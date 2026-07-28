@@ -9,23 +9,25 @@
   <link rel="stylesheet" href="css/home.css" />
 </head>
 <body class="home-page">
-  <div class="focus-timer" id="focus-timer">
-    <label>⏱️ Tập trung</label>
-    <div class="time-display" id="timer-display">30:00</div>
-    <div class="timer-controls">
-      <select id="timer-select">
-        <option value="30">30p</option>
-        <option value="60">1h</option>
-      </select>
-      <button id="timer-toggle">▶</button>
-      <button id="timer-reset">↻</button>
-    </div>
-  </div>
-
   <div class="container">
     <header class="home-header">
-      <h1 class="brand">⚡ SkillForge</h1>
-      <p class="tagline">Lò rèn kỹ năng — Tiếng Anh & Lập trình mỗi ngày</p>
+      <div class="home-header-row">
+        <div>
+          <h1 class="brand">⚡ SkillForge</h1>
+          <p class="tagline">Lò rèn kỹ năng — Tiếng Anh & Lập trình mỗi ngày</p>
+        </div>
+        <div class="focus-timer" id="focus-timer">
+          <div class="time-display" id="timer-display">30:00</div>
+          <div class="timer-controls">
+            <select id="timer-select">
+              <option value="30">30p</option>
+              <option value="60">1h</option>
+            </select>
+            <button id="timer-toggle">▶</button>
+            <button id="timer-reset">↻</button>
+          </div>
+        </div>
+      </div>
     </header>
 
     <div class="home-cards">
@@ -58,7 +60,7 @@
         <select id="ai-topic-select" class="ai-topic-select">
           <option value="">Tất cả chủ đề</option>
         </select>
-        <button class="ai-clear-btn" id="ai-clear-btn">🗑️ Xóa chat</button>
+        <button class="ai-clear-btn" id="ai-clear-btn">🗑️</button>
       </div>
 
       <div class="ai-chat-box" id="ai-chat-messages">

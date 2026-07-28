@@ -78,7 +78,20 @@
   <div class="interview-page-container">
     <header class="interview-topbar">
       <h1>☕ Java Backend Interview</h1>
-      <a class="back-link" href="index.html">⬅ Quay lại Trang chủ</a>
+      <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+        <div class="focus-timer" id="focus-timer">
+          <div class="time-display" id="timer-display">30:00</div>
+          <div class="timer-controls">
+            <select id="timer-select">
+              <option value="30">30p</option>
+              <option value="60">1h</option>
+            </select>
+            <button id="timer-toggle">▶</button>
+            <button id="timer-reset">↻</button>
+          </div>
+        </div>
+        <a class="back-link" href="index.html">⬅ Quay lại Trang chủ</a>
+      </div>
     </header>
 
     <div class="interview-layout">

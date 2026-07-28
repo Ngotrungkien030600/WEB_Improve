@@ -7,7 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatInput = document.getElementById('ai-chat-input');
   const sendBtn = document.getElementById('ai-send-btn');
   const topicSelect = document.getElementById('ai-topic-select');
+  const clearBtn = document.getElementById('ai-clear-btn');
   if (!chatMessages || !chatInput || !sendBtn) return;
+
+  // Hoist helpers — must be defined BEFORE any usage
+  function escHtml(text) {
+    const d = document.createElement('div');
+    d.appendChild(document.createTextNode(text));
+    return d.innerHTML;
+  }
+
+  function renderMd(text) {
+    let html = escHtml(text);
+    html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => {
+      return `<pre><code>${escHtml(code.trim())}</code></pre>`;
+    });
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+    html = html.replace(/\n/g, '<br>');
+    return html;
+  }
 
   const topics = window.interviewTopics || [];
   let conversation = [];
@@ -22,6 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     topicSelect.addEventListener('change', clearChat);
   }
+
+  if (clearBtn) clearBtn.addEventListener('click', clearChat);
 
   function getTopic() {
     if (!topicSelect || !topics.length) return '';
@@ -101,22 +123,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Welcome message
   clearChat();
-
-  function escHtml(text) {
-    const d = document.createElement('div');
-    d.appendChild(document.createTextNode(text));
-    return d.innerHTML;
-  }
-
-  function renderMd(text) {
-    let html = escHtml(text);
-    html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => {
-      return `<pre><code>${escHtml(code.trim())}</code></pre>`;
-    });
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-    html = html.replace(/\n/g, '<br>');
-    return html;
-  }
 });

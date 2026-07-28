@@ -19,3 +19,7 @@
 - Wants learning content to be comprehensive, covering a complete path from basic to advanced topics (e.g., Spring Boot, REST, JPA, Security, Docker, Kafka, Microservices) — not limited to just introductory or beginner material. Confidence: 0.9
 
 - Prefers AI/tool features to support real conversational interaction (back-and-forth chat) rather than single-shot submit-and-evaluate workflows — expects a chat-based interface for AI assistance. Confidence: 0.9
+
+- Expects UI elements to be visually polished and aesthetically pleasing, not just functional — explicitly flags buttons/styling as "xấu" (ugly) when they lack refinement. Confidence: 0.7
+
+- When expanding a collapsible group in a sidebar/topic navigation, expects the first item in that group to be auto-selected/displayed immediately — does not want to click expand and then click again to select an item. Confidence: 0.8

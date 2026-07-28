@@ -19,7 +19,14 @@ body.home-page {
 .home-header {
   color: white;
   margin-bottom: 2.5rem;
-  text-align: center;
+}
+
+.home-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .home-header .brand {
@@ -115,33 +122,62 @@ body.home-page {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.8rem;
+  align-items: center;
 }
 
 .ai-topic-select {
   flex: 1;
-  padding: 0.5rem 0.8rem;
-  border: 2px solid #d0d0e0;
+  padding: 0.55rem 0.8rem;
+  border: 1.5px solid #e2e8f0;
   border-radius: 10px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   background: white;
   cursor: pointer;
+  color: #475569;
+  transition: border-color 0.2s;
 }
 
-.ai-topic-select:focus { outline: none; border-color: #764ba2; }
+.ai-topic-select:focus { outline: none; border-color: #a78bfa; }
 
 .ai-clear-btn {
-  background: #fbe9e7;
-  color: #c62828;
+  background: transparent;
+  color: #94a3b8;
   border: none;
-  border-radius: 10px;
-  padding: 0.5rem 0.8rem;
-  font-size: 0.85rem;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  font-size: 0.95rem;
   cursor: pointer;
-  font-weight: 600;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  position: relative;
 }
 
-.ai-clear-btn:hover { background: #ffccbc; }
+.ai-clear-btn::after {
+  content: "Xoá chat";
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #1e293b;
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  margin-top: 4px;
+}
+
+.ai-clear-btn:hover::after { opacity: 1; }
+.ai-clear-btn:hover {
+  background: #fef2f2;
+  color: #ef4444;
+}
 
 /* Chat box */
 .ai-chat-box {

@@ -46,10 +46,16 @@ export function initInterviewUI() {
       const isCollapsed = true; // start collapsed for compact view
       if (isCollapsed) header.classList.add('collapsed');
       header.addEventListener('click', () => {
+        const wasCollapsed = header.classList.contains('collapsed');
         header.classList.toggle('collapsed');
         const ul = header.nextElementSibling;
         ul.classList.toggle('hidden');
         header.querySelector('.group-toggle').textContent = ul.classList.contains('hidden') ? '▶' : '▼';
+        // Auto-select first topic when expanding a group
+        if (wasCollapsed) {
+          const firstItem = ul.querySelector('li[data-index]');
+          if (firstItem) selectTopic(parseInt(firstItem.dataset.index));
+        }
       });
       topicList.appendChild(header);
 
@@ -145,9 +151,9 @@ export function initInterviewUI() {
     currentIndex = index;
     updateActiveItem(index);
     renderBody(topic);
-    // Scroll content card to top
+    // Scroll to top of the content card
     const card = document.getElementById('interview-card');
-    if (card) card.scrollTop = 0;
+    if (card) card.scrollIntoView({ block: 'start' });
   }
 
   // Init — render sidebar once, then show first topic
