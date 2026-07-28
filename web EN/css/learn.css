@@ -82,10 +82,10 @@ body.learn-page {
 
 .learn-topic-list .intro-item {
   padding: 0.7rem 0.8rem;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 1.25rem;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 600;
   transition: background 0.2s;
   margin-bottom: 0.4rem;
@@ -96,10 +96,10 @@ body.learn-page {
 
 .learn-topic-list li {
   padding: 0.7rem 0.8rem;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 1.15rem;
-  color: #333;
+  color: var(--text-primary);
   transition: background 0.2s;
   margin-bottom: 0.4rem;
   display: flex;
@@ -123,7 +123,7 @@ body.learn-page {
 .learn-progress span {
   display: block;
   font-size: 1.1rem;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
@@ -132,7 +132,7 @@ body.learn-page {
   width: 100%;
   height: 8px;
   background: #e0e0e0;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
@@ -172,14 +172,14 @@ body.learn-page {
 }
 
 .learn-card h4 {
-  color: #555;
+  color: var(--text-secondary);
   font-size: 1.35rem;
   margin: 1.2rem 0 0.5rem;
 }
 
 .learn-card p,
 .learn-card li {
-  color: #333;
+  color: var(--text-primary);
   line-height: 1.8;
   margin-bottom: 1rem;
   font-size: 1.2rem;
@@ -188,7 +188,7 @@ body.learn-page {
 .learn-card ul { margin-bottom: 1rem; padding-left: 1.5rem; }
 
 .learn-card pre {
-  background: #1e1e1e;
+  background: var(--surface-code);
   color: #d4d4d4;
   padding: 1.2rem;
   border-radius: 12px;

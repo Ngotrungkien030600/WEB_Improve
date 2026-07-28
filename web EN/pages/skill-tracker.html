@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Tracker — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/timer.css" />
+  <link rel="stylesheet" href="../css/features/skill-tracker.css" />
+</head>
+<body class="sk-page">
+  <div class="sk-container">
+    <header class="sk-header">
+      <div class="sk-header-row">
+        <div>
+          <h1>📊 Skill Tracker</h1>
+          <p>Theo dõi hành trình học tập của bạn</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+          <div class="focus-timer" id="focus-timer">
+            <div class="time-display" id="timer-display">30:00</div>
+            <div class="timer-controls">
+              <select id="timer-select">
+                <option value="30">30p</option>
+                <option value="60">1h</option>
+              </select>
+              <button id="timer-toggle">▶</button>
+              <button id="timer-reset">↻</button>
+            </div>
+          </div>
+          <a class="sk-back-link" href="../index.html">⬅ Trang chủ</a>
+        </div>
+      </div>
+      <!-- Stats bar -->
+      <div class="sk-stats-bar">
+        <div class="sk-stat"><span class="sk-stat-value" id="sk-total-xp">0</span><span class="sk-stat-label">Tổng XP</span></div>
+        <div class="sk-stat"><span class="sk-stat-value" id="sk-streak">🔥 0</span><span class="sk-stat-label">Streak</span></div>
+        <div class="sk-stat"><span class="sk-stat-value" id="sk-today">⏱ 0</span><span class="sk-stat-label">Hôm nay</span></div>
+      </div>
+    </header>
+
+    <div class="sk-layout">
+      <!-- Left: Skill tree -->
+      <div class="sk-main">
+        <h2>🎯 Kỹ năng</h2>
+        <div id="sk-category-grid" class="sk-category-grid"></div>
+        <div id="sk-skills-container"></div>
+      </div>
+
+      <!-- Right: Practice log -->
+      <aside class="sk-sidebar">
+        <div id="sk-practice-form"></div>
+        <div id="sk-heatmap" class="sk-heatmap"></div>
+        <div id="sk-log" class="sk-log"></div>
+      </aside>
+    </div>
+
+    <footer class="app-footer">
+      <p>© 2026 SkillForge — Skill Tracker</p>
+    </footer>
+  </div>
+
+  <script src="../js/utils/timer.js"></script>
+  <script type="module" src="../js/skill-app.js"></script>
+</body>
+</html>

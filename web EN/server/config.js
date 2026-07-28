@@ -11,7 +11,7 @@ const API_PATHS = {
 };
 
 const AI_CONFIG = {
-  DEFAULT_OLLAMA_MODEL: 'qwen2.5:7b',
+  DEFAULT_OLLAMA_MODEL: 'qwen2.5:1.5b',
   DEFAULT_OPENAI_MODEL: 'gpt-4o-mini',
   OLLAMA_PROTOCOL: 'http',
   OLLAMA_HOST: '127.0.0.1',

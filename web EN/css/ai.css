@@ -50,7 +50,7 @@
 
 .ai-tab.active {
   background: white;
-  color: #764ba2;
+  color: var(--color-secondary);
   border-color: white;
 }
 
@@ -71,7 +71,7 @@
 .ai-card-filter select {
   padding: 0.45rem 0.8rem;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   font-size: 0.95rem;
   cursor: pointer;
   width: 100%;
@@ -112,7 +112,7 @@
 
 .ai-card-category {
   display: inline-block;
-  background: #667eea;
+  background: var(--color-primary);
   color: white;
   font-size: 0.75rem;
   font-weight: 700;
@@ -125,20 +125,20 @@
 .ai-card-en {
   font-size: 2rem;
   font-weight: 800;
-  color: #764ba2;
+  color: var(--color-secondary);
   margin-bottom: 0.3rem;
 }
 
 .ai-card-vi {
   font-size: 1.3rem;
-  color: #475569;
+  color: var(--text-secondary);
   font-weight: 600;
   margin-bottom: 1rem;
 }
 
 .ai-card-def {
   font-size: 1.05rem;
-  color: #333;
+  color: var(--text-primary);
   line-height: 1.6;
 }
 
@@ -149,7 +149,7 @@
   margin-top: 1rem;
   padding: 0.8rem;
   background: #f8fafc;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
 }
 
 .ai-card-controls {
@@ -161,7 +161,7 @@
 
 .ai-card-btn {
   background: rgba(255,255,255,0.9);
-  color: #764ba2;
+  color: var(--color-secondary);
   border: none;
   border-radius: 12px;
   padding: 0.6rem 1.2rem;
@@ -186,7 +186,7 @@
 /* ===== Quiz ===== */
 .ai-q-config {
   background: white;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   padding: 1rem 1.2rem;
   margin-bottom: 1rem;
   display: flex;
@@ -223,15 +223,15 @@
 
 .ai-q-tab.active {
   background: white;
-  color: #764ba2;
+  color: var(--color-secondary);
   border-color: white;
 }
 
 .ai-q-start {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   padding: 0.4rem 1rem;
   font-weight: 700;
   font-size: 0.85rem;
@@ -241,7 +241,7 @@
 .ai-q-timer-bar {
   height: 6px;
   background: rgba(255,255,255,0.3);
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   margin-bottom: 0.3rem;
   display: none;
@@ -251,7 +251,7 @@
 
 .ai-q-timer-fill {
   height: 100%;
-  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  background: linear-gradient(90deg, var(--color-warning), var(--color-error));
   transition: width 1s linear;
 }
 
@@ -275,7 +275,7 @@
 
 .ai-q-badge {
   display: inline-block;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   color: white;
   font-size: 0.8rem;
   font-weight: 700;
@@ -295,7 +295,7 @@
 .ai-q-progress {
   float: right;
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   font-weight: 600;
 }
 
@@ -324,14 +324,14 @@
 }
 
 .ai-q-option.correct {
-  background: #dcfce7;
-  border-color: #22c55e;
+  background: var(--color-success-light);
+  border-color: var(--color-success);
   color: #166534;
 }
 
 .ai-q-option.wrong {
-  background: #fee2e2;
-  border-color: #ef4444;
+  background: var(--color-error-light);
+  border-color: var(--color-error);
   color: #991b1b;
 }
 
@@ -339,7 +339,7 @@
 
 .ai-q-feedback {
   padding: 0.7rem 1rem;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   font-size: 0.9rem;
   margin-bottom: 1rem;
@@ -347,11 +347,11 @@
 }
 
 .ai-q-feedback.show { display: block; }
-.ai-q-feedback.correct { background: #dcfce7; color: #166534; }
-.ai-q-feedback.wrong { background: #fee2e2; color: #991b1b; }
+.ai-q-feedback.correct { background: var(--color-success-light); color: #166534; }
+.ai-q-feedback.wrong { background: var(--color-error-light); color: #991b1b; }
 
 .ai-q-next {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   color: white;
   border: none;
   border-radius: 30px;
@@ -372,7 +372,7 @@
   gap: 0.5rem;
   text-align: center;
   background: white;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   padding: 1rem;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   margin-bottom: 1rem;
@@ -382,12 +382,12 @@
   display: block;
   font-size: 1.4rem;
   font-weight: 800;
-  color: #764ba2;
+  color: var(--color-secondary);
 }
 
 .ai-q-stat-label {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 /* ===== Interview ===== */
@@ -401,7 +401,7 @@
   width: 260px;
   flex-shrink: 0;
   background: white;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   padding: 1rem;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
@@ -416,7 +416,7 @@
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   transition: background 0.15s;
   display: flex;
   justify-content: space-between;
@@ -426,13 +426,13 @@
 
 .ai-interview-item:hover { background: #f3e5f5; }
 .ai-interview-item.active {
-  background: #764ba2;
+  background: var(--color-secondary);
   color: white;
 }
 
 .ai-interview-item-stat {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .ai-interview-item.active .ai-interview-item-stat {
@@ -442,14 +442,14 @@
 .ai-interview-content {
   flex: 1;
   background: white;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   padding: 1.5rem;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   min-height: 300px;
 }
 
 .ai-interview-content h2 {
-  color: #764ba2;
+  color: var(--color-secondary);
   font-size: 1.4rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
@@ -458,7 +458,7 @@
 
 .ai-interview-progress {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin-bottom: 1rem;
   font-weight: 600;
 }
@@ -478,7 +478,7 @@
   margin-top: 0.25rem;
   width: 18px;
   height: 18px;
-  accent-color: #764ba2;
+  accent-color: var(--color-secondary);
   cursor: pointer;
 }
 
@@ -502,7 +502,7 @@
 
 .ai-project-card {
   background: white;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   padding: 1.2rem;
   box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   cursor: pointer;
@@ -532,14 +532,14 @@
 
 .ai-project-card-tech {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin-bottom: 0.5rem;
   font-family: monospace;
 }
 
 .ai-project-card-desc {
   font-size: 0.9rem;
-  color: #475569;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
@@ -551,9 +551,9 @@
   border-radius: 20px;
 }
 
-.ai-project-level.beginner { background: #dcfce7; color: #166534; }
+.ai-project-level.beginner { background: var(--color-success-light); color: #166534; }
 .ai-project-level.intermediate { background: #fef3c7; color: #92400e; }
-.ai-project-level.advanced { background: #fee2e2; color: #991b1b; }
+.ai-project-level.advanced { background: var(--color-error-light); color: #991b1b; }
 
 .ai-project-detail {
   background: white;
@@ -564,9 +564,9 @@
 
 .ai-project-back {
   background: transparent;
-  color: #764ba2;
+  color: var(--color-secondary);
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   font-weight: 600;
@@ -589,13 +589,13 @@
 
 .ai-project-desc {
   font-size: 1rem;
-  color: #475569;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1.5rem;
 }
 
 .ai-project-detail h3 {
-  color: #764ba2;
+  color: var(--color-secondary);
   font-size: 1.1rem;
   margin: 1.2rem 0 0.6rem;
 }
@@ -607,12 +607,12 @@
 .ai-project-steps li {
   padding: 0.4rem 0;
   font-size: 0.95rem;
-  color: #475569;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
 .ai-project-code {
-  background: #1e1e1e;
+  background: var(--surface-code);
   color: #d4d4d4;
   padding: 1rem;
   border-radius: 12px;

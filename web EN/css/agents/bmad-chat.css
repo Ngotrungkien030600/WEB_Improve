@@ -11,12 +11,12 @@
 .bmad-agent-card {
   background: white;
   border: 2px solid transparent;
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   padding: 1.2rem 1rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: var(--shadow-sm);
 }
 
 .bmad-agent-card:hover {
@@ -25,13 +25,13 @@
 }
 
 .bmad-agent-card.selected {
-  border-color: #764ba2;
+  border-color: var(--color-secondary);
   background: #faf5ff;
   box-shadow: 0 4px 15px rgba(118, 75, 162, 0.15);
 }
 
 .bmad-agent-card.party-selected {
-  border-color: #667eea;
+  border-color: var(--color-primary);
   background: #f0f0ff;
 }
 
@@ -44,7 +44,7 @@
 .bmad-agent-card .agent-name {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #333;
+  color: var(--text-primary);
   display: block;
 }
 
@@ -60,7 +60,7 @@
   width: 20px;
   height: 20px;
   margin: 0.5rem auto 0;
-  background: #667eea;
+  background: var(--color-primary);
   color: white;
   border-radius: 50%;
   font-size: 0.75rem;
@@ -86,7 +86,7 @@
   flex: 1;
   padding: 0.55rem 1rem;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -97,12 +97,12 @@
 
 .bmad-mode-btn.active {
   background: white;
-  color: #764ba2;
+  color: var(--color-secondary);
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .bmad-mode-btn:hover:not(.active) {
-  color: #475569;
+  color: var(--text-secondary);
 }
 
 /* Party Start Button */
@@ -122,7 +122,7 @@
 
 .bmad-party-start-btn,
 .bmad-party-select-all-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   color: white;
   border: none;
   border-radius: 30px;
@@ -152,7 +152,7 @@
   flex: 1;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -165,7 +165,7 @@
 
 .bmad-back-btn {
   background: transparent;
-  color: #94a3b8;
+  color: var(--text-muted);
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 0.3rem 0.7rem;
@@ -177,7 +177,7 @@
 
 .bmad-back-btn:hover {
   background: #f1f5f9;
-  color: #475569;
+  color: var(--text-secondary);
 }
 
 /* Chat Messages — Solo */
@@ -195,7 +195,7 @@
 .chat-msg-solo .chat-msg-header .agent-name {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #475569;
+  color: var(--text-secondary);
 }
 
 /* Party Roundtable */
@@ -207,11 +207,11 @@
 }
 
 .party-round-header {
-  background: #f8f9ff;
+  background: var(--surface-chat);
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: var(--text-muted);
   border-bottom: 1px solid #e8eaf6;
   text-align: center;
 }
@@ -241,20 +241,20 @@
 .party-agent-reply .party-agent-name {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #475569;
+  color: var(--text-secondary);
   margin-bottom: 0.2rem;
 }
 
 .party-agent-reply .party-agent-text {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: #333;
+  color: var(--text-primary);
   word-break: break-word;
 }
 
 .party-agent-reply .party-agent-text p { margin-bottom: 0.5rem; }
 .party-agent-reply .party-agent-text pre {
-  background: #1e1e1e;
+  background: var(--surface-code);
   color: #d4d4d4;
   padding: 0.6rem;
   border-radius: 8px;
@@ -278,7 +278,7 @@
 /* Clear button (reused from old home.css) */
 .ai-clear-btn {
   background: transparent;
-  color: #94a3b8;
+  color: var(--text-muted);
   border: none;
   border-radius: 8px;
   width: 34px;
@@ -294,7 +294,7 @@
 
 .ai-clear-btn:hover {
   background: #fef2f2;
-  color: #ef4444;
+  color: var(--color-error);
 }
 
 /* Typing dots */

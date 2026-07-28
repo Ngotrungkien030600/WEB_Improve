@@ -35,7 +35,7 @@
 }
 
 .interview-sidebar h3 {
-  color: #764ba2;
+  color: var(--color-secondary);
   font-size: 1.35rem;
   margin-bottom: 1rem;
 }
@@ -46,10 +46,10 @@
 
 .interview-topic-list .intro-item {
   padding: 0.7rem 0.8rem;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 1.25rem;
-  color: #333;
+  color: var(--text-primary);
   font-weight: 600;
   transition: background 0.2s;
   margin-bottom: 0.4rem;
@@ -61,16 +61,16 @@
   background: #f3e5f5;
 }
 .interview-topic-list .intro-item.active {
-  background: #764ba2;
+  background: var(--color-secondary);
   color: white;
 }
 
 .interview-topic-list .group-header {
   padding: 0.7rem 0.8rem;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 1.3rem;
-  color: #764ba2;
+  color: var(--color-secondary);
   font-weight: 700;
   transition: background 0.2s;
   margin-bottom: 0.4rem;
@@ -96,10 +96,10 @@
 
 .interview-topic-list .group-items li {
   padding: 0.7rem 0.8rem;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 1.25rem;
-  color: #333;
+  color: var(--text-primary);
   transition: background 0.2s;
   margin-bottom: 0.4rem;
   display: flex;
@@ -112,7 +112,7 @@
 }
 
 .interview-topic-list .group-items li.active {
-  background: #764ba2;
+  background: var(--color-secondary);
   color: white;
 }
 
@@ -129,7 +129,7 @@
 .interview-progress span {
   display: block;
   font-size: 1.15rem;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
@@ -138,14 +138,14 @@
   width: 100%;
   height: 8px;
   background: #e0e0e0;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
 #interview-progress-fill {
   height: 100%;
   width: 0%;
-  background: #667eea;
+  background: var(--color-primary);
   transition: width 0.3s;
 }
 
@@ -164,7 +164,7 @@
 }
 
 .interview-card h2 {
-  color: #764ba2;
+  color: var(--color-secondary);
   font-size: 2rem;
   margin-bottom: 1.2rem;
   padding-bottom: 0.7rem;
@@ -172,20 +172,20 @@
 }
 
 .interview-card h3 {
-  color: #764ba2;
+  color: var(--color-secondary);
   font-size: 1.6rem;
   margin: 1.5rem 0 0.8rem;
 }
 
 .interview-card h4 {
-  color: #555;
+  color: var(--text-secondary);
   font-size: 1.35rem;
   margin: 1.2rem 0 0.5rem;
 }
 
 .interview-card p,
 .interview-card li {
-  color: #333;
+  color: var(--text-primary);
   line-height: 1.8;
   margin-bottom: 1rem;
   font-size: 1.2rem;
@@ -197,7 +197,7 @@
 }
 
 .interview-card pre {
-  background: #1e1e1e;
+  background: var(--surface-code);
   color: #d4d4d4;
   padding: 1.2rem;
   border-radius: 12px;
@@ -210,20 +210,20 @@
 .interview-card code {
   font-family: 'Consolas', 'Monaco', monospace;
   background: #f3f4f6;
-  color: #764ba2;
+  color: var(--color-secondary);
   padding: 0.15rem 0.4rem;
   border-radius: 5px;
   font-size: 1.05em;
 }
 
 .interview-card a {
-  color: #667eea;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s;
 }
 .interview-card a:hover {
-  color: #764ba2;
+  color: var(--color-secondary);
   text-decoration: underline;
 }
 
@@ -278,7 +278,7 @@
 
 .interview-card th {
   background: #f3e5f5;
-  color: #764ba2;
+  color: var(--color-secondary);
   font-weight: 700;
 }
 
@@ -306,7 +306,7 @@
   margin-top: 0.35rem;
   width: 22px;
   height: 22px;
-  accent-color: #764ba2;
+  accent-color: var(--color-secondary);
   cursor: pointer;
 }
 

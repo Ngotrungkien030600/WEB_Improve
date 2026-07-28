@@ -11,7 +11,7 @@
 }
 
 body.home-page {
-  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background: linear-gradient(-45deg, var(--color-primary), var(--color-secondary), #f093fb, #f5576c);
   background-size: 400% 400%;
   animation: gradientMove 12s ease infinite;
 }
@@ -50,15 +50,15 @@ body.home-page {
 }
 
 .home-card {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 28px;
+  background: var(--surface-card);
+  border-radius: var(--radius-lg);
   padding: 2.4rem 2rem;
   width: 300px;
   text-align: center;
   text-decoration: none;
-  color: #333;
+  color: var(--text-primary);
   transition: transform 0.25s, box-shadow 0.25s;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.22);
+  box-shadow: var(--shadow-lg);
   animation: float 4s ease-in-out infinite;
   position: relative;
   overflow: hidden;
@@ -74,7 +74,7 @@ body.home-page {
 
 .home-card-ai {
   background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(243,229,245,0.95)) !important;
-  border: 2px solid #764ba2 !important;
+  border: 2px solid var(--color-secondary) !important;
 }
 
 .home-card-ai .badge {
@@ -96,23 +96,23 @@ body.home-page {
 
 /* ===== Home AI Chat Section ===== */
 .home-ai-section {
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 28px;
+  background: var(--surface-card);
+  border-radius: var(--radius-lg);
   padding: 1.5rem 2rem;
   margin: 2rem auto 0;
   max-width: 720px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.22);
+  box-shadow: var(--shadow-lg);
 }
 
 .home-ai-header h2 {
-  color: #764ba2;
+  color: var(--color-secondary);
   font-size: 1.8rem;
   margin-bottom: 0.2rem;
   text-align: center;
 }
 
 .home-ai-header p {
-  color: #666;
+  color: var(--text-light);
   font-size: 1rem;
   margin-bottom: 1rem;
   text-align: center;
@@ -120,7 +120,7 @@ body.home-page {
 
 /* Chat box (reused from old style) */
 .ai-chat-box {
-  background: #f8f9ff;
+  background: var(--surface-chat);
   border-radius: 16px;
   padding: 1rem;
   height: 320px;
@@ -161,20 +161,20 @@ body.home-page {
 }
 
 .chat-user .chat-bubble {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--color-gradient);
   color: white;
   border-bottom-right-radius: 4px;
 }
 
 .chat-assistant .chat-bubble {
   background: white;
-  color: #333;
+  color: var(--text-primary);
   border: 1px solid #e8eaf6;
   border-bottom-left-radius: 4px;
 }
 
 .chat-assistant .chat-bubble pre {
-  background: #1e1e1e;
+  background: var(--surface-code);
   color: #d4d4d4;
   padding: 0.8rem;
   border-radius: 10px;
@@ -185,7 +185,7 @@ body.home-page {
 
 .chat-assistant .chat-bubble code {
   background: #e3f2fd;
-  color: #1565c0;
+  color: var(--color-info);
   padding: 0.15rem 0.4rem;
   border-radius: 4px;
   font-size: 0.95em;
@@ -232,11 +232,11 @@ body.home-page {
 
 .ai-chat-input:focus {
   outline: none;
-  border-color: #764ba2;
+  border-color: var(--color-secondary);
 }
 
 .ai-send-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: var(--color-gradient);
   color: white;
   border: none;
   border-radius: 14px;
@@ -259,7 +259,7 @@ body.home-page {
 
 .home-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--shadow-hover);
 }
 
 .home-card::before {
@@ -269,7 +269,7 @@ body.home-page {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, transparent 60%);
+  background: radial-gradient(circle, var(--surface-glass-hover) 0%, transparent 60%);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -284,14 +284,14 @@ body.home-page {
 }
 
 .home-card h2 {
-  color: #764ba2;
+  color: var(--color-secondary);
   font-size: 1.9rem;
   margin-bottom: 0.7rem;
 }
 
 .home-card p {
   font-size: 1.1rem;
-  color: #555;
+  color: var(--text-secondary);
   line-height: 1.55;
 }
 

@@ -1,4 +1,6 @@
 /* ===== Base Reset & Global ===== */
+@import url('variables.css');
+
 * {
   margin: 0;
   padding: 0;
@@ -6,17 +8,17 @@
 }
 
 html {
-  font-size: 18px;
+  font-size: var(--font-size-base);
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: var(--font-body);
+  background: var(--color-gradient);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #333;
+  color: var(--text-primary);
   padding: 0;
 }
 
@@ -24,11 +26,11 @@ body {
   width: 100%;
   max-width: 1200px;
   text-align: center;
-  padding: 1.5rem;
+  padding: var(--space-md);
 }
 
 .app-header {
-  color: white;
+  color: var(--text-white);
   margin-bottom: 1.2rem;
 }
 
@@ -44,12 +46,12 @@ body {
 
 .app-footer {
   color: rgba(255, 255, 255, 0.85);
-  margin-top: 1.5rem;
+  margin-top: var(--space-md);
   font-size: 1.05rem;
 }
 
 .counter {
-  color: white;
+  color: var(--text-white);
   font-size: 1.15rem;
   font-weight: 600;
   margin-bottom: 1rem;
