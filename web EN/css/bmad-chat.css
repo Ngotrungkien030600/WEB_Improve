@@ -1,0 +1,316 @@
+/* ===== BMAD Agent Chat ===== */
+
+/* Agent Grid */
+.bmad-agent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+}
+
+.bmad-agent-card {
+  background: white;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 1.2rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.bmad-agent-card:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.bmad-agent-card.selected {
+  border-color: #764ba2;
+  background: #faf5ff;
+  box-shadow: 0 4px 15px rgba(118, 75, 162, 0.15);
+}
+
+.bmad-agent-card.party-selected {
+  border-color: #667eea;
+  background: #f0f0ff;
+}
+
+.bmad-agent-card .agent-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.bmad-agent-card .agent-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  display: block;
+}
+
+.bmad-agent-card .agent-role {
+  font-size: 0.8rem;
+  color: #888;
+  display: block;
+  margin-top: 0.15rem;
+}
+
+.bmad-agent-card .agent-check {
+  display: none;
+  width: 20px;
+  height: 20px;
+  margin: 0.5rem auto 0;
+  background: #667eea;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  line-height: 20px;
+  text-align: center;
+}
+
+.bmad-agent-card.party-selected .agent-check {
+  display: block;
+}
+
+/* Mode Bar */
+.bmad-mode-bar {
+  display: flex;
+  gap: 0.4rem;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 0.3rem;
+  margin-bottom: 1.2rem;
+}
+
+.bmad-mode-btn {
+  flex: 1;
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.bmad-mode-btn.active {
+  background: white;
+  color: #764ba2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.bmad-mode-btn:hover:not(.active) {
+  color: #475569;
+}
+
+/* Party Start Button */
+.bmad-party-start {
+  display: none;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.bmad-party-start.visible {
+  display: block;
+}
+
+.bmad-party-start-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 0.7rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.bmad-party-start-btn:hover {
+  transform: scale(1.03);
+}
+
+/* Session Info Bar */
+.bmad-session-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid #e8eaf6;
+}
+
+.bmad-session-info .bmad-session-label {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bmad-session-info .bmad-session-agents {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.bmad-back-btn {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.bmad-back-btn:hover {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* Chat Messages — Solo */
+.chat-msg-solo .chat-msg-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.chat-msg-solo .chat-msg-header .agent-icon {
+  font-size: 1.2rem;
+}
+
+.chat-msg-solo .chat-msg-header .agent-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+/* Party Roundtable */
+.party-round {
+  margin-bottom: 1rem;
+  border: 1px solid #e8eaf6;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.party-round-header {
+  background: #f8f9ff;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+  border-bottom: 1px solid #e8eaf6;
+  text-align: center;
+}
+
+.party-agent-reply {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.party-agent-reply:last-child {
+  border-bottom: none;
+}
+
+.party-agent-reply .party-agent-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.party-agent-reply .party-agent-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.party-agent-reply .party-agent-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 0.2rem;
+}
+
+.party-agent-reply .party-agent-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #333;
+  word-break: break-word;
+}
+
+.party-agent-reply .party-agent-text p { margin-bottom: 0.5rem; }
+.party-agent-reply .party-agent-text pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 0.6rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  margin: 0.4rem 0;
+}
+.party-agent-reply .party-agent-text code {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.party-agent-reply .party-agent-text pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* Clear button (reused from old home.css) */
+.ai-clear-btn {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ai-clear-btn:hover {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+/* Typing dots */
+.chat-typing-dots span {
+  animation: blink 1.4s infinite;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.chat-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.chat-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .bmad-agent-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+  }
+  .bmad-agent-card { padding: 1rem 0.7rem; }
+  .bmad-agent-card .agent-icon { font-size: 2rem; }
+  .bmad-agent-card .agent-name { font-size: 1rem; }
+}

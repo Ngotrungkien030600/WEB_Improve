@@ -23,3 +23,13 @@
 - Expects UI elements to be visually polished and aesthetically pleasing, not just functional — explicitly flags buttons/styling as "xấu" (ugly) when they lack refinement. Confidence: 0.7
 
 - When expanding a collapsible group in a sidebar/topic navigation, expects the first item in that group to be auto-selected/displayed immediately — does not want to click expand and then click again to select an item. Confidence: 0.8
+
+- Prefers replacing/upgrading existing features with better alternatives rather than adding new features alongside old ones — chose to replace the existing AI chat with BMAD agents instead of adding BMAD as a separate tab. Confidence: 0.7
+
+- Prefers multi-agent/collaborative AI interactions (Party Mode) — actively chose to include a mode where multiple specialized AI personas respond to the same query in a roundtable format. Confidence: 0.8
+
+- Prefers having a diverse set of specialized AI personas available (e.g., Business Analyst, Technical Writer, PM, UX Designer, Architect, Engineer) rather than a single generic AI assistant — chose all 6 BMAD agents. Confidence: 0.8
+
+- When fixing frontend JS errors during local development, prefers a **comprehensive** cache-prevention approach: both client-side cache-busting version parameters (`?v=N`) on script/link tags **and** server-side HTTP cache-control headers (`Cache-Control: no-cache, no-store, must-revalidate`) to ensure fresh content is always served — rather than only fixing the code and expecting a manual hard refresh. Confidence: 0.9
+
+- Prefers the main agent/tool selection grid to always remain visible on the page, even when a chat session is active — does not want the grid to be hidden or replaced by the chat view; wants chat to appear below the grid instead. Confidence: 0.9

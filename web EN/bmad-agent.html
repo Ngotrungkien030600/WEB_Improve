@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BMad Agent — SkillForge</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/home.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="home-header">
+      <h1 class="brand">BMad Agent (Prototype)</h1>
+      <p class="tagline">UI prototype: duyệt web-bundles và mở session agent (hook)</p>
+    </header>
+    <div style="text-align:center;margin-bottom:16px;">
+      <button id="open-first-bundle" style="background:#667eea;color:#fff;border:none;padding:8px 14px;border-radius:10px;cursor:pointer">Open first bundle (test)</button>
+    </div>
+
+    <div id="bmad-debug" style="background:#fff8; border:1px dashed rgba(0,0,0,0.08); padding:8px; margin-bottom:12px; border-radius:8px; max-height:120px; overflow:auto; font-size:0.9rem; color:#222">
+      <strong>Debug log:</strong>
+      <div id="bmad-debug-entries"></div>
+    </div>
+
+    <main>
+      <section>
+        <h2>Available Bundles</h2>
+        <div id="bmad-bundles" class="bundle-list"></div>
+      </section>
+
+      <section id="agent-panel" style="display:none; margin-top:20px;">
+        <h2 id="agent-title">Agent</h2>
+        <div id="agent-meta"></div>
+        <div id="agent-console" style="border:1px solid #ddd;padding:12px;margin-top:8px;min-height:120px;background:#fff"></div>
+        <div style="margin-top:8px;">
+          <textarea id="agent-input" rows="3" style="width:100%" placeholder="Nhập prompt (prototype - no model calls yet)"></textarea>
+          <button id="agent-send">Gửi</button>
+        </div>
+      </section>
+
+      <p style="margin-top:24px; font-size:0.9rem;color:#666">Ghi chú: đây là prototype UI. Kết nối model cần cài thêm backend/API key.</p>
+    </main>
+
+    <footer class="app-footer"><a href="index.html">← Về trang chủ</a></footer>
+  </div>
+
+  <script src="js/bmad-agent.js"></script>
+</body>
+</html>
