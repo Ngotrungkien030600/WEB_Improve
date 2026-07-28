@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>⚡ Trắc nghiệm nhanh</title>
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/components.css" />
+  <title>🃏 Ghép cặp từ vựng</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
   <style>
     body {
       display: flex;
@@ -43,26 +43,22 @@
   <div class="game-page">
     <a class="back-link" href="english.html">⬅ Quay lại</a>
     <div class="game-header">
-      <h2>⚡ Trắc nghiệm nhanh</h2>
+      <h2>🃏 Ghép cặp từ vựng</h2>
       <div class="game-stats">
-        <span>Điểm: <strong id="sq-score">0</strong></span>
-        <span>Đã làm: <strong id="sq-count">0/10</strong></span>
+        <span>Điểm: <strong id="game-score">0</strong></span>
+        <span>Bước: <strong id="game-moves">0</strong></span>
+        <span>Thời gian: <strong id="game-time">00:00</strong></span>
       </div>
     </div>
-    <div class="quiz-timer-bar"><div id="sq-timer-fill"></div></div>
-    <p class="quiz-timer-text" id="sq-timer-text">Thời gian: --</p>
-    <div class="sq-card">
-      <p class="sq-question" id="sq-question">Chọn đáp án đúng</p>
-      <div class="options" id="sq-options"></div>
-      <div class="quiz-feedback" id="sq-feedback"></div>
-    </div>
-    <button class="btn-restart" id="sq-start">▶️ Bắt đầu</button>
+    <p class="game-feedback" id="game-feedback">Tìm các cặp từ vựng Anh - Việt!</p>
+    <div class="game-board" id="game-board"></div>
+    <button class="btn-restart" id="game-restart">🔄 Chơi lại</button>
   </div>
 
-  <script src="js/utils/timer.js"></script>
+  <script src="../js/utils/timer.js"></script>
   <script type="module">
-    import { initSpeedQuizUI } from './js/features/game/game-speedquiz-ui.js';
-    document.addEventListener('DOMContentLoaded', () => initSpeedQuizUI());
+    import { initGameUI } from '../js/features/game/game-ui.js';
+    document.addEventListener('DOMContentLoaded', () => initGameUI());
   </script>
 </body>
 </html>

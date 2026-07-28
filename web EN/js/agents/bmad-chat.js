@@ -4,7 +4,7 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
 
-  const { BMAD_API_ENDPOINT } = window.BMAD_CONSTANTS;
+  const { BMAD_API_ENDPOINT } = window.BMAD_CONSTANTS.API_ENDPOINTS;
   const agents = window.BMAD_AGENTS;
   let currentMode = 'solo';
   let selectedAgents = [];

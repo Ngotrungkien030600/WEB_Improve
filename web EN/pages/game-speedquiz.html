@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🔀 Xếp chữ</title>
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/components.css" />
+  <title>⚡ Trắc nghiệm nhanh</title>
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/components.css" />
   <style>
     body {
       display: flex;
@@ -43,29 +43,26 @@
   <div class="game-page">
     <a class="back-link" href="english.html">⬅ Quay lại</a>
     <div class="game-header">
-      <h2>🔀 Xếp chữ</h2>
+      <h2>⚡ Trắc nghiệm nhanh</h2>
       <div class="game-stats">
-        <span>Điểm: <strong id="scramble-score">0</strong></span>
-        <span>Đã làm: <strong id="scramble-count">0/10</strong></span>
+        <span>Điểm: <strong id="sq-score">0</strong></span>
+        <span>Đã làm: <strong id="sq-count">0/10</strong></span>
       </div>
     </div>
-    <div class="scramble-card">
-      <p class="scramble-hint" id="scramble-hint">👆 Bấm vào chữ để xếp</p>
-      <div class="scramble-letters" id="scramble-letters"></div>
-      <div class="scramble-answer" id="scramble-answer"></div>
-      <p class="scramble-meaning" id="scramble-meaning"></p>
-      <div class="practice-actions">
-        <button id="scramble-check">✅ Kiểm tra</button>
-        <button id="scramble-next">Tiếp ➡️</button>
-      </div>
-      <div class="practice-feedback" id="scramble-feedback"></div>
+    <div class="quiz-timer-bar"><div id="sq-timer-fill"></div></div>
+    <p class="quiz-timer-text" id="sq-timer-text">Thời gian: --</p>
+    <div class="sq-card">
+      <p class="sq-question" id="sq-question">Chọn đáp án đúng</p>
+      <div class="options" id="sq-options"></div>
+      <div class="quiz-feedback" id="sq-feedback"></div>
     </div>
+    <button class="btn-restart" id="sq-start">▶️ Bắt đầu</button>
   </div>
 
-  <script src="js/utils/timer.js"></script>
+  <script src="../js/utils/timer.js"></script>
   <script type="module">
-    import { initScrambleUI } from './js/features/game/game-scramble-ui.js';
-    document.addEventListener('DOMContentLoaded', () => initScrambleUI());
+    import { initSpeedQuizUI } from '../js/features/game/game-speedquiz-ui.js';
+    document.addEventListener('DOMContentLoaded', () => initSpeedQuizUI());
   </script>
 </body>
 </html>

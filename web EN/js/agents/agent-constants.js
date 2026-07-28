@@ -1,7 +1,13 @@
 window.BMAD_CONSTANTS = {
-  BMAD_API_ENDPOINT: '/api/bmad/chat',
+  API_ENDPOINTS: {
+    AI_FEEDBACK: '/api/ai-feedback',
+    AI_CHAT: '/api/ai-chat',
+    BMAD_CHAT: '/api/bmad/chat',
+  },
   BMAD_BUNDLES_PATH: 'data/bmad/bmad-bundles.json',
-  BMAD_CONSOLE_USER_CLASS: 'console-user',
-  BMAD_CONSOLE_BMAD_CLASS: 'console-bmad',
-  BMAD_CONSOLE_INFO_CLASS: 'console-info',
+  CSS_CLASSES: {
+    USER: 'console-user',
+    BMAD: 'console-bmad',
+    INFO: 'console-info',
+  },
 };

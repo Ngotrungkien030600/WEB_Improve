@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearBtn = document.getElementById('ai-clear-btn');
   if (!chatMessages || !chatInput || !sendBtn) return;
 
-  // Hoist helpers — must be defined BEFORE any usage
   function escHtml(text) {
     const d = document.createElement('div');
     d.appendChild(document.createTextNode(text));

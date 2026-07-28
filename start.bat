@@ -12,6 +12,6 @@ start "" "http://localhost:8080"
 echo === Chay Web Server ===
 echo Nhan Ctrl+C de dung server.
 echo.
-node server.js
+node server/index.js
 
 pause
