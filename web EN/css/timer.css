@@ -1,29 +1,29 @@
 /* ===== Focus Timer Widget ===== */
 .focus-timer {
   position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  background: rgba(255, 255, 255, 0.9);
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(6px);
-  border-radius: 14px;
-  padding: 0.6rem 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 0.4rem 0.7rem;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
   text-align: center;
   z-index: 100;
-  min-width: 140px;
+  min-width: 100px;
   border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
 }
 
 .focus-timer label {
-  display: block;
-  font-size: 0.75rem;
-  color: #764ba2;
-  font-weight: 700;
-  margin-bottom: 0.15rem;
+  display: none;
 }
 
 .focus-timer .time-display {
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: 800;
   color: #333;
   font-variant-numeric: tabular-nums;
@@ -36,17 +36,16 @@
 
 .focus-timer .timer-controls {
   display: flex;
-  gap: 0.4rem;
-  justify-content: center;
-  margin-top: 0.5rem;
+  gap: 0.25rem;
+  align-items: center;
 }
 
 .focus-timer button,
 .focus-timer select {
   border: none;
-  border-radius: 10px;
-  padding: 0.4rem 0.7rem;
-  font-size: 0.9rem;
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
   cursor: pointer;
   font-weight: 600;
 }
@@ -54,12 +53,14 @@
 .focus-timer select {
   background: #f3e5f5;
   color: #764ba2;
+  width: 48px;
 }
 
 .focus-timer button {
   background: #764ba2;
   color: white;
   transition: background 0.2s;
+  min-width: 40px;
 }
 
 .focus-timer button:hover {
@@ -67,31 +68,27 @@
 }
 
 @keyframes pulse-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   }
   50% {
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
   }
 }
 
 @media (max-width: 600px) {
   .focus-timer {
-    padding: 0.4rem 0.8rem;
-    gap: 0.5rem;
+    padding: 0.3rem 0.5rem;
     min-width: unset;
-    flex-wrap: wrap;
-  }
-  .focus-timer label {
-    font-size: 0.75rem;
+    bottom: 0.5rem;
+    right: 0.5rem;
   }
   .focus-timer .time-display {
-    font-size: 1.3rem;
+    font-size: 1rem;
   }
   .focus-timer button,
   .focus-timer select {
-    font-size: 0.8rem;
-    padding: 0.3rem 0.5rem;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
   }
 }

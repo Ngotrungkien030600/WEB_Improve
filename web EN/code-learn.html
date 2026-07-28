@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillForge — Học Code</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/timer.css" />
+  <link rel="stylesheet" href="css/learn.css" />
+</head>
+<body class="learn-page">
+  <div class="learn-page-container">
+    <header class="learn-topbar">
+      <h1>💻 Học Code</h1>
+      <a class="back-link" href="index.html">⬅ Quay lại Trang chủ</a>
+    </header>
+
+    <div class="learn-layout">
+      <aside class="learn-sidebar">
+        <h3>📚 Bài học</h3>
+        <ul class="learn-topic-list" id="learn-topic-list"></ul>
+        <div class="learn-progress">
+          <span id="learn-progress-text">Tiến độ: 0 / 0</span>
+          <div class="learn-progress-bar"><div id="learn-progress-fill"></div></div>
+        </div>
+      </aside>
+      <div class="learn-content-wrapper">
+        <div class="learn-card" id="learn-card">
+          <h2 id="learn-topic-title">Chọn một bài học</h2>
+          <div id="learn-topic-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer">
+      <p>© 2026 SkillForge — Học Code</p>
+    </footer>
+  </div>
+
+  <script src="js/utils/timer.js"></script>
+  <script src="learn-data.js"></script>
+  <script type="module" src="js/learn-app.js"></script>
+</body>
+</html>

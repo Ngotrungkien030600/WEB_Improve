@@ -9,6 +9,7 @@ function inlineMarkdownToHtml(text) {
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
   html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
   return html;
 }
 
@@ -42,6 +43,13 @@ export function markdownToHTML(text) {
   });
 
   html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Links: [text](url) — convert .md URLs to data-topic attributes for internal navigation
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (m, text, url) => {
+    if (url.endsWith('.md')) {
+      return `<a href="#" class="topic-link" data-topic-file="${url.replace(/^\.\//, '')}">${text}</a>`;
+    }
+    return `<a href="${url}">${text}</a>`;
+  });
   html = html.replace(/^####\s+(.*)$/gm, '<h4>$1</h4>');
   html = html.replace(/^###\s+(.*)$/gm, '<h3>$1</h3>');
   html = html.replace(/^##\s+(.*)$/gm, '<h2>$1</h2>');

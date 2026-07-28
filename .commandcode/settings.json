@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "powershell",
+      "Shell(curl -s http://localhost:8080/interview.html)",
+      "Shell(curl -s http://localhost:8080/js/features/interview/interview-ui.js)",
+      "Shell(curl -s http://localhost:8080/js/features/interview/interview-practice.js)",
+      "Shell(tasklist /fi \"PID eq 5180\" 2>nul | findstr node || echo \"Server not running\")",
+      "Shell(taskkill /f /im node.exe 2>nul; echo \"cleaned\")",
+      "Shell(node server.js)",
+      "Shell(curl -s http://localhost:8080/)",
+      "Shell(findstr:*)",
+      "Shell(curl -s http://localhost:8080/css/home.css)",
+      "Shell(curl -s http://localhost:8080/js/home-ai.js)",
+      "Shell(node -e const fs=require('fs'); const c=fs.readFileSync('C:\\Users\\Admin\\Downloads\\WEB_Improve\\web EN\\learn-data.js','utf8'); const matches=c.match(/file:\\s*[^]+/g)",
+      "Shell(console.log:*)",
+      "Shell(Topics:,:*)",
+      "Shell(matches.forEach:*)",
+      "Shell(m,i:*)",
+      "Shell(=:*)",
+      "Shell(i,m:*)",
+      "Shell(powershell -Command \"(Get-Content 'C:\\Users\\Admin\\Downloads\\WEB_Improve\\web EN\\learn-data.js' | Select-String '\\\"file\\\":' -SimpleMatch).Count\")"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}
