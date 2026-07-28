@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillForge — Lò rèn kỹ năng</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/timer.css" />
+  <link rel="stylesheet" href="css/home.css" />
+</head>
+<body class="home-page">
+  <div class="focus-timer" id="focus-timer">
+    <label>⏱️ Tập trung</label>
+    <div class="time-display" id="timer-display">30:00</div>
+    <div class="timer-controls">
+      <select id="timer-select">
+        <option value="30">30p</option>
+        <option value="60">1h</option>
+      </select>
+      <button id="timer-toggle">▶</button>
+      <button id="timer-reset">↻</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <header class="home-header">
+      <h1 class="brand">⚡ SkillForge</h1>
+      <p class="tagline">Lò rèn kỹ năng — Tiếng Anh & Lập trình mỗi ngày</p>
+    </header>
+
+    <div class="home-cards">
+      <a class="home-card" href="english.html">
+        <div class="icon">🇬🇧</div>
+        <h2>English Forge</h2>
+        <p>Từ vựng, ngữ pháp thì, đọc truyện, luyện thi & game ghép cặp.</p>
+      </a>
+
+      <a class="home-card" href="interview.html">
+        <div class="icon">☕</div>
+        <h2>Code Forge</h2>
+        <p>Java Backend Interview — tổng hợp kiến thức phỏng vấn.</p>
+      </a>
+    </div>
+
+    <footer class="app-footer">
+      <p>© 2026 SkillForge</p>
+    </footer>
+  </div>
+
+  <script src="js/utils/timer.js"></script>
+</body>
+</html>

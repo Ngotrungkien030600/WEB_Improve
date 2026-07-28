@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚡ Trắc nghiệm nhanh</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .game-page {
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+    .game-page .game-header {
+      color: white;
+      margin-bottom: 1.2rem;
+    }
+    .game-page .back-link {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      text-decoration: none;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      transition: background 0.2s;
+    }
+    .game-page .back-link:hover {
+      background: rgba(255,255,255,0.35);
+    }
+  </style>
+</head>
+<body>
+  <div class="game-page">
+    <a class="back-link" href="english.html">⬅ Quay lại</a>
+    <div class="game-header">
+      <h2>⚡ Trắc nghiệm nhanh</h2>
+      <div class="game-stats">
+        <span>Điểm: <strong id="sq-score">0</strong></span>
+        <span>Đã làm: <strong id="sq-count">0/10</strong></span>
+      </div>
+    </div>
+    <div class="quiz-timer-bar"><div id="sq-timer-fill"></div></div>
+    <p class="quiz-timer-text" id="sq-timer-text">Thời gian: --</p>
+    <div class="sq-card">
+      <p class="sq-question" id="sq-question">Chọn đáp án đúng</p>
+      <div class="options" id="sq-options"></div>
+      <div class="quiz-feedback" id="sq-feedback"></div>
+    </div>
+    <button class="btn-restart" id="sq-start">▶️ Bắt đầu</button>
+  </div>
+
+  <script src="js/utils/timer.js"></script>
+  <script type="module">
+    import { initSpeedQuizUI } from './js/features/game/game-speedquiz-ui.js';
+    document.addEventListener('DOMContentLoaded', () => initSpeedQuizUI());
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🃏 Ghép cặp từ vựng</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .game-page {
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+    .game-page .game-header {
+      color: white;
+      margin-bottom: 1.2rem;
+    }
+    .game-page .back-link {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      text-decoration: none;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      transition: background 0.2s;
+    }
+    .game-page .back-link:hover {
+      background: rgba(255,255,255,0.35);
+    }
+  </style>
+</head>
+<body>
+  <div class="game-page">
+    <a class="back-link" href="english.html">⬅ Quay lại</a>
+    <div class="game-header">
+      <h2>🃏 Ghép cặp từ vựng</h2>
+      <div class="game-stats">
+        <span>Điểm: <strong id="game-score">0</strong></span>
+        <span>Bước: <strong id="game-moves">0</strong></span>
+        <span>Thời gian: <strong id="game-time">00:00</strong></span>
+      </div>
+    </div>
+    <p class="game-feedback" id="game-feedback">Tìm các cặp từ vựng Anh - Việt!</p>
+    <div class="game-board" id="game-board"></div>
+    <button class="btn-restart" id="game-restart">🔄 Chơi lại</button>
+  </div>
+
+  <script src="js/utils/timer.js"></script>
+  <script type="module">
+    import { initGameUI } from './js/features/game/game-ui.js';
+    document.addEventListener('DOMContentLoaded', () => initGameUI());
+  </script>
+</body>
+</html>

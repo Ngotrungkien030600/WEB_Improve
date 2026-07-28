@@ -1,0 +1,106 @@
+/* ===== Home / Landing Page ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body.home-page {
+  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+.home-header {
+  color: white;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.home-header .brand {
+  font-size: 3.2rem;
+  font-weight: 800;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  margin-bottom: 0.4rem;
+}
+
+.home-header .tagline {
+  font-size: 1.3rem;
+  opacity: 0.95;
+  font-weight: 500;
+}
+
+.home-cards {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.home-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 28px;
+  padding: 2.4rem 2rem;
+  width: 300px;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.22);
+  animation: float 4s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-card:nth-child(2) {
+  animation-delay: 0.7s;
+}
+
+.home-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.28);
+}
+
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.home-card:hover::before {
+  opacity: 1;
+}
+
+.home-card .icon {
+  font-size: 4.5rem;
+  margin-bottom: 1rem;
+}
+
+.home-card h2 {
+  color: #764ba2;
+  font-size: 1.9rem;
+  margin-bottom: 0.7rem;
+}
+
+.home-card p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.55;
+}
+
+@media (max-width: 600px) {
+  .home-header .brand { font-size: 2.4rem; }
+  .home-cards { gap: 1.5rem; }
+  .home-card { width: 90%; padding: 2rem 1.2rem; }
+}

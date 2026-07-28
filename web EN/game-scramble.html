@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🔀 Xếp chữ</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .game-page {
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+    .game-page .game-header {
+      color: white;
+      margin-bottom: 1.2rem;
+    }
+    .game-page .back-link {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      text-decoration: none;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      transition: background 0.2s;
+    }
+    .game-page .back-link:hover {
+      background: rgba(255,255,255,0.35);
+    }
+  </style>
+</head>
+<body>
+  <div class="game-page">
+    <a class="back-link" href="english.html">⬅ Quay lại</a>
+    <div class="game-header">
+      <h2>🔀 Xếp chữ</h2>
+      <div class="game-stats">
+        <span>Điểm: <strong id="scramble-score">0</strong></span>
+        <span>Đã làm: <strong id="scramble-count">0/10</strong></span>
+      </div>
+    </div>
+    <div class="scramble-card">
+      <p class="scramble-hint" id="scramble-hint">👆 Bấm vào chữ để xếp</p>
+      <div class="scramble-letters" id="scramble-letters"></div>
+      <div class="scramble-answer" id="scramble-answer"></div>
+      <p class="scramble-meaning" id="scramble-meaning"></p>
+      <div class="practice-actions">
+        <button id="scramble-check">✅ Kiểm tra</button>
+        <button id="scramble-next">Tiếp ➡️</button>
+      </div>
+      <div class="practice-feedback" id="scramble-feedback"></div>
+    </div>
+  </div>
+
+  <script src="js/utils/timer.js"></script>
+  <script type="module">
+    import { initScrambleUI } from './js/features/game/game-scramble-ui.js';
+    document.addEventListener('DOMContentLoaded', () => initScrambleUI());
+  </script>
+</body>
+</html>

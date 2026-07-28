@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Học Tiếng Anh</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/timer.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>📚 Học Tiếng Anh</h1>
+    <p>Từ vựng, ngữ pháp thì & luyện thi</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-mode="vocab">📝 Từ vựng</button>
+    <button class="tab" data-mode="tense">⏰ Các thì</button>
+    <button class="tab" data-mode="story">📖 Đọc truyện</button>
+    <button class="tab" data-mode="quiz">🎯 Thi</button>
+    <button class="tab" data-mode="game">🎮 Game</button>
+    <a class="tab" href="index.html">🏠 Trang chủ</a>
+  </nav>
+
+  <main class="container">
+    <!-- Từ vựng -->
+    <section id="vocab-section" class="section active">
+      <div class="category-select">
+        <label for="vocab-category">Chủ đề:</label>
+        <select id="vocab-category">
+          <option value="all">Tất cả</option>
+          <option value="greetings">Chào hỏi & Giới thiệu</option>
+          <option value="daily">Sinh hoạt hàng ngày</option>
+          <option value="food">Ăn uống</option>
+          <option value="shopping">Mua sắm</option>
+          <option value="travel">Du lịch</option>
+          <option value="work">Công việc</option>
+          <option value="school">Trường học</option>
+          <option value="health">Sức khỏe</option>
+          <option value="emotion">Cảm xúc</option>
+          <option value="opinion">Đưa ra ý kiến</option>
+          <option value="requests">Yêu cầu & Xin phép</option>
+          <option value="technology">Công nghệ</option>
+          <option value="time">Thời gian</option>
+          <option value="weather">Thời tiết</option>
+          <option value="idioms">Idioms & Phrasal Verbs (Nâng cao)</option>
+        </select>
+      </div>
+
+      <div class="flip-card" id="vocab-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <h2 id="vocab-en">Hello</h2>
+            <button class="btn-speak" id="vocab-speak" title="Nghe phát âm">🔊</button>
+            <p id="vocab-phonetic">/həˈloʊ/</p>
+            <span class="tag" id="vocab-tag">greetings</span>
+          </div>
+          <div class="flip-card-back">
+            <h3 id="vocab-vi">Xin chào</h3>
+            <p id="vocab-example-en">"Hello, nice to meet you!"</p>
+            <p id="vocab-example-vi">"Xin chào, rất vui được gặp bạn!"</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="vocab-prev">⬅️ Trước</button>
+        <button id="vocab-flip">🔄 Lật</button>
+        <button id="vocab-next">Tiếp ➡️</button>
+      </div>
+      <p class="counter" id="vocab-counter">1 / 100</p>
+    </section>
+
+    <!-- Các thì -->
+    <section id="tense-section" class="section">
+      <div class="subtabs">
+        <button class="tense-subtab active" data-tense-mode="learn">📘 Học thì</button>
+        <button class="tense-subtab" data-tense-mode="practice">✍️ Luyện tập</button>
+      </div>
+
+      <div id="tense-learn" class="tense-panel active">
+        <div class="flip-card" id="tense-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <h2 id="tense-name">Present Simple</h2>
+              <p class="tense-subtitle" id="tense-title">Thì hiện tại đơn</p>
+              <p><strong>Công thức:</strong> <span id="tense-form">S + V(s/es)</span></p>
+              <p><strong>Cách dùng:</strong> <span id="tense-usage">Diễn tả thói quen, sự thật hiển nhiên, chân lý.</span></p>
+              <p><strong>Dấu hiệu:</strong> <span id="tense-signal">every day, usually, often...</span></p>
+            </div>
+            <div class="flip-card-back">
+              <p id="tense-example-en">"She goes to school every day."</p>
+              <p id="tense-example-vi">"Cô ấy đi học mỗi ngày."</p>
+              <p class="note" id="tense-note">Simple present = hiện tại đơn...</p>
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="tense-prev">⬅️ Trước</button>
+          <button id="tense-flip">🔄 Lật</button>
+          <button id="tense-next">Tiếp ➡️</button>
+        </div>
+        <p class="counter" id="tense-counter">1 / 12</p>
+      </div>
+
+      <div id="tense-practice" class="tense-panel">
+        <div class="practice-card">
+          <p class="tense-label" id="practice-tense-label">Present Simple</p>
+          <p class="counter" id="practice-counter">1 / 16</p>
+          <h3 id="practice-vietnamese">Cô ấy đi học mỗi ngày.</h3>
+          <div class="dropzone" id="practice-dropzone"></div>
+          <div class="word-bank" id="practice-words"></div>
+          <div class="practice-actions">
+            <button id="practice-check">✅ Kiểm tra</button>
+            <button id="practice-reset">🔄 Làm lại</button>
+            <button id="practice-next">Tiếp ➡️</button>
+          </div>
+          <div class="practice-feedback" id="practice-feedback"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Đọc truyện -->
+    <section id="story-section" class="section">
+      <h2 id="story-title">The Tortoise and the Hare</h2>
+      <p class="story-subtitle" id="story-subtitle">Thỏ và Rùa</p>
+      <div class="story-nav">
+        <button id="story-prev">⬅️ Truyện trước</button>
+        <button id="story-next">Truyện tiếp theo ➡️</button>
+      </div>
+      <p class="counter" id="story-counter">1 / 2</p>
+      <div class="story-box" id="story-box"></div>
+      <p class="story-tip">🖱️ Rê chuột vào câu tiếng Anh để xem nghĩa tiếng Việt tương ứng.</p>
+    </section>
+
+    <!-- Thi -->
+    <section id="quiz-section" class="section">
+      <div class="quiz-tabs">
+        <button class="quiz-tab active" data-quiz="vocab">📝 Từ vựng</button>
+        <button class="quiz-tab" data-quiz="sentence">✍️ Đặt câu</button>
+        <button class="quiz-tab" data-quiz="tense">⏰ Nhận diện thì</button>
+      </div>
+
+      <div class="quiz-config">
+        <div class="config-row">
+          <label for="quiz-question-count">Số câu:</label>
+          <select id="quiz-question-count">
+            <option value="5">5 câu</option>
+            <option value="10" selected>10 câu</option>
+            <option value="15">15 câu</option>
+            <option value="20">20 câu</option>
+          </select>
+        </div>
+        <div class="config-row">
+          <label for="quiz-time-mode">Chế độ thời gian:</label>
+          <select id="quiz-time-mode">
+            <option value="per-question" selected>Tính theo từng câu</option>
+            <option value="total">Tính tổng toàn bài</option>
+            <option value="unlimited">Không giới hạn</option>
+          </select>
+        </div>
+        <div class="config-row">
+          <label for="quiz-time-limit">Thời gian (giây):</label>
+          <select id="quiz-time-limit">
+            <option value="10">10s</option>
+            <option value="15" selected>15s</option>
+            <option value="20">20s</option>
+            <option value="30">30s</option>
+            <option value="60">60s</option>
+            <option value="120">120s</option>
+          </select>
+        </div>
+        <button class="btn-restart" id="quiz-start">▶️ Bắt đầu bài thi</button>
+      </div>
+
+      <div class="quiz-timer-bar"><div id="quiz-timer-fill"></div></div>
+      <p class="quiz-timer-text" id="quiz-timer-text">Thời gian còn lại: --</p>
+
+      <div class="quiz-card">
+        <p class="quiz-type" id="quiz-label">Từ vựng</p>
+        <h3 id="quiz-question">Question</h3>
+        <p class="quiz-hint" id="quiz-hint">Hint</p>
+        <div class="options" id="options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+        <button class="btn-next" id="btn-next-quiz">Câu tiếp theo ➡️</button>
+      </div>
+      <div class="quiz-stats">
+        <div>Điểm: <span id="score">0</span> / <span id="total">0</span></div>
+        <div id="quiz-level">Trình độ: --</div>
+        <div id="quiz-progress">Tiến độ: 0%</div>
+      </div>
+      <div class="quiz-history">
+        <h3>📜 Lịch sử thi (localStorage)</h3>
+        <ul id="quiz-history-list"></ul>
+      </div>
+    </section>
+
+    <!-- Game -->
+    <section id="game-section" class="section">
+      <div class="game-links">
+        <a class="game-link" href="game-memory.html">🃏 Ghép cặp từ vựng</a>
+        <a class="game-link" href="game-scramble.html">🔀 Xếp chữ</a>
+        <a class="game-link" href="game-speedquiz.html">⚡ Trắc nghiệm nhanh</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>© 2026 Web Học Tiếng Anh</p>
+  </footer>
+
+  <script src="js/utils/timer.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
