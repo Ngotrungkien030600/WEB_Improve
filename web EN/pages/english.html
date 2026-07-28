@@ -13,9 +13,25 @@
   <link rel="stylesheet" href="../css/components.css" />
 </head>
 <body>
-  <header class="app-header">
-    <h1>📚 Học Tiếng Anh</h1>
-    <p>Từ vựng, ngữ pháp thì & luyện thi</p>
+  <header class="app-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+    <div>
+      <h1>📚 Học Tiếng Anh</h1>
+      <p>Từ vựng, ngữ pháp thì & luyện thi</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+      <div class="focus-timer" id="focus-timer">
+        <div class="time-display" id="timer-display">30:00</div>
+        <div class="timer-controls">
+          <select id="timer-select">
+            <option value="30">30p</option>
+            <option value="60">1h</option>
+          </select>
+          <button id="timer-toggle">▶</button>
+          <button id="timer-reset">↻</button>
+        </div>
+      </div>
+      <a href="../index.html" style="background:rgba(255,255,255,0.2);color:white;text-decoration:none;padding:0.4rem 1rem;border-radius:30px;font-weight:600;">⬅ Trang chủ</a>
+    </div>
   </header>
 
   <nav class="tabs">
@@ -24,7 +40,6 @@
     <button class="tab" data-mode="story">📖 Đọc truyện</button>
     <button class="tab" data-mode="game">🎮 Game</button>
     <a class="tab exam-link" href="exam.html">📝 Thi</a>
-    <a class="tab" href="../index.html">🏠 Trang chủ</a>
   </nav>
 
   <main class="container">
