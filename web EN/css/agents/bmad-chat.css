@@ -304,6 +304,26 @@
   50% { opacity: 1; }
 }
 
+/* Prototype console styling */
+.console-info {
+  padding: 0.8rem 1rem;
+  background: #eef2ff;
+  border: 1px solid #dbeafe;
+  border-radius: 12px;
+  color: #334155;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+.console-user {
+  margin: 0.3rem 0;
+  color: #334155;
+  font-weight: 600;
+}
+.console-bmad {
+  margin: 0.3rem 0;
+  color: #0f172a;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .bmad-agent-grid {

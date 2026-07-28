@@ -344,14 +344,34 @@ function handleBmadChat(req, res) {
   req.on('data', chunk => body += chunk);
   req.on('end', () => {
     try {
-      const { agentIds, messages, userMessage } = JSON.parse(body);
+      const { agentIds, messages, userMessage, bundleSlug, topic, conversation } = JSON.parse(body);
+      const apiKey = process.env.OPENAI_API_KEY;
+
+      if (bundleSlug) {
+        const convo = Array.isArray(conversation) ? conversation : [];
+        if (convo.length === 0) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Missing conversation for bundleSlug request' }));
+          return;
+        }
+
+        const systemMsg = buildSystemForBundle(bundleSlug, topic);
+        const msgs = [systemMsg, ...convo];
+
+        return callOpenAI(msgs, apiKey).then(reply => {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ replies: [{ agentId: bundleSlug, name: 'BMad', icon: '🤖', text: reply }] }));
+        }).catch(err => {
+          res.writeHead(502, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: err.message }));
+        });
+      }
+
       if (!agentIds || !Array.isArray(agentIds) || agentIds.length === 0) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Missing agentIds array' }));
         return;
       }
-
-      const apiKey = process.env.OPENAI_API_KEY;
 
       const AGENT_INFO = {
         mary:    { name: 'Mary',    icon: '📊' },
@@ -372,7 +392,6 @@ function handleBmadChat(req, res) {
           ...history,
         ];
 
-        // Add user message if present (for party mode, it's new; solo mode already includes it in history)
         if (userMessage) {
           msgs.push({ role: 'user', content: userMessage });
         }

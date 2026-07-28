@@ -84,6 +84,7 @@ function renderBundles(bundles) {
 }
 
 let currentBundle = null;
+const BMAD_API_ENDPOINT = '/api/bmad/chat';
 
 function openBundle(bundle) {
   currentBundle = bundle;
@@ -91,37 +92,50 @@ function openBundle(bundle) {
   document.getElementById('agent-title').textContent = bundle.name;
   document.getElementById('agent-meta').innerHTML = `
     <div style="color:#666">${bundle.tagline}</div>
-    <div style="margin-top:8px">${bundle.description}</div>`;
+    <div style="margin-top:8px">${bundle.description}</div>
+    <div style="margin-top:10px;font-size:0.95rem;color:#475569">Sử dụng mô hình AI cục bộ hoặc OpenAI nếu cấu hình. Endpoint: <code>${BMAD_API_ENDPOINT}</code></div>`;
   const consoleEl = document.getElementById('agent-console');
-  consoleEl.innerHTML = `Session ready for <strong>${bundle.slug}</strong>`;
+  consoleEl.innerHTML = `<div class="console-info">Session ready for <strong>${bundle.slug}</strong></div>`;
+  const inputEl = document.getElementById('agent-input');
+  inputEl.value = '';
+  inputEl.placeholder = `Nhập prompt cho ${bundle.name}. Ví dụ: "Phân tích vấn đề nghiệp vụ và đề xuất hành động"`;
 
-  document.getElementById('agent-send').onclick = async () => {
-    const input = document.getElementById('agent-input').value.trim();
-    if (!input) return;
-    appendConsole('User', input);
-    // Try calling backend /api/ai-chat if available
-    try {
-      const resp = await fetch('/api/ai-chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [{ role: 'user', content: input }], topic: currentBundle.name, bundleSlug: currentBundle.slug })
-      });
-      if (!resp.ok) {
-        const err = await resp.json().catch(() => ({}));
-        appendConsole('BMad (error)', err.error || 'AI backend error');
-        return;
+  const sendBtn = document.getElementById('agent-send');
+  if (sendBtn) {
+    sendBtn.onclick = async () => {
+      const input = inputEl.value.trim();
+      if (!input) return;
+      appendConsole('User', input);
+      inputEl.value = '';
+      try {
+        const resp = await fetch(BMAD_API_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            bundleSlug: currentBundle.slug,
+            topic: currentBundle.name,
+            conversation: [{ role: 'user', content: input }]
+          })
+        });
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          appendConsole('BMad (error)', err.error || 'AI backend error');
+          return;
+        }
+        const data = await resp.json();
+        const reply = data.replies?.[0]?.text || data.reply || JSON.stringify(data);
+        appendConsole('BMad', reply);
+      } catch (e) {
+        appendConsole('BMad (error)', e.message || 'Network error');
       }
-      const data = await resp.json();
-      appendConsole('BMad', data.reply || JSON.stringify(data));
-    } catch (e) {
-      appendConsole('BMad (error)', e.message || 'Network error');
-    }
-  };
+    };
+  }
 }
 
 function appendConsole(who, text) {
   const el = document.getElementById('agent-console');
   const p = document.createElement('div');
+  p.className = who === 'User' ? 'console-user' : who.startsWith('BMad') ? 'console-bmad' : '';
   p.innerHTML = `<strong>${who}:</strong> ${text}`;
   el.appendChild(p);
   el.scrollTop = el.scrollHeight;

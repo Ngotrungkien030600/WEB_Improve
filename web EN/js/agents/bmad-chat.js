@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const conversations = {};
   agents.forEach(a => { conversations[a.id] = []; });
 
+  const API_ENDPOINT = '/api/bmad/chat';
   const grid = document.getElementById('bmad-agent-grid');
   const partyStart = document.getElementById('bmad-party-start');
   const sessionInfo = document.getElementById('bmad-session-info');
@@ -217,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const typingDiv = addTyping();
 
       try {
-        const resp = await fetch('/api/bmad/chat', {
+        const resp = await fetch(API_ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -256,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const typingDiv = addTyping();
 
       try {
-        const resp = await fetch('/api/bmad/chat', {
+        const resp = await fetch(API_ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -340,11 +341,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function clearAllChats() {
     agents.forEach(a => { conversations[a.id] = []; });
     partyRound = 0;
+    selectedAgents = [];
     chatMessages.innerHTML = '';
     chatMessages.style.display = 'none';
     chatInput.style.display = 'none';
     sendBtn.style.display = 'none';
     sessionInfo.style.display = 'none';
+    renderAgentGrid();
   }
 
   // ---- Events ----
