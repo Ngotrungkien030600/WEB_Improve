@@ -13,3 +13,9 @@
 - Prefers preserving sidebar/collapsible-group UI state when navigating between items — does not want the entire sidebar to rebuild and collapse groups when a different item is selected. Confidence: 0.9
 
 - Wants important features (especially AI/tool features) to be surfaced directly on the main/home page — not hidden behind secondary navigation links or subpages. Confidence: 0.7
+
+- Prefers floating UI widgets (e.g., timers) to be compact and positioned in corners so they do not obstruct or overlap main content — strongly dislikes elements that cover the interface. Confidence: 0.8
+
+- Wants learning content to be comprehensive, covering a complete path from basic to advanced topics (e.g., Spring Boot, REST, JPA, Security, Docker, Kafka, Microservices) — not limited to just introductory or beginner material. Confidence: 0.9
+
+- Prefers AI/tool features to support real conversational interaction (back-and-forth chat) rather than single-shot submit-and-evaluate workflows — expects a chat-based interface for AI assistance. Confidence: 0.9
