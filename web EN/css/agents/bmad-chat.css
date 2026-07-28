@@ -110,25 +110,31 @@
   display: none;
   text-align: center;
   margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .bmad-party-start.visible {
-  display: block;
+  display: flex;
 }
 
-.bmad-party-start-btn {
+.bmad-party-start-btn,
+.bmad-party-select-all-btn {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
   border-radius: 30px;
-  padding: 0.7rem 2rem;
+  padding: 0.7rem 1.5rem;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.15s;
 }
 
-.bmad-party-start-btn:hover {
+.bmad-party-start-btn:hover,
+.bmad-party-select-all-btn:hover {
   transform: scale(1.03);
 }
 

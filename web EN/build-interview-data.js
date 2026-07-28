@@ -78,4 +78,3 @@ const output = `// Auto-generated from interview_java/*.md
 window.interviewTopics = ${JSON.stringify(topics, null, 2)};`;
 
 fs.writeFileSync(path.join(__dirname, 'interview-data.js'), output, 'utf-8');
-console.log(`Generated interview-data.js with ${topics.length} topics.`);

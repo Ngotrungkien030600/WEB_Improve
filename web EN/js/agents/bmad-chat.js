@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const API_ENDPOINT = BMAD_API_ENDPOINT;
   const grid = document.getElementById('bmad-agent-grid');
   const partyStart = document.getElementById('bmad-party-start');
+  const selectAllBtn = document.getElementById('bmad-party-select-all-btn');
   const sessionInfo = document.getElementById('bmad-session-info');
   const sessionLabel = document.getElementById('bmad-session-label');
   const chatMessages = document.getElementById('bmad-chat-messages');
@@ -87,9 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (idx >= 0) {
       selectedAgents.splice(idx, 1);
     } else {
-      if (selectedAgents.length >= 4) return;
       selectedAgents.push(id);
     }
+    renderAgentGrid();
+  }
+
+  function selectAllAgents() {
+    selectedAgents = agents.map(a => a.id);
     renderAgentGrid();
   }
 
@@ -372,6 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   if (clearBtn) clearBtn.addEventListener('click', clearAllChats);
   if (partyStartBtn) partyStartBtn.addEventListener('click', startParty);
+  if (selectAllBtn) selectAllBtn.addEventListener('click', selectAllAgents);
 
   // ---- Init ----
   renderAgentGrid();
