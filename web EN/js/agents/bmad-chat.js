@@ -4,6 +4,7 @@
  */
 document.addEventListener('DOMContentLoaded', () => {
 
+  const { BMAD_API_ENDPOINT } = window.BMAD_CONSTANTS;
   const agents = window.BMAD_AGENTS;
   let currentMode = 'solo';
   let selectedAgents = [];
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const conversations = {};
   agents.forEach(a => { conversations[a.id] = []; });
 
-  const API_ENDPOINT = '/api/bmad/chat';
+  const API_ENDPOINT = BMAD_API_ENDPOINT;
   const grid = document.getElementById('bmad-agent-grid');
   const partyStart = document.getElementById('bmad-party-start');
   const sessionInfo = document.getElementById('bmad-session-info');

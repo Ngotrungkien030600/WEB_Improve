@@ -23,6 +23,12 @@ if (fs.existsSync(envPath)) {
 
 const PORT = process.env.PORT || 8080;
 const ROOT = __dirname;
+const API_PATH_AI_FEEDBACK = '/api/ai-feedback';
+const API_PATH_AI_CHAT = '/api/ai-chat';
+const API_PATH_BMAD_CHAT = '/api/bmad/chat';
+const BUNDLE_METADATA_PATH = path.join(__dirname, 'data', 'bmad', 'bmad-bundles.json');
+const DEFAULT_OLLAMA_MODEL = 'qwen2.5:7b';
+const DEFAULT_OPENAI_MODEL = 'gpt-4o-mini';
 
 // BMAD Agent system prompts (id → prompt lookup)
 const AGENTS = {
@@ -79,8 +85,7 @@ Trả lời bằng tiếng Việt, sử dụng icon 💻 ở đầu mỗi tin nh
 // Load BMAD web-bundles metadata (used to build bundle-specific system prompts)
 let bmadBundles = [];
 try {
-  const bundlesPath = path.join(__dirname, 'data', 'bmad', 'bmad-bundles.json');
-  const raw = fs.readFileSync(bundlesPath, 'utf8');
+  const raw = fs.readFileSync(BUNDLE_METADATA_PATH, 'utf8');
   const parsed = JSON.parse(raw);
   bmadBundles = parsed.bundles || [];
 } catch (e) {
@@ -116,7 +121,7 @@ function callOpenAI(messages, apiKey, maxTokens = 1000) {
     const geminiKey = process.env.GEMINI_API_KEY;
     const useGemini = !!geminiKey;
     const useOllama = !apiKey && !geminiKey;
-    const model = useOllama ? (process.env.OLLAMA_MODEL || 'qwen2.5:7b') : 'gpt-4o-mini';
+    const model = useOllama ? (process.env.OLLAMA_MODEL || DEFAULT_OLLAMA_MODEL) : DEFAULT_OPENAI_MODEL;
 
     if (useGemini) {
       // Gemini API — chỉ lấy nội dung text từ messages
@@ -427,15 +432,15 @@ const server = http.createServer((req, res) => {
   const urlPath = req.url.split('?')[0];
 
   // API route: AI feedback
-  if (req.method === 'POST' && urlPath === '/api/ai-feedback') {
+  if (req.method === 'POST' && urlPath === API_PATH_AI_FEEDBACK) {
     return handleAiFeedback(req, res);
   }
   // API route: AI chat
-  if (req.method === 'POST' && urlPath === '/api/ai-chat') {
+  if (req.method === 'POST' && urlPath === API_PATH_AI_CHAT) {
     return handleAiChat(req, res);
   }
   // API route: BMAD multi-agent chat
-  if (req.method === 'POST' && urlPath === '/api/bmad/chat') {
+  if (req.method === 'POST' && urlPath === API_PATH_BMAD_CHAT) {
     return handleBmadChat(req, res);
   }
 

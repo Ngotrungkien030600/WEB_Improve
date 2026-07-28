@@ -5,9 +5,17 @@
  * - Does NOT perform any model calls; provides `startAgentSession` hook
  */
 
+const {
+  BMAD_API_ENDPOINT,
+  BMAD_BUNDLES_PATH,
+  BMAD_CONSOLE_USER_CLASS,
+  BMAD_CONSOLE_BMAD_CLASS,
+  BMAD_CONSOLE_INFO_CLASS,
+} = window.BMAD_CONSTANTS;
+
 async function loadBundles() {
   try {
-    const res = await fetch('data/bmad/bmad-bundles.json');
+    const res = await fetch(BMAD_BUNDLES_PATH);
     const json = await res.json();
     return json.bundles || [];
   } catch (err) {
@@ -84,7 +92,6 @@ function renderBundles(bundles) {
 }
 
 let currentBundle = null;
-const BMAD_API_ENDPOINT = '/api/bmad/chat';
 
 function openBundle(bundle) {
   currentBundle = bundle;
@@ -95,7 +102,7 @@ function openBundle(bundle) {
     <div style="margin-top:8px">${bundle.description}</div>
     <div style="margin-top:10px;font-size:0.95rem;color:#475569">Sử dụng mô hình AI cục bộ hoặc OpenAI nếu cấu hình. Endpoint: <code>${BMAD_API_ENDPOINT}</code></div>`;
   const consoleEl = document.getElementById('agent-console');
-  consoleEl.innerHTML = `<div class="console-info">Session ready for <strong>${bundle.slug}</strong></div>`;
+  consoleEl.innerHTML = `<div class="${BMAD_CONSOLE_INFO_CLASS}">Session ready for <strong>${bundle.slug}</strong></div>`;
   const inputEl = document.getElementById('agent-input');
   inputEl.value = '';
   inputEl.placeholder = `Nhập prompt cho ${bundle.name}. Ví dụ: "Phân tích vấn đề nghiệp vụ và đề xuất hành động"`;
@@ -135,7 +142,7 @@ function openBundle(bundle) {
 function appendConsole(who, text) {
   const el = document.getElementById('agent-console');
   const p = document.createElement('div');
-  p.className = who === 'User' ? 'console-user' : who.startsWith('BMad') ? 'console-bmad' : '';
+  p.className = who === 'User' ? BMAD_CONSOLE_USER_CLASS : who.startsWith('BMad') ? BMAD_CONSOLE_BMAD_CLASS : '';
   p.innerHTML = `<strong>${who}:</strong> ${text}`;
   el.appendChild(p);
   el.scrollTop = el.scrollHeight;
