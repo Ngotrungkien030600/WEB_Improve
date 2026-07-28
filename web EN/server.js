@@ -110,11 +110,50 @@ function buildSystemForBundle(slug, topic) {
 }
 
 // Shared helper: call AI and return the reply text
-// Supports OpenAI (when OPENAI_API_KEY is set) or Ollama (local, no key needed)
+// Supports: OpenAI (OPENAI_API_KEY), Gemini (GEMINI_API_KEY), or Ollama (local, no key)
 function callOpenAI(messages, apiKey, maxTokens = 1000) {
   return new Promise((resolve, reject) => {
-    const useOllama = !apiKey;
+    const geminiKey = process.env.GEMINI_API_KEY;
+    const useGemini = !!geminiKey;
+    const useOllama = !apiKey && !geminiKey;
     const model = useOllama ? (process.env.OLLAMA_MODEL || 'qwen2.5:7b') : 'gpt-4o-mini';
+
+    if (useGemini) {
+      // Gemini API — chỉ lấy nội dung text từ messages
+      const contents = messages.map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }]
+      }));
+      const postData = JSON.stringify({ contents });
+      const options = {
+        hostname: 'generativelanguage.googleapis.com',
+        port: 443,
+        path: `/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      };
+      const apiReq = https.request(options, (apiRes) => {
+        let data = '';
+        apiRes.on('data', chunk => data += chunk);
+        apiRes.on('end', () => {
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.error) {
+              reject(new Error(parsed.error.message || JSON.stringify(parsed.error)));
+              return;
+            }
+            const reply = parsed.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            resolve(reply);
+          } catch (e) {
+            reject(new Error('Failed to parse Gemini response'));
+          }
+        });
+      });
+      apiReq.on('error', reject);
+      apiReq.write(postData);
+      apiReq.end();
+      return;
+    }
 
     const postData = JSON.stringify({
       model,

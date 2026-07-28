@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Học AI — SkillForge</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/timer.css" />
+  <link rel="stylesheet" href="css/ai.css" />
+</head>
+<body class="home-page">
+  <div class="ai-page">
+    <header class="ai-topbar">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+        <div>
+          <h1>🤖 Học AI</h1>
+          <p>Kiến thức AI/ML — Thi trắc nghiệm — Phỏng vấn</p>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <div class="focus-timer" id="focus-timer">
+            <div class="time-display" id="timer-display">30:00</div>
+            <div class="timer-controls">
+              <select id="timer-select">
+                <option value="30">30p</option>
+                <option value="60">1h</option>
+              </select>
+              <button id="timer-toggle">▶</button>
+              <button id="timer-reset">↻</button>
+            </div>
+          </div>
+          <a href="index.html" style="background:white;color:#764ba2;text-decoration:none;padding:0.4rem 0.8rem;border-radius:30px;font-weight:700;font-size:0.85rem;">🏠</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="ai-tabs">
+      <button class="ai-tab active" data-tab="learn">📚 Học</button>
+      <button class="ai-tab" data-tab="quiz">🎯 Thi</button>
+      <button class="ai-tab" data-tab="interview">💼 Phỏng vấn</button>
+      <button class="ai-tab" data-tab="projects">🛠️ Làm Project</button>
+    </div>
+
+    <!-- ===== LEARN ===== -->
+    <section id="ai-learn" class="ai-section active">
+      <div class="ai-card-filter">
+        <select id="ai-card-filter">
+          <option value="all">📂 Tất cả chủ đề</option>
+          <option value="ml">🤖 Machine Learning</option>
+          <option value="dl">🧠 Deep Learning</option>
+          <option value="nlp">🗣️ NLP</option>
+          <option value="cv">👁️ Computer Vision</option>
+          <option value="genai">✨ Generative AI & LLM</option>
+        </select>
+      </div>
+
+      <div class="ai-card" id="ai-card-body">
+        <div class="ai-card-inner">
+          <div class="ai-card-front">
+            <span class="ai-card-category" id="ai-card-cat">ML</span>
+            <div class="ai-card-en" id="ai-card-en">Machine Learning</div>
+            <div class="ai-card-vi" id="ai-card-vi">Học máy</div>
+            <div class="ai-card-def" id="ai-card-def">Một nhánh của AI...</div>
+          </div>
+          <div class="ai-card-back">
+            <span class="ai-card-category">VÍ DỤ</span>
+            <div class="ai-card-ex" id="ai-card-ex">Ví dụ: Gmail lọc spam...</div>
+            <p style="margin-top:1rem;color:#94a3b8;font-size:0.85rem;text-align:center;">🔄 Click để xem lại mặt trước</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="ai-card-counter" id="ai-card-counter">1 / 30</p>
+      <div class="ai-card-controls">
+        <button class="ai-card-btn" id="ai-card-prev">⬅️ Trước</button>
+        <button class="ai-card-btn" id="ai-card-flip">🔄 Lật</button>
+        <button class="ai-card-btn" id="ai-card-next">Tiếp ➡️</button>
+      </div>
+    </section>
+
+    <!-- ===== QUIZ ===== -->
+    <section id="ai-quiz" class="ai-section">
+      <div class="ai-q-config">
+        <div class="ai-q-tabs">
+          <button class="ai-q-tab active" data-qt="general">📝 Kiến thức chung</button>
+          <button class="ai-q-tab" data-qt="algorithms">🔬 Thuật toán</button>
+          <button class="ai-q-tab" data-qt="frameworks">🛠️ Framework</button>
+        </div>
+        <select id="ai-q-count">
+          <option value="5">5 câu</option>
+          <option value="10" selected>10 câu</option>
+          <option value="15">15 câu</option>
+        </select>
+        <select id="ai-q-time">
+          <option value="10">10s</option>
+          <option value="15" selected>15s</option>
+          <option value="20">20s</option>
+          <option value="30">30s</option>
+        </select>
+        <button class="ai-q-start" id="ai-q-start">▶️ Bắt đầu</button>
+      </div>
+
+      <div class="ai-q-timer-bar" id="ai-q-timer-bar"><div class="ai-q-timer-fill" id="ai-q-timer-fill"></div></div>
+      <p class="ai-q-timer-text" id="ai-q-timer-text">--</p>
+
+      <div class="ai-q-card">
+        <span class="ai-q-badge" id="ai-q-badge">Kiến thức chung</span>
+        <span class="ai-q-progress" id="ai-q-progress">Câu 1 / 10</span>
+        <h2 class="ai-q-question" id="ai-q-question">Question</h2>
+        <div class="ai-q-options" id="ai-q-options"></div>
+        <div class="ai-q-feedback" id="ai-q-feedback"></div>
+        <button class="ai-q-next" id="ai-q-next">Câu tiếp theo ➡️</button>
+      </div>
+
+      <div class="ai-q-stats">
+        <div><span class="ai-q-stat-value" id="ai-q-score">0</span><span class="ai-q-stat-label">Đúng</span></div>
+        <div><span class="ai-q-stat-value" id="ai-q-total">0</span><span class="ai-q-stat-label">Tổng</span></div>
+        <div><span class="ai-q-stat-value" id="ai-q-pct">0%</span><span class="ai-q-stat-label">Tỉ lệ</span></div>
+        <div><span class="ai-q-stat-value" id="ai-q-level">--</span><span class="ai-q-stat-label">Trình độ</span></div>
+      </div>
+    </section>
+
+    <!-- ===== INTERVIEW ===== -->
+    <section id="ai-interview" class="ai-section">
+      <div class="ai-interview-layout">
+        <aside class="ai-interview-sidebar">
+          <p class="ai-interview-progress" id="ai-interview-progress">Tiến độ: 0 / 0</p>
+          <ul class="ai-interview-list" id="ai-interview-list"></ul>
+        </aside>
+        <div class="ai-interview-content">
+          <h2 id="ai-interview-title">Chọn chủ đề</h2>
+          <div id="ai-interview-body"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section id="ai-projects" class="ai-section">
+      <div class="ai-projects-grid" id="ai-projects-grid"></div>
+      <div id="ai-project-detail" class="ai-project-detail" style="display:none;">
+        <button class="ai-project-back" id="ai-project-back">← Quay lại danh sách</button>
+        <h2 id="ai-project-title"></h2>
+        <div id="ai-project-body"></div>
+      </div>
+    </section>
+
+    <footer class="app-footer" style="margin-top:1.5rem;">
+      <p>© 2026 SkillForge — AI Learning</p>
+    </footer>
+  </div>
+
+  <script src="js/utils/timer.js"></script>
+  <script src="js/data/ai-data.js"></script>
+  <script src="js/ai-app.js"></script>
+</body>
+</html>

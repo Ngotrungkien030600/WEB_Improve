@@ -43,3 +43,9 @@
 - Prefers clear, upfront operational explanations when setting up tools — asks "what is X?", "do I need to restart X each time?", "which model will it run?" — wants to understand how the tooling works conceptually and operationally, rather than just blindly following instructions. Confidence: 0.8
 
 - Prefers a single one-click startup script (`.bat` file) to launch the entire project — wants to avoid manually starting multiple processes (Ollama server, node server, browser) separately each time; expects the startup to be fully automated so that running the project requires only double-clicking one file. Confidence: 0.9
+
+- When setting up external services/API keys (e.g., Gemini API key), prefers explicit, numbered, click-by-click visual-step instructions — telling them exactly which URL to visit, which button to click, what to name the project, and where to copy/paste the key — rather than high-level or vague guidance. Asks concrete "lấy sao"/"lấy ở đâu" questions until given precise navigation steps. Confidence: 0.85
+
+- Prefers to see annotated screenshots or image-based guidance when learning how to navigate unfamiliar cloud dashboards/developer portals for API key setup — the assistant's combination of text instructions referencing the exact buttons in the user's own screenshot directly answered repeated "lấy ở đâu" questions. Confidence: 0.7
+
+- Proactively wants hands-on, project-based learning alongside theoretical content — unprompted, asked "thêm phần để làm 1 project AI thì sao" when shown a learning page with only flashcards, quizzes, and interview prep; expects practical projects with step-by-step instructions and code samples to be integrated into learning resources, not just theory. Confidence: 0.8
