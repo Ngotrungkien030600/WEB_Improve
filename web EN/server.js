@@ -109,47 +109,70 @@ function buildSystemForBundle(slug, topic) {
   return { role: 'system', content: instructions.join(' ') };
 }
 
-// Shared helper: call OpenAI and return the reply text
+// Shared helper: call AI and return the reply text
+// Supports OpenAI (when OPENAI_API_KEY is set) or Ollama (local, no key needed)
 function callOpenAI(messages, apiKey, maxTokens = 1000) {
   return new Promise((resolve, reject) => {
+    const useOllama = !apiKey;
+    const model = useOllama ? (process.env.OLLAMA_MODEL || 'qwen2.5:7b') : 'gpt-4o-mini';
+
     const postData = JSON.stringify({
-      model: 'gpt-4o-mini',
+      model,
       messages,
       max_tokens: maxTokens,
       temperature: 0.7,
+      stream: false,
     });
 
-    const options = {
-      hostname: 'api.openai.com',
-      port: 443,
-      path: '/v1/chat/completions',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Length': Buffer.byteLength(postData),
-      },
-    };
+    const options = useOllama
+      ? {
+          hostname: '127.0.0.1',
+          port: 11434,
+          path: '/v1/chat/completions',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(postData),
+          },
+        }
+      : {
+          hostname: 'api.openai.com',
+          port: 443,
+          path: '/v1/chat/completions',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Length': Buffer.byteLength(postData),
+          },
+        };
 
-    const apiReq = https.request(options, (apiRes) => {
+    const mod = useOllama ? http : https;
+    const apiReq = mod.request(options, (apiRes) => {
       let data = '';
       apiRes.on('data', chunk => data += chunk);
       apiRes.on('end', () => {
         try {
           const parsed = JSON.parse(data);
           if (parsed.error) {
-            reject(new Error(parsed.error.message));
+            reject(new Error(parsed.error.message || JSON.stringify(parsed.error)));
             return;
           }
           const reply = parsed.choices?.[0]?.message?.content || '';
           resolve(reply);
         } catch (e) {
-          reject(new Error('Failed to parse OpenAI response'));
+          reject(new Error('Failed to parse AI response'));
         }
       });
     });
 
-    apiReq.on('error', reject);
+    apiReq.on('error', (err) => {
+      if (useOllama) {
+        reject(new Error('Không thể kết nối Ollama. Hãy chạy "ollama run qwen2.5:7b" trước.'));
+      } else {
+        reject(err);
+      }
+    });
     apiReq.write(postData);
     apiReq.end();
   });
@@ -194,11 +217,6 @@ function handleAiFeedback(req, res) {
       }
 
       const apiKey = process.env.OPENAI_API_KEY;
-      if (!apiKey) {
-        res.writeHead(503, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'OPENAI_API_KEY not configured on server' }));
-        return;
-      }
 
       const systemPrompt = `Bạn là một senior Java backend interviewer người Việt. Nhiệm vụ: chấm điểm câu trả lời phỏng vấn Java của ứng viên.
 
@@ -258,11 +276,6 @@ function handleAiChat(req, res) {
       }
 
       const apiKey = process.env.OPENAI_API_KEY;
-      if (!apiKey) {
-        res.writeHead(503, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'OPENAI_API_KEY not configured on server' }));
-        return;
-      }
 
       // Build a system message using the selected BMAD bundle when provided
       const systemMsg = buildSystemForBundle(bundleSlug, topic);
@@ -300,11 +313,6 @@ function handleBmadChat(req, res) {
       }
 
       const apiKey = process.env.OPENAI_API_KEY;
-      if (!apiKey) {
-        res.writeHead(503, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'OPENAI_API_KEY not configured on server' }));
-        return;
-      }
 
       const AGENT_INFO = {
         mary:    { name: 'Mary',    icon: '📊' },

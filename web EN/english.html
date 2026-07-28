@@ -18,8 +18,8 @@
     <button class="tab active" data-mode="vocab">📝 Từ vựng</button>
     <button class="tab" data-mode="tense">⏰ Các thì</button>
     <button class="tab" data-mode="story">📖 Đọc truyện</button>
-    <button class="tab" data-mode="quiz">🎯 Thi</button>
     <button class="tab" data-mode="game">🎮 Game</button>
+    <a class="tab exam-link" href="exam.html">📝 Thi</a>
     <a class="tab" href="index.html">🏠 Trang chủ</a>
   </nav>
 
@@ -132,68 +132,6 @@
       <p class="counter" id="story-counter">1 / 2</p>
       <div class="story-box" id="story-box"></div>
       <p class="story-tip">🖱️ Rê chuột vào câu tiếng Anh để xem nghĩa tiếng Việt tương ứng.</p>
-    </section>
-
-    <!-- Thi -->
-    <section id="quiz-section" class="section">
-      <div class="quiz-tabs">
-        <button class="quiz-tab active" data-quiz="vocab">📝 Từ vựng</button>
-        <button class="quiz-tab" data-quiz="sentence">✍️ Đặt câu</button>
-        <button class="quiz-tab" data-quiz="tense">⏰ Nhận diện thì</button>
-      </div>
-
-      <div class="quiz-config">
-        <div class="config-row">
-          <label for="quiz-question-count">Số câu:</label>
-          <select id="quiz-question-count">
-            <option value="5">5 câu</option>
-            <option value="10" selected>10 câu</option>
-            <option value="15">15 câu</option>
-            <option value="20">20 câu</option>
-          </select>
-        </div>
-        <div class="config-row">
-          <label for="quiz-time-mode">Chế độ thời gian:</label>
-          <select id="quiz-time-mode">
-            <option value="per-question" selected>Tính theo từng câu</option>
-            <option value="total">Tính tổng toàn bài</option>
-            <option value="unlimited">Không giới hạn</option>
-          </select>
-        </div>
-        <div class="config-row">
-          <label for="quiz-time-limit">Thời gian (giây):</label>
-          <select id="quiz-time-limit">
-            <option value="10">10s</option>
-            <option value="15" selected>15s</option>
-            <option value="20">20s</option>
-            <option value="30">30s</option>
-            <option value="60">60s</option>
-            <option value="120">120s</option>
-          </select>
-        </div>
-        <button class="btn-restart" id="quiz-start">▶️ Bắt đầu bài thi</button>
-      </div>
-
-      <div class="quiz-timer-bar"><div id="quiz-timer-fill"></div></div>
-      <p class="quiz-timer-text" id="quiz-timer-text">Thời gian còn lại: --</p>
-
-      <div class="quiz-card">
-        <p class="quiz-type" id="quiz-label">Từ vựng</p>
-        <h3 id="quiz-question">Question</h3>
-        <p class="quiz-hint" id="quiz-hint">Hint</p>
-        <div class="options" id="options"></div>
-        <div class="quiz-feedback" id="quiz-feedback"></div>
-        <button class="btn-next" id="btn-next-quiz">Câu tiếp theo ➡️</button>
-      </div>
-      <div class="quiz-stats">
-        <div>Điểm: <span id="score">0</span> / <span id="total">0</span></div>
-        <div id="quiz-level">Trình độ: --</div>
-        <div id="quiz-progress">Tiến độ: 0%</div>
-      </div>
-      <div class="quiz-history">
-        <h3>📜 Lịch sử thi (localStorage)</h3>
-        <ul id="quiz-history-list"></ul>
-      </div>
     </section>
 
     <!-- Game -->

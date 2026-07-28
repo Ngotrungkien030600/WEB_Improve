@@ -1,5 +1,7 @@
 - Prefers dedicated pages per learning domain (e.g., separate pages for interview prep vs. coding lessons) rather than combining everything into a single page. Confidence: 0.8
 
+- Prefers complex/interactive features (e.g., exams, quizzes, tests) to be extracted into their own dedicated standalone page rather than kept as tabbed sections within a general feature page — wants each major activity to have a clear, focused, explicit space ("tường minh hơn") instead of being nested/hidden inside another page. Confidence: 0.8
+
 - Wants content view to scroll/reset to the top when navigating between topics/items — does not want the scroll position from the previous topic to carry over. Confidence: 0.9
 
 - Prefers concise, high-trust task requests — gives minimal instructions (e.g. "run app", "run app cho tôi") and lets the agent autonomously discover project structure, entry points, and run logic. Confidence: 0.7
@@ -33,3 +35,11 @@
 - When fixing frontend JS errors during local development, prefers a **comprehensive** cache-prevention approach: both client-side cache-busting version parameters (`?v=N`) on script/link tags **and** server-side HTTP cache-control headers (`Cache-Control: no-cache, no-store, must-revalidate`) to ensure fresh content is always served — rather than only fixing the code and expecting a manual hard refresh. Confidence: 0.9
 
 - Prefers the main agent/tool selection grid to always remain visible on the page, even when a chat session is active — does not want the grid to be hidden or replaced by the chat view; wants chat to appear below the grid instead. Confidence: 0.9
+
+- Prefers local/free AI solutions (like Ollama running local models) over cloud API-based services (like OpenAI) to avoid needing external API keys or cloud subscriptions — wants AI features to work without internet/dependency on third-party paid services. Confidence: 0.8
+
+- Sensitive to AI response speed — explicitly questions when responses are slow ("typing sao lâu trả lời vậy", "thảo luận lâu z") and expects performant, near-real-time interaction from AI features. Repeated complaints about slowness indicate this is a strong, consistent concern. Confidence: 0.85
+
+- Prefers clear, upfront operational explanations when setting up tools — asks "what is X?", "do I need to restart X each time?", "which model will it run?" — wants to understand how the tooling works conceptually and operationally, rather than just blindly following instructions. Confidence: 0.8
+
+- Prefers a single one-click startup script (`.bat` file) to launch the entire project — wants to avoid manually starting multiple processes (Ollama server, node server, browser) separately each time; expects the startup to be fully automated so that running the project requires only double-clicking one file. Confidence: 0.9

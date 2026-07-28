@@ -6,7 +6,6 @@ import { initVocabularyUI } from './features/vocabulary/vocabulary-ui.js';
 import { initTensesUI } from './features/tenses/tenses-ui.js';
 import { initPracticeUI } from './features/practice/practice-ui.js';
 import { initStoriesUI } from './features/stories/stories-ui.js';
-import { initQuizUI } from './features/quiz/quiz-ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Tab switching
@@ -15,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     vocab: document.getElementById('vocab-section'),
     tense: document.getElementById('tense-section'),
     story: document.getElementById('story-section'),
-    quiz: document.getElementById('quiz-section'),
     game: document.getElementById('game-section'),
   };
 
@@ -39,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const { onArrowRight: tenseRight, onArrowLeft: tenseLeft, onSpaceEnter: tenseEnter } = initTensesUI();
   initPracticeUI();
   initStoriesUI();
-  initQuizUI();
 
   // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {

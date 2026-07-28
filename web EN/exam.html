@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thi Tiếng Anh — SkillForge</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/timer.css" />
+  <link rel="stylesheet" href="css/exam.css" />
+</head>
+<body>
+  <div class="exam-page">
+    <!-- Top bar -->
+    <header class="exam-topbar">
+      <div>
+        <h1>📝 Thi Tiếng Anh</h1>
+        <p class="exam-subtitle">Kiểm tra từ vựng, ngữ pháp & khả năng đặt câu</p>
+      </div>
+      <div class="exam-topbar-actions">
+        <div class="focus-timer" id="focus-timer">
+          <div class="time-display" id="timer-display">30:00</div>
+          <div class="timer-controls">
+            <select id="timer-select">
+              <option value="30">30p</option>
+              <option value="60">1h</option>
+            </select>
+            <button id="timer-toggle">▶</button>
+            <button id="timer-reset">↻</button>
+          </div>
+        </div>
+        <a class="exam-back-btn" href="english.html">⬅ Tiếng Anh</a>
+      </div>
+    </header>
+
+    <!-- Topic selector & config -->
+    <section class="exam-section exam-config">
+      <div class="exam-config-row">
+        <label>Chủ đề:</label>
+        <div class="exam-topic-tabs" id="exam-topic-tabs">
+          <button class="exam-topic-tab active" data-quiz="vocab">📝 Từ vựng</button>
+          <button class="exam-topic-tab" data-quiz="sentence">✍️ Đặt câu</button>
+          <button class="exam-topic-tab" data-quiz="tense">⏰ Nhận diện thì</button>
+        </div>
+      </div>
+      <div class="exam-config-row">
+        <label>Số câu:</label>
+        <select id="exam-question-count">
+          <option value="5">5 câu</option>
+          <option value="10" selected>10 câu</option>
+          <option value="15">15 câu</option>
+          <option value="20">20 câu</option>
+        </select>
+        <label>Thời gian:</label>
+        <select id="exam-time-mode">
+          <option value="per-question" selected>Theo từng câu</option>
+          <option value="total">Tổng toàn bài</option>
+          <option value="unlimited">Không giới hạn</option>
+        </select>
+        <select id="exam-time-limit">
+          <option value="10">10s</option>
+          <option value="15" selected>15s</option>
+          <option value="20">20s</option>
+          <option value="30">30s</option>
+        </select>
+        <button class="exam-btn-start" id="exam-start">▶️ Bắt đầu thi</button>
+      </div>
+    </section>
+
+    <!-- Timer bar -->
+    <div class="exam-timer-bar" id="exam-timer-bar">
+      <div class="exam-timer-fill" id="exam-timer-fill"></div>
+    </div>
+    <p class="exam-timer-text" id="exam-timer-text">Thời gian còn lại: --</p>
+
+    <!-- Active exam area -->
+    <section class="exam-section exam-card" id="exam-card">
+      <div class="exam-card-header">
+        <span class="exam-badge" id="exam-badge">Từ vựng</span>
+        <span class="exam-progress" id="exam-progress">Câu 1 / 10</span>
+      </div>
+      <h2 class="exam-question" id="exam-question">Question</h2>
+      <p class="exam-hint" id="exam-hint">Hint</p>
+      <div class="exam-options" id="exam-options"></div>
+      <div class="exam-feedback" id="exam-feedback"></div>
+      <div class="exam-actions">
+        <button class="exam-btn-next" id="exam-btn-next">Câu tiếp theo ➡️</button>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="exam-section exam-stats" id="exam-stats">
+      <div class="exam-stat">
+        <span class="exam-stat-value" id="exam-score">0</span>
+        <span class="exam-stat-label">Đúng</span>
+      </div>
+      <div class="exam-stat">
+        <span class="exam-stat-value" id="exam-total">0</span>
+        <span class="exam-stat-label">Tổng</span>
+      </div>
+      <div class="exam-stat">
+        <span class="exam-stat-value" id="exam-pct">0%</span>
+        <span class="exam-stat-label">Tỉ lệ</span>
+      </div>
+      <div class="exam-stat">
+        <span class="exam-stat-value" id="exam-level">--</span>
+        <span class="exam-stat-label">Trình độ</span>
+      </div>
+    </section>
+
+    <!-- History -->
+    <section class="exam-section exam-history">
+      <h3>📜 Lịch sử thi</h3>
+      <ul id="exam-history-list"></ul>
+    </section>
+
+    <footer class="app-footer">
+      <p>© 2026 SkillForge</p>
+    </footer>
+  </div>
+
+  <script src="js/utils/timer.js"></script>
+  <script type="module" src="js/exam-app.js"></script>
+</body>
+</html>

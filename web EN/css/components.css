@@ -39,6 +39,12 @@
   border-color: white;
 }
 
+/* Exam link — stands out as special */
+.tab.exam-link {
+  background: rgba(255, 215, 0, 0.25);
+  border-color: rgba(255, 215, 0, 0.5);
+}
+
 /* Controls / Action Buttons */
 .controls,
 .story-nav,
