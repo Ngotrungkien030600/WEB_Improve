@@ -79,7 +79,7 @@ Trả lời bằng tiếng Việt, sử dụng icon 💻 ở đầu mỗi tin nh
 // Load BMAD web-bundles metadata (used to build bundle-specific system prompts)
 let bmadBundles = [];
 try {
-  const bundlesPath = path.join(__dirname, 'data', 'bmad-bundles.json');
+  const bundlesPath = path.join(__dirname, 'data', 'bmad', 'bmad-bundles.json');
   const raw = fs.readFileSync(bundlesPath, 'utf8');
   const parsed = JSON.parse(raw);
   bmadBundles = parsed.bundles || [];

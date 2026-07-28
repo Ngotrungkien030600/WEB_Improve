@@ -7,7 +7,7 @@
 
 async function loadBundles() {
   try {
-    const res = await fetch('data/bmad-bundles.json');
+    const res = await fetch('data/bmad/bmad-bundles.json');
     const json = await res.json();
     return json.bundles || [];
   } catch (err) {
