@@ -8,6 +8,7 @@ const API_PATHS = {
   AI_FEEDBACK: '/api/ai-feedback',
   AI_CHAT: '/api/ai-chat',
   BMAD_CHAT: '/api/bmad/chat',
+  SALARY_INTERVIEW: '/api/salary-interview',
 };
 
 const AI_CONFIG = {

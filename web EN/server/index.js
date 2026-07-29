@@ -24,6 +24,65 @@ if (fs.existsSync(envPath)) {
   });
 }
 
+/** POST /api/salary-interview — Salary-based question generator */
+function handleSalaryInterview(req, res) {
+  let body = '';
+  req.on('data', chunk => body += chunk);
+  req.on('end', () => {
+    try {
+      const { salary, topic, customRequest } = JSON.parse(body);
+      const apiKey = process.env.OPENAI_API_KEY;
+
+      const systemPrompt = `Bạn là senior Java backend interviewer. Dựa trên mức lương ${salary} triệu/tháng, hãy tạo câu hỏi phỏng vấn phù hợp.
+
+QUY TẮC:
+- ${salary < 20 ? 'Junior: hỏi core Java, OOP, SQL, Git, data structures cơ bản' : ''}
+- ${salary >= 20 && salary < 40 ? 'Middle: Spring Boot, JPA, REST, Multithreading, Transaction, Security' : ''}
+- ${salary >= 40 && salary < 70 ? 'Senior: Microservices, Docker, Kafka, Design Patterns, Cloud, Performance' : ''}
+- ${salary >= 70 ? 'Architect: System Design, Distributed Systems, CAP, CQRS, Event Sourcing, Leadership' : ''}
+
+Trả về JSON array, mỗi item có: { "id": "q1", "topic": "chủ đề", "question": "câu hỏi", "sampleAnswer": "gợi ý trả lời" }
+Tạo 5-8 câu hỏi, focus vào mức lương ${salary}tr.`;
+
+      const userMsg = customRequest
+        ? `Yêu cầu đặc biệt: ${customRequest}. Hãy tạo câu hỏi phù hợp cho mức lương ${salary} triệu.`
+        : `Tạo câu hỏi phỏng vấn Java cho mức lương ${salary} triệu/tháng.`;
+
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMsg }
+      ];
+
+      callAI(messages, apiKey, 1500).then(reply => {
+        const jsonMatch = reply.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ questions: JSON.parse(jsonMatch[0]), fromAI: true }));
+        } else {
+          // Fallback: parse từng dòng câu hỏi
+          const parsed = [];
+          const lines = reply.split('\n');
+          for (const line of lines) {
+            const trimmed = line.trim();
+            const qMatch = trimmed.match(/[?"'](.+?)[?"']/);
+            if (trimmed.toLowerCase().includes('câu hỏi') && trimmed.length > 20) {
+              parsed.push({ id: 'q-fallback', topic: 'General', question: trimmed.replace(/^\d+[\.\)]\s*/, ''), sampleAnswer: '—' });
+            }
+          }
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ questions: parsed, fromAI: true, note: 'fallback parse' }));
+        }
+      }).catch(err => {
+        res.writeHead(502, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: err.message }));
+      });
+    } catch (e) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid JSON body' }));
+    }
+  });
+}
+
 // ---- Route Handlers ----
 
 /** POST /api/ai-feedback — Interview answer evaluation */
@@ -195,6 +254,7 @@ const server = http.createServer((req, res) => {
   if (req.method === 'POST' && urlPath === API_PATHS.AI_FEEDBACK) return handleAiFeedback(req, res);
   if (req.method === 'POST' && urlPath === API_PATHS.AI_CHAT) return handleAiChat(req, res);
   if (req.method === 'POST' && urlPath === API_PATHS.BMAD_CHAT) return handleBmadChat(req, res);
+  if (req.method === 'POST' && urlPath === API_PATHS.SALARY_INTERVIEW) return handleSalaryInterview(req, res);
 
   let filePath = path.join(ROOT, urlPath === '/' ? 'index.html' : urlPath);
   const ext = path.extname(filePath).toLowerCase();

@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/timer.css" />
   <link rel="stylesheet" href="css/home.css" />
-  <link rel="stylesheet" href="css/agents/bmad-chat.css" />
 </head>
 <body class="home-page">
   <div class="container">
@@ -36,34 +35,28 @@
     </header>
 
     <div class="home-cards">
-      <a class="home-card" href="pages/interview.html">
+      <a class="home-card" href="pages/java/hub.html">
         <div class="icon">☕</div>
-        <h2>Phỏng vấn</h2>
-        <p>Java Backend Interview — tổng hợp cheat sheet, checklist ôn tập.</p>
+        <h2>Java</h2>
+        <p>Học code Java &amp; ôn luyện phỏng vấn backend, cheat sheet có lộ trình.</p>
       </a>
 
-      <a class="home-card" href="pages/code-learn.html">
-        <div class="icon">💻</div>
-        <h2>Học Code</h2>
-        <p>Bài học Java, data structures, thuật toán, SQL, Git từ cơ bản.</p>
-      </a>
-
-      <a class="home-card" href="pages/english.html">
+      <a class="home-card" href="pages/english/hub.html">
         <div class="icon">📖</div>
         <h2>English</h2>
         <p>Từ vựng, ngữ pháp, đọc truyện, luyện thi & game ghép cặp.</p>
       </a>
 
-      <a class="home-card" href="pages/ai.html">
+      <a class="home-card" href="pages/ai/hub.html">
         <div class="icon">🧠</div>
         <h2>Học AI</h2>
         <p>AI/ML — kiến thức, thi trắc nghiệm, câu hỏi phỏng vấn.</p>
       </a>
 
-      <a class="home-card" href="#" onclick="document.getElementById('bmad-section').scrollIntoView({behavior:'smooth'});return false;">
+      <a class="home-card" href="pages/bmad-agents.html">
         <div class="icon">🗣️</div>
         <h2>BMAD Agents</h2>
-        <p>Trợ lý AI chuyên gia — Business Analyst, Architect, Developer...</p>
+        <p>6 trợ lý AI chuyên gia — phân tích, thiết kế, code, Party Mode</p>
       </a>
 
       <a class="home-card" href="pages/skill-tracker.html">
@@ -71,44 +64,18 @@
         <h2>Skill Tracker</h2>
         <p>Theo dõi kỹ năng, XP, streak — biến việc học thành game.</p>
       </a>
-    </div>
 
-    <div class="home-ai-section" id="bmad-section">
-      <div class="home-ai-header">
-        <h2>🤖 BMAD Agents</h2>
-        <p>Chọn agent để trò chuyện, hoặc bật Party Mode để thảo luận đa chiều.</p>
-      </div>
+      <a class="home-card" href="pages/dashboard.html">
+        <div class="icon">📈</div>
+        <h2>Dashboard</h2>
+        <p>Thống kê học tập, lịch sử thi, tổng quan tiến độ.</p>
+      </a>
 
-      <!-- Mode bar -->
-      <div class="bmad-mode-bar" id="bmad-mode-bar">
-        <button class="bmad-mode-btn active" data-mode="solo">🧑‍💻 Trò chuyện 1-1</button>
-        <button class="bmad-mode-btn" data-mode="party">🎉 Party Mode</button>
-      </div>
-
-      <!-- Agent grid -->
-      <div class="bmad-agent-grid" id="bmad-agent-grid"></div>
-
-      <!-- Party start button -->
-      <div class="bmad-party-start" id="bmad-party-start">
-        <button class="bmad-party-select-all-btn" id="bmad-party-select-all-btn">✅ Chọn tất cả agent</button>
-        <button class="bmad-party-start-btn" id="bmad-party-start-btn">🎉 Bắt đầu Party</button>
-      </div>
-
-      <!-- Session info -->
-      <div class="bmad-session-info" id="bmad-session-info" style="display:none;">
-        <span class="bmad-session-label" id="bmad-session-label">Đang trò chuyện</span>
-        <button class="bmad-back-btn" id="bmad-back-btn">← Danh sách</button>
-        <button class="ai-clear-btn" id="bmad-clear-btn">🗑️</button>
-      </div>
-
-      <!-- Chat messages -->
-      <div class="ai-chat-box" id="bmad-chat-messages" style="display:none;"></div>
-
-      <!-- Input row -->
-      <div class="ai-chat-input-row">
-        <textarea id="bmad-chat-input" class="ai-chat-input" rows="2" placeholder="Nhập câu hỏi của bạn..." maxlength="2000" style="display:none;"></textarea>
-        <button id="bmad-send-btn" class="ai-send-btn" style="display:none;">➤</button>
-      </div>
+      <a class="home-card" href="pages/learning-paths.html">
+        <div class="icon">🗺️</div>
+        <h2>Lộ trình</h2>
+        <p>Lộ trình học có mục tiêu rõ ràng từ cơ bản đến nâng cao.</p>
+      </a>
     </div>
 
     <footer class="app-footer">
@@ -116,18 +83,7 @@
     </footer>
   </div>
 
-  <!-- Data layer -->
-  <script src="js/data/data-meta.js"></script>
-  <script src="js/data/learning-path-data.js"></script>
-  <script src="js/data/search-index.js"></script>
-  <script src="js/data/spaced-repetition.js"></script>
-  <script src="js/data/progress-db.js"></script>
-
-  <!-- Legacy data -->
   <script src="js/utils/timer.js"></script>
   <script src="js/data/interview-data.js"></script>
-  <script src="js/agents/agent-constants.js"></script>
-  <script src="js/agents/agents-config.js"></script>
-  <script src="js/agents/bmad-chat.js"></script>
 </body>
 </html>

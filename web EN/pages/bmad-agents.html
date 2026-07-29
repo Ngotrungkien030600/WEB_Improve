@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BMAD Agents — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/hub.css" />
+  <style>
+    .bmad-header { margin-bottom: 1.5rem; }
+    .bmad-header h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .bmad-header p { font-size: 0.9rem; color: var(--text-secondary); }
+    .bmad-mode-bar { display: flex; gap: 0.25rem; background: var(--bg-subtle); border-radius: var(--radius-sm); padding: 0.25rem; margin-bottom: 1rem; }
+    .bmad-mode-btn { flex: 1; padding: 0.45rem 0.75rem; border: none; border-radius: 4px; font-size: 0.85rem; font-weight: 500; cursor: pointer; background: transparent; color: var(--text-muted); transition: all 0.15s; }
+    .bmad-mode-btn.active { background: var(--bg-surface); color: var(--color-primary); box-shadow: var(--shadow-sm); }
+    .bmad-agent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+    .bmad-agent-card { background: var(--bg-subtle); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1rem; text-align: center; cursor: pointer; transition: border-color 0.15s; }
+    .bmad-agent-card:hover { border-color: var(--color-primary); background: var(--color-primary-light); }
+    .bmad-agent-card.selected, .bmad-agent-card.party-selected { border-color: var(--color-primary); background: var(--color-primary-light); }
+    .bmad-agent-card .agent-icon { font-size: 2rem; display: block; margin-bottom: 0.3rem; }
+    .bmad-agent-card .agent-name { font-size: 0.95rem; font-weight: 600; display: block; }
+    .bmad-agent-card .agent-role { font-size: 0.75rem; color: var(--text-muted); display: block; }
+    .bmad-agent-card .agent-check { display: none; }
+    .bmad-party-start { display: flex; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .bmad-party-start-btn, .bmad-party-select-all-btn { background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); padding: 0.5rem 1.25rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+    .bmad-party-start-btn:hover, .bmad-party-select-all-btn:hover { background: var(--color-primary-hover); }
+    .bmad-session-info { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-light); }
+    .bmad-session-label { flex: 1; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+    .bmad-back-btn { background: transparent; color: var(--text-muted); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 0.25rem 0.6rem; font-size: 0.8rem; cursor: pointer; }
+    .bmad-back-btn:hover { background: var(--bg-hover); }
+    .ai-clear-btn { background: transparent; color: var(--text-muted); border: none; border-radius: var(--radius-sm); width: 32px; height: 32px; font-size: 0.9rem; cursor: pointer; }
+    .ai-clear-btn:hover { background: var(--color-error-light); color: var(--color-error); }
+    .ai-chat-box { background: var(--bg-subtle); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1rem; height: 400px; overflow-y: auto; margin-bottom: 0.75rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .chat-msg { display: flex; gap: 0.5rem; max-width: 88%; }
+    .chat-user { align-self: flex-end; flex-direction: row-reverse; }
+    .chat-assistant { align-self: flex-start; }
+    .chat-avatar { font-size: 1.5rem; flex-shrink: 0; }
+    .chat-bubble { padding: 0.6rem 0.9rem; border-radius: var(--radius-sm); font-size: 0.9rem; line-height: 1.55; }
+    .chat-user .chat-bubble { background: var(--color-primary); color: white; }
+    .chat-assistant .chat-bubble { background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-light); }
+    .ai-chat-input-row { display: flex; gap: 0.5rem; align-items: flex-end; }
+    .ai-chat-input { flex: 1; padding: 0.6rem 0.9rem; border: 1px solid var(--border-medium); border-radius: var(--radius-sm); font-size: 0.9rem; font-family: inherit; resize: none; line-height: 1.5; max-height: 100px; }
+    .ai-chat-input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-subtle); }
+    .ai-send-btn { background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); width: 42px; height: 42px; font-size: 1.1rem; cursor: pointer; flex-shrink: 0; }
+    .ai-send-btn:hover { background: var(--color-primary-hover); }
+    .chat-msg-solo .chat-msg-header { display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.2rem; }
+    .chat-msg-solo .chat-msg-header .agent-icon { font-size: 1rem; }
+    .chat-msg-solo .chat-msg-header .agent-name { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
+    .party-round { margin-bottom: 1rem; border: 1px solid var(--border-light); border-radius: var(--radius-sm); overflow: hidden; }
+    .party-round-header { background: var(--bg-subtle); padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-light); text-align: center; }
+    .party-agent-reply { display: flex; gap: 0.5rem; padding: 0.65rem 0.8rem; border-bottom: 1px solid var(--border-light); }
+    .party-agent-reply:last-child { border-bottom: none; }
+    .party-agent-reply .party-agent-icon { font-size: 1.25rem; flex-shrink: 0; }
+    .party-agent-reply .party-agent-name { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.15rem; }
+    .party-agent-reply .party-agent-text { font-size: 0.88rem; line-height: 1.55; color: var(--text-primary); }
+    .chat-typing-dots span { animation: blink 1.4s infinite; font-size: 1.5rem; }
+    .chat-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+    @media (max-width: 600px) { .bmad-agent-grid { grid-template-columns: repeat(2, 1fr); } .ai-chat-box { height: 300px; } }
+  </style>
+</head>
+<body>
+  <div class="hub-page">
+    <div class="hub-topbar">
+      <h1>🗣️ BMAD Agents</h1>
+      <a class="back-home" href="../index.html">← Trang chủ</a>
+    </div>
+    <div class="bmad-header">
+      <h2>Trợ lý AI chuyên gia</h2>
+      <p>6 agent với 6 chuyên môn — chọn 1 để trò chuyện, hoặc Party Mode thảo luận đa chiều</p>
+    </div>
+
+    <div class="bmad-mode-bar" id="bmad-mode-bar">
+      <button class="bmad-mode-btn active" data-mode="solo">🧑‍💻 Trò chuyện 1-1</button>
+      <button class="bmad-mode-btn" data-mode="party">🎉 Party Mode</button>
+    </div>
+    <div class="bmad-agent-grid" id="bmad-agent-grid"></div>
+    <div class="bmad-party-start" id="bmad-party-start">
+      <button class="bmad-party-select-all-btn" id="bmad-party-select-all-btn">✅ Chọn tất cả</button>
+      <button class="bmad-party-start-btn" id="bmad-party-start-btn">🎉 Bắt đầu Party</button>
+    </div>
+    <div class="bmad-session-info" id="bmad-session-info" style="display:none;">
+      <span class="bmad-session-label" id="bmad-session-label">Đang trò chuyện</span>
+      <button class="bmad-back-btn" id="bmad-back-btn">← Danh sách</button>
+      <button class="ai-clear-btn" id="bmad-clear-btn">🗑️</button>
+    </div>
+    <div class="ai-chat-box" id="bmad-chat-messages" style="display:none;"></div>
+    <div class="ai-chat-input-row">
+      <textarea id="bmad-chat-input" class="ai-chat-input" rows="2" placeholder="Nhập câu hỏi của bạn..." maxlength="2000" style="display:none;"></textarea>
+      <button id="bmad-send-btn" class="ai-send-btn" style="display:none;">➤</button>
+    </div>
+  </div>
+
+  <script src="../js/agents/agent-constants.js"></script>
+  <script src="../js/agents/agents-config.js"></script>
+  <script src="../js/agents/bmad-chat.js"></script>
+</body>
+</html>

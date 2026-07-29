@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lộ trình học — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <style>
+    .lp-page { max-width: 720px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .lp-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+    .lp-topbar h1 { font-size: 1.75rem; font-weight: 700; }
+    .lp-topbar .back-home { font-size: 0.875rem; color: var(--color-primary); text-decoration: none; }
+    .lp-topbar .back-home:hover { text-decoration: underline; }
+
+    .path-card { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.25rem; }
+    .path-card h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .path-card .meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .path-card .desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem; }
+    .path-card .milestone { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border-light); }
+    .path-card .milestone:last-child { border-bottom: none; }
+    .path-card .milestone .num { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-subtle); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: var(--color-primary); flex-shrink: 0; }
+    .path-card .milestone .info { flex: 1; }
+    .path-card .milestone .info strong { font-size: 0.9rem; }
+    .path-card .milestone .info p { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.15rem; }
+    .path-card .btn-start { display: inline-block; margin-top: 0.75rem; background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); padding: 0.5rem 1.25rem; font-size: 0.875rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: background 0.15s; }
+    .path-card .btn-start:hover { background: var(--color-primary-hover); }
+
+    @media (max-width: 600px) { .lp-page { padding: 2rem 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="lp-page">
+    <div class="lp-topbar">
+      <h1>🗺️ Lộ trình học</h1>
+      <a class="back-home" href="../index.html">← Trang chủ</a>
+    </div>
+
+    <!-- English Beginner -->
+    <div class="path-card">
+      <h2>🌱 Tiếng Anh Cơ Bản</h2>
+      <p class="meta">14 ngày • Người mới bắt đầu</p>
+      <p class="desc">Xây dựng nền tảng vững chắc với từ vựng và ngữ pháp cơ bản. Kết thúc lộ trình bạn có thể giới thiệu bản thân và giao tiếp hàng ngày.</p>
+      <div class="milestone"><div class="num">1</div><div class="info"><strong>Chào hỏi &amp; Giới thiệu</strong><p>20+ từ greetings, giới thiệu bản thân, thì Present Simple</p></div></div>
+      <div class="milestone"><div class="num">2</div><div class="info"><strong>Sinh hoạt hàng ngày</strong><p>25+ từ daily routine, adverbs of frequency, telling time</p></div></div>
+      <div class="milestone"><div class="num">3</div><div class="info"><strong>Ẩm thực &amp; Mua sắm</strong><p>25+ từ food/shopping, some/any, countable/uncountable</p></div></div>
+      <div class="milestone"><div class="num">4</div><div class="info"><strong>Thời tiết &amp; Cảm xúc</strong><p>20+ từ weather/emotion, It is + adjective, feelings</p></div></div>
+      <a class="btn-start" href="english/hub.html">Bắt đầu →</a>
+    </div>
+
+    <!-- English Intermediate -->
+    <div class="path-card">
+      <h2>📈 Tiếng Anh Trung Cấp</h2>
+      <p class="meta">21 ngày • Đã có nền tảng</p>
+      <p class="desc">Mở rộng vốn từ và tự tin giao tiếp trong du lịch, công sở, và thảo luận.</p>
+      <div class="milestone"><div class="num">1</div><div class="info"><strong>Du lịch &amp; Định hướng</strong><p>20+ từ travel, Past Simple, Can/Could, hỏi đường</p></div></div>
+      <div class="milestone"><div class="num">2</div><div class="info"><strong>Sức khỏe &amp; Trường học</strong><p>25+ từ health/school, Present Perfect, Should/Must</p></div></div>
+      <div class="milestone"><div class="num">3</div><div class="info"><strong>Công sở &amp; Công nghệ</strong><p>25+ từ work/technology, Present Perfect Continuous</p></div></div>
+      <div class="milestone"><div class="num">4</div><div class="info"><strong>Ý kiến &amp; Thảo luận</strong><p>20+ từ opinion, Conditionals, Passive Voice</p></div></div>
+      <a class="btn-start" href="english/hub.html">Bắt đầu →</a>
+    </div>
+
+    <!-- Java Beginner -->
+    <div class="path-card">
+      <h2>☕ Java Cơ Bản</h2>
+      <p class="meta">14 ngày • Người mới bắt đầu</p>
+      <p class="desc">Nắm vững nền tảng Java: biến, OOP, collections, generic.</p>
+      <div class="milestone"><div class="num">1</div><div class="info"><strong>Biến &amp; Kiểu dữ liệu</strong><p>Primitive vs Reference, ép kiểu implicit/explicit, final</p></div></div>
+      <div class="milestone"><div class="num">2</div><div class="info"><strong>Điều kiện &amp; Vòng lặp</strong><p>if-else, switch-case, for, while, do-while, break/continue</p></div></div>
+      <div class="milestone"><div class="num">3</div><div class="info"><strong>Mảng &amp; Chuỗi</strong><p>Array, String, StringBuilder, String Pool</p></div></div>
+      <div class="milestone"><div class="num">4</div><div class="info"><strong>OOP</strong><p>4 tính chất OOP, Interface vs Abstract, Overloading vs Overriding</p></div></div>
+      <a class="btn-start" href="java/hub.html">Bắt đầu →</a>
+    </div>
+
+    <!-- Java Intermediate -->
+    <div class="path-card">
+      <h2>⚙️ Java Trung Cấp</h2>
+      <p class="meta">21 ngày • Đã có nền tảng</p>
+      <p class="desc">Collections, thuật toán, SQL, JDBC — sẵn sàng cho backend.</p>
+      <div class="milestone"><div class="num">1</div><div class="info"><strong>Collection &amp; Generic</strong><p>ArrayList, HashMap, Set, Queue, Generic class/method</p></div></div>
+      <div class="milestone"><div class="num">2</div><div class="info"><strong>Cấu trúc dữ liệu</strong><p>Stack, Queue, Linked List, Binary Tree</p></div></div>
+      <div class="milestone"><div class="num">3</div><div class="info"><strong>Giải thuật cơ bản</strong><p>Linear/Binary Search, Bubble/Selection Sort, Recursion</p></div></div>
+      <div class="milestone"><div class="num">4</div><div class="info"><strong>SQL &amp; JDBC</strong><p>SELECT/JOIN/GROUP BY, PreparedStatement, DAO Pattern</p></div></div>
+      <a class="btn-start" href="java/hub.html">Bắt đầu →</a>
+    </div>
+
+    <!-- AI/ML Beginner -->
+    <div class="path-card">
+      <h2>🤖 AI/ML Cơ Bản</h2>
+      <p class="meta">14 ngày • Người mới bắt đầu</p>
+      <p class="desc">Nắm vững concepts Machine Learning cốt lõi và làm dự án đầu tay.</p>
+      <div class="milestone"><div class="num">1</div><div class="info"><strong>ML Concepts</strong><p>Supervised/Unsupervised/Reinforcement Learning, Overfitting</p></div></div>
+      <div class="milestone"><div class="num">2</div><div class="info"><strong>Deep Learning cơ bản</strong><p>Neural Network, Backpropagation, CNN, RNN, Transformer</p></div></div>
+      <div class="milestone"><div class="num">3</div><div class="info"><strong>NLP cơ bản</strong><p>Tokenization, Embedding, Sentiment Analysis, BERT, GPT</p></div></div>
+      <div class="milestone"><div class="num">4</div><div class="info"><strong>Dự án thực hành</strong><p>Linear Regression, Classification, RAG Chatbot</p></div></div>
+      <a class="btn-start" href="ai/hub.html">Bắt đầu →</a>
+    </div>
+  </div>
+</body>
+</html>

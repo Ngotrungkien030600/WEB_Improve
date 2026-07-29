@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phỏng vấn theo lương — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <style>
+    .si-page { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .si-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .si-topbar h1 { font-size: 1.5rem; font-weight: 700; }
+    .si-topbar .back { font-size: 0.875rem; color: var(--color-primary); text-decoration: none; }
+    .si-topbar .back:hover { text-decoration: underline; }
+
+    .si-salary-card { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 2rem; margin-bottom: 2rem; }
+    .si-salary-card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .si-salary-card p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+
+    .si-range { display: flex; align-items: center; gap: 1rem; }
+    .si-slider { flex: 1; -webkit-appearance: none; height: 8px; border-radius: 4px; background: linear-gradient(to right, #22c55e, #3b82f6, #8b5cf6, #ef4444); outline: none; }
+    .si-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: white; border: 3px solid var(--color-primary); cursor: pointer; box-shadow: var(--shadow-sm); }
+    .si-value { font-size: 2rem; font-weight: 800; color: var(--color-primary); min-width: 100px; text-align: center; }
+    .si-unit { font-size: 0.9rem; color: var(--text-muted); }
+    .si-tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: white; margin-top: 1rem; }
+
+    .si-custom-input { width: 100%; padding: 0.6rem 0.9rem; border: 1px solid var(--border-light); border-radius: var(--radius-sm); font-size: 0.9rem; font-family: inherit; margin-top: 1rem; box-sizing: border-box; }
+    .si-custom-input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-subtle); }
+
+    .si-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
+    .si-gen-btn { background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); padding: 0.6rem 1.5rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+    .si-gen-btn:hover { background: var(--color-primary-hover); }
+    .si-gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .si-loading { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; }
+
+    .si-questions { margin-top: 1.5rem; }
+    .si-question { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; margin-bottom: 1rem; }
+    .si-q-topic { display: inline-block; font-size: 0.75rem; font-weight: 600; color: var(--color-primary); padding: 0.15rem 0.5rem; border-radius: 4px; background: var(--color-primary-light); margin-bottom: 0.5rem; }
+    .si-q-text { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.5; }
+    .si-q-answer { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; padding: 0.75rem; background: var(--bg-subtle); border-radius: var(--radius-sm); }
+    .si-q-answer summary { cursor: pointer; font-weight: 600; color: var(--text-muted); font-size: 0.8rem; }
+    .si-q-answer[open] { border: 1px solid var(--border-light); }
+    .si-badge { font-size: 0.75rem; color: var(--text-muted); padding: 0.75rem 0; }
+
+    @media (max-width: 600px) { .si-range { flex-direction: column; } .si-value { min-width: auto; } }
+  </style>
+</head>
+<body>
+  <div class="si-page">
+    <div class="si-topbar">
+      <h1>💰 Phỏng vấn theo lương</h1>
+      <a class="back" href="../index.html">← Trang chủ</a>
+    </div>
+
+    <div class="si-salary-card">
+      <h2>Chọn mức lương mong muốn</h2>
+      <p>Kéo slider để xem bộ câu hỏi phỏng vấn tương ứng. AI có thể bổ sung thêm nếu cần.</p>
+      <div class="si-range">
+        <input type="range" class="si-slider" id="salary-slider" min="8" max="150" value="20" step="1" />
+        <div class="si-value" id="salary-display">20</div>
+        <span class="si-unit">triệu/tháng</span>
+      </div>
+      <div id="salary-tag" class="si-tag" style="background:#22c55e;">🌱 Junior: 10 - 20 triệu</div>
+      <input type="text" class="si-custom-input" id="custom-request" placeholder="Yêu cầu riêng? VD: 'Tôi focus vào Spring Boot và Microservices' — để trống nếu không có" />
+      <div class="si-actions">
+        <button class="si-gen-btn" id="gen-btn">🎯 Tạo câu hỏi</button>
+      </div>
+    </div>
+
+    <div id="si-questions" class="si-questions"></div>
+  </div>
+
+  <script src="../js/data/salary-interview-data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const slider = document.getElementById('salary-slider');
+      const display = document.getElementById('salary-display');
+      const tag = document.getElementById('salary-tag');
+      const genBtn = document.getElementById('gen-btn');
+      const container = document.getElementById('si-questions');
+      const customInput = document.getElementById('custom-request');
+
+      const tiers = window.salaryInterviewData.tiers;
+
+      function updateSalary(val) {
+        const v = parseInt(val);
+        display.textContent = v;
+        const tier = window.salaryInterviewData.getTier(v);
+        if (tier) {
+          tag.textContent = `${tier.icon} ${tier.label}: ${tier.range}`;
+          tag.style.background = tier.color;
+        }
+      }
+
+      slider.addEventListener('input', () => updateSalary(slider.value));
+      updateSalary(slider.value);
+
+      genBtn.addEventListener('click', async () => {
+        const salary = parseInt(slider.value);
+        const tier = window.salaryInterviewData.getTier(salary);
+        const customRequest = customInput.value.trim();
+
+        genBtn.disabled = true;
+        genBtn.textContent = '⏳ Đang tạo...';
+        container.innerHTML = '<div class="si-loading">🤖 AI đang tạo câu hỏi phù hợp với mức lương của bạn...</div>';
+
+        // Render từ static data trước
+        let allQuestions = [...tier.questions];
+
+        // Gọi AI nếu có network
+        if (customRequest) {
+          try {
+            const resp = await fetch('/api/salary-interview', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ salary, customRequest, topic: 'Java Backend' })
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              if (data.questions && data.questions.length > 0) {
+                allQuestions = [...allQuestions, ...data.questions.map((q, i) => ({
+                  ...q,
+                  id: 'ai-' + i,
+                  fromAI: true
+                }))];
+              }
+            }
+          } catch(e) {
+            // Silent fallback — vẫn dùng static data
+          }
+        } else {
+          // Auto generate AI questions for any salary
+          try {
+            const resp = await fetch('/api/salary-interview', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ salary, topic: 'Java Backend' })
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              if (data.questions && data.questions.length > 0) {
+                allQuestions = [...allQuestions, ...data.questions.map((q, i) => ({
+                  ...q,
+                  id: 'ai-' + i,
+                  fromAI: true
+                }))];
+              }
+            }
+          } catch(e) {}
+        }
+
+        // Render
+        let html = `<h2 style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">
+          📋 ${allQuestions.length} câu hỏi cho mức ${salary} triệu/tháng
+        </h2>
+        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">
+          ${tier.icon} ${tier.description}
+        </p>`;
+
+        allQuestions.forEach((q, idx) => {
+          const isAI = q.fromAI;
+          html += `
+          <div class="si-question">
+            <div class="si-q-topic">${q.topic || 'Java'} ${isAI ? '🤖 AI' : ''}</div>
+            <div class="si-q-text">${idx + 1}. ${q.question}</div>
+            <details class="si-q-answer">
+              <summary>📝 Xem gợi ý trả lời</summary>
+              <p style="margin-top:0.5rem;">${q.sampleAnswer || '—'}</p>
+            </details>
+          </div>`;
+        });
+
+        if (tier.topics) {
+          html += `<div class="si-badge">📌 Chủ đề cần ôn: ${tier.topics.join(' • ')}</div>`;
+        }
+
+        const next = window.salaryInterviewData.getNextTier(tier.id);
+        if (next) {
+          html += `<div style="margin-top:1rem;padding:0.75rem;background:var(--bg-subtle);border-radius:var(--radius-sm);font-size:0.85rem;color:var(--text-secondary);">
+            💡 Mục tiêu tiếp theo: <strong style="color:${next.color}">${next.label} (${next.range})</strong> — ${next.description}
+          </div>`;
+        }
+
+        container.innerHTML = html;
+        genBtn.disabled = false;
+        genBtn.textContent = '🎯 Tạo câu hỏi';
+      });
+
+      // Enter key to generate
+      customInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') genBtn.click();
+      });
+    });
+  </script>
+</body>
+</html>

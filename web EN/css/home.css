@@ -43,17 +43,15 @@ body.home-page {
 }
 
 .home-cards {
-  display: flex;
-  justify-content: center;
-  gap: 2.5rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 
 .home-card {
   background: var(--surface-card);
   border-radius: var(--radius-lg);
-  padding: 2.4rem 2rem;
-  width: 300px;
+  padding: 2rem 1.5rem;
   text-align: center;
   text-decoration: none;
   color: var(--text-primary);
@@ -297,6 +295,13 @@ body.home-page {
 
 @media (max-width: 600px) {
   .home-header .brand { font-size: 2.4rem; }
-  .home-cards { gap: 1.5rem; }
-  .home-card { width: 90%; padding: 2rem 1.2rem; }
+  .home-cards { 
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .home-card { padding: 1.5rem 1rem; }
+}
+
+@media (max-width: 400px) {
+  .home-cards { grid-template-columns: 1fr; }
 }
