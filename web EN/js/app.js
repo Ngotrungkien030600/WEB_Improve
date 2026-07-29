@@ -32,6 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
     tab.addEventListener('click', () => setMode(tab.dataset.mode));
   });
 
+  // Support anchor hash for direct tab access (#vocab, #tense, #story, #game)
+  const hash = window.location.hash.replace('#', '');
+  if (hash && sections[hash]) {
+    setMode(hash);
+  }
+
   // Initialize feature UIs
   const { onArrowRight: vocabRight, onArrowLeft: vocabLeft, onSpaceEnter: vocabEnter } = initVocabularyUI();
   const { onArrowRight: tenseRight, onArrowLeft: tenseLeft, onSpaceEnter: tenseEnter } = initTensesUI();

@@ -6,49 +6,39 @@
   <title>AI/ML — SkillForge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/variables.css" />
-  <link rel="stylesheet" href="../../css/base.css" />
-  <link rel="stylesheet" href="../../css/hub.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#f472b6; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .back { color:var(--accent); text-decoration:none; font-size:0.9rem; }
+    .topbar .back:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2rem; font-size:0.95rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem; }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; text-decoration:none; color:var(--text); display:flex; align-items:flex-start; gap:1rem; transition:border-color 0.2s; }
+    .card:hover { border-color:var(--accent); }
+    .card .icon { font-size:2rem; flex-shrink:0; }
+    .card .body h3 { font-size:1rem; font-weight:600; margin-bottom:0.2rem; }
+    .card .body p { font-size:0.85rem; color:var(--text2); line-height:1.5; }
+    @media (max-width:600px) { .grid { grid-template-columns:1fr; } }
+  </style>
 </head>
 <body>
-  <div class="hub-page">
-    <div class="hub-topbar">
-      <h1>🧠 AI/ML</h1>
-      <a class="back-home" href="../../index.html">← Trang chủ</a>
-    </div>
-    <p class="hub-desc">Học Artificial Intelligence &amp; Machine Learning từ concepts cơ bản đến thực hành project.</p>
-
-    <div class="hub-grid">
-      <a class="hub-card" href="../ai.html">
-        <div class="hub-icon">📚</div>
-        <div class="hub-body">
-          <h3>Học Concepts</h3>
-          <p>48 khái niệm AI/ML flashcard: ML, Deep Learning, NLP, Computer Vision, GenAI</p>
-        </div>
-      </a>
-      <a class="hub-card" href="../ai.html">
-        <div class="hub-icon">🎯</div>
-        <div class="hub-body">
-          <h3>Trắc nghiệm</h3>
-          <p>50+ câu hỏi trắc nghiệm ML/DL/NLP — kiểm tra kiến thức có thời gian</p>
-        </div>
-      </a>
-      <a class="hub-card" href="../ai.html">
-        <div class="hub-icon">💼</div>
-        <div class="hub-body">
-          <h3>Phỏng vấn AI</h3>
-          <p>60+ câu hỏi phỏng vấn AI/ML chia theo chủ đề, kèm checklist ôn tập</p>
-        </div>
-      </a>
-      <a class="hub-card" href="../ai.html">
-        <div class="hub-icon">🛠️</div>
-        <div class="hub-body">
-          <h3>Projects</h3>
-          <p>8 dự án thực hành: Linear Regression, CNN, RAG Chatbot, Stable Diffusion...</p>
-        </div>
-      </a>
-    </div>
+<div class="page">
+  <div class="topbar">
+    <h1>🧠 AI/ML</h1>
+    <a class="back" href="../../index.html">← Trang chủ</a>
   </div>
+  <p class="desc">Học Artificial Intelligence &amp; Machine Learning từ concepts đến thực hành.</p>
+  <div class="grid">
+    <a class="card" href="../ai.html"><div class="icon">📚</div><div class="body"><h3>Học Concepts</h3><p>48 khái niệm AI/ML flashcard: ML, DL, NLP, CV, GenAI</p></div></a>
+    <a class="card" href="../ai.html"><div class="icon">🎯</div><div class="body"><h3>Trắc nghiệm</h3><p>50+ câu hỏi ML/DL/NLP — kiểm tra có thời gian</p></div></a>
+    <a class="card" href="../ai.html"><div class="icon">💼</div><div class="body"><h3>Phỏng vấn AI</h3><p>60+ câu hỏi chia chủ đề, kèm checklist</p></div></a>
+    <a class="card" href="../ai.html"><div class="icon">🛠️</div><div class="body"><h3>Projects</h3><p>8 dự án: Regression, CNN, RAG, Stable Diffusion</p></div></a>
+  </div>
+</div>
 </body>
 </html>

@@ -6,172 +6,124 @@
   <title>Dashboard — SkillForge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/variables.css" />
-  <link rel="stylesheet" href="../css/base.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    .dash-page { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem; }
-    .dash-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
-    .dash-topbar h1 { font-size: 1.75rem; font-weight: 700; }
-    .dash-topbar .back-home { font-size: 0.875rem; color: var(--color-primary); text-decoration: none; }
-    .dash-topbar .back-home:hover { text-decoration: underline; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#7c5cfc; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .back { color:var(--accent); text-decoration:none; font-size:0.9rem; }
+    .topbar .back:hover { text-decoration:underline; }
 
-    .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
-    .dash-stat { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem; text-align: center; }
-    .dash-stat .stat-value { font-size: 2rem; font-weight: 700; color: var(--color-primary); }
-    .dash-stat .stat-label { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem; }
+    .stat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:2rem; }
+    .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; text-align:center; }
+    .stat-card .val { font-size:2.2rem; font-weight:800; color:var(--accent); }
+    .stat-card .lbl { font-size:0.85rem; color:var(--text2); margin-top:0.25rem; }
 
-    .dash-section { margin-bottom: 2rem; }
-    .dash-section h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-light); }
+    .section { margin-bottom:2rem; }
+    .section h2 { font-size:1.1rem; font-weight:700; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); }
 
-    .dash-table { width: 100%; border-collapse: collapse; }
-    .dash-table th { text-align: left; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border-light); }
-    .dash-table td { font-size: 0.9rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border-light); }
-    .dash-table tr:hover td { background: var(--bg-subtle); }
+    table { width:100%; border-collapse:collapse; }
+    th { text-align:left; font-size:0.75rem; font-weight:600; color:var(--text2); padding:0.5rem 0.75rem; border-bottom:1px solid var(--border); }
+    td { font-size:0.85rem; padding:0.5rem 0.75rem; border-bottom:1px solid var(--border); }
+    tr:hover td { background:var(--surface2); }
 
-    .skill-bar { display: flex; align-items: center; gap: 0.5rem; }
-    .skill-bar-fill { height: 8px; border-radius: 4px; flex: 1; background: var(--bg-subtle); overflow: hidden; }
-    .skill-bar-fill div { height: 100%; border-radius: 4px; transition: width 0.3s; }
+    .skill-bar { display:flex; align-items:center; gap:0.5rem; }
+    .skill-bar-fill { height:6px; border-radius:3px; flex:1; background:var(--surface2); overflow:hidden; }
+    .skill-bar-fill div { height:100%; border-radius:3px; background:var(--accent); transition:width 0.3s; }
 
-    .streak-box { display: flex; gap: 1rem; justify-content: center; }
-    .streak-day { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; background: var(--bg-subtle); color: var(--text-muted); }
-    .streak-day.active { background: var(--color-primary); color: white; }
-    .streak-day.today { border: 2px solid var(--color-primary); }
+    .streak-box { display:flex; gap:0.75rem; justify-content:center; }
+    .streak-day { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:600; background:var(--surface2); color:var(--text2); }
+    .streak-day.active { background:var(--accent); color:white; }
+    .streak-day.today { border:2px solid var(--accent); }
 
-    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
-    .empty-state .icon { font-size: 3rem; margin-bottom: 0.5rem; }
+    .empty-state { text-align:center; padding:2.5rem 1rem; color:var(--text2); }
+    .empty-state .icon { font-size:2.5rem; margin-bottom:0.5rem; }
 
-    @media (max-width: 600px) { .dash-grid { grid-template-columns: 1fr; } }
+    @media (max-width:600px) { .stat-grid { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
-  <div class="dash-page">
-    <div class="dash-topbar">
-      <h1>📊 Dashboard</h1>
-      <a class="back-home" href="../index.html">← Trang chủ</a>
-    </div>
-
-    <!-- Stats row -->
-    <div class="dash-grid" id="dash-stats">
-      <div class="dash-stat">
-        <div class="stat-value" id="stat-xp">0</div>
-        <div class="stat-label">Tổng XP</div>
-      </div>
-      <div class="dash-stat">
-        <div class="stat-value" id="stat-streak">0</div>
-        <div class="stat-label">Streak (ngày)</div>
-      </div>
-      <div class="dash-stat">
-        <div class="stat-value" id="stat-level">1</div>
-        <div class="stat-label">Level</div>
-      </div>
-    </div>
-
-    <!-- Skills -->
-    <div class="dash-section">
-      <h2>🎯 Kỹ năng</h2>
-      <div id="dash-skills"></div>
-    </div>
-
-    <!-- Exam History -->
-    <div class="dash-section">
-      <h2>📝 Lịch sử thi</h2>
-      <div id="dash-exams"></div>
-    </div>
-
-    <!-- Streak -->
-    <div class="dash-section">
-      <h2>🔥 Streak 7 ngày</h2>
-      <div id="dash-streak"></div>
-    </div>
+<div class="page">
+  <div class="topbar">
+    <h1>📊 Dashboard</h1>
+    <a class="back" href="../index.html">← Trang chủ</a>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Load skills
-      let skills = [];
-      try {
-        const raw = localStorage.getItem('skillforge_skills');
-        if (raw) skills = JSON.parse(raw);
-      } catch(e) {}
+  <div class="stat-grid" id="dash-stats">
+    <div class="stat-card"><div class="val" id="stat-xp">0</div><div class="lbl">Tổng XP</div></div>
+    <div class="stat-card"><div class="val" id="stat-streak">0</div><div class="lbl">Streak (ngày)</div></div>
+    <div class="stat-card"><div class="val" id="stat-level">1</div><div class="lbl">Level</div></div>
+  </div>
 
-      const totalXp = skills.reduce((sum, s) => sum + (s.xp || 0), 0);
-      const xpPerLevel = 200;
-      const totalLevel = Math.floor(totalXp / xpPerLevel) + 1;
+  <div class="section"><h2>🎯 Kỹ năng</h2><div id="dash-skills"></div></div>
+  <div class="section"><h2>📝 Lịch sử thi</h2><div id="dash-exams"></div></div>
+  <div class="section"><h2>🔥 Streak 7 ngày</h2><div id="dash-streak"></div></div>
+</div>
 
-      document.getElementById('stat-xp').textContent = totalXp;
-      document.getElementById('stat-level').textContent = totalLevel;
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let skills = []; try { const raw = localStorage.getItem('skillforge_skills'); if (raw) skills = JSON.parse(raw); } catch(e) {}
+  const totalXp = skills.reduce((s, a) => s + (a.xp || 0), 0);
+  document.getElementById('stat-xp').textContent = totalXp;
+  document.getElementById('stat-level').textContent = Math.floor(totalXp / 200) + 1;
 
-      // Build streak
-      let streak = 0;
-      try {
-        const log = JSON.parse(localStorage.getItem('skillforge_log') || '[]');
-        const dates = [...new Set(log.map(e => e.date?.split('T')[0] || ''))].filter(Boolean).sort().reverse();
-        if (dates.length > 0) {
-          const today = new Date().toISOString().split('T')[0];
-          let check = new Date(today);
-          for (const d of dates) {
-            const ds = check.toISOString().split('T')[0];
-            if (d === ds) { streak++; check.setDate(check.getDate() - 1); }
-            else if (d === new Date(Date.now() - 86400000).toISOString().split('T')[0] && streak === 0) { streak = 1; }
-            else break;
-          }
-        }
-      } catch(e) {}
-      document.getElementById('stat-streak').textContent = streak;
-
-      // Skills table
-      const skillsContainer = document.getElementById('dash-skills');
-      if (skills.length === 0) {
-        skillsContainer.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>Chưa có dữ liệu kỹ năng. Bắt đầu học để tích XP!</p></div>';
-      } else {
-        let html = '<table class="dash-table"><thead><tr><th>Kỹ năng</th><th>Level</th><th>XP</th><th>Tiến độ</th></tr></thead><tbody>';
-        skills.forEach(s => {
-          const progress = ((s.xp || 0) % xpPerLevel) / xpPerLevel * 100;
-          html += `<tr>
-            <td>${s.icon || '📌'} ${s.name}</td>
-            <td>${s.level || 0}</td>
-            <td>${s.xp || 0}</td>
-            <td><div class="skill-bar"><div class="skill-bar-fill"><div style="width:${progress}%;background:var(--color-primary)"></div></div></div></td>
-          </tr>`;
-        });
-        html += '</tbody></table>';
-        skillsContainer.innerHTML = html;
+  let streak = 0;
+  try {
+    const log = JSON.parse(localStorage.getItem('skillforge_log') || '[]');
+    const dates = [...new Set(log.map(e => e.date?.split('T')[0] || ''))].filter(Boolean).sort().reverse();
+    if (dates.length > 0) {
+      const today = new Date().toISOString().split('T')[0];
+      let check = new Date(today);
+      for (const d of dates) {
+        const ds = check.toISOString().split('T')[0];
+        if (d === ds) { streak++; check.setDate(check.getDate() - 1); }
+        else if (d === new Date(Date.now() - 86400000).toISOString().split('T')[0] && streak === 0) { streak = 1; }
+        else break;
       }
+    }
+  } catch(e) {}
+  document.getElementById('stat-streak').textContent = streak;
 
-      // Exam history
-      const examsContainer = document.getElementById('dash-exams');
-      try {
-        const exams = JSON.parse(localStorage.getItem('skillforge_exam_history') || '[]');
-        if (exams.length === 0) {
-          examsContainer.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>Chưa có bài thi nào. Thi thử để xem kết quả!</p></div>';
-        } else {
-          let html = '<table class="dash-table"><thead><tr><th>Ngày</th><th>Đúng</th><th>Tổng</th><th>%</th><th>Đánh giá</th></tr></thead><tbody>';
-          exams.slice().reverse().slice(0, 20).forEach(e => {
-            const pct = e.total > 0 ? Math.round((e.correct / e.total) * 100) : 0;
-            const label = pct >= 90 ? '🌟 Xuất sắc' : pct >= 75 ? '✅ Tốt' : pct >= 50 ? '⚠️ TB' : '❌ Yếu';
-            const d = new Date(e.date || e.completedAt);
-            html += `<tr><td>${d.toLocaleDateString('vi-VN')}</td><td>${e.correct || 0}</td><td>${e.total || 0}</td><td>${pct}%</td><td>${label}</td></tr>`;
-          });
-          html += '</tbody></table>';
-          examsContainer.innerHTML = html;
-        }
-      } catch(e) {
-        examsContainer.innerHTML = '<div class="empty-state"><p>Không có dữ liệu thi.</p></div>';
-      }
-
-      // Streak visualization
-      const streakContainer = document.getElementById('dash-streak');
-      const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
-      let html = '<div class="streak-box">';
-      const today = new Date().getDay();
-      for (let i = 6; i >= 0; i--) {
-        const idx = (today - i + 7) % 7;
-        html += `<div class="streak-day${i < streak ? ' active' : ''}${i === 0 ? ' today' : ''}">${days[idx]}</div>`;
-      }
-      html += '</div>';
-      streakContainer.innerHTML = html;
+  const sk = document.getElementById('dash-skills');
+  if (skills.length === 0) sk.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>Chưa có dữ liệu. Học để tích XP!</p></div>';
+  else {
+    let h = '<table><thead><tr><th>Kỹ năng</th><th>Level</th><th>XP</th><th>Tiến độ</th></tr></thead><tbody>';
+    skills.forEach(s => {
+      const pct = ((s.xp || 0) % 200) / 200 * 100;
+      h += `<tr><td>${s.icon||'📌'} ${s.name}</td><td>${s.level||0}</td><td>${s.xp||0}</td><td><div class="skill-bar"><div class="skill-bar-fill"><div style="width:${pct}%"></div></div></div></td></tr>`;
     });
-  </script>
+    sk.innerHTML = h + '</tbody></table>';
+  }
+
+  const exams = document.getElementById('dash-exams');
+  try {
+    const ex = JSON.parse(localStorage.getItem('skillforge_exam_history') || '[]');
+    if (ex.length === 0) exams.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>Chưa có bài thi nào.</p></div>';
+    else {
+      let h = '<table><thead><tr><th>Ngày</th><th>Đúng</th><th>Tổng</th><th>%</th><th>ĐG</th></tr></thead><tbody>';
+      ex.slice().reverse().slice(0,20).forEach(e => {
+        const pct = e.total > 0 ? Math.round((e.correct/e.total)*100) : 0;
+        const label = pct >= 90 ? '🌟' : pct >= 75 ? '✅' : pct >= 50 ? '⚠️' : '❌';
+        const d = new Date(e.date || e.completedAt);
+        h += `<tr><td>${d.toLocaleDateString('vi-VN')}</td><td>${e.correct||0}</td><td>${e.total||0}</td><td>${pct}%</td><td>${label}</td></tr>`;
+      });
+      exams.innerHTML = h + '</tbody></table>';
+    }
+  } catch(e) { exams.innerHTML = '<div class="empty-state"><p>Không có dữ liệu.</p></div>'; }
+
+  const streakC = document.getElementById('dash-streak');
+  const days = ['CN','T2','T3','T4','T5','T6','T7'];
+  let h = '<div class="streak-box">';
+  const today = new Date().getDay();
+  for (let i = 6; i >= 0; i--) {
+    const idx = (today - i + 7) % 7;
+    h += `<div class="streak-day${i < streak ? ' active' : ''}${i === 0 ? ' today' : ''}">${days[idx]}</div>`;
+  }
+  streakC.innerHTML = h + '</div>';
+});
+</script>
 </body>
 </html>
