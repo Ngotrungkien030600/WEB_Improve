@@ -8,6 +8,7 @@
   --color-accent: #f093fb;
   --color-warm: #f5576c;
   --color-gradient: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  --color-gradient-text: linear-gradient(135deg, var(--color-primary), var(--color-accent), var(--color-warm));
 
   /* Text */
   --text-primary: #1e293b;
@@ -15,10 +16,10 @@
   --text-muted: #94a3b8;
   --text-white: #ffffff;
 
-  /* Surfaces */
-  --surface-card: rgba(255, 255, 255, 0.95);
-  --surface-glass: rgba(255, 255, 255, 0.2);
-  --surface-glass-hover: rgba(255, 255, 255, 0.35);
+  /* Surfaces — white on dark gradient, need high contrast */
+  --surface-card: rgba(255, 255, 255, 0.96);
+  --surface-glass: rgba(255, 255, 255, 0.25);
+  --surface-glass-hover: rgba(255, 255, 255, 0.4);
 
   /* Semantic */
   --color-success: #22c55e;
@@ -35,6 +36,7 @@
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.18);
   --shadow-hover: 0 20px 50px rgba(0, 0, 0, 0.22);
+  --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.3);
 
   /* Border radius */
   --radius-sm: 8px;
@@ -55,4 +57,37 @@
   --font-size-lg: 1.125rem;
   --font-size-xl: 1.5rem;
   --font-size-2xl: 2rem;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-spring: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Scrollbar */
+  --scrollbar-size: 8px;
+  --scrollbar-track: #e2e8f0;
+  --scrollbar-thumb: #667eea;
+  --scrollbar-thumb-hover: #5a6fd6;
+
+  /* Dark mode (applied via .dark) */
+  --text-primary-dark: #e2e8f0;
+  --text-secondary-dark: #94a3b8;
+  --text-muted-dark: #64748b;
+  --bg-page-dark: #0f172a;
+  --bg-surface-dark: #1e293b;
+  --bg-subtle-dark: #334155;
+  --border-dark: #475569;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: var(--color-gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow utility */
+.glow {
+  box-shadow: var(--shadow-glow);
 }
