@@ -83,3 +83,8 @@ export const idiomsList = [
   { en: "Ping me", vi: "Nhắn tin/gọi cho tôi", phonetic: "/pɪŋ miː/", category: "idioms", exampleEn: "Ping me when you're ready.", exampleVi: "Nhắn tôi khi bạn sẵn sàng nhé." },
   { en: "Bandwidth", vi: "Khả năng/thời gian làm việc", phonetic: "/ˈbændwɪdθ/", category: "idioms", exampleEn: "I don't have the bandwidth to take on more work.", exampleVi: "Tôi không có đủ khả năng nhận thêm việc." },
 ];
+
+// Expose to window for non-module scripts
+if (typeof window !== 'undefined') {
+  window.idiomsList = idiomsList;
+}

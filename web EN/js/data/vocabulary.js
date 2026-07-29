@@ -1,4 +1,5 @@
-// Danh sách từ vựng (209 items, 14 chủ đề)
+// Danh sách từ vựng (220+ items, 14 chủ đề)
+// Mỗi item có: en, vi, phonetic, category, exampleEn, exampleVi, difficulty (1-5), tags[]
 export const vocabList = [
   // Greetings
   { en: "Hello", vi: "Xin chào", phonetic: "/həˈloʊ/", category: "greetings", exampleEn: "Hello, nice to meet you!", exampleVi: "Xin chào, rất vui được gặp bạn!" },
@@ -205,3 +206,8 @@ export const vocabList = [
   { en: "Storm", vi: "Cơn bão", phonetic: "/stɔːrm/", category: "weather", exampleEn: "There's a storm coming.", exampleVi: "Có một cơn bão đang đến." },
   { en: "Umbrella", vi: "Ô / Dù", phonetic: "/ʌmˈbrelə/", category: "weather", exampleEn: "Don't forget your umbrella.", exampleVi: "Đừng quên ô của bạn." }
 ];
+
+// Expose to window for non-module scripts
+if (typeof window !== 'undefined') {
+  window.vocabList = vocabList;
+}

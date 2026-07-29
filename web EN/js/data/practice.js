@@ -17,3 +17,8 @@ export const practiceSentences = [
   { tense: "Future Perfect", vi: "Tôi sẽ hoàn thành dự án trước thứ Sáu.", words: ["I", "will", "have", "finished", "the", "project", "by", "Friday."], explain: "Thì tương lai hoàn thành: will have + V3/ed, diễn tả hành động hoàn thành trước một thời điểm." },
   { tense: "Future Perfect Continuous", vi: "Vào tháng sau, tôi sẽ đã làm việc ở đây được 2 năm.", words: ["By", "next", "month,", "I", "will", "have", "been", "working", "here", "for", "2", "years."], explain: "Thì tương lai hoàn thành tiếp diễn: will have been + V-ing, diễn tả hành động kéo dài đến một thời điểm tương lai." }
 ];
+
+// Expose to window for non-module scripts
+if (typeof window !== 'undefined') {
+  window.practiceSentences = practiceSentences;
+}

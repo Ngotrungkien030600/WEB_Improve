@@ -31,3 +31,8 @@ export const stories = [
     ]
   }
 ];
+
+// Expose to window for non-module scripts
+if (typeof window !== 'undefined') {
+  window.stories = stories;
+}

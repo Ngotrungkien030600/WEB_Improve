@@ -121,3 +121,8 @@ export const tenses = [
     note: "Future perfect continuous = tương lai hoàn thành tiếp diễn. Nhấn mạnh liên tục đến tương lai."
   }
 ];
+
+// Expose to window for non-module scripts
+if (typeof window !== 'undefined') {
+  window.tenses = tenses;
+}
