@@ -1,0 +1,540 @@
+/* ===== Sub-page Layout Template — Forge Dark Theme ===== */
+/* Shared by: english, exam, game-memory, game-scramble, game-speedquiz */
+
+/* ───── Page Container ───── */
+.subpage {
+  min-height: 100vh;
+  background: var(--forge-bg, #08080e);
+  color: var(--forge-text, #f1f5f9);
+  font-family: 'Inter', system-ui, sans-serif;
+  position: relative;
+}
+
+.subpage-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* ───── Standard Topbar ───── */
+.subpage-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.subpage-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.subpage-topbar-left .icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.subpage-topbar-left h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #f1f5f9, var(--forge-ember, #fbbf24));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subpage-topbar-left .subtitle {
+  font-size: 0.85rem;
+  color: var(--forge-text3, #64748b);
+  margin-top: 0.1rem;
+}
+
+.subpage-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Timer wrapper slot */
+.subpage-topbar-right .forge-timer-wrap {
+  flex-shrink: 0;
+}
+
+/* Back button */
+.subpage-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 1rem;
+  background: var(--forge-glass, rgba(255,255,255,0.06));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 20px;
+  color: var(--forge-text2, #94a3b8);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.subpage-back:hover {
+  background: var(--forge-glass-hover, rgba(255,255,255,0.12));
+  border-color: var(--forge-glass-hover-border, rgba(255,255,255,0.18));
+  color: var(--forge-text);
+}
+
+/* ───── Content Area ───── */
+.subpage-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ───── Sub-page Card (glass card) ───── */
+.subpage-card {
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: border-color 0.3s ease;
+}
+
+.subpage-card:hover {
+  border-color: rgba(255,255,255,0.12);
+}
+
+.subpage-card h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--forge-text2, #94a3b8);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.subpage-card p,
+.subpage-card div {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--forge-text2, #94a3b8);
+}
+
+.subpage-card strong {
+  color: var(--forge-text, #f1f5f9);
+}
+
+/* ───── Tabs (forge theme) — compatible with existing .tab class ───── */
+.subpage .tab,
+.subpage .quiz-tab,
+.subpage .tense-subtab,
+.subpage .game-subtab {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text2, #94a3b8);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.subpage .tab:hover,
+.subpage .quiz-tab:hover,
+.subpage .tense-subtab:hover,
+.subpage .game-subtab:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.18);
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .tab.active,
+.subpage .quiz-tab.active,
+.subpage .tense-subtab.active,
+.subpage .game-subtab.active {
+  background: white;
+  color: var(--forge-bg, #08080e);
+  border-color: white;
+}
+
+.subpage .tab.exam-link {
+  background: rgba(249,115,22,0.12);
+  border-color: rgba(249,115,22,0.2);
+  color: var(--forge-ember, #fbbf24);
+}
+
+.subpage .tab.exam-link:hover {
+  background: rgba(249,115,22,0.2);
+  border-color: rgba(249,115,22,0.3);
+}
+
+/* ───── Tabs (forge theme) ───── */
+.subpage-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.subpage-tab {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text2, #94a3b8);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.subpage-tab:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.18);
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage-tab.active {
+  background: white;
+  color: var(--forge-bg, #08080e);
+  border-color: white;
+}
+
+.subpage-tab.exam-link {
+  background: rgba(249,115,22,0.12);
+  border-color: rgba(249,115,22,0.2);
+  color: var(--forge-ember, #fbbf24);
+}
+
+.subpage-tab.exam-link:hover {
+  background: rgba(249,115,22,0.2);
+  border-color: rgba(249,115,22,0.3);
+}
+
+/* ───── Footer ───── */
+.subpage-footer {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+  color: var(--forge-text3, #64748b);
+  font-size: 0.78rem;
+  border-top: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  margin-top: 1rem;
+  letter-spacing: 0.02em;
+}
+
+/* ───── Flip card (forge dark) ───── */
+.subpage .flip-card-front,
+.subpage .flip-card-back {
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+}
+
+.subpage .flip-card-front h2 {
+  color: var(--forge-ember, #fbbf24);
+}
+
+.subpage .flip-card-front p,
+.subpage .flip-card-back p {
+  color: var(--forge-text2, #94a3b8);
+}
+
+.subpage .flip-card-back {
+  background: rgba(249,115,22,0.06);
+  border-color: rgba(249,115,22,0.12);
+}
+
+.subpage .tag {
+  background: var(--forge-fire, #f97316);
+  color: white;
+}
+
+.subpage .counter {
+  color: var(--forge-text2, #94a3b8);
+}
+
+/* ───── Practice card (forge dark) ───── */
+.subpage .practice-card {
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
+  padding: 1.5rem;
+}
+
+.subpage .practice-card h3 {
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .tense-label {
+  background: rgba(249,115,22,0.12);
+  color: var(--forge-ember, #fbbf24);
+}
+
+/* ───── Controls (forge dark) ───── */
+.subpage .controls button,
+.subpage .story-nav button,
+.subpage .practice-actions button {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text, #f1f5f9);
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-shadow: none;
+}
+
+.subpage .controls button:hover,
+.subpage .story-nav button:hover,
+.subpage .practice-actions button:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--forge-fire, #f97316);
+  color: var(--forge-text, #f1f5f9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.subpage .controls button:active,
+.subpage .story-nav button:active,
+.subpage .practice-actions button:active {
+  transform: scale(0.97);
+}
+
+.subpage .controls button:focus-visible {
+  outline: 2px solid var(--forge-fire, #f97316);
+  outline-offset: 2px;
+}
+
+/* ───── Story box (forge dark) ───── */
+.subpage .story-box {
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
+  padding: 1.5rem;
+}
+
+.subpage .story-box p {
+  color: var(--forge-text2, #94a3b8);
+}
+
+.subpage .story-en {
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .story-vi {
+  color: var(--forge-text3, #64748b);
+}
+
+.subpage .story-subtitle {
+  color: var(--forge-text3, #64748b);
+}
+
+.subpage .story-tip {
+  color: var(--forge-text3, #64748b);
+}
+
+/* ───── Quiz config / select (forge dark) ───── */
+.subpage .category-select {
+  color: var(--forge-text2, #94a3b8);
+}
+
+.subpage .category-select select {
+  background: rgba(255,255,255,0.08);
+  color: var(--forge-text, #f1f5f9);
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.subpage .category-select select option {
+  background: #1a1a2e;
+  color: #f1f5f9;
+}
+
+/* ───── Note ───── */
+.subpage .note {
+  background: rgba(59,130,246,0.08);
+  color: var(--forge-text2, #94a3b8);
+  border: 1px solid rgba(59,130,246,0.12);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+/* ───── Dropzone / word-bank ───── */
+.subpage .dropzone {
+  border: 1px dashed var(--forge-glass-border, rgba(255,255,255,0.08));
+  background: rgba(255,255,255,0.02);
+}
+
+.subpage .word-chip {
+  background: rgba(255,255,255,0.08);
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .word-chip:hover {
+  background: rgba(249,115,22,0.12);
+  transform: translateY(-2px);
+}
+
+.subpage .word-chip.in-dropzone {
+  background: var(--forge-fire, #f97316);
+  color: white;
+}
+
+/* ───── Practice feedback ───── */
+.subpage .practice-feedback.correct {
+  background: rgba(34,197,94,0.1);
+  color: var(--color-success, #22c55e);
+  border: 1px solid rgba(34,197,94,0.15);
+}
+
+.subpage .practice-feedback.wrong {
+  background: rgba(239,68,68,0.1);
+  color: var(--color-error, #ef4444);
+  border: 1px solid rgba(239,68,68,0.15);
+}
+
+/* ───── Quiz options (forge dark) ───── */
+.subpage .options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.subpage .option {
+  background: rgba(255,255,255,0.04);
+  color: var(--forge-text, #f1f5f9);
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  font-family: inherit;
+}
+
+.subpage .option:hover {
+  border-color: var(--forge-fire, #f97316);
+  background: rgba(249,115,22,0.08);
+}
+
+.subpage .option.correct {
+  background: rgba(34,197,94,0.12);
+  border-color: var(--color-success, #22c55e);
+  color: var(--color-success, #22c55e);
+}
+
+.subpage .option.wrong {
+  background: rgba(239,68,68,0.12);
+  border-color: var(--color-error, #ef4444);
+  color: var(--color-error, #ef4444);
+}
+
+.subpage .option:disabled {
+  cursor: default;
+}
+
+.subpage .option:disabled:hover {
+  border-color: var(--forge-glass-border, rgba(255,255,255,0.08));
+  background: rgba(255,255,255,0.04);
+}
+
+/* ───── Quiz feedback (forge dark) ───── */
+.subpage .quiz-feedback {
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  display: none;
+}
+
+.subpage .quiz-feedback.show,
+.subpage .quiz-feedback.correct,
+.subpage .quiz-feedback.wrong { display: block; }
+
+.subpage .quiz-feedback.correct {
+  background: rgba(34,197,94,0.1);
+  color: var(--color-success, #22c55e);
+  border: 1px solid rgba(34,197,94,0.15);
+}
+
+.subpage .quiz-feedback.wrong {
+  background: rgba(239,68,68,0.1);
+  color: var(--color-error, #ef4444);
+  border: 1px solid rgba(239,68,68,0.15);
+}
+
+/* ───── Quiz timer ───── */
+.subpage .quiz-timer-bar {
+  background: rgba(255,255,255,0.08);
+}
+
+#quiz-timer-fill {
+  background: linear-gradient(90deg, var(--forge-fire, #f97316), var(--forge-ember, #fbbf24));
+}
+
+.subpage .quiz-timer-text {
+  color: var(--forge-text2, #94a3b8);
+}
+
+/* ───── Responsive ───── */
+@media (max-width: 768px) {
+  .subpage-container {
+    padding: 1rem;
+  }
+
+  .subpage-topbar-left h1 {
+    font-size: 1.25rem;
+  }
+
+  .subpage-topbar-left .icon {
+    font-size: 1.5rem;
+  }
+
+  .subpage-card {
+    padding: 1.2rem;
+  }
+
+  .subpage-tab {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .subpage-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .subpage-topbar-right {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

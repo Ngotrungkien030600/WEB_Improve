@@ -14,6 +14,7 @@ const AGENTS = [
   { id: 'sally', name: 'Sally', icon: '🎨', title: 'UX Designer' },
   { id: 'winston', name: 'Winston', icon: '🏗️', title: 'System Architect' },
   { id: 'amelia', name: 'Amelia', icon: '💻', title: 'Senior Engineer' },
+  { id: 'quinn', name: 'Quinn', icon: '🧪', title: 'QA Engineer' },
 ];
 
 let mode = ''; // 'solo' | 'party'

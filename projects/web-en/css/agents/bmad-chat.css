@@ -110,7 +110,6 @@
   display: none;
   text-align: center;
   margin-bottom: 1rem;
-  display: flex;
   justify-content: center;
   gap: 0.75rem;
   flex-wrap: wrap;
@@ -207,7 +206,7 @@
 }
 
 .party-round-header {
-  background: var(--surface-chat);
+  background: var(--surface2);
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
   font-weight: 600;
@@ -254,7 +253,7 @@
 
 .party-agent-reply .party-agent-text p { margin-bottom: 0.5rem; }
 .party-agent-reply .party-agent-text pre {
-  background: var(--surface-code);
+  background: #1e293b;
   color: #d4d4d4;
   padding: 0.6rem;
   border-radius: 8px;

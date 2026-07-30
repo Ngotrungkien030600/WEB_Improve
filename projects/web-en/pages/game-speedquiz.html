@@ -3,74 +3,79 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>⚡ Trắc nghiệm nhanh</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <title>⚡ Trắc nghiệm nhanh — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/variables.css" />
   <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/subpage.css" />
+  <link rel="stylesheet" href="../css/timer.css" />
   <link rel="stylesheet" href="../css/components.css" />
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 1.5rem;
-    }
-    .game-page {
-      width: 100%;
-      max-width: 600px;
-      text-align: center;
-    }
-    .game-page .game-header {
-      color: white;
-      margin-bottom: 1.2rem;
-    }
-    .game-page .back-link {
-      display: inline-block;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      text-decoration: none;
-      padding: 0.4rem 1rem;
-      border-radius: 30px;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      transition: background 0.2s;
-    }
-    .game-page .back-link:hover {
-      background: rgba(255,255,255,0.35);
-    }
-  </style>
 </head>
-<body>
-  <div class="game-page">
-    <a class="back-link" href="english/hub.html">⬅ Quay lại</a>
-    <div class="game-header">
-      <h2>⚡ Trắc nghiệm nhanh</h2>
-      <div class="game-stats">
-        <span>Điểm: <strong id="sq-score">0</strong></span>
-        <span>Đã làm: <strong id="sq-count">0/10</strong></span>
-      </div>
+<body class="subpage game-page">
+<div class="subpage-container">
+  <!-- Topbar -->
+  <header class="subpage-topbar">
+    <div class="subpage-topbar-left">
+      <span class="icon">⚡</span>
+      <h1>Trắc nghiệm nhanh</h1>
     </div>
-    <div class="quiz-timer-bar"><div id="sq-timer-fill"></div></div>
+    <div class="subpage-topbar-right">
+      <div class="forge-timer-wrap">
+        <div class="forge-timer-ring">
+          <svg viewBox="0 0 68 68">
+            <circle class="forge-ring-bg" cx="34" cy="34" r="30" />
+            <circle class="forge-ring-progress" id="forge-ring-progress" cx="34" cy="34" r="30" />
+          </svg>
+          <div class="forge-time" id="forge-time">30:00</div>
+        </div>
+        <div class="forge-controls">
+          <select id="forge-select">
+            <option value="30">30p</option>
+            <option value="60">1h</option>
+          </select>
+          <div class="forge-btn-row">
+            <button class="forge-btn forge-btn-primary" id="forge-toggle">⚒️</button>
+            <button class="forge-btn forge-btn-secondary" id="forge-reset">↻</button>
+          </div>
+        </div>
+        <div class="forge-stats">
+          <div class="forge-stat-row">📋 Hôm nay <span class="val fire" id="stat-today">0m</span></div>
+          <div class="forge-stat-row">🔥 Streak <span class="val" id="stat-streak">0🔥</span></div>
+          <div class="forge-stat-row">📦 Đã rèn <span class="val" id="stat-total">0</span></div>
+        </div>
+      </div>
+      <a class="subpage-back" href="english.html">⬅ Tiếng Anh</a>
+    </div>
+  </header>
+
+  <div class="subpage-content">
+    <div class="quiz-timer-bar" id="sq-timer-bar"><div id="sq-timer-fill"></div></div>
     <p class="quiz-timer-text" id="sq-timer-text">Thời gian: --</p>
     <div class="sq-card">
       <p class="sq-question" id="sq-question">Chọn đáp án đúng</p>
       <div class="options" id="sq-options"></div>
       <div class="quiz-feedback" id="sq-feedback"></div>
     </div>
-    <button class="btn-restart" id="sq-start">▶️ Bắt đầu</button>
+    <div style="text-align:center;">
+      <button class="btn-restart" id="sq-start">▶️ Bắt đầu</button>
+    </div>
   </div>
 
-  <script src="../js/utils/timer.js"></script>
-  <script src="../js/data/data-meta.js"></script>
-  <script src="../js/data/search-index.js"></script>
-  <script src="../js/data/spaced-repetition.js"></script>
-  <script src="../js/data/progress-db.js"></script>
-  <script type="module">
-    import { initSpeedQuizUI } from '../js/features/game/game-speedquiz-ui.js';
-    document.addEventListener('DOMContentLoaded', () => initSpeedQuizUI());
-  </script>
+  <footer class="subpage-footer">
+    <p>© 2026 SkillForge</p>
+  </footer>
+</div>
+
+<script src="../js/utils/timer.js"></script>
+<script src="../js/data/data-meta.js"></script>
+<script src="../js/data/search-index.js"></script>
+<script src="../js/data/spaced-repetition.js"></script>
+<script src="../js/data/progress-db.js"></script>
+<script type="module">
+  import { initSpeedQuizUI } from '../js/features/game/game-speedquiz-ui.js';
+  document.addEventListener('DOMContentLoaded', () => initSpeedQuizUI());
+</script>
 </body>
 </html>

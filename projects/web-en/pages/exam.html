@@ -4,40 +4,58 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thi Tiếng Anh — SkillForge</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/variables.css" />
   <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/subpage.css" />
   <link rel="stylesheet" href="../css/timer.css" />
   <link rel="stylesheet" href="../css/exam.css" />
 </head>
-<body>
-  <div class="exam-page">
-    <!-- Top bar -->
-    <header class="exam-topbar">
+<body class="subpage exam-page">
+<div class="subpage-container">
+  <!-- Topbar -->
+  <header class="subpage-topbar">
+    <div class="subpage-topbar-left">
+      <span class="icon">📝</span>
       <div>
-        <h1>📝 Thi Tiếng Anh</h1>
-        <p class="exam-subtitle">Kiểm tra từ vựng, ngữ pháp & khả năng đặt câu</p>
+        <h1>Thi Tiếng Anh</h1>
+        <div class="subtitle">Kiểm tra từ vựng, ngữ pháp &amp; khả năng đặt câu</div>
       </div>
-      <div class="exam-topbar-actions">
-        <div class="focus-timer" id="focus-timer">
-          <div class="time-display" id="timer-display">30:00</div>
-          <div class="timer-controls">
-            <select id="timer-select">
-              <option value="30">30p</option>
-              <option value="60">1h</option>
-            </select>
-            <button id="timer-toggle">▶</button>
-            <button id="timer-reset">↻</button>
+    </div>
+    <div class="subpage-topbar-right">
+      <div class="forge-timer-wrap">
+        <div class="forge-timer-ring">
+          <svg viewBox="0 0 68 68">
+            <circle class="forge-ring-bg" cx="34" cy="34" r="30" />
+            <circle class="forge-ring-progress" id="forge-ring-progress" cx="34" cy="34" r="30" />
+          </svg>
+          <div class="forge-time" id="forge-time">30:00</div>
+        </div>
+        <div class="forge-controls">
+          <select id="forge-select">
+            <option value="30">30p</option>
+            <option value="60">1h</option>
+          </select>
+          <div class="forge-btn-row">
+            <button class="forge-btn forge-btn-primary" id="forge-toggle">⚒️</button>
+            <button class="forge-btn forge-btn-secondary" id="forge-reset">↻</button>
           </div>
         </div>
-        <a class="exam-back-btn" href="english/hub.html">⬅ Tiếng Anh</a>
+        <div class="forge-stats">
+          <div class="forge-stat-row">📋 Hôm nay <span class="val fire" id="stat-today">0m</span></div>
+          <div class="forge-stat-row">🔥 Streak <span class="val" id="stat-streak">0🔥</span></div>
+          <div class="forge-stat-row">📦 Đã rèn <span class="val" id="stat-total">0</span></div>
+        </div>
       </div>
-    </header>
+      <a class="subpage-back" href="english.html">⬅ Tiếng Anh</a>
+    </div>
+  </header>
 
+  <div class="subpage-content">
     <!-- Topic selector & config -->
-    <section class="exam-section exam-config">
+    <section class="subpage-card exam-config">
       <div class="exam-config-row">
         <label>Chủ đề:</label>
         <div class="exam-topic-tabs" id="exam-topic-tabs">
@@ -77,7 +95,7 @@
     <p class="exam-timer-text" id="exam-timer-text">Thời gian còn lại: --</p>
 
     <!-- Active exam area -->
-    <section class="exam-section exam-card" id="exam-card">
+    <section class="subpage-card exam-card" id="exam-card">
       <div class="exam-card-header">
         <span class="exam-badge" id="exam-badge">Từ vựng</span>
         <span class="exam-progress" id="exam-progress">Câu 1 / 10</span>
@@ -92,7 +110,7 @@
     </section>
 
     <!-- Stats -->
-    <section class="exam-section exam-stats" id="exam-stats">
+    <section class="subpage-card exam-stats" id="exam-stats">
       <div class="exam-stat">
         <span class="exam-stat-value" id="exam-score">0</span>
         <span class="exam-stat-label">Đúng</span>
@@ -112,21 +130,22 @@
     </section>
 
     <!-- History -->
-    <section class="exam-section exam-history">
+    <section class="subpage-card exam-history">
       <h3>📜 Lịch sử thi</h3>
       <ul id="exam-history-list"></ul>
     </section>
-
-    <footer class="app-footer">
-      <p>© 2026 SkillForge</p>
-    </footer>
   </div>
 
-  <script src="../js/utils/timer.js"></script>
-  <script src="../js/data/data-meta.js"></script>
-  <script src="../js/data/search-index.js"></script>
-  <script src="../js/data/spaced-repetition.js"></script>
-  <script src="../js/data/progress-db.js"></script>
-  <script type="module" src="../js/exam-app.js"></script>
+  <footer class="subpage-footer">
+    <p>© 2026 SkillForge</p>
+  </footer>
+</div>
+
+<script src="../js/utils/timer.js"></script>
+<script src="../js/data/data-meta.js"></script>
+<script src="../js/data/search-index.js"></script>
+<script src="../js/data/spaced-repetition.js"></script>
+<script src="../js/data/progress-db.js"></script>
+<script type="module" src="../js/exam-app.js"></script>
 </body>
 </html>

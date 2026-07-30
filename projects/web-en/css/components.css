@@ -566,7 +566,7 @@ select {
 
 /* Stories */
 .story-subtitle {
-  color: var(--surface-card);
+  color: #94a3b8;
   font-size: 1.3rem;
   margin-bottom: 1rem;
 }
@@ -658,7 +658,7 @@ select {
 .game-panel { display: none; }
 .game-panel.active { display: block; }
 
-/* Game Links */
+/* Game Links (forge theme) */
 .game-links {
   display: flex;
   flex-direction: column;
@@ -672,34 +672,35 @@ select {
   justify-content: center;
   width: 100%;
   max-width: 380px;
-  background: var(--surface-card);
-  color: var(--text-primary);
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  color: var(--forge-text, #f1f5f9);
   text-decoration: none;
   padding: 1.1rem 1.5rem;
-  border-radius: var(--radius-lg);
-  font-size: 1.15rem;
+  border-radius: 14px;
+  font-size: 1.1rem;
   font-weight: 700;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   gap: 0.6rem;
 }
 .game-link:hover {
   transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  border-color: var(--forge-fire, #f97316);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
-/* Word Scramble */
+/* Word Scramble (forge theme) */
 .scramble-card {
-  background: white;
-  border-radius: var(--radius-lg);
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
   padding: 1.5rem;
-  box-shadow: var(--shadow-md);
   max-width: 500px;
   margin: 0 auto;
 }
-.scramble-hint { font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem; font-weight: 600; }
+.scramble-hint { font-size: 0.95rem; color: var(--forge-text2, #94a3b8); margin-bottom: 1rem; font-weight: 600; }
 .scramble-letters { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-bottom: 1rem; min-height: 60px; }
-.scramble-answer { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-bottom: 0.8rem; min-height: 50px; border-bottom: 2px dashed #ddd; padding-bottom: 0.8rem; }
+.scramble-answer { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-bottom: 0.8rem; min-height: 50px; border-bottom: 1px dashed var(--forge-glass-border, rgba(255,255,255,0.08)); padding-bottom: 0.8rem; }
 
 .scramble-tile {
   display: inline-flex;
@@ -707,29 +708,159 @@ select {
   align-items: center;
   width: 42px;
   height: 42px;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  background: #f3e5f5;
-  color: var(--color-secondary);
-  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.08);
+  color: var(--forge-text, #f1f5f9);
+  border-radius: 8px;
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
   cursor: pointer;
-  transition: transform 0.15s, background 0.15s;
+  transition: all 0.15s;
   user-select: none;
 }
-.scramble-tile:hover { transform: scale(1.1); background: #e1bee7; }
-.scramble-tile.placed { background: var(--color-secondary); color: white; }
-.scramble-meaning { font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.8rem; font-style: italic; }
+.scramble-tile:hover { transform: scale(1.1); background: rgba(249,115,22,0.12); border-color: var(--forge-fire, #f97316); }
+.scramble-tile.placed { background: var(--forge-fire, #f97316); color: white; border-color: var(--forge-fire, #f97316); }
+.scramble-meaning { font-size: 0.95rem; color: var(--forge-text3, #64748b); margin-bottom: 0.8rem; font-style: italic; }
 
-/* Speed Quiz */
+/* Speed Quiz (forge theme) */
 .sq-card {
-  background: white;
-  border-radius: var(--radius-lg);
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
   padding: 1.5rem;
-  box-shadow: var(--shadow-md);
   max-width: 500px;
   margin: 1rem auto;
 }
-.sq-question { font-size: 1.25rem; font-weight: 700; color: var(--color-secondary); margin-bottom: 1rem; }
+.sq-question { font-size: 1.2rem; font-weight: 700; color: var(--forge-text, #f1f5f9); margin-bottom: 1rem; }
+
+/* ===== Forge-themed Game board + card (override white defaults) ===== */
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.game-card {
+  aspect-ratio: 1;
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--forge-text, #f1f5f9);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.3rem;
+  box-shadow: none;
+}
+
+.game-card:hover {
+  transform: scale(1.05);
+  border-color: var(--forge-fire, #f97316);
+  box-shadow: 0 0 16px rgba(249,115,22,0.1);
+}
+
+.game-card.flipped {
+  background: rgba(249,115,22,0.15);
+  border-color: var(--forge-fire, #f97316);
+  color: var(--forge-ember, #fbbf24);
+}
+
+.game-card.matched {
+  background: rgba(34,197,94,0.12);
+  border-color: var(--color-success, #22c55e);
+  color: var(--color-success, #22c55e);
+  cursor: default;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.game-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--forge-text, #f1f5f9);
+}
+
+.game-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--forge-text2, #94a3b8);
+}
+
+.game-stats strong {
+  color: var(--forge-ember, #fbbf24);
+  font-weight: 700;
+}
+
+.game-feedback {
+  color: var(--forge-text2, #94a3b8);
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* Game restart button (forge) */
+.btn-restart {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text2, #94a3b8);
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-restart:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--forge-fire, #f97316);
+  color: var(--forge-text, #f1f5f9);
+  transform: translateY(-1px);
+}
+
+/* Game subtabs (forge) */
+.game-subtab {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text2, #94a3b8);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.game-subtab:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.18);
+  color: var(--forge-text, #f1f5f9);
+}
+
+.game-subtab.active {
+  background: white;
+  color: var(--forge-bg, #08080e);
+  border-color: white;
+}
+
+.game-panel { display: none; }
+.game-panel.active { display: block; }
 
 /* Responsive */
 @media (max-width: 600px) {

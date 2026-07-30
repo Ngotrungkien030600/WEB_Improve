@@ -1,0 +1,152 @@
+📋 UI Bug
+
+1. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Navigate to the homepage.
+   
+2. Actual Result: 
+   The "English" link is missing and does not redirect to the English section.
+
+3. Expected Result:
+   Clicking on "English" should redirect to the English section of SkillForge.
+
+4. Bug Rating: Suggestion
+
+5. Steps to Reproduce (Steps 1-2): 
+   - Navigate to homepage.
+   - Click on either "Java" or "Skillforge".
+   
+6. Actual Result (Step 3):
+   A broken link appears, with no redirection.
+
+7. Expected Result (Step 4):
+   The page should be redirected to the English section of SkillForge if clicked on "English".
+
+8. Steps to Reproduce (Steps 5-6): 
+   - Go to homepage.
+   - Click either "Java" or "Skillforge".
+   
+9. Actual Result: 
+   A broken link appears, with no redirection.
+
+10. Expected Result:
+    The page should be redirected to the English section of SkillForge if clicked on "English".
+
+Bug 2: Responsive Layout
+
+11. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in landscape mode.
+   
+12. Actual Result: 
+   Text elements are not properly aligned, and there is a noticeable horizontal scroll bar.
+
+13. Expected Result:
+   The layout should be responsive and elements should align correctly without scroll bars.
+
+Bug 3: Spacing
+
+14. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in wide mode.
+   
+15. Actual Result:
+   There is a significant lack of spacing between header, brand, and content sections.
+
+16. Expected Result:
+   The elements should have appropriate spacing from each other without overcrowding the screen.
+
+Bug 4: Color
+
+17. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in light mode.
+   
+18. Actual Result:
+   Text color is not distinguishable against background.
+
+19. Expected Result:
+   The text should be easily readable and visible against the background.
+
+Bug 5: Typography
+
+20. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in a light mode.
+   
+21. Actual Result:
+   Text is not correctly formatted, some words are too small for readability.
+
+22. Expected Result:
+   The text should be properly spaced and readable without being cramped or stretched excessively.
+
+Bug 6: Layout
+
+23. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in a wide mode.
+   
+24. Actual Result:
+   Some elements overlap, resulting in an unorganized layout.
+
+25. Expected Result:
+   The layout should be organized and not overlapping elements without cluttering the page.
+
+Bug 7: Broken Elements
+
+26. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in wide mode.
+   
+27. Actual Result:
+   There is no visible text, as if it has been cut off.
+
+28. Expected Result:
+   The elements should be fully displayed without being cut off or missing from the layout.
+
+Bug 8: Console Errors
+
+29. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in wide mode.
+   
+30. Actual Result:
+   There are no visible console errors on the page.
+
+31. Expected Result:
+   The console should not show any errors or warnings if there is a problem with the content loading correctly.
+
+Bug 9: Broken Elements
+
+32. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in wide mode.
+   
+33. Actual Result:
+   There are no visible elements, as it appears the page has been cut off or not loaded completely.
+
+34. Expected Result:
+   The elements should be fully displayed without being cut off or missing from the layout.
+
+Bug 10: Broken Elements
+
+35. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in wide mode.
+   
+36. Actual Result:
+   There are no visible elements, as it appears the page has been cut off or not loaded completely.
+
+37. Expected Result:
+   The elements should be fully displayed without being cut off or missing from the layout.
+
+Bug 11: Responsive Layout
+
+38. Bước 1: Trang chủ
+   Steps to Reproduce:
+   - Open browser in wide mode.
+   
+39. Actual Result:
+   Text elements are not properly aligned, and there is a noticeable horizontal scroll bar.
+
+40.
