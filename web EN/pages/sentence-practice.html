@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luyện nói tiếng Anh — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#34d399; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:720px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .back { color:var(--accent); text-decoration:none; font-size:0.9rem; }
+    .topbar .back:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:1.5rem; font-size:0.95rem; }
+
+    .cat-bar { display:flex; gap:0.4rem; overflow-x:auto; padding-bottom:0.5rem; margin-bottom:1.5rem; }
+    .cat-btn { flex-shrink:0; padding:0.4rem 0.8rem; border:1px solid var(--border); border-radius:20px; font-size:0.8rem; font-weight:500; cursor:pointer; background:var(--surface); color:var(--text2); transition:all 0.15s; white-space:nowrap; }
+    .cat-btn:hover { border-color:var(--accent); color:var(--text); }
+    .cat-btn.active { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+
+    .practice-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:2rem; margin-bottom:1.5rem; }
+    .p-counter { font-size:0.8rem; color:var(--text2); margin-bottom:0.5rem; text-align:center; }
+    .p-vi { font-size:1.3rem; font-weight:700; text-align:center; margin-bottom:0.3rem; color:var(--text); }
+    .p-hint { font-size:0.8rem; color:var(--text2); text-align:center; margin-bottom:1.5rem; font-style:italic; }
+
+    .p-input { width:100%; padding:0.75rem 1rem; border:2px solid var(--border); border-radius:var(--radius); font-size:1rem; font-family:inherit; background:var(--surface2); color:var(--text); text-align:center; transition:border-color 0.2s; }
+    .p-input:focus { outline:none; border-color:var(--accent); }
+    .p-input.correct { border-color:var(--accent); background:rgba(52,211,153,0.08); }
+    .p-input.wrong { border-color:#ef4444; background:rgba(239,68,68,0.08); }
+
+    .p-actions { display:flex; justify-content:center; gap:0.75rem; margin-top:1.25rem; flex-wrap:wrap; }
+    .p-actions button { border:none; border-radius:6px; padding:0.55rem 1.3rem; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
+    .btn-check { background:var(--accent); color:var(--bg); }
+    .btn-check:hover { opacity:0.9; }
+    .btn-next { background:var(--surface2); color:var(--text); border:1px solid var(--border)!important; }
+    .btn-next:hover { border-color:var(--accent)!important; }
+    .btn-speak { background:var(--surface2); color:var(--text); border:1px solid var(--border)!important; }
+    .btn-speak:hover { border-color:var(--accent)!important; }
+    button:disabled { opacity:0.4; cursor:not-allowed; }
+
+    .p-result { text-align:center; margin-top:1rem; padding:0.75rem; border-radius:var(--radius); display:none; }
+    .p-result.show { display:block; }
+    .p-result.good { background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.2); }
+    .p-result.bad { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); }
+    .p-result .correct-en { font-weight:600; color:var(--accent); font-size:1.05rem; }
+    .p-result .note { font-size:0.8rem; color:var(--text2); margin-top:0.3rem; }
+
+    .p-stats { display:flex; justify-content:center; gap:1.5rem; margin-bottom:1rem; font-size:0.85rem; color:var(--text2); }
+    .p-stats span strong { color:var(--text); }
+
+    .progress-bar { height:4px; background:var(--surface2); border-radius:2px; margin-bottom:1.5rem; overflow:hidden; }
+    .progress-fill { height:100%; background:var(--accent); border-radius:2px; transition:width 0.3s; }
+
+    @media (max-width:600px) { .p-vi { font-size:1.1rem; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <h1>🗣️ Luyện nói & Viết lại</h1>
+    <a class="back" href="../index.html">← Trang chủ</a>
+  </div>
+  <p class="desc">Xem tiếng Việt → tự viết/nói tiếng Anh → kiểm tra. Mỗi câu đúng giúp bạn nhớ lâu hơn. 400+ câu từ 13 chủ đề.</p>
+
+  <div class="cat-bar" id="cat-bar"></div>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="p-stats"><span>✅ <strong id="correct-count">0</strong></span><span>❌ <strong id="wrong-count">0</strong></span><span>📊 <strong id="total-count">0</strong></span></div>
+
+  <div class="practice-card">
+    <div class="p-counter" id="p-counter">Câu 1 / 20</div>
+    <div class="p-vi" id="p-vi">Xin chào, bạn khỏe không?</div>
+    <div class="p-hint" id="p-hint">💡 Câu hỏi thăm phổ biến nhất</div>
+    <input class="p-input" id="p-input" placeholder="Gõ câu tiếng Anh của bạn..." autocomplete="off" spellcheck="false" />
+    <div class="p-result" id="p-result"></div>
+    <div class="p-actions">
+      <button class="btn-check" id="btn-check">✅ Kiểm tra</button>
+      <button class="btn-next" id="btn-next" disabled>➡️ Câu tiếp</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/data/sentence-practice.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const sentences = window.sentencePractice;
+  let currentCat = sentences.categories[0].id;
+  let pool = [...sentences.categories[0].sentences];
+  let index = 0;
+  let correct = 0, wrong = 0;
+  let checked = false;
+
+  const catBar = document.getElementById('cat-bar');
+  const counter = document.getElementById('p-counter');
+  const viEl = document.getElementById('p-vi');
+  const hintEl = document.getElementById('p-hint');
+  const inputEl = document.getElementById('p-input');
+  const resultEl = document.getElementById('p-result');
+  const checkBtn = document.getElementById('btn-check');
+  const nextBtn = document.getElementById('btn-next');
+  const correctCount = document.getElementById('correct-count');
+  const wrongCount = document.getElementById('wrong-count');
+  const totalCount = document.getElementById('total-count');
+  const progressFill = document.getElementById('progress-fill');
+
+  // Render category tabs
+  sentences.categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (cat.id === currentCat ? ' active' : '');
+    btn.textContent = `${cat.icon} ${cat.name}`;
+    btn.addEventListener('click', () => switchCategory(cat.id));
+    catBar.appendChild(btn);
+  });
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length-1; i>0; i--) { const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a;
+  }
+
+  function switchCategory(catId) {
+    currentCat = catId;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(sentences.categories.find(c=>c.id===catId).name)));
+    const cat = sentences.categories.find(c => c.id === catId);
+    pool = shuffle(cat.sentences);
+    index = 0; correct = 0; wrong = 0;
+    checked = false;
+    updateStats();
+    showSentence();
+  }
+
+  function showSentence() {
+    if (index >= pool.length) {
+      resultEl.className = 'p-result show good';
+      resultEl.innerHTML = `<div style="text-align:center;padding:1rem;"><div style="font-size:3rem;margin-bottom:0.5rem;">🎉</div><strong style="font-size:1.1rem;">Hoàn thành!</strong><p style="color:var(--text2);margin-top:0.3rem;">Đúng: ${correct}/${pool.length} câu</p></div>`;
+      inputEl.style.display = 'none';
+      checkBtn.style.display = 'none';
+      nextBtn.textContent = '🔄 Luyện lại';
+      nextBtn.disabled = false;
+      nextBtn.onclick = () => { index=0; correct=0; wrong=0; checked=false; inputEl.style.display=''; checkBtn.style.display=''; nextBtn.textContent='➡️ Câu tiếp'; nextBtn.disabled=true; updateStats(); showSentence(); };
+      return;
+    }
+    const s = pool[index];
+    counter.textContent = `Câu ${index+1} / ${pool.length}`;
+    viEl.textContent = s.vi;
+    hintEl.textContent = `💡 ${s.note}`;
+    inputEl.value = '';
+    inputEl.className = 'p-input';
+    inputEl.disabled = false;
+    inputEl.focus();
+    resultEl.className = 'p-result';
+    resultEl.innerHTML = '';
+    checked = false;
+    checkBtn.disabled = false;
+    nextBtn.disabled = true;
+    progressFill.style.width = `${(index/pool.length)*100}%`;
+  }
+
+  function checkAnswer() {
+    if (checked) return;
+    const s = pool[index];
+    const user = inputEl.value.trim().toLowerCase().replace(/[^\w\s]/g, '');
+    const correct = s.en.toLowerCase().replace(/[^\w\s]/g, '');
+    const isMatch = user === correct;
+
+    if (isMatch) { inputEl.className = 'p-input correct'; window.correctCount++; }
+    else { inputEl.className = 'p-input wrong'; window.wrongCount++; }
+
+    if (isMatch) window.checkedCorrect = true;
+    else window.checkedCorrect = false;
+
+    checked = true;
+    checkBtn.disabled = true;
+    nextBtn.disabled = false;
+    inputEl.disabled = true;
+
+    resultEl.className = `p-result show ${isMatch ? 'good' : 'bad'}`;
+    resultEl.innerHTML = isMatch
+      ? `<div>✅ <span class="correct-en">${s.en}</span></div>`
+      : `<div>❌ Bạn viết: <span style="color:#ef4444;">${inputEl.value.trim() || '(trống)'}</span></div><div class="correct-en" style="margin-top:0.3rem;">✅ Đúng: ${s.en}</div>`;
+
+    correctCount.textContent = window.correctCount;
+    wrongCount.textContent = window.wrongCount;
+  }
+
+  function updateStats() {
+    correctCount.textContent = window.correctCount || 0;
+    wrongCount.textContent = window.wrongCount || 0;
+    totalCount.textContent = pool.length;
+  }
+
+  function nextSentence() {
+    index++;
+    showSentence();
+  }
+
+  // Init
+  let cat = sentences.categories.find(c => c.id === currentCat);
+  pool = shuffle(cat.sentences);
+  window.correctCount = 0;
+  window.wrongCount = 0;
+  updateStats();
+  showSentence();
+
+  checkBtn.addEventListener('click', checkAnswer);
+  nextBtn.addEventListener('click', nextSentence);
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (!checked) checkAnswer();
+      else if (!nextBtn.disabled) nextSentence();
+    }
+  });
+});
+</script>
+</body>
+</html>
