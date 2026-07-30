@@ -1,4 +1,318 @@
-/* ===== Focus Timer Widget — Glassmorphism ===== */
+/* ===== Forge Timer — SVG Ring + Stats Panel ===== */
+
+/* ───── Container ───── */
+.forge-timer-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+/* ───── SVG Ring Timer ───── */
+.forge-timer-ring {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.forge-timer-ring svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.forge-ring-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 4;
+}
+
+.forge-ring-progress {
+  fill: none;
+  stroke: #f97316;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 188.5;  /* 2π × 30 */
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
+  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.3));
+}
+
+.forge-ring-progress.warning {
+  stroke: #ef4444;
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
+}
+
+.forge-ring-progress.danger {
+  stroke: #dc2626;
+  filter: drop-shadow(0 0 12px rgba(220, 38, 38, 0.5));
+  animation: ringPulse 1s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.4)); }
+  50% { filter: drop-shadow(0 0 18px rgba(220, 38, 38, 0.7)); }
+}
+
+/* Time display inside ring */
+.forge-time {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+  transition: color 0.4s ease;
+}
+
+.forge-time.warning {
+  color: #fca5a5;
+}
+
+.forge-time.danger {
+  color: #f87171;
+}
+
+/* ───── Controls ───── */
+.forge-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.forge-controls select {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.7rem;
+  cursor: pointer;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+  width: 42px;
+  text-align: center;
+  transition: background 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.forge-controls select:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.forge-controls select option {
+  color: #1e293b;
+  background: #fff;
+}
+
+.forge-btn-row {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.forge-btn {
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.forge-btn-primary {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: white;
+  box-shadow: 0 2px 10px rgba(249, 115, 22, 0.3);
+}
+
+.forge-btn-primary:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.45);
+}
+
+.forge-btn-primary:active {
+  transform: scale(0.92);
+}
+
+.forge-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.forge-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  transform: scale(1.08);
+}
+
+.forge-btn-secondary:active {
+  transform: scale(0.92);
+}
+
+/* ───── Stats Panel ───── */
+.forge-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.forge-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+}
+
+.forge-stat-row .val {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  min-width: 2.2rem;
+}
+
+.forge-stat-row .val.fire {
+  color: #fbbf24;
+}
+
+/* ───── Congratulation Modal ───── */
+.forge-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: forgeFadeIn 0.35s ease;
+}
+
+.forge-modal {
+  background: linear-gradient(145deg, #1a1a2e, #16213e);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 24px;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(249, 115, 22, 0.08);
+  animation: forgeScaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.forge-modal-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+  animation: forgeBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+}
+
+@keyframes forgeBounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.forge-modal h2 {
+  color: #fbbf24;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.forge-modal .forge-modal-stats {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.forge-modal .forge-modal-stats strong {
+  color: #f97316;
+}
+
+.forge-modal-btn {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 0.7rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3);
+}
+
+.forge-modal-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(249, 115, 22, 0.45);
+}
+
+@keyframes forgeFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes forgeScaleIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ───── Responsive ───── */
+@media (max-width: 768px) {
+  .forge-timer-ring {
+    width: 60px;
+    height: 60px;
+  }
+  .forge-time {
+    font-size: 0.95rem;
+  }
+  .forge-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 0.65rem;
+  }
+  .forge-controls select {
+    width: 36px;
+    font-size: 0.65rem;
+  }
+  .forge-stats {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .forge-timer-ring {
+    width: 52px;
+    height: 52px;
+  }
+  .forge-time {
+    font-size: 0.85rem;
+  }
+}
+
+/* ===== Legacy focus-timer (subpages) ===== */
 .focus-timer {
   display: flex;
   align-items: center;
@@ -12,12 +326,10 @@
   flex-shrink: 0;
   transition: background var(--transition-base), box-shadow var(--transition-base);
 }
-
 .focus-timer:hover {
   background: rgba(0, 0, 0, 0.4);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
-
 .focus-timer .time-display {
   font-size: 1.5rem;
   font-weight: 800;
@@ -27,18 +339,15 @@
   text-align: center;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
-
 .focus-timer .time-display.warning {
   color: #fca5a5;
   text-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
 }
-
 .focus-timer .timer-controls {
   display: flex;
   gap: 0.25rem;
   align-items: center;
 }
-
 .focus-timer select {
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
@@ -52,16 +361,8 @@
   text-align: center;
   transition: background var(--transition-fast);
 }
-
-.focus-timer select:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.focus-timer select option {
-  color: var(--text-primary);
-  background: white;
-}
-
+.focus-timer select:hover { background: rgba(255, 255, 255, 0.25); }
+.focus-timer select option { color: var(--text-primary); background: white; }
 .focus-timer button {
   border: none;
   border-radius: 20px;
@@ -74,34 +375,15 @@
   transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   min-width: 32px;
 }
-
 .focus-timer button:hover {
   background: white;
   transform: scale(1.08);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-
-.focus-timer button:active {
-  transform: scale(0.95);
-}
-
+.focus-timer button:active { transform: scale(0.95); }
 @media (max-width: 600px) {
-  .focus-timer {
-    padding: 0.3rem 0.5rem;
-    gap: 0.25rem;
-  }
-  .focus-timer .time-display {
-    font-size: 1.1rem;
-    min-width: 2.8rem;
-  }
-  .focus-timer select {
-    font-size: 0.7rem;
-    padding: 0.2rem 0.3rem;
-    width: 38px;
-  }
-  .focus-timer button {
-    font-size: 0.7rem;
-    padding: 0.2rem 0.4rem;
-    min-width: 26px;
-  }
+  .focus-timer { padding: 0.3rem 0.5rem; gap: 0.25rem; }
+  .focus-timer .time-display { font-size: 1.1rem; min-width: 2.8rem; }
+  .focus-timer select { font-size: 0.7rem; padding: 0.2rem 0.3rem; width: 38px; }
+  .focus-timer button { font-size: 0.7rem; padding: 0.2rem 0.4rem; min-width: 26px; }
 }
