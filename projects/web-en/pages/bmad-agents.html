@@ -6,64 +6,13 @@
   <title>BMAD Agents — SkillForge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#7c5cfc; --radius:10px; --font:'Inter',system-ui,sans-serif; }
-    body { font-family:var(--font); background:var(--bg); color:var(--text); }
-    .page { max-width:800px; margin:0 auto; padding:2.5rem 1.5rem; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
-    .topbar h1 { font-size:1.5rem; font-weight:700; }
-    .topbar .back { color:var(--accent); text-decoration:none; font-size:0.9rem; }
-    .topbar .back:hover { text-decoration:underline; }
-    .desc { color:var(--text2); margin-bottom:1rem; font-size:0.9rem; }
-    .mode-bar, .bmad-mode-bar { display:flex; gap:0.25rem; background:var(--surface2); border-radius:var(--radius); padding:0.25rem; margin-bottom:1rem; }
-    .mode-btn, .bmad-mode-btn { flex:1; padding:0.4rem 0.75rem; border:none; border-radius:6px; font-size:0.85rem; font-weight:600; cursor:pointer; background:transparent; color:var(--text2); transition:all 0.15s; }
-    .mode-btn.active, .bmad-mode-btn.active { background:var(--surface); color:var(--accent); }
-    .agent-grid, .bmad-agent-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem; margin-bottom:1rem; }
-    .agent-card, .bmad-agent-card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; text-align:center; cursor:pointer; transition:border-color 0.15s,background 0.15s; }
-    .agent-card:hover, .bmad-agent-card:hover { border-color:var(--accent); background:rgba(124,92,252,0.08); }
-    .agent-card.selected, .agent-card.party-selected, .bmad-agent-card.selected, .bmad-agent-card.party-selected { border-color:var(--accent); background:rgba(124,92,252,0.12); }
-    .agent-card .icon, .bmad-agent-card .agent-icon { font-size:2rem; display:block; margin-bottom:0.3rem; }
-    .agent-card .name, .bmad-agent-card .agent-name { font-size:0.9rem; font-weight:600; display:block; }
-    .agent-card .role, .bmad-agent-card .agent-role { font-size:0.75rem; color:var(--text2); display:block; }
-    .party-start { display:flex; justify-content:center; gap:0.75rem; margin-bottom:0.5rem; }
-    .party-start button { background:var(--accent); color:white; border:none; border-radius:6px; padding:0.45rem 1.1rem; font-size:0.85rem; font-weight:600; cursor:pointer; }
-    .party-start button:hover { background:#6b4de0; }
-    .session-info { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); }
-    .session-label { flex:1; font-size:0.85rem; font-weight:600; }
-    .back-btn { background:transparent; color:var(--text2); border:1px solid var(--border); border-radius:6px; padding:0.25rem 0.6rem; font-size:0.8rem; cursor:pointer; }
-    .back-btn:hover { background:var(--surface2); }
-    .clear-btn { background:transparent; color:var(--text2); border:none; border-radius:6px; width:32px;height:32px; font-size:0.9rem; cursor:pointer; }
-    .clear-btn:hover { background:rgba(239,68,68,0.15); color:#ef4444; }
-    .chat-box { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; height:400px; overflow-y:auto; margin-bottom:0.75rem; display:flex; flex-direction:column; gap:0.75rem; }
-    .chat-msg { display:flex; gap:0.5rem; max-width:88%; }
-    .chat-user { align-self:flex-end; flex-direction:row-reverse; }
-    .chat-assistant { align-self:flex-start; }
-    .chat-avatar { font-size:1.3rem; flex-shrink:0; }
-    .chat-bubble { padding:0.5rem 0.8rem; border-radius:var(--radius); font-size:0.85rem; line-height:1.55; }
-    .chat-user .chat-bubble { background:var(--accent); color:white; }
-    .chat-assistant .chat-bubble { background:var(--surface); color:var(--text); border:1px solid var(--border); }
-    .input-row { display:flex; gap:0.5rem; align-items:flex-end; }
-    .input-row textarea { flex:1; padding:0.5rem 0.8rem; border:1px solid var(--border); border-radius:var(--radius); font-size:0.85rem; font-family:inherit; resize:none; line-height:1.5; max-height:100px; background:var(--surface2); color:var(--text); }
-    .input-row textarea:focus { outline:none; border-color:var(--accent); }
-    .input-row button { background:var(--accent); color:white; border:none; border-radius:6px; width:38px;height:38px; font-size:1rem; cursor:pointer; }
-    .chat-msg-solo .msg-header { display:flex; align-items:center; gap:0.3rem; margin-bottom:0.2rem; }
-    .chat-msg-solo .msg-header .agent-name { font-size:0.75rem; font-weight:600; color:var(--text2); }
-    .party-round { margin-bottom:1rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
-    .party-round-header { background:var(--surface2); padding:0.35rem 0.8rem; font-size:0.75rem; font-weight:600; color:var(--text2); border-bottom:1px solid var(--border); text-align:center; }
-    .party-agent-reply { display:flex; gap:0.5rem; padding:0.6rem 0.8rem; border-bottom:1px solid var(--border); }
-    .party-agent-reply:last-child { border-bottom:none; }
-    .party-agent-reply .ai { font-size:1.1rem; flex-shrink:0; }
-    .party-agent-reply .an { font-size:0.75rem; font-weight:600; color:var(--text2); margin-bottom:0.1rem; }
-    .party-agent-reply .at { font-size:0.82rem; line-height:1.55; }
-    .typing span { animation:blink 1.4s infinite; font-size:1.3rem; }
-    .typing span:nth-child(2) { animation-delay:0.2s; }
-    .typing span:nth-child(3) { animation-delay:0.4s; }
-    @keyframes blink { 0%,100%{opacity:0.2} 50%{opacity:1} }
-    @media (max-width:600px) { .agent-grid { grid-template-columns:repeat(2,1fr); } .chat-box { height:300px; } }
-  </style>
-  <link rel="stylesheet" href="../../../css/subpage.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/forge-tokens.css" />
+  <link rel="stylesheet" href="../css/subpage.css" />
+  <link rel="stylesheet" href="../css/timer.css" />
+  <link rel="stylesheet" href="../css/agents/bmad-chat.css" />
 </head>
 <body class="subpage">
 <div class="page">
