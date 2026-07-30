@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS Cloud Foundations &amp; Core — SkillForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#ff9900; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .links { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .topbar .links a { color:var(--accent); text-decoration:none; font-size:0.85rem; }
+    .topbar .links a:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2.5rem; font-size:0.95rem; }
+
+    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem; margin-bottom:2.5rem; }
+    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.7rem 1rem; text-decoration:none; color:var(--text); font-size:0.85rem; font-weight:500; transition:border-color 0.2s,color 0.2s; }
+    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+
+    .section { margin-bottom:3rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .section-title { background:var(--surface2); padding:0.9rem 1.25rem; font-size:1.1rem; font-weight:700; border-bottom:1px solid var(--border); }
+    .section-body { padding:1.25rem; }
+    .section-body h3 { font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; color:var(--accent); }
+    .section-body h3:first-child { margin-top:0; }
+    .section-body h4 { font-size:0.9rem; font-weight:600; margin:1rem 0 0.4rem; color:var(--text); }
+    .section-body p { font-size:0.9rem; color:var(--text2); margin-bottom:0.75rem; }
+    .section-body ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .section-body li { font-size:0.85rem; color:var(--text2); margin-bottom:0.3rem; }
+    .section-body strong { color:var(--text); }
+
+    pre { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; font-size:0.82rem; overflow-x:auto; margin:0.75rem 0; line-height:1.6; }
+    code { background:var(--surface2); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    pre code { background:transparent; padding:0; }
+
+    .diagram { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--accent); font-weight:600; line-height:2; font-family:monospace; }
+
+    .tag { display:inline-block; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.7rem; font-weight:600; margin-right:0.35rem; }
+    .tag-compute { background:rgba(255,153,0,0.1); color:#ff9900; border:1px solid rgba(255,153,0,0.2); }
+    .tag-storage { background:rgba(72,202,228,0.1); color:#48cae4; border:1px solid rgba(72,202,228,0.2); }
+    .tag-db { background:rgba(52,211,153,0.1); color:#34d399; border:1px solid rgba(52,211,153,0.2); }
+    .tag-net { background:rgba(244,114,182,0.1); color:#f472b6; border:1px solid rgba(244,114,182,0.2); }
+    .tag-sec { background:rgba(251,191,36,0.1); color:#fbbf24; border:1px solid rgba(251,191,36,0.2); }
+    .tag-devops { background:rgba(129,140,248,0.1); color:#818cf8; border:1px solid rgba(129,140,248,0.2); }
+    .tag-svr { background:rgba(239,68,68,0.1); color:#ef4444; border:1px solid rgba(239,68,68,0.2); }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .card h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.25rem; }
+    .card p, .card li { font-size:0.8rem; color:var(--text2); }
+    .card ul { padding-left:1rem; }
+    .card li { margin-bottom:0.2rem; }
+
+    @media (max-width:600px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>☁️ AWS Cloud Foundations &amp; Core</h1>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">IAM, VPC, EC2, Lambda, S3, RDS, ECS, CodePipeline — kiến trúc, code mẫu, best practices</p>
+    </div>
+    <div class="links">
+      <a href="cloud/hub.html">← AWS Cloud</a>
+      <a href="../index.html">Trang chủ</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <a href="#iam">1. IAM &amp; Security</a>
+    <a href="#vpc">2. VPC &amp; Networking</a>
+    <a href="#ec2">3. EC2 &amp; Auto Scaling</a>
+    <a href="#lambda">4. Lambda &amp; Serverless</a>
+    <a href="#ecs">5. ECS &amp; Containers</a>
+    <a href="#s3">6. S3 &amp; Storage</a>
+    <a href="#rds">7. RDS &amp; DynamoDB</a>
+    <a href="#cicd">8. CodePipeline &amp; DevOps</a>
+    <a href="#arch">9. Architecture &amp; Best Practices</a>
+  </div>
+
+  <!-- ===== 1. IAM ===== -->
+  <div class="section" id="iam">
+    <div class="section-title">1. IAM (Identity &amp; Access Management)</div>
+    <div class="section-body">
+      <h3>IAM là gì?</h3>
+      <p>IAM là dịch vụ quản lý danh tính và quyền truy cập AWS. Mọi thao tác với AWS API đều phải qua IAM authentication + authorization. <strong>IAM không phải là service-specific</strong> — nó áp dụng cho toàn bộ tài khoản AWS.</p>
+
+      <h3>IAM Components</h3>
+      <div class="grid-2">
+        <div class="card"><h4>👤 User</h4><p>Một người/vật thực thể. Có long-term credentials (password + access key). Khuyến nghị: 1 user = 1 người thật.</p></div>
+        <div class="card"><h4>👥 Group</h4><p>Tập hợp users. Gán policy cho group thay vì từng user. Quản lý dễ hơn, ít trùng lặp.</p></div>
+        <div class="card"><h4>🤖 Role</h4><p>Không gắn với user cụ thể. Được assume bởi users, services (EC2, Lambda), hoặc AWS accounts khác. Có temporary credentials (STS).</p></div>
+        <div class="card"><h4>📜 Policy</h4><p>JSON document định nghĩa quyền (Allow/Deny) trên các resource. Gán vào User, Group, hoặc Role.</p></div>
+      </div>
+
+      <h3>IAM Policy — cấu trúc JSON</h3>
+      <pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::my-app-bucket/uploads/*"
+    },
+    {
+      "Effect": "Deny",
+      "Action": "s3:DeleteObject",
+      "Resource": "*"
+    }
+  ]
+}</code></pre>
+
+      <h3>Least Privilege — nguyên tắc vàng</h3>
+      <p>Chỉ cấp quyền tối thiểu cần thiết. Dùng <strong>AWS Managed Policies</strong> khi bắt đầu, sau đó chuyển sang <strong>Customer Managed Policies</strong> chi tiết hơn. Tránh dùng <code>"Action": "*"</code> và <code>"Resource": "*"</code> cùng lúc.</p>
+
+      <h3>IAM Roles cho EC2</h3>
+      <pre><code>// Khi EC2 cần truy cập S3 — không bao giờ đặt access key trong code
+// Bước 1: Tạo IAM Role với policy S3 access
+// Bước 2: Gán Role vào EC2 Instance Profile
+// Bước 3: Code dùng AWS SDK — tự động lấy credentials từ Instance Metadata
+
+// SDK sẽ tự động gọi http://169.254.169.254/latest/meta-data/iam/security-credentials/
+const { S3Client } = require('@aws-sdk/client-s3');
+const s3 = new S3Client({ region: 'ap-southeast-1' });  // Không cần credentials!
+</code></pre>
+
+      <h3>IAM Policy Evaluation Logic</h3>
+      <div class="diagram">
+   Request → Explicit Deny? → YES → DENY ✗<br>
+              ↓ NO<br>
+            Allow? → YES → ALLOW ✓<br>
+              ↓ NO<br>
+            Implicit Deny ✗ (mặc định)
+      </div>
+      <p><strong>Quy tắc:</strong> Explicit Deny luôn thắng mọi Allow. Nếu không có Allow nào match → implicit deny.</p>
+
+      <h3>STS — Assume Role</h3>
+      <pre><code>// User A (account 111) assume Role ở account 222
+aws sts assume-role \
+  --role-arn "arn:aws:iam::222:role/CrossAccountRole" \
+  --role-session-name "my-session"
+
+// Output: AccessKeyId, SecretAccessKey, SessionToken (tạm thời, mặc định 1h)
+</code></pre>
+
+      <h3>IAM Best Practices</h3>
+      <ul>
+        <li><strong>Không dùng root account</strong> — tạo admin user với MFA, khóa root access key</li>
+        <li><strong>MFA bắt buộc</strong> cho users có quyền cao (admin, billing)</li>
+        <li><strong>Rotate access key</strong> định kỳ (90 ngày) — dùng 2 keys để zero-downtime rotation</li>
+        <li><strong>IAM Access Analyzer</strong> — phát hiện resource được share public ra ngoài account</li>
+        <li><strong>Service Control Policies (SCP)</strong> — Organization-level permission boundary</li>
+        <li><strong>Permissions Boundary</strong> — giới hạn maximum permission cho IAM entities</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 2. VPC ===== -->
+  <div class="section" id="vpc">
+    <div class="section-title">2. VPC (Virtual Private Cloud) &amp; Networking</div>
+    <div class="section-body">
+      <h3>VPC là gì?</h3>
+      <p>VPC là mạng ảo riêng trong AWS — <strong>logically isolated network</strong> trong tài khoản của bạn. Bạn tự định nghĩa IP range, subnets, route tables, gateways.</p>
+
+      <h3>VPC Architecture cơ bản</h3>
+      <div class="diagram">
+Internet ─→ Internet Gateway (IGW) ─→ Public Subnet ─→ EC2<br>
+                                      │<br>
+                                      └─→ NAT Gateway ─→ Private Subnet ─→ EC2/DB<br>
+                                                            │<br>
+                                                       VPC Peering / VPN / Direct Connect
+      </div>
+
+      <h3>CIDR &amp; Subnets</h3>
+      <pre><code>// VPC — 1 region, nhiều Availability Zones
+VPC CIDR: 10.0.0.0/16 (65536 địa chỉ — AWS reserved 5 đầu mỗi subnet)
+
+// Public subnet — có route đến IGW
+Public Subnet  10.0.1.0/24  (AZ: ap-southeast-1a) — Web servers, Load Balancers
+Public Subnet  10.0.2.0/24  (AZ: ap-southeast-1b)
+
+// Private subnet — không có route đến IGW, ra internet qua NAT
+Private Subnet 10.0.3.0/24  (AZ: ap-southeast-1a) — App servers
+Private Subnet 10.0.4.0/24  (AZ: ap-southeast-1b)
+
+// Database subnet — private, chỉ app servers access
+DB Subnet      10.0.5.0/24  (AZ: ap-southeast-1a) — RDS, ElastiCache
+DB Subnet      10.0.6.0/24  (AZ: ap-southeast-1b)
+</code></pre>
+
+      <h3>Security Groups vs NACL</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🔒 Security Group (Stateful)</h4>
+          <ul>
+            <li>Stateful — allow inbound → tự động allow outbound response</li>
+            <li>Chỉ có Allow rules (không Deny)</li>
+            <li>Attach vào ENI (EC2, RDS, ELB)</li>
+            <li>Reference SG khác: <code>sg-xxx</code></li>
+            <li>Default: block all inbound, allow all outbound</li>
+          </ul>
+        </div>
+        <div class="card"><h4>📋 NACL (Stateless)</h4>
+          <ul>
+            <li>Stateless — phải define cả inbound + outbound rules</li>
+            <li>Có Allow + Deny rules (đánh số, số nhỏ ưu tiên hơn)</li>
+            <li>Attach vào Subnet (affect all instances trong subnet)</li>
+            <li>Chỉ reference IP/CIDR, không reference SG</li>
+            <li>Dùng để deny list (block IP cụ thể)</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>NAT Gateway vs NAT Instance</h3>
+      <pre><code>// NAT Gateway — managed service
+// - AWS quản lý, auto multi-AZ, bandwidth up to 45 Gbps
+// - Không cần patch, không là Bastion Host
+// - Giá theo giờ + data processed (~$0.045/h + $0.045/GB)
+// - Mỗi AZ cần 1 NAT Gateway riêng
+
+// NAT Instance — EC2 tự quản
+// - Bạn tự setup iptables / NAT
+// - Cần patch OS, quản lý instance
+// - Có thể làm Bastion Host (SSH)
+// - Rẻ hơn nếu traffic thấp
+</code></pre>
+
+      <h3>VPC Endpoints</h3>
+      <pre><code>// Interface Endpoint (PrivateLink) — dùng cho services có ENI
+// - S3, DynamoDB có Gateway Endpoint (free, dùng route table)
+// - Còn lại: SSM, ECR, Lambda, SQS, Kinesis → Interface Endpoint ($)
+
+// Gateway Endpoint — free, dùng Prefix List trong route table
+// - Chỉ có S3 và DynamoDB
+// - Không cần NAT, không cần IGW
+// - Route table: 10.0.0.0/16 → local, pl-xxxxx (S3) → vpce-xxxx
+</code></pre>
+
+      <h3>VPC Peering &amp; Transit Gateway</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🔗 VPC Peering</h4><p>Kết nối 2 VPC (cùng hoặc khác account). Không transitive — A→B và B→C không cho A→C. Route table entries thủ công. Cross-region OK.</p></div>
+        <div class="card"><h4>🚇 Transit Gateway</h4><p>Hub-and-spoke — 1 TG kết nối N VPC, VPN, Direct Connect. Transitive routing. Có route tables riêng. Pay per attachment + GB processed.</p></div>
+      </div>
+
+      <h3>VPC Flow Logs</h3>
+      <pre><code>// Ghi lại tất cả traffic trong VPC/Subnet/ENI
+// Gửi đến CloudWatch Logs hoặc S3
+// Dùng để troubleshoot kết nối, security analysis, network monitoring
+
+// Format: version account-id eni-id src-addr dst-addr src-port dst-port protocol
+//         packets bytes start-time end-time action (ACCEPT/REJECT) log-status
+
+// Ví dụ gửi đến CloudWatch:
+aws ec2 create-flow-logs \
+  --resource-type VPC --resource-ids vpc-12345 \
+  --log-group-name vpc-flow-logs \
+  --traffic-type ALL
+</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 3. EC2 ===== -->
+  <div class="section" id="ec2">
+    <div class="section-title">3. EC2 &amp; Auto Scaling</div>
+    <div class="section-body">
+      <h3>EC2 Instance Types &amp; Families</h3>
+      <div class="grid-3">
+        <div class="card"><h4>⚡ General Purpose (T3, M7g)</h4><p>Web servers, small DB, dev/test. T3 burstable (CPU credits). M7g: Graviton3 ARM, 20% rẻ hơn Intel.</p></div>
+        <div class="card"><h4>🔬 Compute Optimized (C7g)</h4><p>Batch processing, gaming, HPC, CI/CD runners. Giá/vCPU thấp nhất. Graviton3 cho performance cao.</p></div>
+        <div class="card"><h4>📦 Memory Optimized (R7g, X2iedn)</h4><p>In-memory caches (Redis), large DB, real-time analytics. X2iedn: up to 4TB RAM/instance.</p></div>
+      </div>
+
+      <h3>User Data — Bootstrap Script</h3>
+      <pre><code>#!/bin/bash
+exec > /var/log/user-data.log 2>&1  # log tất cả output
+set -euo pipefail
+
+yum update -y
+yum install -y docker
+systemctl start docker
+systemctl enable docker
+
+# ECR login — cần IAM Role
+aws ecr get-login-password --region ap-southeast-1 | \
+  docker login --username AWS --password-stdin \
+  <account>.dkr.ecr.ap-southeast-1.amazonaws.com
+
+docker pull <account>.dkr.ecr.ap-southeast-1.amazonaws.com/my-app:latest
+docker run -d -p 80:3000 --name my-app \
+  -e DB_HOST=$(aws ssm get-parameter --name /prod/db/host --query Parameter.Value --output text) \
+  my-app:latest
+</code></pre>
+
+      <h3>Instance Metadata &amp; IMDSv2</h3>
+      <pre><code>// IMDSv1 (cũ) — HTTP GET, dễ bị SSRF attack
+curl http://169.254.169.254/latest/meta-data/
+
+// IMDSv2 (mới — bắt buộc) — session-oriented
+TOKEN=$(curl -X PUT http://169.254.169.254/latest/api/token \
+  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+curl -H "X-aws-ec2-metadata-token: $TOKEN" \
+  http://169.254.169.254/latest/meta-data/
+
+// Lấy instance ID, region, IAM Role, public-ip, vpc-id
+</code></pre>
+
+      <h3>Auto Scaling — Launch Template</h3>
+      <pre><code>// Launch Template (mới hơn Launch Configuration)
+// versioned — cập nhật AMI, instance type không ảnh hưởng ASG đang chạy
+
+// Auto Scaling Group
+aws autoscaling create-auto-scaling-group \
+  --auto-scaling-group-name prod-web-asg \
+  --launch-template LaunchTemplateName=web-v2 \
+  --min-size 2 --max-size 10 --desired-capacity 3 \
+  --availability-zones ap-southeast-1a ap-southeast-1b \
+  --target-group-arns arn:aws:elasticloadbalancing:.../prod-web-tg
+
+// Scaling Policies
+aws autoscaling put-scaling-policy \
+  --auto-scaling-group-name prod-web-asg \
+  --policy-name cpu-target \
+  --policy-type TargetTrackingScaling \
+  --target-tracking-configuration \
+  '{"TargetValue": 70.0, "PredefinedMetricSpecification": {"PredefinedMetricType": "ASGAverageCPUUtilization"}}'
+</code></pre>
+
+      <h3>Application Load Balancer (ALB)</h3>
+      <pre><code>// ALB — Layer 7, path-based routing, host-based routing
+// Target Group → ASG (or fixed targets)
+// Dùng cho HTTP/HTTPS, WebSocket, gRPC
+
+// Path-based routing:
+// /api/* → TargetGroup-A (user-service)
+// /orders/* → TargetGroup-B (order-service)
+// /* → TargetGroup-C (frontend)
+
+// Sticky sessions (session affinity) — dùng cookie
+// ALB tự tạo AWSALB cookie hoặc dùng custom cookie
+
+// Connection draining (deregistration delay): mặc định 300s
+// Cho in-flight requests hoàn thành trước khi instance bị terminate
+</code></pre>
+
+      <h3>EC2 Best Practices</h3>
+      <ul>
+        <li><strong>Dùng IAM Role</strong> cho EC2 — không bao giờ nhúng access key vào instance</li>
+        <li><strong>IMDSv2 bắt buộc</strong> — set <code>MetadataOptions HttpTokens=required</code></li>
+        <li><strong>SSM Session Manager</strong> thay vì SSH — không cần bastion, không cần security group port 22</li>
+        <li><strong>Spot Instances</strong> cho workload chịu được interrupt (batch, CI/CD, stateless workers) — tiết kiệm 70-90%</li>
+        <li><strong>Placement Groups</strong>: Cluster (low-latency, 10 Gbps), Spread (HA, max 7 instances/AZ), Partition (HDFS, Cassandra)</li>
+        <li><strong>Auto Recovery</strong>: CloudWatch alarm → auto-recover instance nếu health check fail</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 4. Lambda ===== -->
+  <div class="section" id="lambda">
+    <div class="section-title">4. Lambda &amp; Serverless</div>
+    <div class="section-body">
+      <h3>Lambda là gì?</h3>
+      <p>Function-as-a-Service (FaaS) — chạy code không cần quản lý server. AWS quản lý infrastructure, auto-scale từ 0 đến hàng ngàn concurrent executions. <strong>Chỉ trả tiền khi code chạy</strong> (per request + compute duration).</p>
+
+      <h3>Lambda Execution Model</h3>
+      <div class="diagram">
+Event Source (S3, SQS, API GW, DynamoDB Streams, EventBridge, ...)<br>
+         ↓<br>
+Lambda Service → Cold Start (nếu chưa có warm container)<br>
+                    ↓<br>
+                 Execution Environment (sandbox)<br>
+                    ↓<br>
+         Handler được gọi với event + context<br>
+         ├── /tmp: 512 MB – 10 GB (ephemeral storage)<br>
+         └── environment variables (4 KB max, encrypted với KMS)
+      </div>
+
+      <h3>Lambda với API Gateway (REST API)</h3>
+      <pre><code>// handler.mjs
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
+
+const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+
+export const handler = async (event) => {
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',   // CORS
+  };
+
+  try {
+    switch (event.httpMethod) {
+      case 'GET': {
+        const { id } = event.pathParameters || {};
+        if (!id) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing id' }) };
+
+        const { Item } = await ddb.send(new GetCommand({
+          TableName: process.env.TABLE_NAME,
+          Key: { pk: id },
+        }));
+        return {
+          statusCode: Item ? 200 : 404,
+          headers,
+          body: JSON.stringify(Item ?? { error: 'Not found' }),
+        };
+      }
+
+      case 'POST': {
+        const body = JSON.parse(event.body || '{}');
+        const item = { pk: crypto.randomUUID(), ...body, createdAt: new Date().toISOString() };
+        await ddb.send(new PutCommand({ TableName: process.env.TABLE_NAME, Item: item }));
+        return { statusCode: 201, headers, body: JSON.stringify(item) };
+      }
+
+      default:
+        return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Internal server error' }) };
+  }
+};
+</code></pre>
+
+      <h3>Lambda Layers — Dependencies</h3>
+      <pre><code>// Layer = ZIP chứa node_modules, Python packages, hoặc runtime extensions
+// Giảm deployment package size, share dependencies giữa nhiều functions
+
+// Cấu trúc layer:
+// layer.zip
+// └── nodejs/
+//     └── node_modules/
+//         ├── uuid/
+//         ├── aws-sdk/       (trừ aws-sdk v3 — đã có sẵn trong runtime)
+//         └── ...
+
+// Gắn tối đa 5 layers / function (tổng ~250 MB giải nén)
+// Layer version là immutable — tạo version mới khi cập nhật
+</code></pre>
+
+      <h3>Event Source Mappings</h3>
+      <pre><code>// Lambda poll SQS / DynamoDB Streams / Kinesis — không cần code poll
+
+// SQS — batching & partial batch response
+export const handler = async (event) => {
+  const failedIds = [];
+  for (const record of event.Records) {
+    try {
+      await processMessage(JSON.parse(record.body));
+    } catch (err) {
+      console.error('Failed:', record.messageId, err);
+      failedIds.push(record.messageId);
+    }
+  }
+  // Report batch item failures — chỉ những message failed mới xuất hiện lại
+  return { batchItemFailures: failedIds.map(id => ({ itemIdentifier: id })) };
+};
+
+// Cấu hình mapping:
+// - Batch size: 1–10 (SQS), tối đa 10000 (Kinesis/DynamoDB Streams)
+// - Maximum batching window: 0–300s
+// - Concurrency: Reserved concurrency (tránh throttling)
+// - DLQ: cho event không xử lý được sau max retries
+</code></pre>
+
+      <h3>Lambda Power Tuning</h3>
+      <pre><code>// Memory: 128 MB – 10,240 MB (1 MB steps)
+// CPU tỉ lệ với memory — 1769 MB = 1 vCPU, 3538 MB = 2 vCPU, ...
+// Network bandwidth cũng tăng theo memory
+
+// Cost optimization: tăng memory → giảm duration
+// Test: 128 MB → 3s (cost 128 × 3 = 384) vs 1024 MB → 0.4s (cost 1024 × 0.4 = 409)
+
+// → Dùng AWS Lambda Power Tuning (Step Functions state machine) để tìm optimal memory
+// → Thường optimal ở 1024–2048 MB cho Node.js/Python, 2048+ cho Java
+</code></pre>
+
+      <h3>Lambda Best Practices</h3>
+      <ul>
+        <li><strong>Cold Start:</strong> Java/.NET cold start ~1-5s, Node.js/Python/Go ~100-300ms. Dùng <strong>Provisioned Concurrency</strong> cho latency-critical apps</li>
+        <li><strong>Execution Timeout:</strong> tối đa 15 ph (900s). Workflow >15 ph → Step Functions + Lambda</li>
+        <li><strong>Environment Variables:</strong> dùng cho config (stage, table name). Secrets → Secrets Manager, Parameter Store (SecureString)</li>
+        <li><strong>Stateless:</strong> không lưu state trong memory giữa các invocations. /tmp tồn tại giữa các warm starts</li>
+        <li><strong>VPC Lambda:</strong> cần ENI trong VPC → cold start lâu hơn, tốn IP. Chỉ đặt Lambda trong VPC khi cần truy cập RDS/ElastiCache</li>
+        <li><strong>Dead Letter Queue (DLQ):</strong> bắt event failed sau max retries. Dùng SQS hoặc SNS</li>
+        <li><strong>Reserved Concurrency:</strong> tránh một function "ăn" hết account concurrency limit (1000/region)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 5. ECS & Containers ===== -->
+  <div class="section" id="ecs">
+    <div class="section-title">5. ECS &amp; Container Orchestration</div>
+    <div class="section-body">
+      <h3>ECS là gì?</h3>
+      <p>Amazon Elastic Container Service — orchestration cho Docker containers. Có 2 launch types: <strong>Fargate</strong> (serverless — không quản lý server) và <strong>EC2</strong> (tự quản cluster).</p>
+
+      <h3>ECS Architecture</h3>
+      <div class="diagram">
+                     ┌─→ Target Group ─→ Service ─→ Task (Fargate/EC2)<br>
+      ALB / NLB ────┤<br>
+                     └─→ Target Group ─→ Service ─→ Task<br>
+                                                    │<br>
+                                               Task Definition<br>
+                                               ├── container image (ECR)<br>
+                                               ├── port mapping<br>
+                                               ├── env vars / secrets<br>
+                                               ├── resource (CPU, memory)<br>
+                                               └── IAM Task Role
+      </div>
+
+      <h3>Task Definition (ví dụ)</h3>
+      <pre><code>// task-definition.json — JSON format
+{
+  "family": "my-app",
+  "taskRoleArn": "arn:aws:iam::xxx:role/ecsTaskRole",
+  "executionRoleArn": "arn:aws:iam::xxx:role/ecsExecutionRole",
+  "networkMode": "awsvpc",        // Fargate bắt buộc
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",                   // 0.5 vCPU (256=0.25, 512=0.5, 1024=1, 2048=2, 4096=4)
+  "memory": "1024",               // MB
+  "containerDefinitions": [{
+    "name": "app",
+    "image": "xxx.dkr.ecr.ap-southeast-1.amazonaws.com/my-app:latest",
+    "portMappings": [{ "containerPort": 3000, "protocol": "tcp" }],
+    "environment": [
+      { "name": "NODE_ENV", "value": "production" }
+    ],
+    "secrets": [
+      { "name": "DB_PASSWORD", "valueFrom": "arn:aws:ssm:...:parameter/prod/db/password" }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/my-app",
+        "awslogs-region": "ap-southeast-1",
+        "awslogs-stream-prefix": "ecs"
+      }
+    },
+    "healthCheck": {
+      "command": ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"],
+      "interval": 30,
+      "timeout": 5,
+      "retries": 3,
+      "startPeriod": 60
+    }
+  }]
+}</code></pre>
+
+      <h3>ECS Service với ALB</h3>
+      <pre><code>// Service = long-running tasks (web app, worker)
+// - Số lượng desired tasks
+// - Gắn với ALB Target Group
+// - Auto-recovery: ECS restart task nếu health check fail
+// - Deployment: Rolling update hoặc Blue/Green (CodeDeploy)
+
+// Deploy mới với rolling update:
+aws ecs update-service \
+  --cluster prod \
+  --service web \
+  --force-new-deployment \
+  --deployment-configuration '{
+    "deploymentCircuitBreaker": {"enable": true, "rollback": true},
+    "maximumPercent": 200,
+    "minimumHealthyPercent": 100
+  }'
+
+// deploymentCircuitBreaker — tự động rollback nếu deployment thất bại
+</code></pre>
+
+      <h3>ECS vs EKS vs Lambda</h3>
+      <div class="grid-3">
+        <div class="card"><h4>🐳 ECS (Fargate)</h4><p>Serverless container. AWS quản lý control plane. Không cần quản lý cluster nodes. Tích hợp sâu AWS (ALB, CloudWatch, IAM). Đơn giản nhất.</p></div>
+        <div class="card"><h4>☸️ EKS (Kubernetes)</h4><p>Managed K8s — chuẩn CNCF. Portable (chạy on-prem, multi-cloud). Phức tạp hơn nhưng flexible hơn. Cần quản lý worker nodes (self-managed hoặc Fargate).</p></div>
+        <div class="card"><h4>⚡ Lambda</h4><p>FaaS — event-driven. Tối đa 15 ph execution. Cold start. Phù hợp: API, event processing, cron jobs. Không phù hợp: long-running, WebSocket, large containers.</p></div>
+      </div>
+
+      <h3>Sidecar Pattern trong ECS</h3>
+      <pre><code>// Task definition với 2 containers — chia sẻ cùng network + volume
+{
+  "containerDefinitions": [
+    {
+      "name": "app",
+      "image": "my-app:latest",
+      "portMappings": [{ "containerPort": 3000 }]
+    },
+    {
+      "name": "envoy",              // Sidecar — Service Mesh
+      "image": "public.ecr.aws/appmesh/aws-appmesh-envoy:v1.28",
+      "dependsOn": [{ "containerName": "app", "condition": "START" }],
+      "environment": [
+        { "name": "APPMESH_VIRTUAL_NODE_NAME", "value": "mesh/app/meshNode" }
+      ]
+    }
+  ]
+}
+// Use cases: logging sidecar (FluentBit), metrics (CloudWatch Agent), proxy (Envoy)
+</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 6. S3 ===== -->
+  <div class="section" id="s3">
+    <div class="section-title">6. S3 (Simple Storage Service)</div>
+    <div class="section-body">
+      <h3>S3 là gì?</h3>
+      <p>S3 là object storage — lưu trữ <strong>unlimited objects</strong> (0 byte – 5 TB). <strong>99.999999999% durability</strong> (11 9's). Dữ liệu replicated qua ít nhất 3 AZ trong region.</p>
+
+      <h3>S3 Storage Classes</h3>
+      <div class="grid-2">
+        <div class="card"><h4>⚡ S3 Standard</h4><p>Frequent access, low latency. 99.99% availability. $0.023/GB. Cho web app, big data analytics.</p></div>
+        <div class="card"><h4>📉 S3 Intelligent-Tiering</h4><p>Tự động di chuyển objects giữa tiers dựa trên access pattern. $0.0025/1000 objects monitoring fee. Cho data access pattern khó đoán.</p></div>
+        <div class="card"><h4>❄️ S3 Glacier (Instant/Flexible/Deep Archive)</h4><p>Archive — rẻ nhất $0.001/GB. Deep Archive: restore 12h. Cho backup, compliance.</p></div>
+        <div class="card"><h4>🗄️ S3 One Zone-IA</h4><p>Chỉ 1 AZ, rẻ hơn Standard-IA 20%. Cho non-critical / reproducible data.</p></div>
+      </div>
+
+      <h3>S3 Bucket Policy &amp; ACL</h3>
+      <pre><code>// Bucket Policy — cho phép public read (static website)
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::my-static-site/*"
+    }
+  ]
+}
+
+// Block Public Access — 4 layers (recommended: block all)
+// 1. BlockPublicAcls
+// 2. IgnorePublicAcls
+// 3. BlockPublicPolicy
+// 4. RestrictPublicBuckets
+
+// Pre-signed URL — temporary access (1h mặc định, tối đa 7 ngày)
+aws s3 presign s3://my-bucket/private-file.pdf --expires-in 3600
+</code></pre>
+
+      <h3>S3 Versioning &amp; Lifecycle</h3>
+      <pre><code>// Versioning — khi enable không thể tắt (chỉ suspend)
+// - Bảo vệ khỏi accidental delete (delete = thêm DeleteMarker)
+// - Có thể restore version cũ
+// - Tốn chi phí cho nhiều versions
+
+// Lifecycle Rules — tự động chuyển/xóa objects
+&lt;Rule&gt;
+  &lt;Filter&gt;&lt;Prefix&gt;logs/&lt;/Prefix&gt;&lt;/Filter&gt;
+  &lt;Status&gt;Enabled&lt;/Status&gt;
+  &lt;Transition&gt;
+    &lt;Days&gt;30&lt;/Days&gt;
+    &lt;StorageClass&gt;STANDARD_IA&lt;/StorageClass&gt;
+  &lt;/Transition&gt;
+  &lt;Transition&gt;
+    &lt;Days&gt;90&lt;/Days&gt;
+    &lt;StorageClass&gt;GLACIER&lt;/StorageClass&gt;
+  &lt;/Transition&gt;
+  &lt;Expiration&gt;
+    &lt;Days&gt;365&lt;/Days&gt;
+  &lt;/Expiration&gt;
+&lt;/Rule&gt;
+</code></pre>
+
+      <h3>S3 Event Notifications</h3>
+      <pre><code>// Gửi events đến Lambda, SQS, SNS khi object được create/delete/restore
+// Use case: auto-resize image khi upload, trigger ETL pipeline
+
+// Cấu hình notification:
+aws s3api put-bucket-notification-configuration \
+  --bucket my-app-uploads \
+  --notification-configuration '{
+    "LambdaFunctionConfigurations": [{
+      "LambdaFunctionArn": "arn:aws:lambda:...:function:resize-image",
+      "Events": ["s3:ObjectCreated:*"],
+      "Filter": {
+        "Key": {
+          "FilterRules": [
+            {"Name": "suffix", "Value": ".jpg"},
+            {"Name": "prefix", "Value": "uploads/"}
+          ]
+        }
+      }
+    }]
+  }'
+</code></pre>
+
+      <h3>S3 Static Website Hosting</h3>
+      <pre><code>// 1. Tạo bucket với tên trùng domain
+// 2. Enable Static Website Hosting
+// 3. Bucket Policy cho phép public read
+// 4. Route 53: Alias A record → S3 website endpoint
+
+// Cấu hình:
+aws s3api put-bucket-website \
+  --bucket my-site.com \
+  --website-configuration '{
+    "IndexDocument": {"Suffix": "index.html"},
+    "ErrorDocument": {"Key": "error.html"}
+  }'
+
+// CloudFront trước mặt S3 — HTTPS, caching, custom domain, WAF, global
+// Origin Access Control (OAC) — chỉ CloudFront mới được truy cập S3
+</code></pre>
+
+      <h3>S3 Best Practices</h3>
+      <ul>
+        <li><strong>Prefix cho performance:</strong> S3 hỗ trợ 5500 GET/3500 PUT requests/s mỗi prefix. Nếu cần hơn → dùng nhiều prefixes (e.g. /user/123/ vs /user/456/)</li>
+        <li><strong>Multipart Upload:</strong> cho file &gt;100 MB — parallel upload parts, retry từng part</li>
+        <li><strong>Transfer Acceleration:</strong> dùng AWS edge locations cho upload từ xa (tốn phí)</li>
+        <li><strong>Object Lock:</strong> WORM (Write Once Read Many) — compliance, legal hold</li>
+        <li><strong>Replication:</strong> CRR (cross-region) cho disaster recovery, SRR (same-region) cho log aggregation</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 7. RDS & DynamoDB ===== -->
+  <div class="section" id="rds">
+    <div class="section-title">7. RDS &amp; DynamoDB</div>
+    <div class="section-body">
+      <h3>RDS — Relational Databases</h3>
+      <p>Managed DB: <strong>Aurora, PostgreSQL, MySQL, MariaDB, SQL Server, Oracle</strong>. AWS quản lý: OS patching, backup, replication, failover.</p>
+
+      <h3>RDS Multi-AZ &amp; Read Replicas</h3>
+      <div class="diagram">
+Multi-AZ (HA):<br>
+Primary (AZ-a) ↔ Standby (AZ-b) — synchronous replication<br>
+                   ↓ auto failover (DNS CNAME switch, ~60-120s)<br>
+                   CNAME luôn trỏ về primary<br><br>
+Read Replicas (performance):<br>
+Primary → Read Replica 1 (AZ-b) — async replication<br>
+        → Read Replica 2 (region 2) — cross-region<br>
+        → Read Replica 3 (region 3) — DR
+      </div>
+      <pre><code>// Tạo read replica — zero downtime cho primary
+aws rds create-db-instance-read-replica \
+  --db-instance-identifier mydb-replica \
+  --source-db-instance-identifier mydb \
+  --region ap-southeast-1
+
+// Promote to standalone (cho DR / migration)
+aws rds promote-read-replica --db-instance-identifier mydb-replica
+</code></pre>
+
+      <h3>RDS Backup &amp; Restore</h3>
+      <pre><code>// Automated backup — mặc định 7 ngày (tối đa 35)
+// - Transaction logs: 5 phút → point-in-time recovery
+// - Backup window: chọn giờ thấp tải
+
+// Manual snapshot — không tự động xóa
+aws rds create-db-snapshot \
+  --db-instance-identifier mydb \
+  --db-snapshot-identifier mydb-pre-upgrade
+
+// Restore — tạo instance mới từ snapshot
+aws rds restore-db-instance-from-db-snapshot \
+  --db-instance-identifier mydb-restored \
+  --db-snapshot-identifier mydb-pre-upgrade
+</code></pre>
+
+      <h3>RDS Proxy</h3>
+      <pre><code>// Connection pooling cho Lambda & ECS
+// - Giảm connection churn (không tạo/destroy connection mỗi request)
+// - IAM authentication — không cần DB password trong code
+// - Failover: transparent — connections không bị drop khi DB failover
+
+aws rds create-db-proxy \
+  --db-proxy-name myproxy \
+  --engine-family POSTGRESQL \
+  --auth '[{
+    " AuthScheme": "SECRETS",
+    "SecretArn": "arn:aws:secretsmanager:...:secret:/prod/db",
+    "IAMAuth": "REQUIRED"
+  }]' \
+  --vpc-subnet-ids subnet-xxx subnet-yyy
+</code></pre>
+
+      <h3>DynamoDB — NoSQL Key-Value &amp; Document</h3>
+      <p>Managed NoSQL — <strong>single-digit millisecond</strong> latency ở bất kỳ scale nào. Auto-scaling, multi-AZ, DAX (in-memory cache).</p>
+
+      <h3>DynamoDB Table Design</h3>
+      <pre><code>// Single Table Design — 1 bảng cho nhiều entity types
+// Partition Key (PK) + Sort Key (SK) + Global Secondary Index (GSI)
+
+// Ví dụ: E-commerce app
+// PK              SK                      Data
+// USER#alice      PROFILE                 { name:"Alice", email, ... }
+// USER#alice      ORDER#2024-01-01#001    { total: 50, items: [...] }
+// USER#bob        PROFILE                 { name:"Bob", ... }
+// PRODUCT#kindle  META                    { title:"Kindle", price:99, ... }
+
+// GSI1: PK=SK, SK=GSI1PK — query theo pattern khác
+// GSI1PK = ORDER#2024-01-01#001  → Query đơn hàng theo order ID
+// GSI2PK = STATUS#shipped         → Query all shipped orders
+</code></pre>
+
+      <h3>DynamoDB Operations</h3>
+      <pre><code>// Write
+await ddb.send(new PutCommand({
+  TableName: 'Orders',
+  Item: {
+    pk: 'USER#alice',
+    sk: 'ORDER#001',
+    total: 50,
+    status: 'PENDING',
+    items: [{ productId: 'kindle', qty: 1, price: 50 }],
+  },
+  ConditionExpression: 'attribute_not_exists(pk)',  // Chỉ tạo nếu chưa tồn tại
+}));
+
+// Read — 2 loại: GetItem (1 item theo PK+SK), Query (nhiều items)
+const { Items } = await ddb.send(new QueryCommand({
+  TableName: 'Orders',
+  KeyConditionExpression: 'pk = :pk AND begins_with(sk, :prefix)',
+  ExpressionAttributeValues: {
+    ':pk': 'USER#alice',
+    ':prefix': 'ORDER#',
+  },
+  Limit: 10,
+  ScanIndexForward: false,  // DESC theo SK
+}));
+
+// Transaction — ACID cross items
+await ddb.send(new TransactWriteCommand({
+  TransactItems: [
+    { Put: { TableName: 'Orders', Item: order } },
+    { Update: {
+        TableName: 'Products',
+        Key: { pk: 'PRODUCT#kindle', sk: 'META' },
+        UpdateExpression: 'SET stock = stock - :qty',
+        ConditionExpression: 'stock >= :qty',
+      }
+    }
+  ]
+}));
+</code></pre>
+
+      <h3>DynamoDB Streams &amp; TTL</h3>
+      <pre><code>// Streams — ghi lại thay đổi (INSERT, MODIFY, REMOVE) trong 24h
+// Trigger Lambda để: sync sang OpenSearch, update cache, analytics
+
+// TTL (Time To Live) — tự động xóa item sau timestamp
+// - Dùng cho session, event, log expiration
+// - Item bị xóa trong ~48h sau TTL (miễn phí)
+// - Item xóa vẫn ghi vào Streams
+
+aws dynamodb update-time-to-live \
+  --table-name Sessions \
+  --time-to-live-specification "Enabled=true, AttributeName=ttl"
+</code></pre>
+
+      <h3>RDS vs DynamoDB — chọn cái nào?</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🗄️ RDS (SQL)</h4>
+          <ul>
+            <li>Dữ liệu có quan hệ (JOIN, FK)</li>
+            <li>Complex queries, aggregations, transactions</li>
+            <li>Schema fixed, cần migration</li>
+            <li>Ví dụ: ERP, CRM, accounting</li>
+          </ul>
+        </div>
+        <div class="card"><h4>📊 DynamoDB (NoSQL)</h4>
+          <ul>
+            <li>Key-value access pattern, high scale</li>
+            <li>Single-digit ms ở mọi scale</li>
+            <li>Schema-less, denormalized</li>
+            <li>Ví dụ: user session, shopping cart, IoT, gaming leaderboard</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 8. CI/CD ===== -->
+  <div class="section" id="cicd">
+    <div class="section-title">8. CodePipeline &amp; DevOps</div>
+    <div class="section-body">
+      <h3>CI/CD trên AWS</h3>
+      <p>AWS cung cấp CI/CD stack: <strong>CodeCommit</strong> (Git), <strong>CodeBuild</strong> (build/test), <strong>CodeDeploy</strong> (deploy), <strong>CodePipeline</strong> (orchestration). Hoặc dùng GitHub + Jenkins + ArgoCD truyền thống.</p>
+
+      <h3>CodePipeline — Pipeline CI/CD</h3>
+      <div class="diagram">
+Source Stage → Build Stage → Deploy Stage → Approval → Production<br>
+  ├── GitHub / CodeCommit    ├── CodeBuild    ├── CodeDeploy (EC2/ECS/Lambda)<br>
+  ├── S3                     ├── Jenkins      ├── ECS (Blue/Green)<br>
+  └── ECR                    └── ...          └── CloudFormation / CDK
+      </div>
+
+      <pre><code>// pipeline.yml — CloudFormation
+Resources:
+  AppPipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !GetAtt PipelineRole.Arn
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: GitHubSource
+              ActionTypeId: { Category: Source, Owner: ThirdParty, Provider: GitHub, Version: 1 }
+              Configuration:
+                Owner: my-org
+                Repo: my-app
+                Branch: main
+                PollForSourceChanges: false
+              OutputArtifacts:
+                - Name: source-code
+
+        - Name: Build
+          Actions:
+            - Name: CodeBuild
+              ActionTypeId: { Category: Build, Owner: AWS, Provider: CodeBuild, Version: 1 }
+              Configuration: { ProjectName: !Ref BuildProject }
+              InputArtifacts:
+                - Name: source-code
+              OutputArtifacts:
+                - Name: built-artifact
+
+        - Name: DeployStaging
+          Actions:
+            - Name: DeployECS
+              ActionTypeId: { Category: Deploy, Owner: AWS, Provider: ECS, Version: 1 }
+              Configuration:
+                ClusterName: staging
+                ServiceName: web
+                FileName: imagedefinitions.json
+              InputArtifacts:
+                - Name: built-artifact
+
+        - Name: Approval
+          Actions:
+            - Name: ManualApproval
+              ActionTypeId: { Category: Approval, Owner: AWS, Provider: Manual, Version: 1 }
+
+        - Name: DeployProd
+          Actions:
+            - Name: DeployECSProd
+              ActionTypeId: { Category: Deploy, Owner: AWS, Provider: CodeDeploy, Version: 1 }
+              Configuration:
+                ApplicationName: prod-web
+                DeploymentGroupName: ecs-bluegreen
+              InputArtifacts:
+                - Name: built-artifact
+</code></pre>
+
+      <h3>CodeBuild — Build &amp; Test</h3>
+      <pre><code># buildspec.yml
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - npm ci
+  pre_build:
+    commands:
+      - npm run lint
+      - npm run test -- --coverage
+  build:
+    commands:
+      - npm run build
+      - docker build -t $REPOSITORY_URI:latest .
+  post_build:
+    commands:
+      - aws ecr get-login-password | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - docker push $REPOSITORY_URI:latest
+      - printf '[{"name":"app","imageUri":"%s"}]' $REPOSITORY_URI:latest > imagedefinitions.json
+
+artifacts:
+  files: imagedefinitions.json
+  discard-paths: yes
+</code></pre>
+
+      <h3>CodeDeploy — ECS Blue/Green</h3>
+      <pre><code># appspec.yaml — CodeDeploy ECS
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:...:task-definition/my-app:123"
+        LoadBalancerInfo:
+          ContainerName: "app"
+          ContainerPort: 3000
+
+# Blue/Green deployment flow:
+# 1. CodeDeploy tạo Task Set mới (Green) bên cạnh Blue
+# 2. Route % traffic đến Green (canary: 10% trong 5 ph)
+# 3. Monitor CloudWatch alarms
+# 4. Chuyển 100% traffic → Green → terminate Blue
+# 5. Rollback: chuyển lại traffic về Blue (nếu alarm)
+
+Hooks:
+  - BeforeInstall: Lambda để run DB migration
+  - AfterAllowTraffic: Lambda để smoke test
+</code></pre>
+
+      <h3>CloudFormation &amp; CDK — Infrastructure as Code</h3>
+      <pre><code>// CloudFormation — YAML/JSON template
+// CDK (Cloud Development Kit) — TypeScript/Python/Java code → CloudFormation
+
+// CDK — TypeScript example
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+
+export class AppStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+
+    const vpc = ec2.Vpc.fromLookup(this, 'Vpc', { isDefault: true });
+
+    const cluster = new ecs.Cluster(this, 'Cluster', { vpc });
+
+    const taskDef = new ecs.FargateTaskDefinition(this, 'TaskDef', {
+      cpu: 256,
+      memoryLimitMiB: 512,
+    });
+
+    taskDef.addContainer('app', {
+      image: ecs.ContainerImage.fromAsset('./app'),
+      portMappings: [{ containerPort: 3000 }],
+      environment: { NODE_ENV: 'production' },
+      logging: ecs.LogDrivers.awsLogs({ streamPrefix: 'ecs', logRetention: 7 }),
+    });
+
+    new ecs.FargateService(this, 'Service', {
+      cluster,
+      taskDefinition: taskDef,
+      desiredCount: 2,
+      assignPublicIp: true,
+    });
+  }
+}
+</code></pre>
+
+      <h3>CI/CD Best Practices</h3>
+      <ul>
+        <li><strong>Build artifact duy nhất</strong> — build 1 lần, deploy qua các môi trường (tránh rebuild mỗi stage)</li>
+        <li><strong>Immutable infrastructure</strong> — tạo AMI mới / container image mới mỗi deploy. Không SSH vào server patch</li>
+        <li><strong>Canary / Blue-Green</strong> — giảm blast radius. Dùng CodeDeploy deployment config</li>
+        <li><strong>Automated rollback</strong> — CloudWatch alarm + deployment circuit breaker</li>
+        <li><strong>Secret management</strong> — không hardcode secret trong buildspec. Dùng Parameter Store / Secrets Manager</li>
+        <li><strong>Artifact storage</strong> — lưu artifacts trong S3, có version và lifecycle policy</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 9. Architecture ===== -->
+  <div class="section" id="arch">
+    <div class="section-title">9. Architecture &amp; Best Practices</div>
+    <div class="section-body">
+      <h3>Serverless Web Application</h3>
+      <div class="diagram">
+CloudFront (CDN) ─→ S3 (static files)<br>
+         │<br>
+    API Gateway (REST / HTTP API)<br>
+         │<br>
+    Lambda (business logic)<br>
+         ├── DynamoDB (NoSQL)<br>
+         ├── S3 (file upload)<br>
+         ├── SQS (async tasks)<br>
+         └── SES (email)<br>
+         │<br>
+    Cognito (authentication)<br>
+    ─────────────────────────────────<br>
+    Pros: zero server management, auto-scale, pay-per-use<br>
+    Cons: cold start (3-5s cho Java, ~200ms cho Node.js), 15 ph timeout
+      </div>
+
+      <h3>Microservices on ECS Fargate</h3>
+      <div class="diagram">
+Route 53 ─→ CloudFront ─→ ALB (public)<br>
+                            ├── /api/users/* ─→ ECS Service (user-svc) ─→ RDS Aurora<br>
+                            ├── /api/orders/* ─→ ECS Service (order-svc) ─→ DynamoDB<br>
+                            └── /api/* ─→ ECS Service (gateway) ─→ SQS ─→ Worker Service<br>
+                                                                         ├── S3<br>
+                                                                         └── SES<br>
+Service Mesh: App Mesh (Envoy sidecar) — mTLS, tracing, retry<br>
+Observability: CloudWatch Logs + X-Ray + Prometheus + Grafana
+      </div>
+
+      <h3>Disaster Recovery Strategies</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🔄 Backup &amp; Restore (RTO: 24h, RPO: 24h)</h4><p>Rẻ nhất. Daily backup S3 → Glacier. Khi disaster: restore to new region. Phù hợp: non-critical systems.</p></div>
+        <div class="card"><h4>🌊 Pilot Light (RTO: ~30m, RPO: ~15m)</h4><p>Replicate data (RDS cross-region replica, S3 CRR). Core services chạy minimal. Khi disaster: scale up.</p></div>
+        <div class="card"><h4>📋 Warm Standby (RTO: ~5m, RPO: ~5m)</h4><p>Full-scale replica chạy ở region phụ. Route 53 failover routing. Tốn gấp đôi cost.</p></div>
+        <div class="card"><h4>🏃 Active-Active (RTO: ~0, RPO: ~0)</h4><p>Multi-region, cả hai đều serve traffic. Route 53 latency/weighted routing. RDS Aurora Global Database. Đắt nhất.</p></div>
+      </div>
+
+      <h3>Well-Architected Framework</h3>
+      <div class="grid-2">
+        <div class="card"><h4>⚡ Operational Excellence</h4><p>IaC (CDK/CF), monitoring (CloudWatch, X-Ray), runbooks, auto-remediation. Deploy frequently, small changes.</p></div>
+        <div class="card"><h4>🔒 Security</h4><p>Least privilege IAM, encryption at rest (KMS) + in transit (TLS), VPC isolation, security groups, AWS Shield/WAF.</p></div>
+        <div class="card"><h4>💪 Reliability</h4><p>Multi-AZ, auto scaling, health checks, graceful degradation, retry with exponential backoff, circuit breaker.</p></div>
+        <div class="card"><h4>⚡ Performance Efficiency</h4><p>Right-size resources (use Compute Optimizer), serverless first, read replicas, caching (ElastiCache, CloudFront, DAX).</p></div>
+        <div class="card"><h4>💰 Cost Optimization</h4><p>Savings Plans / Reserved Instances, Spot instances, auto scaling, S3 lifecycle, delete unused resources. Dùng Budget + Cost Anomaly Detection.</p></div>
+        <div class="card"><h4>🌱 Sustainability</h4><p>Graviton (ARM) instances — 20% less energy. Serverless. Region with green energy. Optimize data transfer.</p></div>
+      </div>
+
+      <h3>AWS Exam &amp; Interview Checklist</h3>
+      <ul>
+        <li><strong>Difference:</strong> Security Group vs NACL (stateful vs stateless), EBS vs Instance Store (persistent vs ephemeral), Gateway vs Interface Endpoint (free vs paid), ECS vs EKS (managed vs portable)</li>
+        <li><strong>Key numbers:</strong> S3 durability 11 9's, Lambda timeout 15 ph, 54 AZs 18 regions (2024), VPC CIDR /16 to /28, ELB idle timeout 60s</li>
+        <li><strong>When to use:</strong> SQS (async decoupling), SNS (push notification), Kinesis (real-time streaming), Step Functions (workflow orchestration), EventBridge (event bus)</li>
+        <li><strong>Security:</strong> KMS (encryption), Secrets Manager (rotation), WAF (web firewall), Shield (DDoS), GuardDuty (threat detection), Inspector (vulnerability)</li>
+        <li><strong>Migration:</strong> DMS (Database Migration Service), MGN (Application Migration Service), DataSync (file), Snowball (petabyte-scale physical)</li>
+        <li><strong>Cost:</strong> Compute Optimizer, Trusted Advisor, Cost Explorer, Budgets, Reserved Instances vs Savings Plans (RI: instance-specific, SP: flexible)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>
