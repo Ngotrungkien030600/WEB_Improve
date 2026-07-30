@@ -18,10 +18,11 @@
     .topbar .back:hover { text-decoration:underline; }
     .desc { color:var(--text2); margin-bottom:1.5rem; font-size:0.95rem; }
 
-    .cat-bar { display:flex; gap:0.4rem; overflow-x:auto; padding-bottom:0.5rem; margin-bottom:1.5rem; }
-    .cat-btn { flex-shrink:0; padding:0.4rem 0.8rem; border:1px solid var(--border); border-radius:20px; font-size:0.8rem; font-weight:500; cursor:pointer; background:var(--surface); color:var(--text2); transition:all 0.15s; white-space:nowrap; }
+    .cat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0.5rem; margin-bottom:1.5rem; }
+    @media (max-width:600px) { .cat-grid { grid-template-columns:repeat(2,1fr); } }
+    .cat-btn { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:0.6rem 0.4rem; cursor:pointer; transition:all 0.15s; text-align:center; font-size:0.75rem; font-weight:500; color:var(--text2); }
     .cat-btn:hover { border-color:var(--accent); color:var(--text); }
-    .cat-btn.active { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+    .cat-btn.active { border-color:var(--accent); background:rgba(52,211,153,0.1); color:var(--accent); }
 
     .practice-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:2rem; margin-bottom:1.5rem; }
     .p-counter { font-size:0.8rem; color:var(--text2); margin-bottom:0.5rem; text-align:center; }
@@ -67,7 +68,7 @@
   </div>
   <p class="desc">Xem tiếng Việt → tự viết/nói tiếng Anh → kiểm tra. Mỗi câu đúng giúp bạn nhớ lâu hơn. 400+ câu từ 13 chủ đề.</p>
 
-  <div class="cat-bar" id="cat-bar"></div>
+  <div class="cat-grid" id="cat-bar"></div>
   <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
   <div class="p-stats"><span>✅ <strong id="correct-count">0</strong></span><span>❌ <strong id="wrong-count">0</strong></span><span>📊 <strong id="total-count">0</strong></span></div>
 
