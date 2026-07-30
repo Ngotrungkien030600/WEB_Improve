@@ -83,15 +83,28 @@
     <header class="interview-topbar">
       <h1>☕ Java Backend Interview</h1>
       <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
-        <div class="focus-timer" id="focus-timer">
-          <div class="time-display" id="timer-display">30:00</div>
-          <div class="timer-controls">
-            <select id="timer-select">
+        <div class="forge-timer-wrap">
+          <div class="forge-timer-ring">
+            <svg viewBox="0 0 68 68">
+              <circle class="forge-ring-bg" cx="34" cy="34" r="30" />
+              <circle class="forge-ring-progress" id="forge-ring-progress" cx="34" cy="34" r="30" />
+            </svg>
+            <div class="forge-time" id="forge-time">30:00</div>
+          </div>
+          <div class="forge-controls">
+            <select id="forge-select">
               <option value="30">30p</option>
               <option value="60">1h</option>
             </select>
-            <button id="timer-toggle">▶</button>
-            <button id="timer-reset">↻</button>
+            <div class="forge-btn-row">
+              <button class="forge-btn forge-btn-primary" id="forge-toggle">⚒️</button>
+              <button class="forge-btn forge-btn-secondary" id="forge-reset">↻</button>
+            </div>
+          </div>
+          <div class="forge-stats">
+            <div class="forge-stat-row">📋 Hôm nay <span class="val fire" id="stat-today">0m</span></div>
+            <div class="forge-stat-row">🔥 Streak <span class="val" id="stat-streak">0🔥</span></div>
+            <div class="forge-stat-row">📦 Đã rèn <span class="val" id="stat-total">0</span></div>
           </div>
         </div>
         <a class="back-link" href="../index.html">⬅ Quay lại Trang chủ</a>
