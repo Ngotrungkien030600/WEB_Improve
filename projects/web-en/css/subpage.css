@@ -1042,21 +1042,24 @@
   gap: 1rem;
 }
 
-.subpage .hub-card {
+.subpage .hub-card,
+.subpage .hub-grid .card {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  background: var(--forge-glass, rgba(255,255,255,0.04));
-  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 14px;
   padding: 1.25rem;
   text-decoration: none;
   transition: all 0.25s ease;
+  color: var(--forge-text, #f1f5f9);
 }
 
-.subpage .hub-card:hover {
+.subpage .hub-card:hover,
+.subpage .hub-grid .card:hover {
   border-color: var(--forge-fire, #f97316);
-  background: rgba(249,115,22,0.04);
+  background: rgba(249,115,22,0.08);
 }
 
 .subpage .hub-card .hub-icon {
@@ -1086,4 +1089,433 @@
   .subpage .hub-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ───── AI page (forge dark) ───── */
+.subpage .ai-page {
+  width: 100%;
+}
+
+.subpage .ai-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .ai-topbar h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .ai-topbar p {
+  color: var(--forge-text2, #94a3b8);
+  font-size: 0.9rem;
+}
+
+.subpage .ai-card {
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+.subpage .ai-card-inner {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.subpage .ai-card.flipped .ai-card-inner {
+  transform: rotateY(180deg);
+}
+
+.subpage .ai-card-front,
+.subpage .ai-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.subpage .ai-card-back {
+  transform: rotateY(180deg);
+  background: rgba(249,115,22,0.06);
+  border-radius: 14px;
+}
+
+.subpage .ai-card-en {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--forge-ember, #fbbf24);
+  margin-bottom: 0.3rem;
+}
+
+.subpage .ai-card-vi {
+  font-size: 1.1rem;
+  color: var(--forge-text, #f1f5f9);
+  margin-bottom: 0.5rem;
+}
+
+.subpage .ai-card-def {
+  font-size: 0.85rem;
+  color: var(--forge-text2, #94a3b8);
+  line-height: 1.6;
+}
+
+.subpage .ai-card-category {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  background: var(--forge-fire, #f97316);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.subpage .ai-card-counter {
+  text-align: center;
+  color: var(--forge-text2, #94a3b8);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0.75rem 0;
+}
+
+.subpage .ai-card-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.subpage .ai-card-btn {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text, #f1f5f9);
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 8px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.subpage .ai-card-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--forge-fire, #f97316);
+}
+
+.subpage .ai-card-filter select {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text, #f1f5f9);
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.subpage .ai-card-filter select option {
+  background: #1a1a2e;
+  color: #f1f5f9;
+}
+
+.subpage .ai-section {
+  display: none;
+}
+
+.subpage .ai-section.active {
+  display: block;
+}
+
+/* ───── AI Quiz ───── */
+.subpage .ai-q-config {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.subpage .ai-q-config select {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text, #f1f5f9);
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.subpage .ai-q-tab {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text2, #94a3b8);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.subpage .ai-q-tab:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.18);
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .ai-q-tab.active {
+  background: white;
+  color: var(--forge-bg, #08080e);
+  border-color: white;
+}
+
+.subpage .ai-q-start {
+  background: linear-gradient(135deg, var(--forge-fire, #f97316), var(--forge-fire-glow, #ea580c));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.45rem 1.1rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.subpage .ai-q-start:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249,115,22,0.3);
+}
+
+.subpage .ai-q-card {
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
+  padding: 1.5rem;
+}
+
+.subpage .ai-q-question {
+  color: var(--forge-text, #f1f5f9);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.subpage .ai-q-badge {
+  background: linear-gradient(135deg, var(--forge-fire, #f97316), var(--forge-fire-glow, #ea580c));
+  color: white;
+  border-radius: 20px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.subpage .ai-q-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.subpage .ai-q-options .exam-option {
+  background: rgba(255,255,255,0.04);
+  color: var(--forge-text, #f1f5f9);
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  font-family: inherit;
+}
+
+.subpage .ai-q-options .exam-option:hover {
+  border-color: var(--forge-fire, #f97316);
+  background: rgba(249,115,22,0.08);
+}
+
+.subpage .ai-q-feedback {
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  display: none;
+}
+
+.subpage .ai-q-feedback.correct {
+  background: rgba(34,197,94,0.1);
+  color: var(--color-success, #22c55e);
+  border: 1px solid rgba(34,197,94,0.15);
+  display: block;
+}
+
+.subpage .ai-q-feedback.wrong {
+  background: rgba(239,68,68,0.1);
+  color: var(--color-error, #ef4444);
+  border: 1px solid rgba(239,68,68,0.15);
+  display: block;
+}
+
+.subpage .ai-q-next {
+  background: linear-gradient(135deg, var(--forge-fire, #f97316), var(--forge-fire-glow, #ea580c));
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 0.55rem 1.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.subpage .ai-q-next:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(249,115,22,0.3);
+}
+
+.subpage .ai-q-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.subpage .ai-q-stats .ai-q-stat-value {
+  color: var(--forge-ember, #fbbf24);
+  font-weight: 800;
+  font-size: 1.3rem;
+  display: block;
+}
+
+.subpage .ai-q-stats .ai-q-stat-label {
+  color: var(--forge-text3, #64748b);
+  font-size: 0.75rem;
+}
+
+.subpage .ai-q-timer-bar {
+  background: rgba(255,255,255,0.08);
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.3rem;
+  display: none;
+}
+
+.subpage .ai-q-timer-bar.active { display: block; }
+
+.subpage .ai-q-timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--forge-fire, #f97316), var(--forge-ember, #fbbf24));
+  transition: width 1s linear;
+}
+
+.subpage .ai-q-timer-text {
+  color: var(--forge-text2, #94a3b8);
+  text-align: center;
+  font-size: 0.82rem;
+  margin-bottom: 0.75rem;
+  display: none;
+}
+
+.subpage .ai-q-timer-text.active { display: block; }
+
+/* ───── AI Interview ───── */
+.subpage .ai-interview-layout {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.subpage .ai-interview-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
+  padding: 1.2rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  position: sticky;
+  top: 1rem;
+}
+
+.subpage .ai-interview-list {
+  list-style: none;
+}
+
+.subpage .ai-interview-list li {
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--forge-text2, #94a3b8);
+  transition: background 0.2s;
+}
+
+.subpage .ai-interview-list li:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.subpage .ai-interview-list li.active {
+  background: rgba(249,115,22,0.1);
+  color: var(--forge-ember, #fbbf24);
+}
+
+.subpage .ai-interview-content {
+  flex: 1;
+}
+
+.subpage .ai-project-detail {
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
+  padding: 1.5rem;
+}
+
+.subpage .ai-project-back {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text2, #94a3b8);
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 8px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.subpage .ai-project-back:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: var(--forge-fire, #f97316);
+}
+
+/* ───── App footer override ───── */
+.subpage .app-footer {
+  color: var(--forge-text3, #64748b);
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  text-align: center;
 }
