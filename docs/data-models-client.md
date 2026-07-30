@@ -54,20 +54,22 @@ Tham số SM-2 (hardcode trong `srsSystem.params`):
 
 ---
 
-## localStorage — 8 khoá
+## localStorage — 10 khoá
 
 | Khoá | Nội dung | Có tiền tố |
 |---|---|---|
 | `skillforge_skills` | danh sách kỹ năng theo dõi | ✓ |
 | `skillforge_skill_state` | trạng thái màn skill-tracker | ✓ |
 | `skillforge_timer_state` | trạng thái đồng hồ pomodoro | ✓ |
+| `skillforge_timer_history` | lịch sử phiên pomodoro — khai qua hằng số `HISTORY_KEY` (`timer.js:6`) | ✓ |
 | `skillforge_exam_history` | lịch sử làm đề | ✓ |
 | `skillforge_log` | log hoạt động | ✓ |
 | `quizHistory` | lịch sử quiz | ✗ |
 | `aiChecklist` | checklist học AI | ✗ |
 | `learnChecklist` | checklist code-learn | ✗ |
+| `interviewChecklist` | checklist phỏng vấn — khai qua hằng số `STORAGE_KEY` (`interview-logic.js:5`) | ✗ |
 
-**Nợ nhất quán:** 3 khoá cuối không có tiền tố `skillforge_`. Rủi ro xung đột với script khác cùng origin, và không xoá được sạch bằng một vòng lặp theo prefix.
+**Nợ nhất quán:** 4 khoá không có tiền tố `skillforge_` (`quizHistory`, `aiChecklist`, `learnChecklist`, `interviewChecklist`). Rủi ro xung đột với script khác cùng origin, và không xoá được sạch bằng một vòng lặp theo prefix.
 
 **Nợ trùng vai:** `quizHistory` và `skillforge_exam_history` cùng lưu lịch sử làm bài; `progressDB.sessions` cũng ghi việc đó ở IndexedDB. Ba nơi lưu chồng lấn, không có nguồn sự thật duy nhất.
 

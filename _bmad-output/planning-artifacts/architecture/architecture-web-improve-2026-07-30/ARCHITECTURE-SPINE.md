@@ -82,7 +82,7 @@ graph TD
 
 - **Binds:** FR-6
 - **Prevents:** hai chủ cho một dữ liệu — Vue ghi lịch sử quiz vào IndexedDB trong khi Legacy vẫn ghi vào `localStorage.quizHistory`, cùng một sự kiện thành hai bản ghi lệch nhau.
-- **Rule:** Ba nơi lưu giữ nguyên chủ hiện tại: lịch sử quiz → `localStorage.quizHistory` · lịch sử làm đề → `localStorage.skillforge_exam_history` · phiên học → IndexedDB `SkillForgeProgress`. Vue app ghi **đúng nơi tính năng tương ứng đang ghi**, không tạo store thứ tư, không migrate, không hợp nhất.
+- **Rule:** Legacy app hiện có **10 khoá `localStorage`** (hai trong đó khai qua hằng số nên dễ đếm sót: `interviewChecklist` ở `interview-logic.js:5`, `skillforge_timer_history` ở `timer.js:6`) và **2 IndexedDB** (`SkillForgeProgress`, `SkillForgeSRS`). Mọi khoá giữ nguyên chủ hiện tại của nó. Ba nơi **chồng lấn nhau** — lịch sử quiz → `localStorage.quizHistory` · lịch sử làm đề → `localStorage.skillforge_exam_history` · phiên học → store `sessions` trong IndexedDB `SkillForgeProgress` — giữ y nguyên sự chồng lấn đó ở đợt này. Vue app ghi **đúng nơi tính năng tương ứng đang ghi**, không tạo nơi lưu mới, không migrate, không hợp nhất.
   **Một nơi lưu, đúng một người ghi.** Nơi nào logic Legacy đã tự ghi (hiện có `quiz-logic.js:70,82` và `skill-logic.js:44,52,58` gọi `localStorage` trực tiếp) thì Vue app đọc/ghi **qua chính module logic đó**, tuyệt đối không dựng adapter song song. Chỉ nơi lưu nào **chưa** có người ghi ở tầng logic mới được có adapter trong `storage/`. Trong phạm vi `web-app/`, ngoài adapter thì không code nào gọi `localStorage` hay `indexedDB` trực tiếp — luật này áp cho `web-app/`, không áp ngược lên logic Legacy (nếu áp thì mâu thuẫn với AD-4).
 
 ### AD-7 — Danh sách trang đã chuyển là nguồn sự thật duy nhất
@@ -127,11 +127,13 @@ graph TD
 - **Prevents:** link cũ (bookmark, liên kết trong nội dung, liên kết từ trang chưa port) chết khi trang được chuyển; và hai chiều điều hướng phải dịch đường dẫn theo hai luật khác nhau.
 - **Rule:** Route của trang đã chuyển mang đúng hình dạng đường dẫn Legacy của trang đó. Đổi hình dạng đường dẫn không thuộc phạm vi cuộc port này.
 
-### AD-14 — Trang nội dung tĩnh không port
+### AD-14 — Sáu trang nội dung dài không port
 
 - **Binds:** FR-3
-- **Prevents:** tiêu 3.500 dòng HTML công port cho thứ người dùng không nhận được lợi ích gì; và đẻ ra cơ chế nhúng nội dung thứ hai bên cạnh cơ chế component.
-- **Rule:** 12 trang nội dung có **0 chỗ tương tác** (`cloud.html`, `java/backend.html`, `java/spring-boot.html`, 5 trang `frontend/*`, 4 hub) do Legacy app phục vụ tiếp; điều hướng tới chúng theo AD-7. Nếu về sau muốn đưa vào vỏ Vue, phải chọn **một** cơ chế duy nhất cho cả 12 trang — không xử lý lẻ từng trang.
+- **Prevents:** tiêu 2.964 dòng HTML công port cho thứ người dùng không nhận được lợi ích gì; và đẻ ra cơ chế nhúng nội dung thứ hai bên cạnh cơ chế component.
+- **Rule:** Tiêu chí là **trang nội dung dài chứa code sample**, không phải "0 chỗ tương tác" — hai thứ đó không trùng nhau. Đúng sáu trang do Legacy app phục vụ tiếp: `cloud.html` (1.121 dòng, 32 khối `<pre>`), `java/spring-boot.html` (741, 26), `java/backend.html` (656, 16), `frontend/html-css.html` (160, 7), `frontend/frameworks.html` (158, 4), `frontend/responsive.html` (128, 7) — tổng 2.964 dòng, 92 khối `<pre>`. Điều hướng tới chúng theo AD-7.
+  **Hub thì ngược lại: phải port.** Năm hub (`ai/`, `english/`, `java/`, `cloud/`, `frontend/`) cùng `learning-paths.html` là bộ xương điều hướng, mỗi trang 39–79 dòng và **0** khối `<pre>`; để chúng ở Legacy sẽ khiến chuỗi đi lại nhảy qua nhảy lại giữa hai app, đúng thứ AD-7 dựng registry để tránh.
+  Nếu về sau muốn đưa sáu trang nội dung vào vỏ Vue, phải chọn **một** cơ chế duy nhất cho cả sáu — không xử lý lẻ từng trang.
 
 ### AD-15 — Vá Legacy app chỉ trong đúng phạm vi FR-8 và FR-9
 
@@ -144,6 +146,13 @@ graph TD
 - **Binds:** FR-7
 - **Prevents:** hai đường nạp dữ liệu song song. 10 file trong `web-en/js/data/` xuất bằng `window.*` chứ không `export`; nếu không có luật, một trang sẽ import `?raw` rồi tự parse, trang khác khai lại một bản dữ liệu trong `web-app/` — bản thứ hai lệch dần mà không ai thấy.
 - **Rule:** Vue app chạm dữ liệu Legacy **chỉ** bằng `import` ESM từ `@legacy/data/…`. File nào chưa có `export` thì **thêm** một dòng `export` bên cạnh phép gán `window.*` đang có — Legacy app không đổi hành vi, Vue app có đường import. Cấm `?raw`, cấm `eval`, cấm khai lại dữ liệu trong `web-app/`, cấm shim `window.*` (AD-5).
+
+### AD-17 — Màu nhấn theo khu vực là token ghi đè ở tầng trang
+
+- **Binds:** FR-4, FR-5, FR-6
+- **Prevents:** hai dev port hai hub độc lập, cùng tuân AD-8, vẫn chọn khác nhau — một người nhét hex vào `<style scoped>` của trang, người kia thêm `--accent-ai`/`--accent-java` vào file token dùng chung. Cách thứ hai làm bảng token phình theo số khu vực; cách thứ nhất làm component mất tính dùng lại.
+- **Rule:** Component dùng chung tham chiếu **một** tên token màu nhấn duy nhất. Trang **ghi đè** giá trị token đó trên phần tử gốc của chính nó — không thêm token mới vào file dùng chung cho mỗi khu vực, không hex trong `<style scoped>`.
+  Bốn trang hiện tự khai `:root` inline (`ai/hub.html`, `english/hub.html`, `java/hub.html`, `learning-paths.html`) dùng bảng tên **không trùng một chữ nào** với `variables.css` (`--bg`/`--surface`/`--text`/`--accent` so với `--color-primary`/`--surface-card`/`--text-primary`/`--color-accent`). Phép ánh xạ giữa hai bảng được ghi **một lần** ở tầng kiến trúc rồi mọi trang dùng lại — không mỗi trang tự ánh xạ. Màu nhấn của bốn trang đó (`#f472b6`, `#34d399`, `#f59e0b`, `#7c5cfc`) là chủ ý phân biệt khu vực, phải giữ, không phải trôi dạt để chuẩn hoá mất.
 
 ## Consistency Conventions
 
