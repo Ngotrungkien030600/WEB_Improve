@@ -1,6 +1,6 @@
-# ⚡ SkillForge — Lò rèn kỹ năng
+# ⚒️ SkillForge — Lò rèn kỹ năng
 
-**SkillForge** là nền tảng học tập toàn diện dành cho lập trình viên Việt Nam, tích hợp AI để hỗ trợ học tiếng Anh, lập trình Java, frontend, AI/ML và luyện phỏng vấn backend — tất cả chạy local, miễn phí, không cần internet cho AI.
+**SkillForge** là nền tảng học tập toàn diện dành cho lập trình viên Việt Nam, tích hợp AI để hỗ trợ học tiếng Anh, lập trình Java, frontend, AI/ML, AWS Cloud, Backend Engineering và luyện phỏng vấn — tất cả chạy local, miễn phí, không cần internet cho AI.
 
 ---
 
@@ -15,13 +15,15 @@
 | Tính năng | Mô tả |
 |-----------|-------|
 | 📖 **Tiếng Anh** | 220+ từ vựng, 70+ idioms, 12 thì, truyện song ngữ, thi thử, 3 games |
-| ☕ **Java** | 10 bài học code + 21 cheat sheet phỏng vấn backend + phỏng vấn theo lương |
+| ☕ **Java** | 10 bài học code + Spring Boot chuyên sâu + phỏng vấn theo lương |
 | 🧠 **AI/ML** | 48 concepts flashcard, 50+ quiz, 60+ câu phỏng vấn, 8 projects thực hành |
 | 🌐 **Frontend** | HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE |
+| ⚙️ **Backend Engineering** | SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance |
+| ☁️ **AWS Cloud** | IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices |
 | 🤖 **BMAD Agents** | 6 AI agent chuyên gia: Mary (BA), Paige (Writer), John (PM), Sally (UX), Winston (Architect), Amelia (Developer) |
 | 📊 **Dashboard** | Thống kê XP, streak, lịch sử thi, kỹ năng |
 | 🗺️ **Lộ trình học** | Beginner → Intermediate → Advanced cho English, Java, AI |
-| ⏱️ **Focus Timer** | Đồng hồ Pomodoro tích hợp |
+| ⏱️ **Focus Timer** | SVG ring timer với streak tracking, session history, forge theme |
 
 ---
 
@@ -50,7 +52,9 @@ web EN/
 │   ├── english/
 │   │   └── hub.html              # English hub
 │   ├── java/
-│   │   └── hub.html              # Java hub
+│   │   ├── hub.html              # Java hub
+│   │   ├── spring-boot.html      # Spring Boot deep-dive
+│   │   └── backend.html          # Backend Engineering deep-dive
 │   ├── ai/
 │   │   └── hub.html              # AI hub
 │   ├── frontend/
@@ -60,6 +64,9 @@ web EN/
 │   │   ├── frameworks.html
 │   │   ├── responsive.html
 │   │   └── ui-interview.html
+│   ├── cloud/
+│   │   └── hub.html              # AWS Cloud hub
+│   ├── cloud.html                # AWS Cloud deep-dive (IAM, VPC, Lambda, ECS...)
 │   ├── bmad-agents.html          # BMAD agents page
 │   ├── dashboard.html            # Progress dashboard
 │   ├── learning-paths.html       # Learning paths
@@ -132,8 +139,9 @@ OLLAMA_MODEL=qwen2.5:7b
 Trang chủ
 ├── ☕ Java → Java Hub
 │   ├── 💻 Học Code
-│   ├── ☕ Phỏng vấn Backend
+│   ├── 🍃 Spring Boot
 │   └── 💰 Phỏng vấn theo lương
+├── ⚙️ Backend Engineering (chi tiết: SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance)
 ├── 📖 English → English Hub
 │   ├── 📝 Từ vựng & Idioms
 │   ├── ⏰ Các thì & Practice
@@ -151,11 +159,12 @@ Trang chủ
 │   ├── ⚛️ React/Vue/Angular
 │   ├── 📱 Responsive
 │   └── 💼 Phỏng vấn UI/FE
+├── ☁️ AWS Cloud (chi tiết: IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline)
 ├── 🗣️ BMAD Agents
 ├── 📊 Skill Tracker
 ├── 📈 Dashboard
 ├── 🗺️ Lộ trình học
-└── Timer học tập (góc phải header)
+└── 🔥 Forge Timer (SVG ring + streak tracking, góc phải header)
 ```
 
 ---
@@ -192,9 +201,18 @@ Lộ trình có cấu trúc từ cơ bản đến nâng cao, mỗi mốc có m�
 
 ---
 
+## 🎨 Design Theme
+
+**Dark Forge** — nền tối `#08080e` với ánh lửa cam:
+- Glassmorphism cards với `backdrop-filter: blur`
+- SVG vòng lửa timer với streak tracking
+- Ember particles bay (CSS animation thuần)
+- Gradient cam logo + hero text
+- Ambient glow radial gradients nền
+
 ## 📚 Công nghệ sử dụng
 
-- **Frontend:** HTML5, CSS3 (Flexbox, Grid, Custom Properties, Animations), Vanilla JS
+- **Frontend:** HTML5, CSS3 (Flexbox, Grid, Custom Properties, Animations, backdrop-filter), Vanilla JS
 - **Backend:** Node.js (HTTP server thuần, không framework)
 - **AI:** Ollama (local), OpenAI API, Google Gemini API
 - **Lưu trữ:** localStorage, IndexedDB
