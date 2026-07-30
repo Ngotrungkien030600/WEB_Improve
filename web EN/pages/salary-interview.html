@@ -6,194 +6,121 @@
   <title>Phỏng vấn theo lương — SkillForge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/variables.css" />
-  <link rel="stylesheet" href="../css/base.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    .si-page { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
-    .si-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .si-topbar h1 { font-size: 1.5rem; font-weight: 700; }
-    .si-topbar .back { font-size: 0.875rem; color: var(--color-primary); text-decoration: none; }
-    .si-topbar .back:hover { text-decoration: underline; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#7c5cfc; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:860px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .back { color:var(--accent); text-decoration:none; font-size:0.9rem; }
+    .topbar .back:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2rem; font-size:0.95rem; }
 
-    .si-salary-card { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 2rem; margin-bottom: 2rem; }
-    .si-salary-card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
-    .si-salary-card p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+    .salary-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.75rem; margin-bottom:2rem; }
+    .salary-card h2 { font-size:1.1rem; font-weight:600; margin-bottom:0.5rem; }
+    .salary-card p { font-size:0.85rem; color:var(--text2); margin-bottom:1.25rem; }
 
-    .si-range { display: flex; align-items: center; gap: 1rem; }
-    .si-slider { flex: 1; -webkit-appearance: none; height: 8px; border-radius: 4px; background: linear-gradient(to right, #22c55e, #3b82f6, #8b5cf6, #ef4444); outline: none; }
-    .si-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: white; border: 3px solid var(--color-primary); cursor: pointer; box-shadow: var(--shadow-sm); }
-    .si-value { font-size: 2rem; font-weight: 800; color: var(--color-primary); min-width: 100px; text-align: center; }
-    .si-unit { font-size: 0.9rem; color: var(--text-muted); }
-    .si-tag { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: white; margin-top: 1rem; }
+    .range-wrap { display:flex; align-items:center; gap:1rem; }
+    .slider { flex:1; -webkit-appearance:none; height:6px; border-radius:3px; background:linear-gradient(to right,#22c55e,#3b82f6,#8b5cf6,#ef4444); outline:none; }
+    .slider::-webkit-slider-thumb { -webkit-appearance:none; width:22px;height:22px; border-radius:50%; background:white; border:3px solid var(--accent); cursor:pointer; }
+    .salary-val { font-size:2rem; font-weight:800; color:var(--accent); min-width:90px; text-align:center; }
+    .salary-unit { font-size:0.85rem; color:var(--text2); }
+    .salary-tag { display:inline-block; padding:0.25rem 0.75rem; border-radius:20px; font-size:0.78rem; font-weight:600; color:white; margin-top:0.75rem; }
+    .q-count { font-size:0.8rem; color:var(--text2); padding:0.35rem 0; }
+    .custom-input { width:100%; padding:0.55rem 0.85rem; border:1px solid var(--border); border-radius:var(--radius); font-size:0.85rem; font-family:inherit; margin-top:0.75rem; background:var(--surface2); color:var(--text); }
+    .custom-input:focus { outline:none; border-color:var(--accent); }
+    .actions { display:flex; gap:0.75rem; margin-top:1rem; }
+    .gen-btn { background:var(--accent); color:white; border:none; border-radius:6px; padding:0.5rem 1.3rem; font-size:0.85rem; font-weight:600; cursor:pointer; transition:background 0.15s; }
+    .gen-btn:hover { background:#6b4de0; }
+    .gen-btn:disabled { opacity:0.5; cursor:not-allowed; }
 
-    .si-custom-input { width: 100%; padding: 0.6rem 0.9rem; border: 1px solid var(--border-light); border-radius: var(--radius-sm); font-size: 0.9rem; font-family: inherit; margin-top: 1rem; box-sizing: border-box; }
-    .si-custom-input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-subtle); }
-
-    .si-actions { display: flex; gap: 0.75rem; margin-top: 1.25rem; }
-    .si-gen-btn { background: var(--color-primary); color: white; border: none; border-radius: var(--radius-sm); padding: 0.6rem 1.5rem; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.15s; }
-    .si-gen-btn:hover { background: var(--color-primary-hover); }
-    .si-gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .si-loading { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; }
-
-    .si-questions { margin-top: 1.5rem; }
-    .si-question { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; margin-bottom: 1rem; }
-    .si-q-topic { display: inline-block; font-size: 0.75rem; font-weight: 600; color: var(--color-primary); padding: 0.15rem 0.5rem; border-radius: 4px; background: var(--color-primary-light); margin-bottom: 0.5rem; }
-    .si-q-text { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.5; }
-    .si-q-answer { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; padding: 0.75rem; background: var(--bg-subtle); border-radius: var(--radius-sm); }
-    .si-q-answer summary { cursor: pointer; font-weight: 600; color: var(--text-muted); font-size: 0.8rem; }
-    .si-q-answer[open] { border: 1px solid var(--border-light); }
-    .si-badge { font-size: 0.75rem; color: var(--text-muted); padding: 0.75rem 0; }
-
-    @media (max-width: 600px) { .si-range { flex-direction: column; } .si-value { min-width: auto; } }
+    .loading { text-align:center; padding:2rem; color:var(--text2); font-size:0.9rem; }
+    .question { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem; margin-bottom:0.75rem; }
+    .q-head { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem; flex-wrap:wrap; }
+    .q-topic { font-size:0.7rem; font-weight:600; color:var(--accent); padding:0.15rem 0.5rem; border-radius:4px; background:rgba(124,92,252,0.1); }
+    .q-diff { font-size:0.7rem; color:var(--text2); }
+    .q-text { font-size:0.9rem; font-weight:500; margin-bottom:0.5rem; line-height:1.55; }
+    details.q-answer { font-size:0.82rem; color:var(--text2); line-height:1.6; padding:0.65rem; background:var(--surface2); border-radius:var(--radius); }
+    details.q-answer summary { cursor:pointer; font-weight:600; color:var(--text2); font-size:0.78rem; }
+    details.q-answer[open] { border:1px solid var(--border); }
+    details.q-answer[open] summary { margin-bottom:0.4rem; color:var(--accent); }
+    .keywords { display:flex; gap:0.3rem; flex-wrap:wrap; margin-top:0.5rem; }
+    .kw { font-size:0.7rem; padding:0.15rem 0.45rem; border-radius:4px; background:rgba(124,92,252,0.08); color:var(--accent); border:1px solid rgba(124,92,252,0.15); }
+    .badge { font-size:0.75rem; color:var(--text2); padding:0.5rem 0; }
+    .next-tier { margin-top:1rem; padding:0.75rem; background:var(--surface2); border-radius:var(--radius); font-size:0.82rem; color:var(--text2); }
+    @media (max-width:600px) { .range-wrap { flex-direction:column; } .salary-val { min-width:auto; } }
   </style>
 </head>
 <body>
-  <div class="si-page">
-    <div class="si-topbar">
-      <h1>💰 Phỏng vấn theo lương</h1>
-      <a class="back" href="../index.html">← Trang chủ</a>
-    </div>
-
-    <div class="si-salary-card">
-      <h2>Chọn mức lương mong muốn</h2>
-      <p>Kéo slider để xem bộ câu hỏi phỏng vấn tương ứng. AI có thể bổ sung thêm nếu cần.</p>
-      <div class="si-range">
-        <input type="range" class="si-slider" id="salary-slider" min="8" max="150" value="20" step="1" />
-        <div class="si-value" id="salary-display">20</div>
-        <span class="si-unit">triệu/tháng</span>
-      </div>
-      <div id="salary-tag" class="si-tag" style="background:#22c55e;">🌱 Junior: 10 - 20 triệu</div>
-      <input type="text" class="si-custom-input" id="custom-request" placeholder="Yêu cầu riêng? VD: 'Tôi focus vào Spring Boot và Microservices' — để trống nếu không có" />
-      <div class="si-actions">
-        <button class="si-gen-btn" id="gen-btn">🎯 Tạo câu hỏi</button>
-      </div>
-    </div>
-
-    <div id="si-questions" class="si-questions"></div>
+<div class="page">
+  <div class="topbar">
+    <h1>💰 Phỏng vấn theo lương</h1>
+    <a class="back" href="../index.html">← Trang chủ</a>
   </div>
+  <p class="desc">Chọn mức lương (8-150+ triệu) — hệ thống hiển thị câu hỏi phù hợp. Câu trả lời mẫu chi tiết kèm từ khóa. AI có thể bổ sung theo yêu cầu.</p>
 
-  <script src="../js/data/salary-interview-data.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const slider = document.getElementById('salary-slider');
-      const display = document.getElementById('salary-display');
-      const tag = document.getElementById('salary-tag');
-      const genBtn = document.getElementById('gen-btn');
-      const container = document.getElementById('si-questions');
-      const customInput = document.getElementById('custom-request');
+  <div class="salary-card">
+    <h2>Chọn mức lương</h2>
+    <p>Kéo slider hoặc nhập số — mỗi mức lương có bộ câu hỏi riêng.</p>
+    <div class="range-wrap">
+      <input type="range" class="slider" id="salary-slider" min="8" max="150" value="20" step="1" />
+      <div class="salary-val" id="salary-display">20</div>
+      <span class="salary-unit">triệu/tháng</span>
+    </div>
+    <div id="salary-tag" class="salary-tag" style="background:#22c55e;">🌱 Junior: 10 - 20 triệu</div>
+    <div id="question-count" class="q-count"></div>
+    <input type="text" class="custom-input" id="custom-request" placeholder="Yêu cầu riêng? VD: focus Spring Boot & Microservices — AI bổ sung câu hỏi" />
+    <div class="actions"><button class="gen-btn" id="gen-btn">🎯 Tạo câu hỏi</button></div>
+  </div>
+  <div id="si-questions"></div>
+</div>
 
-      const tiers = window.salaryInterviewData.tiers;
+<script src="../js/data/salary-interview-data.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const slider=document.getElementById('salary-slider'), display=document.getElementById('salary-display'),
+    tag=document.getElementById('salary-tag'), qCount=document.getElementById('question-count'),
+    genBtn=document.getElementById('gen-btn'), container=document.getElementById('si-questions'),
+    customInput=document.getElementById('custom-request');
 
-      function updateSalary(val) {
-        const v = parseInt(val);
-        display.textContent = v;
-        const tier = window.salaryInterviewData.getTier(v);
-        if (tier) {
-          tag.textContent = `${tier.icon} ${tier.label}: ${tier.range}`;
-          tag.style.background = tier.color;
-        }
-      }
+  function stars(d) { return '⭐'.repeat(Math.min(d,5))+'○'.repeat(Math.max(0,5-d)); }
 
-      slider.addEventListener('input', () => updateSalary(slider.value));
-      updateSalary(slider.value);
+  function update(v) {
+    const val=parseInt(v); display.textContent=val;
+    const t=window.salaryInterviewData.getTier(val);
+    if(t){ tag.textContent=`${t.icon} ${t.label}: ${t.range}`; tag.style.background=t.color;
+      qCount.textContent=`📋 ${t.questions.length} câu hỏi • độ khó ${stars(1)}-${stars(5)}`; }
+  }
+  slider.addEventListener('input',()=>update(slider.value)); update(slider.value);
 
-      genBtn.addEventListener('click', async () => {
-        const salary = parseInt(slider.value);
-        const tier = window.salaryInterviewData.getTier(salary);
-        const customRequest = customInput.value.trim();
-
-        genBtn.disabled = true;
-        genBtn.textContent = '⏳ Đang tạo...';
-        container.innerHTML = '<div class="si-loading">🤖 AI đang tạo câu hỏi phù hợp với mức lương của bạn...</div>';
-
-        // Render từ static data trước
-        let allQuestions = [...tier.questions];
-
-        // Gọi AI nếu có network
-        if (customRequest) {
-          try {
-            const resp = await fetch('/api/salary-interview', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ salary, customRequest, topic: 'Java Backend' })
-            });
-            if (resp.ok) {
-              const data = await resp.json();
-              if (data.questions && data.questions.length > 0) {
-                allQuestions = [...allQuestions, ...data.questions.map((q, i) => ({
-                  ...q,
-                  id: 'ai-' + i,
-                  fromAI: true
-                }))];
-              }
-            }
-          } catch(e) {
-            // Silent fallback — vẫn dùng static data
-          }
-        } else {
-          // Auto generate AI questions for any salary
-          try {
-            const resp = await fetch('/api/salary-interview', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ salary, topic: 'Java Backend' })
-            });
-            if (resp.ok) {
-              const data = await resp.json();
-              if (data.questions && data.questions.length > 0) {
-                allQuestions = [...allQuestions, ...data.questions.map((q, i) => ({
-                  ...q,
-                  id: 'ai-' + i,
-                  fromAI: true
-                }))];
-              }
-            }
-          } catch(e) {}
-        }
-
-        // Render
-        let html = `<h2 style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">
-          📋 ${allQuestions.length} câu hỏi cho mức ${salary} triệu/tháng
-        </h2>
-        <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">
-          ${tier.icon} ${tier.description}
-        </p>`;
-
-        allQuestions.forEach((q, idx) => {
-          const isAI = q.fromAI;
-          html += `
-          <div class="si-question">
-            <div class="si-q-topic">${q.topic || 'Java'} ${isAI ? '🤖 AI' : ''}</div>
-            <div class="si-q-text">${idx + 1}. ${q.question}</div>
-            <details class="si-q-answer">
-              <summary>📝 Xem gợi ý trả lời</summary>
-              <p style="margin-top:0.5rem;">${q.sampleAnswer || '—'}</p>
-            </details>
-          </div>`;
-        });
-
-        if (tier.topics) {
-          html += `<div class="si-badge">📌 Chủ đề cần ôn: ${tier.topics.join(' • ')}</div>`;
-        }
-
-        const next = window.salaryInterviewData.getNextTier(tier.id);
-        if (next) {
-          html += `<div style="margin-top:1rem;padding:0.75rem;background:var(--bg-subtle);border-radius:var(--radius-sm);font-size:0.85rem;color:var(--text-secondary);">
-            💡 Mục tiêu tiếp theo: <strong style="color:${next.color}">${next.label} (${next.range})</strong> — ${next.description}
-          </div>`;
-        }
-
-        container.innerHTML = html;
-        genBtn.disabled = false;
-        genBtn.textContent = '🎯 Tạo câu hỏi';
-      });
-
-      // Enter key to generate
-      customInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') genBtn.click();
-      });
+  genBtn.addEventListener('click',async()=>{
+    const salary=parseInt(slider.value), tier=window.salaryInterviewData.getTier(salary), custom=customInput.value.trim();
+    genBtn.disabled=true; genBtn.textContent='⏳ Đang tạo...';
+    container.innerHTML='<div class="loading">🤖 AI đang tạo câu hỏi...</div>';
+    let all=[...tier.questions];
+    try {
+      const resp=await fetch('/api/salary-interview',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({salary,customRequest:custom||'',topic:'Java Backend'})});
+      if(resp.ok){ const d=await resp.json(); if(d.questions?.length) all=[...all,...d.questions.map((q,i)=>({...q,id:'ai-'+i,fromAI:true}))]; }
+    } catch(e){}
+    let html=`<h2 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;">📋 ${all.length} câu hỏi — ${tier.range}</h2>
+      <p style="font-size:0.82rem;color:var(--text2);margin-bottom:1rem;">${tier.icon} ${tier.description}</p>`;
+    all.forEach((q,i)=>{
+      const st=q.difficulty?stars(q.difficulty):'', kws=q.keywords?.length?q.keywords.map(k=>`<span class="kw">${k}</span>`).join(''):'';
+      html+=`<div class="question"><div class="q-head"><span class="q-topic">${q.topic||'Java'}${q.fromAI?' 🤖AI':''}</span>${st?`<span class="q-diff">${st}</span>`:''}</div>
+        <div class="q-text">${i+1}. ${q.question}</div>
+        <details class="q-answer"><summary>📝 Xem câu trả lời mẫu</summary>
+        <p style="margin-top:0.5rem;">${q.sampleAnswer||'—'}</p>${kws?`<div class="keywords">${kws}</div>`:''}</details></div>`;
     });
-  </script>
+    if(tier.topics) html+=`<div class="badge">📌 Chủ đề: ${tier.topics.join(' • ')}</div>`;
+    const next=window.salaryInterviewData.getNextTier(tier.id);
+    if(next) html+=`<div class="next-tier">💡 Mục tiêu: <strong style="color:${next.color}">${next.label} (${next.range})</strong> — ${next.description}</div>`;
+    container.innerHTML=html; genBtn.disabled=false; genBtn.textContent='🎯 Tạo câu hỏi';
+  });
+  customInput.addEventListener('keydown',e=>{if(e.key==='Enter')genBtn.click();});
+});
+</script>
 </body>
 </html>
