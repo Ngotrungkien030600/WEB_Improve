@@ -1,0 +1,17 @@
+# Bí mật — không bao giờ commit
+.env
+.env.*
+!.env.example
+
+# Phụ thuộc & build
+node_modules/
+
+# Source của framework/tool bên ngoài: cài qua installer, không vendor vào repo
+BMAD-METHOD/
+codegraph/
+.codegraph/
+
+# Rác hệ điều hành / editor
+.DS_Store
+Thumbs.db
+*.swp
