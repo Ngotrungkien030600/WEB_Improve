@@ -1027,3 +1027,63 @@
   text-decoration: line-through;
   color: var(--forge-text3, #64748b);
 }
+
+/* ───── Hub page override (frontend/hub, cloud/hub) ───── */
+.subpage .hub-desc {
+  color: var(--forge-text2, #94a3b8);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.subpage .hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.subpage .hub-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
+  padding: 1.25rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.subpage .hub-card:hover {
+  border-color: var(--forge-fire, #f97316);
+  background: rgba(249,115,22,0.04);
+}
+
+.subpage .hub-card .hub-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.subpage .hub-card .hub-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.subpage .hub-card .hub-body h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .hub-card .hub-body p {
+  font-size: 0.82rem;
+  color: var(--forge-text2, #94a3b8);
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .subpage .hub-grid {
+    grid-template-columns: 1fr;
+  }
+}
