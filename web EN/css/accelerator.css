@@ -1,0 +1,592 @@
+/* ===== Accelerator — 30-Day Senior Path ===== */
+
+/* ───── Layout ───── */
+.acc-page {
+  min-height: 100vh;
+  background: var(--forge-bg, #08080e);
+  color: var(--forge-text, #f1f5f9);
+  font-family: 'Inter', system-ui, sans-serif;
+  position: relative;
+}
+
+.acc-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(249,115,22,0.06) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 50%, rgba(59,130,246,0.04) 0%, transparent 60%);
+}
+
+.acc-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.5rem;
+}
+
+/* ───── Sidebar ───── */
+.acc-sidebar {
+  position: sticky;
+  top: 1.5rem;
+  height: calc(100vh - 3rem);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.acc-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--forge-glass, rgba(255,255,255,0.04));
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--forge-text);
+  transition: all 0.25s ease;
+}
+
+.acc-sidebar-header:hover {
+  background: var(--forge-glass-hover, rgba(255,255,255,0.08));
+  border-color: var(--forge-glass-hover-border, rgba(255,255,255,0.18));
+}
+
+.acc-sidebar-header .icon { font-size: 2rem; }
+.acc-sidebar-header h2 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+.acc-sidebar-header small { font-size: 0.75rem; color: var(--forge-text3, #64748b); }
+
+/* ───── Progress Summary ───── */
+.acc-progress-summary {
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 14px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.acc-progress-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--forge-text2, #94a3b8);
+}
+
+.acc-progress-row .val {
+  font-weight: 700;
+  color: var(--forge-ember, #fbbf24);
+  font-size: 1rem;
+}
+
+.acc-progress-bar-wrap {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.acc-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--forge-fire, #f97316), var(--forge-ember, #fbbf24));
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ───── Session Timer ───── */
+.acc-session-box {
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 14px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.acc-session-ring-wrap {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 0.75rem;
+}
+
+.acc-session-ring-wrap svg { transform: rotate(-90deg); }
+
+.acc-session-ring-bg {
+  fill: none;
+  stroke: rgba(255,255,255,0.06);
+  stroke-width: 4;
+}
+
+.acc-session-ring-progress {
+  fill: none;
+  stroke: var(--forge-fire, #f97316);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 188.5;
+  stroke-dashoffset: 188.5;
+  transition: stroke-dashoffset 0.5s ease;
+  filter: drop-shadow(0 0 4px rgba(249,115,22,0.4));
+}
+
+.acc-session-ring-progress.warning { stroke: var(--color-warning, #f59e0b); }
+.acc-session-ring-progress.danger { stroke: var(--color-error, #ef4444); }
+
+.acc-session-time {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--forge-text);
+}
+
+.acc-session-time.active { color: var(--forge-fire, #f97316); }
+
+.acc-start-btn {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--forge-fire, #f97316);
+  background: rgba(249,115,22,0.15);
+  color: var(--forge-ember, #fbbf24);
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.acc-start-btn:hover:not(:disabled) {
+  background: rgba(249,115,22,0.25);
+  box-shadow: 0 0 20px rgba(249,115,22,0.15);
+}
+
+.acc-start-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ───── Day Grid (Collapsible Weeks) ───── */
+.acc-day-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.acc-week-group {
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.acc-week-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--forge-text2);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.acc-week-header:hover { background: rgba(255,255,255,0.03); }
+
+.acc-week-arrow { transition: transform 0.3s ease; font-size: 0.7rem; }
+.acc-week-group.collapsed .acc-week-arrow { transform: rotate(-90deg); }
+.acc-week-group.collapsed .acc-week-days { display: none; }
+
+.acc-week-days {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 0 0.4rem 0.4rem;
+}
+
+.acc-day-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  border: none;
+  background: transparent;
+  color: var(--forge-text2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-size: 0.78rem;
+}
+
+.acc-day-btn:hover { background: rgba(255,255,255,0.05); color: var(--forge-text); }
+
+.acc-day-btn.current {
+  background: rgba(249,115,22,0.12);
+  color: var(--forge-ember);
+  border-left: 2px solid var(--forge-fire);
+}
+
+.acc-day-btn.completed { color: var(--forge-text); }
+.acc-day-btn.completed .acc-day-num { color: var(--color-success, #22c55e); }
+
+.acc-day-num {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.7rem;
+  font-weight: 600;
+  min-width: 1.8rem;
+  color: var(--forge-text3);
+}
+
+.acc-day-title { flex: 1; line-height: 1.3; }
+.acc-day-check { font-size: 0.7rem; }
+
+/* ───── Main Content ───── */
+.acc-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ───── Day Header ───── */
+.acc-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.acc-day-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background: rgba(249,115,22,0.12);
+  border: 1px solid rgba(249,115,22,0.2);
+  border-radius: 20px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--forge-ember);
+}
+
+.acc-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0;
+  background: linear-gradient(135deg, #f1f5f9, var(--forge-ember));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.acc-nav-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.acc-nav-btn {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--forge-glass-border);
+  background: var(--forge-glass);
+  color: var(--forge-text2);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.acc-nav-btn:hover {
+  background: var(--forge-glass-hover);
+  color: var(--forge-text);
+  border-color: var(--forge-glass-hover-border);
+}
+
+/* ───── Content Cards ───── */
+.acc-card {
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  transition: border-color 0.3s;
+}
+
+.acc-card:hover { border-color: rgba(255,255,255,0.12); }
+
+.acc-card h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--forge-text3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.acc-card p, .acc-card div { font-size: 0.92rem; line-height: 1.7; color: var(--forge-text2); }
+.acc-card strong { color: var(--forge-text); }
+
+/* ───── Vocabulary Chips ───── */
+.acc-vocab-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.acc-vocab-chip {
+  padding: 0.25rem 0.65rem;
+  background: rgba(249,115,22,0.1);
+  border: 1px solid rgba(249,115,22,0.15);
+  border-radius: 16px;
+  font-size: 0.78rem;
+  color: var(--forge-ember);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-mono, monospace);
+}
+
+.acc-vocab-chip:hover {
+  background: rgba(249,115,22,0.2);
+  border-color: var(--forge-fire);
+  transform: translateY(-1px);
+}
+
+/* ───── Speech / English Practice ───── */
+.acc-english-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.acc-speech-btn, .acc-record-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--forge-glass-border);
+  background: var(--forge-glass);
+  color: var(--forge-text2);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.acc-speech-btn:hover, .acc-record-btn:hover { background: var(--forge-glass-hover); color: var(--forge-text); }
+.acc-speech-btn.recording, .acc-record-btn.recording {
+  background: rgba(239,68,68,0.15);
+  border-color: var(--color-error, #ef4444);
+  color: var(--color-error, #ef4444);
+  animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.acc-transcript {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  min-height: 2rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--forge-text2);
+}
+
+.acc-transcript-final { color: var(--forge-text); }
+.acc-transcript-interim { color: var(--forge-text3); font-style: italic; }
+
+/* ───── Typing + AI Streaming Feedback ───── */
+.acc-typing-area {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.85rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 10px;
+  color: var(--forge-text);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  resize: vertical;
+  transition: border-color 0.3s;
+}
+
+.acc-typing-area:focus {
+  outline: none;
+  border-color: var(--forge-fire);
+  box-shadow: 0 0 12px rgba(249,115,22,0.08);
+}
+
+.acc-typing-feedback {
+  display: none;
+  margin-top: 0.75rem;
+  padding: 0.85rem;
+  background: rgba(59,130,246,0.06);
+  border: 1px solid rgba(59,130,246,0.12);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--forge-text2);
+  transition: all 0.3s;
+}
+
+.acc-typing-feedback.active { display: block; }
+
+.acc-feedback-item {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.acc-feedback-item:last-child { border-bottom: none; }
+
+.acc-streaming-dot { animation: pulse 1s ease infinite; }
+.acc-cursor-blink {
+  animation: blink 0.8s step-end infinite;
+  color: var(--forge-fire);
+  font-weight: 700;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ───── Complete Button ───── */
+.acc-complete-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.acc-complete-btn {
+  padding: 0.85rem 2rem;
+  border: none;
+  background: linear-gradient(135deg, var(--forge-fire), var(--forge-fire-glow));
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 16px rgba(249,115,22,0.25);
+}
+
+.acc-complete-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(249,115,22,0.35);
+}
+
+.acc-complete-btn:disabled {
+  background: rgba(34,197,94,0.2);
+  color: var(--color-success, #22c55e);
+  cursor: default;
+  box-shadow: none;
+}
+
+.acc-completion-msg {
+  font-size: 0.9rem;
+  color: var(--forge-text3);
+  font-style: italic;
+  transition: all 0.3s;
+}
+
+.acc-completion-msg.completed {
+  color: var(--color-success, #22c55e);
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* ───── Achievement Toast (Real-time) ───── */
+.acc-toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.acc-toast {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.25rem;
+  background: rgba(15,15,26,0.95);
+  border: 1px solid rgba(249,115,22,0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  color: var(--forge-text);
+  font-size: 0.88rem;
+  transform: translateX(120%);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  max-width: 360px;
+}
+
+.acc-toast.show { transform: translateX(0); opacity: 1; }
+.acc-toast-icon { font-size: 1.6rem; }
+.acc-toast strong { color: var(--forge-ember); }
+.acc-toast small { color: var(--forge-text3); font-size: 0.78rem; }
+
+/* ───── Keyboard Shortcut Hint ───── */
+.acc-shortcut-hint {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  font-size: 0.72rem;
+  color: var(--forge-text3);
+  opacity: 0.5;
+  z-index: 100;
+}
+
+.acc-shortcut-hint kbd {
+  padding: 0.1rem 0.4rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+}
+
+/* ───── Scrollbar ───── */
+.acc-sidebar::-webkit-scrollbar { width: 4px; }
+.acc-sidebar::-webkit-scrollbar-track { background: transparent; }
+.acc-sidebar::-webkit-scrollbar-thumb { background: rgba(249,115,22,0.2); border-radius: 2px; }
+
+/* ───── Responsive ───── */
+@media (max-width: 1024px) {
+  .acc-container { grid-template-columns: 240px 1fr; }
+}
+
+@media (max-width: 768px) {
+  .acc-container { grid-template-columns: 1fr; }
+  .acc-sidebar {
+    position: static;
+    height: auto;
+    max-height: 300px;
+  }
+  .acc-title { font-size: 1.3rem; }
+  .acc-day-header { flex-direction: column; align-items: flex-start; }
+  .acc-toast-container { bottom: 1rem; right: 1rem; left: 1rem; }
+  .acc-toast { max-width: 100%; }
+  .acc-shortcut-hint { display: none; }
+}

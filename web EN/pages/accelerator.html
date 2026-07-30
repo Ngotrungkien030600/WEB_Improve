@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accelerator — 30 Ngày Lên Senior — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/timer.css" />
+  <link rel="stylesheet" href="../css/accelerator.css" />
+</head>
+<body class="acc-page">
+  <div class="acc-ambient"></div>
+
+  <div class="acc-container">
+    <!-- ─── Sidebar ─── -->
+    <aside class="acc-sidebar">
+      <a href="../index.html" class="acc-sidebar-header">
+        <span class="icon">⚒️</span>
+        <div>
+          <h2>SkillForge</h2>
+          <small>Accelerator</small>
+        </div>
+      </a>
+
+      <!-- Progress Summary -->
+      <div class="acc-progress-summary">
+        <div class="acc-progress-row">
+          <span>Tiến độ</span>
+          <span class="val" id="acc-progress-pct">0% (0/30)</span>
+        </div>
+        <div class="acc-progress-bar-wrap">
+          <div class="acc-progress-bar-fill" id="acc-progress-bar" style="width:0%"></div>
+        </div>
+        <div class="acc-progress-row">
+          <span>⚡ XP</span>
+          <span class="val" id="acc-xp">0 XP</span>
+        </div>
+        <div class="acc-progress-row">
+          <span>🔥 Streak</span>
+          <span class="val" id="acc-streak">🔥 0 ngày</span>
+        </div>
+      </div>
+
+      <!-- Session Timer (Real-time) -->
+      <div class="acc-session-box">
+        <div class="acc-session-ring-wrap">
+          <svg viewBox="0 0 68 68" width="100" height="100">
+            <circle class="acc-session-ring-bg" cx="34" cy="34" r="30" />
+            <circle class="acc-session-ring-progress" id="acc-session-ring" cx="34" cy="34" r="30" />
+          </svg>
+          <div class="acc-session-time" id="acc-session-timer">00:00</div>
+        </div>
+        <button class="acc-start-btn" id="acc-start-session">⚒️ Bắt đầu 1h</button>
+      </div>
+
+      <!-- Day Navigation -->
+      <div class="acc-day-grid" id="acc-day-grid"></div>
+    </aside>
+
+    <!-- ─── Main Content ─── -->
+    <main class="acc-main">
+      <!-- Day Header -->
+      <div class="acc-day-header">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+          <span class="acc-day-badge" id="acc-day">Day 01</span>
+          <h1 class="acc-title" id="acc-title">RESTful API Design & Documentation</h1>
+        </div>
+        <div class="acc-nav-row">
+          <button class="acc-nav-btn" id="acc-nav-left">◀ Trước</button>
+          <button class="acc-nav-btn" id="acc-nav-right">Sau ▶</button>
+        </div>
+      </div>
+
+      <!-- Technical Concept -->
+      <div class="acc-card">
+        <h3>💡 Technical Concept</h3>
+        <p id="acc-tech-concept"></p>
+      </div>
+
+      <!-- Technical Practice -->
+      <div class="acc-card">
+        <h3>🛠️ Practice</h3>
+        <p id="acc-tech-practice"></p>
+      </div>
+
+      <!-- English Vocabulary -->
+      <div class="acc-card">
+        <h3>📝 English Vocabulary</h3>
+        <div class="acc-vocab-chips" id="acc-vocab-chips"></div>
+      </div>
+
+      <!-- English Listening -->
+      <div class="acc-card">
+        <h3>🎧 English Listening</h3>
+        <p id="acc-english-listening"></p>
+      </div>
+
+      <!-- English Speaking Practice (Real-time Speech) -->
+      <div class="acc-card">
+        <h3>🗣️ Speaking Practice</h3>
+        <p id="acc-english-practice"></p>
+        <div class="acc-english-row">
+          <button class="acc-speech-btn" id="acc-speech-btn">🎤</button>
+          <span style="font-size:0.8rem;color:var(--forge-text3)">Click để nói, click lại để dừng</span>
+        </div>
+        <div class="acc-transcript" id="acc-transcript">Transcript sẽ hiện ở đây...</div>
+      </div>
+
+      <!-- System Design Case -->
+      <div class="acc-card">
+        <h3>🏛️ System Design</h3>
+        <p id="acc-system-design"></p>
+      </div>
+
+      <!-- Typing + AI Streaming Feedback (Real-time) -->
+      <div class="acc-card">
+        <h3>✍️ Practice Your Answer</h3>
+        <p style="font-size:0.82rem;color:var(--forge-text3);margin:-0.5rem 0 0.75rem;">
+          Gõ câu trả lời bằng tiếng Anh. AI sẽ phân tích technical accuracy & grammar real-time.
+        </p>
+        <textarea class="acc-typing-area" id="acc-typing-area" placeholder="Practice your answer in English... Type your technical explanation here..."></textarea>
+        <div class="acc-typing-feedback" id="acc-typing-feedback"></div>
+      </div>
+
+      <!-- Key Takeaway + Complete -->
+      <div class="acc-card">
+        <p id="acc-key-takeaway"></p>
+        <div class="acc-complete-row">
+          <button class="acc-complete-btn" id="acc-complete">🎯 Hoàn thành ngày này</button>
+          <span class="acc-completion-msg" id="acc-completion-msg"></span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast Container (Real-time) -->
+  <div class="acc-toast-container" id="acc-toast-container"></div>
+
+  <!-- Keyboard Hint -->
+  <div class="acc-shortcut-hint">
+    <kbd>Ctrl</kbd>+<kbd>Enter</kbd> Hoàn thành &nbsp;·&nbsp; <kbd>←</kbd> <kbd>→</kbd> Điều hướng ngày &nbsp;·&nbsp; <kbd>Esc</kbd> Dừng ghi âm
+  </div>
+
+  <script src="../js/utils/timer.js"></script>
+  <script type="module">
+    import { initAcceleratorUI } from '../js/features/accelerator/accelerator-ui.js';
+    document.addEventListener('DOMContentLoaded', () => initAcceleratorUI());
+  </script>
+</body>
+</html>

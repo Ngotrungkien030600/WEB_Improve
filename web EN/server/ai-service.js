@@ -141,4 +141,60 @@ function callAI(messages, apiKey, maxTokens = AI_CONFIG.DEFAULT_MAX_TOKENS) {
   });
 }
 
-module.exports = { callAI, buildSystemForBundle };
+/**
+ * Streaming AI call — hỗ trợ SSE cho real-time feedback
+ * Sử dụng OpenAI streaming API với chunk callback
+ */
+function callAIStream(messages, apiKey, onChunk) {
+  return new Promise((resolve, reject) => {
+    const postData = JSON.stringify({
+      model: AI_CONFIG.DEFAULT_OPENAI_MODEL,
+      messages,
+      max_tokens: 300,
+      temperature: AI_CONFIG.TEMPERATURE,
+      stream: true,
+    });
+
+    const options = {
+      hostname: AI_CONFIG.OPENAI_HOST,
+      port: 443,
+      path: '/v1/chat/completions',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Length': Buffer.byteLength(postData),
+      },
+    };
+
+    const apiReq = https.request(options, (apiRes) => {
+      let buffer = '';
+      apiRes.setEncoding('utf8');
+      apiRes.on('data', (chunk) => {
+        buffer += chunk;
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed || !trimmed.startsWith('data: ')) continue;
+          const data = trimmed.slice(6);
+          if (data === '[DONE]') return;
+          try {
+            const parsed = JSON.parse(data);
+            const content = parsed.choices?.[0]?.delta?.content || '';
+            if (content) onChunk(content);
+          } catch (e) { /* skip parse errors */ }
+        }
+      });
+      apiRes.on('end', () => {
+        resolve();
+      });
+    });
+
+    apiReq.on('error', reject);
+    apiReq.write(postData);
+    apiReq.end();
+  });
+}
+
+module.exports = { callAI, callAIStream, buildSystemForBundle };
