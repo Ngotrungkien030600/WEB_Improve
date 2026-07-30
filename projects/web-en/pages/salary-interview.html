@@ -140,8 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
     container.innerHTML = '<div class="loading">🤖 AI đang tạo câu hỏi...</div>';
     let all = [...tier.questions];
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
       const resp = await fetch('/api/salary-interview', {method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({salary, customRequest:custom||'', topic:'Java Backend'})});
+        body:JSON.stringify({salary, customRequest:custom||'', topic:'Java Backend'}),
+        signal: controller.signal});
+      clearTimeout(timeout);
       if (resp.ok) { const d = await resp.json(); if (d.questions?.length) all = [...all, ...d.questions.map((q,i)=>({...q,id:'ai-'+i,fromAI:true}))]; }
     } catch(e) {}
     let html = `<h2 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;">📋 ${all.length} câu hỏi — ${tier.range}</h2>

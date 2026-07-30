@@ -1,17 +1,10 @@
 @echo off
-title SkillForge — Web + Ollama AI
-cd /d "%~dp0projects\web-en"
+title SkillForge — Web Server
+cd /d "%~dp0"
 
-echo === Khoi dong Ollama AI (qwen2.5:7b) ===
-start /b "" "%LOCALAPPDATA%\Programs\Ollama\ollama.exe" serve >nul 2>&1
-
-echo === Dong mo trinh duyet ===
-timeout /t 3 /nobreak >nul
-start "" "http://localhost:8080"
-
-echo === Chay Web Server ===
-echo Nhan Ctrl+C de dung server.
+echo === Khoi dong Web Server ===
+echo Open http://localhost:8080 trong trinh duyet.
+echo Nhan Ctrl+C de dung.
 echo.
-node server/index.js
-
+npm start
 pause

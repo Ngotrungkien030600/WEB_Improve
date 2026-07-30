@@ -4,7 +4,8 @@
   "private": true,
   "description": "Khung điều phối BMAD cho SkillForge — code sản phẩm nằm trong projects/",
   "scripts": {
-    "legacy": "node projects/web-en/server/index.js",
+    "start": "node projects/web-en/server/index.js",
+    "legacy": "npm start",
     "dev": "npm --prefix projects/web-app run dev",
     "build": "npm --prefix projects/web-app run build"
   },
