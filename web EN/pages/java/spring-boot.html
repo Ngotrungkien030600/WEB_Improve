@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spring Boot — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#22d3ee; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .links { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .topbar .links a { color:var(--accent); text-decoration:none; font-size:0.85rem; }
+    .topbar .links a:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2.5rem; font-size:0.95rem; }
+
+    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem; margin-bottom:2.5rem; }
+    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.7rem 1rem; text-decoration:none; color:var(--text); font-size:0.85rem; font-weight:500; transition:border-color 0.2s,color 0.2s; }
+    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+
+    .section { margin-bottom:3rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .section-title { background:var(--surface2); padding:0.9rem 1.25rem; font-size:1.1rem; font-weight:700; border-bottom:1px solid var(--border); }
+    .section-body { padding:1.25rem; }
+    .section-body h3 { font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; color:var(--accent); }
+    .section-body h3:first-child { margin-top:0; }
+    .section-body p { font-size:0.9rem; color:var(--text2); margin-bottom:0.75rem; }
+    .section-body ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .section-body li { font-size:0.85rem; color:var(--text2); margin-bottom:0.3rem; }
+    .section-body strong { color:var(--text); }
+
+    pre { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; font-size:0.82rem; overflow-x:auto; margin:0.75rem 0; line-height:1.6; }
+    code { background:var(--surface2); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    pre code { background:transparent; padding:0; }
+
+    .diagram { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--accent); font-weight:600; line-height:2; font-family:monospace; }
+
+    .tag { display:inline-block; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.7rem; font-weight:600; margin-right:0.35rem; }
+    .tag-core { background:rgba(34,211,238,0.1); color:var(--accent); border:1px solid rgba(34,211,238,0.2); }
+    .tag-jpa { background:rgba(52,211,153,0.1); color:#34d399; border:1px solid rgba(52,211,153,0.2); }
+    .tag-sec { background:rgba(244,114,182,0.1); color:#f472b6; border:1px solid rgba(244,114,182,0.2); }
+    .tag-web { background:rgba(251,191,36,0.1); color:#fbbf24; border:1px solid rgba(251,191,36,0.2); }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .card h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.25rem; }
+    .card p, .card li { font-size:0.8rem; color:var(--text2); }
+    .card ul { padding-left:1rem; }
+    .card li { margin-bottom:0.2rem; }
+
+    @media (max-width:600px) { .grid-2 { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>🍃 Spring Boot</h1>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">Từ IoC/DI đến Microservices — code mẫu, kiến trúc, best practices</p>
+    </div>
+    <div class="links">
+      <a href="hub.html">← Java</a>
+      <a href="../../index.html">Trang chủ</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <a href="#core">1. IoC &amp; DI</a>
+    <a href="#web">2. Spring MVC &amp; REST</a>
+    <a href="#jpa">3. JPA &amp; Hibernate</a>
+    <a href="#security">4. Security &amp; JWT</a>
+    <a href="#boot">5. Auto-config &amp; Actuator</a>
+    <a href="#async">6. Async &amp; Scheduling</a>
+    <a href="#test">7. Testing</a>
+    <a href="#cloud">8. Microservices</a>
+  </div>
+
+  <!-- 1. IoC & DI -->
+  <div class="section" id="core">
+    <div class="section-title">1. IoC (Inversion of Control) &amp; Dependency Injection</div>
+    <div class="section-body">
+      <h3>IoC Container là gì?</h3>
+      <p>IoC Container (ApplicationContext) quản lý vòng đời của beans — tạo, cấu hình, inject dependencies. Thay vì tự tạo object (<code>new UserService()</code>), bạn để Spring quản lý và inject khi cần.</p>
+
+      <h3>Các cách inject</h3>
+      <pre><code>// 1. Field injection (không khuyến nghị — khó test)
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepo;
+}
+
+// 2. Constructor injection (khuyến nghị)
+@Service
+public class UserService {
+    private final UserRepository userRepo;
+    public UserService(UserRepository userRepo) {  // Spring tự inject
+        this.userRepo = userRepo;
+    }
+}
+
+// 3. Setter injection
+@Service
+public class UserService {
+    private UserRepository userRepo;
+    @Autowired
+    public void setUserRepo(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
+}</code></pre>
+
+      <h3>@Component vs @Bean</h3>
+      <div class="grid-2">
+        <div class="card"><h4>@Component (@Service, @Repository, @Controller)</h4><p>Dùng cho class tự viết. Spring scan package → tạo bean tự động.</p></div>
+        <div class="card"><h4>@Bean</h4><p>Dùng trong @Configuration class cho third-party classes (DataSource, RestTemplate).</p></div>
+      </div>
+
+      <h3>Bean Scopes</h3>
+      <pre><code>@Component
+@Scope("singleton")  // Mặc định — 1 instance cho toàn app
+@Scope("prototype")  // Tạo mới mỗi lần getBean/inject
+@Scope("request")    // 1 instance cho 1 HTTP request (Web)
+@Scope("session")    // 1 instance cho 1 HTTP session
+@Scope("application")// 1 instance cho ServletContext</code></pre>
+
+      <h3>@Primary &amp; @Qualifier</h3>
+      <pre><code>// Nhiều bean cùng type — chọn 1
+@Primary  // Bean mặc định
+@Service
+public class VnpayPayment implements PaymentService { }
+
+@Qualifier("paypal")
+@Service
+public class PaypalPayment implements PaymentService { }
+
+// Khi inject
+public OrderService(@Qualifier("paypal") PaymentService payment) { }</code></pre>
+    </div>
+  </div>
+
+  <!-- 2. MVC & REST -->
+  <div class="section" id="web">
+    <div class="section-title">2. Spring MVC &amp; REST API</div>
+    <div class="section-body">
+      <h3>Luồng xử lý request</h3>
+      <div class="diagram">
+Request → DispatcherServlet → HandlerMapping → Controller → Service → Repository → DB<br>
+                                          → ResponseEntity ← JSON ←
+      </div>
+
+      <h3>REST Controller</h3>
+      <pre><code>@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    @GetMapping
+    public List&lt;User&gt; getAll(@RequestParam(defaultValue = "0") int page) {
+        return userService.findAll(page);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity&lt;User&gt; getById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity&lt;User&gt; create(@Valid @RequestBody UserCreateRequest req) {
+        User created = userService.create(req);
+        return ResponseEntity.created(URI.create("/api/users/" + created.getId())).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public User update(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest req) {
+        return userService.update(id, req);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}</code></pre>
+
+      <h3>Exception Handling</h3>
+      <pre><code>@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(404).body(new ErrorResponse("NOT_FOUND", ex.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleValidation(MethodArgumentNotValidException ex) {
+        List&lt;String&gt; errors = ex.getBindingResult().getFieldErrors()
+            .stream().map(e -> e.getField() + ": " + e.getDefaultMessage()).collect(Collectors.toList());
+        return ResponseEntity.badRequest().body(new ErrorResponse("VALIDATION_FAILED", errors));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleGeneral(Exception ex) {
+        return ResponseEntity.status(500).body(new ErrorResponse("INTERNAL_ERROR", "Có lỗi xảy ra"));
+    }
+}</code></pre>
+
+      <h3>DTO &amp; Validation</h3>
+      <pre><code>public record UserCreateRequest(
+    @NotBlank(message = "Tên không được để trống")
+    @Size(min = 2, max = 100)
+    String name,
+
+    @NotBlank @Email
+    String email,
+
+    @Pattern(regexp = "^(0|\+84)[3-9][0-9]{8}$", message = "SĐT không hợp lệ")
+    String phone
+) {}
+
+// MapStruct — mapper DTO &harr; Entity
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+    User toEntity(UserCreateRequest req);
+    UserResponse toResponse(User user);
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- 3. JPA & Hibernate -->
+  <div class="section" id="jpa">
+    <div class="section-title">3. JPA &amp; Hibernate</div>
+    <div class="section-body">
+      <h3>Entity &amp; Relationships</h3>
+      <pre><code>@Entity
+@Table(name = "users")
+public class User {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(unique = true)
+    private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List&lt;Order&gt; orders = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set&lt;Role&gt; roles = new HashSet<>();
+}
+
+@Entity
+@Table(name = "orders")
+public class Order {
+    @Id @GeneratedValue
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)  // Mặc định EAGER với ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+}</code></pre>
+
+      <h3>Repository</h3>
+      <pre><code>public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
+    Optional&lt;User&gt; findByEmail(String email);
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.orders WHERE u.id = :id")
+    Optional&lt;User&gt; findByIdWithOrders(@Param("id") Long id);
+
+    @Query("SELECT new com.example.dto.UserSummary(u.id, u.name, COUNT(o)) " +
+           "FROM User u LEFT JOIN u.orders o GROUP BY u.id")
+    List&lt;UserSummary&gt; findUserSummaries();
+
+    @Modifying
+    @Query("UPDATE User u SET u.status = :status WHERE u.lastLogin &lt; :date")
+    int deactivateInactiveUsers(@Param("date") LocalDateTime date, @Param("status") String status);
+}</code></pre>
+
+      <h3>N+1 Problem</h3>
+      <p>Khi lấy 100 users + mỗi user có orders → 1 query users + 100 query orders = 101 queries.</p>
+      <pre><code>// Fix 1: JOIN FETCH
+@Query("SELECT u FROM User u JOIN FETCH u.orders")
+List&lt;User&gt; findAllWithOrders();
+
+// Fix 2: @EntityGraph
+@EntityGraph(attributePaths = {"orders"})
+@Query("SELECT u FROM User u")
+List&lt;User&gt; findAllWithOrders();
+
+// Fix 3: @BatchSize
+@Entity
+public class User {
+    @OneToMany(mappedBy = "user")
+    @BatchSize(size = 10)
+    private List&lt;Order&gt; orders;
+    // 100 users → 100/10 = 10 queries thay vì 100
+}</code></pre>
+
+      <h3>Paging &amp; Sorting</h3>
+      <pre><code>Page&lt;User&gt; page = userRepository.findAll(
+    PageRequest.of(0, 20, Sort.by("createdAt").descending())
+);
+// page.getContent(), page.getTotalPages(), page.getTotalElements()</code></pre>
+    </div>
+  </div>
+
+  <!-- 4. Security -->
+  <div class="section" id="security">
+    <div class="section-title">4. Spring Security &amp; JWT</div>
+    <div class="section-body">
+      <h3>Cấu hình SecurityFilterChain</h3>
+      <pre><code>@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(sm -> sm.sessionCreationPolicy(STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**", "/actuator/health").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .authenticationProvider(authenticationProvider())
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider p = new DaoAuthenticationProvider();
+        p.setUserDetailsService(userDetailsService);
+        p.setPasswordEncoder(passwordEncoder());
+        return p;
+    }
+}</code></pre>
+
+      <h3>JWT Filter</h3>
+      <pre><code>@Component
+public class JwtFilter extends OncePerRequestFilter {
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
+                                    FilterChain chain) throws IOException, ServletException {
+        String auth = req.getHeader("Authorization");
+        if (auth != null && auth.startsWith("Bearer ")) {
+            String token = auth.substring(7);
+            try {
+                Claims claims = Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+
+                String email = claims.getSubject();
+                UserDetails user = userDetailsService.loadUserByUsername(email);
+                UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (JwtException e) {
+                res.setStatus(401);
+                return;
+            }
+        }
+        chain.doFilter(req, res);
+    }
+}</code></pre>
+
+      <h3>Password Encoding &amp; CORS</h3>
+      <pre><code>@Bean
+public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();  // Salt tự động, chống brute force
+}
+
+@Bean
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowedOrigins(List.of("http://localhost:3000"));
+    config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+    config.setAllowedHeaders(List.of("*"));
+    config.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource src = new UrlBasedCorsConfigurationSource();
+    src.registerCorsConfiguration("/**", config);
+    return src;
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- 5. Auto-config & Actuator -->
+  <div class="section" id="boot">
+    <div class="section-title">5. Auto-configuration &amp; Actuator</div>
+    <div class="section-body">
+      <h3>Auto-configuration hoạt động thế nào?</h3>
+      <p>@EnableAutoConfiguration scan META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports. Mỗi auto-config class có @Conditional annotation — chỉ active khi điều kiện đúng.</p>
+      <pre><code>// Ví dụ: DataSourceAutoConfiguration
+@AutoConfiguration
+@ConditionalOnClass(DataSource.class)            // Có H2/MySQL driver?
+@ConditionalOnMissingBean(DataSource.class)       // Chưa có DataSource bean?
+@EnableConfigurationProperties(DataSourceProperties.class)
+public class DataSourceAutoConfiguration {
+    @Bean
+    @ConditionalOnMissingBean
+    public DataSource dataSource(DataSourceProperties props) {
+        return props.initializeDataSourceBuilder().build();
+    }
+}</code></pre>
+
+      <h3>Custom properties</h3>
+      <pre><code>@ConfigurationProperties(prefix = "app")
+public class AppProperties {
+    private String name;
+    private Jwt jwt = new Jwt();
+    private Cors cors = new Cors();
+
+    @Data public static class Jwt {
+        private String secret;
+        private long expirationMs = 86400000;
+    }
+}
+
+// application.yml
+app:
+  name: SkillForge
+  jwt:
+    secret: ${JWT_SECRET:defaultSecretKey1234567890123456}
+    expiration-ms: 86400000</code></pre>
+
+      <h3>Actuator endpoints</h3>
+      <div class="grid-2">
+        <div class="card"><h4>/actuator/health</h4><p>Health check DB, disk, custom components. Liveness/Readiness probe cho K8s.</p></div>
+        <div class="card"><h4>/actuator/metrics</h4><p>JVM (heap, thread, GC), HTTP request count/latency, custom metrics (Prometheus).</p></div>
+        <div class="card"><h4>/actuator/info</h4><p>Custom info (version, build time, git commit).</p></div>
+        <div class="card"><h4>/actuator/env</h4><p>Environment properties (cần bảo vệ).</p></div>
+      </div>
+      <pre><code># application.yml
+management:
+  endpoints.web.exposure.include: health,info,metrics,prometheus
+  endpoint.health.show-details: when-authorized
+  metrics.tags.application: skillforge</code></pre>
+    </div>
+  </div>
+
+  <!-- 6. Async & Scheduling -->
+  <div class="section" id="async">
+    <div class="section-title">6. Async &amp; Scheduling</div>
+    <div class="section-body">
+      <h3>@Async</h3>
+      <pre><code>@Configuration
+@EnableAsync
+public class AsyncConfig implements AsyncConfigurer {
+    @Override
+    public Executor getAsyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(10);
+        executor.setQueueCapacity(100);
+        executor.setThreadNamePrefix("async-");
+        executor.initialize();
+        return executor;
+    }
+}
+
+@Service
+public class EmailService {
+    @Async
+    public CompletableFuture&lt;Void&gt; sendWelcomeEmail(User user) {
+        // Chạy trên thread pool riêng, không block caller
+        emailClient.send(user.getEmail(), "Welcome!", template);
+        return CompletableFuture.completedFuture(null);
+    }
+}</code></pre>
+
+      <h3>@Scheduled</h3>
+      <pre><code>@Configuration
+@EnableScheduling
+public class SchedulingConfig {}
+
+@Component
+public class CleanupJob {
+    // Mỗi ngày lúc 2h sáng
+    @Scheduled(cron = "0 0 2 * * ?")
+    public void cleanExpiredTokens() {
+        tokenRepository.deleteExpired(LocalDateTime.now());
+    }
+
+    // Mỗi 30 giây
+    @Scheduled(fixedRate = 30000)
+    public void checkHealth() {
+        healthService.ping();
+    }
+
+    // Sau khi start 10s, mỗi phút
+    @Scheduled(initialDelay = 10000, fixedRate = 60000)
+    public void syncCache() {
+        cacheService.refresh();
+    }
+}</code></pre>
+
+      <h3>@EventListener</h3>
+      <pre><code>// Event
+public record UserCreatedEvent(User user, Instant timestamp) {}
+
+// Publisher
+@Service
+public class UserService {
+    @Autowired private ApplicationEventPublisher publisher;
+    public User create(CreateUserRequest req) {
+        User user = userRepo.save(toEntity(req));
+        publisher.publishEvent(new UserCreatedEvent(user, Instant.now()));
+        return user;
+    }
+}
+
+// Listener
+@Component
+public class UserEventListener {
+    @Async
+    @EventListener
+    public void handleUserCreated(UserCreatedEvent event) {
+        emailService.sendWelcome(event.user());
+        analyticsService.trackRegistration(event.user());
+    }
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- 7. Testing -->
+  <div class="section" id="test">
+    <div class="section-title">7. Testing</div>
+    <div class="section-body">
+      <h3>Các loại test</h3>
+      <div class="grid-2">
+        <div class="card"><h4>Unit Test</h4><p>Test 1 class độc lập, mock dependencies. @ExtendWith(MockitoExtension.class). @Mock, @InjectMocks.</p></div>
+        <div class="card"><h4>Integration Test</h4><p>Test tầng repository với DB thật. @DataJpaTest + Testcontainers.</p></div>
+        <div class="card"><h4>Web Layer Test</h4><p>@WebMvcTest — chỉ tầng controller, mock service. Test request/response, validation, security.</p></div>
+        <div class="card"><h4>Full Integration</h4><p>@SpringBootTest + Testcontainers — test từ controller đến DB.</p></div>
+      </div>
+
+      <h3>Unit Test với Mockito</h3>
+      <pre><code>@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
+
+    @Mock private UserRepository userRepo;
+    @Mock private PasswordEncoder passwordEncoder;
+    @InjectMocks private UserService userService;
+
+    @Test
+    void createUser_shouldReturn_whenValid() {
+        // Given
+        CreateUserRequest req = new CreateUserRequest("Alice", "alice@email.com", "pass123");
+        User entity = new User(null, "Alice", "alice@email.com", "encoded");
+        when(passwordEncoder.encode("pass123")).thenReturn("encoded");
+        when(userRepo.save(any())).thenReturn(entity);
+
+        // When
+        User result = userService.create(req);
+
+        // Then
+        assertThat(result.getEmail()).isEqualTo("alice@email.com");
+        verify(userRepo).save(any());
+        verify(passwordEncoder).encode("pass123");
+    }
+
+    @Test
+    void createUser_shouldThrow_whenEmailExists() {
+        when(userRepo.findByEmail("alice@email.com")).thenReturn(Optional.of(new User()));
+        assertThrows(DuplicateEmailException.class,
+            () -> userService.create(new CreateUserRequest("Alice", "alice@email.com", "pass")));
+    }
+}</code></pre>
+
+      <h3>Integration Test với Testcontainers</h3>
+      <pre><code>@SpringBootTest
+@Testcontainers
+class UserRepositoryTest {
+
+    @Container
+    static PostgreSQLContainer&lt;?&gt; postgres = new PostgreSQLContainer<>("postgres:16")
+        .withDatabaseName("testdb");
+
+    @DynamicPropertySource
+    static void props(DynamicPropertyRegistry r) {
+        r.add("spring.datasource.url", postgres::getJdbcUrl);
+        r.add("spring.datasource.username", postgres::getUsername);
+        r.add("spring.datasource.password", postgres::getPassword);
+    }
+
+    @Autowired private UserRepository userRepo;
+
+    @Test
+    void findByEmail_shouldReturnUser() {
+        userRepo.save(new User(null, "Alice", "alice@email.com", "encoded"));
+        Optional&lt;User&gt; result = userRepo.findByEmail("alice@email.com");
+        assertThat(result).isPresent();
+        assertThat(result.get().getName()).isEqualTo("Alice");
+    }
+}</code></pre>
+
+      <h3>Web Layer Test</h3>
+      <pre><code>@WebMvcTest(UserController.class)
+class UserControllerTest {
+
+    @Autowired private MockMvc mockMvc;
+    @MockBean private UserService userService;
+
+    @Test
+    void getById_shouldReturn200() throws Exception {
+        when(userService.findById(1L)).thenReturn(new UserResponse(1L, "Alice", "alice@email.com"));
+
+        mockMvc.perform(get("/api/users/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Alice"));
+    }
+
+    @Test
+    void create_shouldReturn201() throws Exception {
+        String body = """
+            { "name": "Alice", "email": "alice@email.com" }
+        """;
+        when(userService.create(any())).thenReturn(new UserResponse(1L, "Alice", "alice@email.com"));
+
+        mockMvc.perform(post("/api/users").contentType(MediaType.APPLICATION_JSON).content(body))
+            .andExpect(status().isCreated())
+            .andExpect(header().exists("Location"));
+    }
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- 8. Microservices -->
+  <div class="section" id="cloud">
+    <div class="section-title">8. Spring Cloud &amp; Microservices</div>
+    <div class="section-body">
+      <h3>Service Discovery (Eureka)</h3>
+      <pre><code>// Service Registry (Eureka Server)
+@SpringBootApplication
+@EnableEurekaServer
+public class ServiceRegistry { }
+
+// Client
+@SpringBootApplication
+@EnableDiscoveryClient
+public class UserService { }
+
+// application.yml (client)
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/</code></pre>
+
+      <h3>API Gateway (Spring Cloud Gateway)</h3>
+      <pre><code>@Bean
+public RouteLocator customRoutes(RouteLocatorBuilder builder) {
+    return builder.routes()
+        .route("user-service", r -> r.path("/api/users/**")
+            .filters(f -> f.circuitBreaker(config -> config
+                .setName("userCircuitBreaker")
+                .setFallbackUri("forward:/fallback/users")))
+            .uri("lb://user-service"))
+        .route("order-service", r -> r.path("/api/orders/**")
+            .uri("lb://order-service"))
+        .build();
+}
+
+// Rate limiting — Redis Token Bucket
+@Bean
+public KeyResolver userKeyResolver() {
+    return exchange -> Mono.just(
+        exchange.getRequest().getRemoteAddress().getAddress().getHostAddress()
+    );
+}</code></pre>
+
+      <h3>Distributed Tracing (Micrometer Tracing)</h3>
+      <pre><code>// docker-compose cho observability
+// services: prometheus, grafana, jaeger, loki
+
+// application.yml
+management:
+  tracing:
+    sampling:
+      probability: 1.0  // 100% traces
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+// Mỗi request sẽ có traceId xuyên suốt các services
+// Jaeger UI: xem trace, span duration, error
+// Grafana: dashboard 4 golden signals (latency, traffic, errors, saturation)</code></pre>
+
+      <h3>Spring Cloud Config</h3>
+      <pre><code>// Config Server
+@SpringBootApplication
+@EnableConfigServer
+public class ConfigServer { }
+
+// Config Client — application.yml
+spring:
+  config:
+    import: configserver:http://localhost:8888
+  cloud:
+    config:
+      name: user-service
+      profile: prod
+
+// Git-backed config repo
+// user-service-prod.yml
+server.port: 8082
+spring.datasource.url: jdbc:postgresql://prod-db:5432/users</code></pre>
+
+      <h3>Best Practices Checklist</h3>
+      <ul>
+        <li><strong>Package structure:</strong> controller → service → repository → entity/dto</li>
+        <li><strong>DTO riêng:</strong> không expose entity ra ngoài (tránh lazy loading fail, security leak)</li>
+        <li><strong>Exception handling:</strong> Global exception handler, không try-catch trong controller</li>
+        <li><strong>Logging:</strong> SLF4J + MDC (traceId, userId), JSON format cho ELK</li>
+        <li><strong>Transaction:</strong> @Transactional trên service layer. ReadOnly = true cho GET</li>
+        <li><strong>Validation:</strong> @Valid ở controller + Bean Validation</li>
+        <li><strong>API versioning:</strong> /api/v1/users, Accept header hoặc URL prefix</li>
+        <li><strong>Security:</strong> JWT + HTTPS, không hardcode secret, CORS restrict</li>
+        <li><strong>Database:</strong> Flyway/Flyway cho migration, connection pool sizing</li>
+        <li><strong>Monitoring:</strong> Actuator + Micrometer + Prometheus + Grafana</li>
+        <li><strong>CI/CD:</strong> Docker multi-stage build + GitHub Actions + K8s</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

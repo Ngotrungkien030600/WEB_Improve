@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backend — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#f59e0b; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .links { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .topbar .links a { color:var(--accent); text-decoration:none; font-size:0.85rem; }
+    .topbar .links a:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2.5rem; font-size:0.95rem; }
+
+    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:0.5rem; margin-bottom:2.5rem; }
+    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.65rem 1rem; text-decoration:none; color:var(--text); font-size:0.85rem; font-weight:500; transition:border-color 0.2s,color 0.2s; }
+    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+
+    .section { margin-bottom:3rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .section-title { background:var(--surface2); padding:0.9rem 1.25rem; font-size:1.1rem; font-weight:700; border-bottom:1px solid var(--border); }
+    .section-body { padding:1.25rem; }
+    .section-body h3 { font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; color:var(--accent); }
+    .section-body h3:first-child { margin-top:0; }
+    .section-body p { font-size:0.9rem; color:var(--text2); margin-bottom:0.75rem; }
+    .section-body ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .section-body li { font-size:0.85rem; color:var(--text2); margin-bottom:0.3rem; }
+    .section-body strong { color:var(--text); }
+
+    pre { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; font-size:0.82rem; overflow-x:auto; margin:0.75rem 0; line-height:1.6; }
+    code { background:var(--surface2); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    pre code { background:transparent; padding:0; }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .card h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.25rem; }
+    .card p, .card li { font-size:0.8rem; color:var(--text2); }
+    .card ul { padding-left:1rem; } .card li { margin-bottom:0.2rem; }
+
+    .diagram { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--accent); font-weight:600; line-height:2; font-family:monospace; }
+
+    @media (max-width:600px) { .grid-2 { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>⚙️ Backend Engineering</h1>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">Database, Message Queue, Docker, K8s, CI/CD, System Design, Performance</p>
+    </div>
+    <div class="links">
+      <a href="hub.html">← Java</a>
+      <a href="../../index.html">Trang chủ</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <a href="#sql">1. SQL &amp; Database</a>
+    <a href="#nosql">2. NoSQL</a>
+    <a href="#mq">3. Message Queue</a>
+    <a href="#docker">4. Docker</a>
+    <a href="#k8s">5. Kubernetes</a>
+    <a href="#cicd">6. CI/CD</a>
+    <a href="#design">7. System Design</a>
+    <a href="#perf">8. Performance</a>
+    <a href="#arch">9. Architecture Patterns</a>
+    <a href="#interview">10. Câu hỏi phỏng vấn</a>
+  </div>
+
+  <!-- 1. SQL & Database -->
+  <div class="section" id="sql">
+    <div class="section-title">1. SQL &amp; Database</div>
+    <div class="section-body">
+      <h3>ACID Properties</h3>
+      <div class="grid-2">
+        <div class="card"><h4>Atomicity</h4><p>Toàn bộ hoặc không gì cả. Transaction commit → all changes. Rollback → không thay đổi nào.</p></div>
+        <div class="card"><h4>Consistency</h4><p>Dữ liệu từ trạng thái hợp lệ này sang hợp lệ khác. Ràng buộc (FK, unique, check) luôn được đảm bảo.</p></div>
+        <div class="card"><h4>Isolation</h4><p>Transaction không ảnh hưởng lẫn nhau. Các mức: READ_UNCOMMITTED, READ_COMMITTED, REPEATABLE_READ, SERIALIZABLE.</p></div>
+        <div class="card"><h4>Durability</h4><p>Dữ liệu đã commit được lưu vĩnh viễn. Dùng WAL (Write-Ahead Log) để phục hồi khi crash.</p></div>
+      </div>
+
+      <h3>Index chi tiết</h3>
+      <pre><code>-- B-Tree index (mặc định) — tốt cho =, >, &lt;, BETWEEN, LIKE 'abc%'
+CREATE INDEX idx_email ON users(email);
+
+-- Composite index — áp dụng left-most prefix
+CREATE INDEX idx_name_age ON users(last_name, first_name, age);
+-- Dùng được: WHERE last_name='Nguyen'
+-- Dùng được: WHERE last_name='Nguyen' AND first_name='An'
+-- KHÔNG dùng được: WHERE first_name='An'  (thiếu last_name)
+-- Dùng được 1 phần: WHERE last_name='Nguyen' AND age=25  (chỉ index last_name)
+
+-- Unique index
+CREATE UNIQUE INDEX idx_email_unique ON users(email);
+
+-- Partial index (PostgreSQL) — chỉ index dòng thỏa điều kiện
+CREATE INDEX idx_active_users ON users(email) WHERE status = 'ACTIVE';
+
+-- Covering index — index chứa sẵn data, không cần truy cập table
+CREATE INDEX idx_covering ON users(email) INCLUDE (name, avatar_url);
+
+-- Giải thích query plan
+EXPLAIN ANALYZE SELECT * FROM users WHERE email = 'test@email.com';</code></pre>
+
+      <h3>Transaction &amp; Locking</h3>
+      <pre><code>-- Pessimistic Lock — khóa dòng khi đọc, tránh concurrent update
+@Lock(LockModeType.PESSIMISTIC_WRITE)
+@Query("SELECT o FROM Order o WHERE o.id = :id")
+Optional&lt;Order&gt; findByIdForUpdate(@Param("id") Long id);
+
+-- Optimistic Lock — dùng version column, throw exception khi conflict
+@Entity
+public class Product {
+    @Version
+    private Long version;
+}
+// Khi update, Hibernate: UPDATE product SET ... WHERE id=? AND version=oldVersion
+// Nếu version thay đổi → OptimisticLockException → retry
+
+-- Deadlock — 2 transaction lock nhau
+-- Transaction 1: UPDATE accounts SET balance=balance-100 WHERE id=1;
+--               UPDATE accounts SET balance=balance+100 WHERE id=2;
+-- Transaction 2: UPDATE accounts SET balance=balance-200 WHERE id=2;
+--               UPDATE accounts SET balance=balance+200 WHERE id=1;
+-- Fix: luôn lock theo cùng thứ tự (id 1 → 2)</code></pre>
+
+      <h3>Query Optimization</h3>
+      <ul>
+        <li><strong>EXPLAIN ANALYZE:</strong> xem seq scan vs index scan, các bước, thời gian</li>
+        <li><strong>N+1:</strong> dùng JOIN FETCH, @EntityGraph, batch fetching</li>
+        <li><strong>Chỉ SELECT cần thiết:</strong> không SELECT * — chỉ lấy cột cần</li>
+        <li><strong>Pagination:</strong> keyset pagination (WHERE id &gt; lastId) thay vì OFFSET</li>
+        <li><strong>Connection pool:</strong> HikariCP size ~ 2*CPU + 1, không lớn quá</li>
+        <li><strong>Avoid lock trong transaction:</strong> transaction càng ngắn càng tốt</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2. NoSQL -->
+  <div class="section" id="nosql">
+    <div class="section-title">2. NoSQL Databases</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>Redis</h4><p>In-memory key-value. Dùng: cache, session, rate limiter, distributed lock, pub/sub. Data structures: String, List, Set, Sorted Set, Hash, Bitmap, HyperLogLog.</p></div>
+        <div class="card"><h4>MongoDB</h4><p>Document DB (JSON-like). Dùng: flexible schema, nested data, fast prototyping. Query: find, aggregate pipeline. Index: single, compound, text, geospatial.</p></div>
+        <div class="card"><h4>Cassandra</h4><p>Wide-column, write-optimized. Dùng: time-series, IoT, event logging. Partition key + clustering key. CQL (Cassandra Query Language).</p></div>
+        <div class="card"><h4>Elasticsearch</h4><p>Full-text search + analytics. Dùng: logging (ELK), search engine, product search. Inverted index, aggregation, scoring.</p></div>
+      </div>
+
+      <h3>Redis Patterns</h3>
+      <pre><code>// Cache Aside
+public User getUser(Long id) {
+    String key = "user:" + id;
+    String cached = redis.opsForValue().get(key);
+    if (cached != null) return deserialize(cached);     // cache hit
+    User user = userRepo.findById(id).orElse(null);     // miss → get from DB
+    if (user != null) redis.opsForValue().set(key, serialize(user), 1, TimeUnit.HOURS);
+    return user;
+}
+
+// Distributed Lock (Redis + Lua script)
+// SET lock:order:123 uuid NX PX 30000
+// NX: only set if not exists, PX: expire 30s
+// Lua script release: if redis.call("get",KEYS[1]) == ARGV[1] then return redis.call("del",KEYS[1]) end
+
+// Rate Limiter (Token Bucket)
+// Lưu tokens + last_refill_time trong Redis Hash
+// Lua script: lấy tokens, nếu &lt; 0 reject, nếu &ge; 0 trừ đi và cho qua
+
+// Session Storage
+// spring.session.store-type=redis
+// Tự động serialize HttpSession vào Redis</code></pre>
+    </div>
+  </div>
+
+  <!-- 3. Message Queue -->
+  <div class="section" id="mq">
+    <div class="section-title">3. Message Queue (Kafka &amp; RabbitMQ)</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>🐇 RabbitMQ</h4><p>Message broker cổ điển. Exchange types: Direct, Topic, Fanout, Headers. Dùng cho: task queue, RPC, pub/sub. Guarantee delivery (consumer ack).</p></div>
+        <div class="card"><h4>📊 Kafka</h4><p>Distributed event streaming. Topic, Partition, Consumer Group, Offset. Dùng cho: event sourcing, stream processing, CDC, log aggregation. Lưu message trên disk.</p></div>
+      </div>
+
+      <h3>Spring Kafka</h3>
+      <pre><code>// Producer
+@RestController
+public class OrderController {
+    @Autowired private KafkaTemplate&lt;String, OrderEvent&gt; kafka;
+
+    @PostMapping("/orders")
+    public Order create(@RequestBody @Valid CreateOrderRequest req) {
+        Order order = orderService.create(req);
+        kafka.send("order-events", new OrderEvent(order.getId(), "CREATED"));
+        return order;
+    }
+}
+
+// Consumer
+@Component
+public class OrderEventHandler {
+
+    @KafkaListener(topics = "order-events", groupId = "notification-service")
+    public void handleOrderCreated(OrderEvent event) {
+        // Xử lý: gửi email, push notification, cập nhật inventory
+        if (event.getType().equals("CREATED")) {
+            emailService.sendOrderConfirmation(event.getOrderId());
+        }
+    }
+
+    @KafkaListener(topics = "order-events", groupId = "analytics-service")
+    public void handleForAnalytics(OrderEvent event) {
+        analyticsService.recordEvent(event);
+    }
+}
+
+// Kafka Configuration
+@Configuration
+public class KafkaConfig {
+    @Bean
+    public ConsumerFactory&lt;String, OrderEvent&gt; consumerFactory() {
+        Map&lt;String, Object&gt; props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "order-group");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "com.example.event");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);  // manual commit
+        return new DefaultKafkaConsumerFactory<>(props);
+    }
+}</code></pre>
+
+      <h3>Kafka Streams (xử lý real-time)</h3>
+      <pre><code>// Đếm số đơn hàng mỗi phút
+StreamsBuilder builder = new StreamsBuilder();
+KStream&lt;String, OrderEvent&gt; stream = builder.stream("order-events");
+
+KTable&lt;Long, Long&gt; countPerMinute = stream
+    .filter((k, v) -> "CREATED".equals(v.getType()))
+    .groupBy((k, v) -> v.getProductId())
+    .windowedBy(TimeWindows.ofSizeWithNoGrace(Duration.ofMinutes(1)))
+    .count();
+
+countPerMinute.toStream().foreach((key, count) ->
+    System.out.println("Product " + key.key() + ": " + count + " orders in last minute")
+);</code></pre>
+
+      <h3>RabbitMQ với Spring</h3>
+      <pre><code>@Configuration
+public class RabbitConfig {
+    @Bean public Queue orderQueue() { return new Queue("order.queue", true); }
+    @Bean public DirectExchange exchange() { return new DirectExchange("order.exchange"); }
+    @Bean public Binding binding() { return BindingBuilder.bind(orderQueue()).to(exchange()).with("order.created"); }
+}
+
+// Producer
+rabbitTemplate.convertAndSend("order.exchange", "order.created", new OrderEvent(orderId, "CREATED"));
+
+// Consumer
+@RabbitListener(queues = "order.queue")
+public void handle(OrderEvent event) { ... }</code></pre>
+    </div>
+  </div>
+
+  <!-- 4. Docker -->
+  <div class="section" id="docker">
+    <div class="section-title">4. Docker</div>
+    <div class="section-body">
+      <h3>Dockerfile cho Spring Boot</h3>
+      <pre><code># Multi-stage build
+# Stage 1: Build
+FROM eclipse-tomcat:17-jdk-alpine AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline       # Download dependencies
+COPY src/ src/
+RUN mvn package -DskipTests          # Build jar
+
+# Stage 2: Runtime
+FROM eclipse-tomcat:17-jre-alpine
+RUN addgroup -S app && adduser -S app -G app
+USER app
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
+ENTRYPOINT ["java", "-jar", "app.jar"]</code></pre>
+
+      <h3>docker-compose cho full-stack</h3>
+      <pre><code>version: '3.8'
+services:
+  app:
+    build: .
+    ports: ["8080:8080"]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/skillforge
+      SPRING_PROFILES_ACTIVE: prod
+    depends_on:
+      db: { condition: service_healthy }
+      redis: { condition: service_started }
+      kafka: { condition: service_started }
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: skillforge
+      POSTGRES_PASSWORD: secret
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+    depends_on: [zookeeper]
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5
+
+volumes: { pgdata: }</code></pre>
+    </div>
+  </div>
+
+  <!-- 5. Kubernetes -->
+  <div class="section" id="k8s">
+    <div class="section-title">5. Kubernetes</div>
+    <div class="section-body">
+      <h3>Deployment &amp; Service</h3>
+      <pre><code># deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: app
+          image: registry.example.com/user-service:1.2.3
+          ports:
+            - containerPort: 8080
+          livenessProbe:        # restart nếu chết
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:       # không gửi traffic nếu chưa sẵn sàng
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 5
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+---
+# service.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP</code></pre>
+
+      <h3>ConfigMap &amp; Secret</h3>
+      <pre><code># configmap.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  application.yml: |
+    app:
+      name: user-service
+    spring:
+      datasource:
+        url: jdbc:postgresql://postgres:5432/users
+
+# secret.yml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+type: Opaque
+data:
+  db-password: c2VjcmV0    # base64 của "secret"</code></pre>
+
+      <h3>Horizontal Pod Autoscaler</h3>
+      <pre><code>apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: user-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: user-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80</code></pre>
+    </div>
+  </div>
+
+  <!-- 6. CI/CD -->
+  <div class="section" id="cicd">
+    <div class="section-title">6. CI/CD</div>
+    <div class="section-body">
+      <h3>GitHub Actions</h3>
+      <pre><code># .github/workflows/deploy.yml
+name: Build and Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: test
+        options: --health-cmd pg_isready --health-interval 10s
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { java-version: '17', distribution: 'temurin' }
+      - run: ./mvnw verify   # Chạy test với PostgreSQL thật
+
+  build-and-deploy:
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          docker build -t registry.example.com/app:${{ github.sha }} .
+          docker push registry.example.com/app:${{ github.sha }}
+      - run: |
+          kubectl set image deployment/app app=registry.example.com/app:${{ github.sha }}
+          kubectl rollout status deployment/app</code></pre>
+
+      <h3>Git Flow &amp; Branch Strategy</h3>
+      <div class="grid-2">
+        <div class="card"><h4>main</h4><p>Production-ready. Chỉ merge từ release/hotfix.</p></div>
+        <div class="card"><h4>develop</h4><p>Tích hợp feature branches. Auto deploy lên staging.</p></div>
+        <div class="card"><h4>feature/xxx</h4><p>Nhánh từ develop. Tên theo ticket: feature/SF-123-login</p></div>
+        <div class="card"><h4>release/v1.2</h4><p>Chuẩn bị release. Chỉ fix bug, không thêm feature.</p></div>
+        <div class="card"><h4>hotfix/1.2.1</h4><p>Fix production bug gấp. Từ main, merge vào cả main và develop.</p></div>
+      </div>
+
+      <h3>Code Quality Gates</h3>
+      <ul>
+        <li><strong>SonarQube:</strong> code smell, bug, security hotspot, coverage gate (&gt;80%)</li>
+        <li><strong>Checkstyle/PMD:</strong> coding convention, unused code, complexity</li>
+        <li><strong>OWASP Dependency Check:</strong> scan CVE trong dependencies</li>
+        <li><strong>Trivy:</strong> scan Docker image vulnerabilities</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 7. System Design -->
+  <div class="section" id="design">
+    <div class="section-title">7. System Design</div>
+    <div class="section-body">
+      <h3>CAP Theorem</h3>
+      <div class="diagram">
+               Consistency<br>
+             /           \<br>
+            /             \<br>
+           CP              CA<br>
+           (Banking)       (Single-node)<br>
+            \             /<br>
+             \           /<br>
+          Partition --- Availability<br>
+                     AP (Social media, CDN)
+      </div>
+      <p>Trong distributed system, khi có network partition (P), bạn chỉ chọn được C (consistency) hoặc A (availability). Không có hệ thống nào có cả 3 cùng lúc.</p>
+
+      <h3>Common Design Questions</h3>
+      <div class="grid-2">
+        <div class="card"><h4>URL Shortener</h4><p>Base62 encoding (7 ký tự = 3.5T URLs). Redis cache hot URLs. DB sharding. 301 redirect.</p></div>
+        <div class="card"><h4>Rate Limiter</h4><p>Token Bucket + Redis Lua script. Per user/IP/API. Headers: X-RateLimit-Remaining, Retry-After.</p></div>
+        <div class="card"><h4>Chat System</h4><p>WebSocket Gateway cluster. Kafka cho message queue. Cassandra cho message storage. Redis pub/sub cho presence.</p></div>
+        <div class="card"><h4>Notification System</h4><p>Kafka topic → Push Worker (FCM/APNs), Email Worker (SES), SMS Worker (Twilio). Rate limiting + DLQ.</p></div>
+      </div>
+
+      <h3>Estimation Cheat Sheet</h3>
+      <pre><code>1 request/second = 86,400 requests/day ≈ 2.5M/month
+1M requests/day ≈ 12 requests/second
+1GB/s = ~8Gbps bandwidth
+PostgreSQL: ~5k writes/s, ~50k reads/s (single node)
+Redis: ~100k ops/s (single node)
+Kafka: ~1M messages/s (cluster)
+Network latency: data center 0.5ms, same region 5ms, cross-continent 100-200ms
+avg DB query: 5-50ms (with index), 100-500ms (full scan)</code></pre>
+    </div>
+  </div>
+
+  <!-- 8. Performance -->
+  <div class="section" id="perf">
+    <div class="section-title">8. Performance Optimization</div>
+    <div class="section-body">
+      <h3>Caching Layers</h3>
+      <div class="diagram">
+Client → CDN (CloudFront) → Reverse Proxy (Nginx) → App Cache (Caffeine) → Distributed Cache (Redis) → Database
+      </div>
+
+      <h3>Database Optimization</h3>
+      <ul>
+        <li><strong>Index tối ưu:</strong> composite index cho query thường xuyên, partial index cho filtered query</li>
+        <li><strong>Connection pool:</strong> HikariCP size = 2*CPU+1, monitor active/pending connections</li>
+        <li><strong>Read replicas:</strong> PostgreSQL primary for write, replicas for read. Spring @Transactional(readOnly=true) → replica</li>
+        <li><strong>Query optimization:</strong> EXPLAIN ANALYZE, tránh full scan, LIMIT + OFFSET → keyset pagination</li>
+      </ul>
+
+      <h3>Application Optimization</h3>
+      <pre><code>// 1. Async xử lý non-critical tasks
+@Async
+public CompletableFuture&lt;Void&gt; sendEmail(User user) { ... }
+
+// 2. Cache expensive operations
+@Cacheable(value = "products", unless = "#result == null")
+public Product getProduct(Long id) { ... }
+
+// 3. Batch processing thay vì từng cái
+public void importUsers(List&lt;User&gt; users) {
+    userRepo.saveAll(users);    // 1 batch insert
+    // Thay vì: users.forEach(u -> userRepo.save(u));  // N queries
+}
+
+// 4. Compress response
+server.compression.enabled=true
+server.compression.mime-types=application/json,text/html
+
+// 5. Pagination — không load tất cả
+Page&lt;User&gt; page = userRepo.findAll(PageRequest.of(0, 20));</code></pre>
+
+      <h3>JVM Tuning</h3>
+      <pre><code># Docker memory limits
+-XX:+UseContainerSupport             # Tự động detect container memory
+-XX:MaxRAMPercentage=75.0            # Dùng 75% container memory cho heap
+-Xss512k                             # Stack size per thread (giảm nếu nhiều thread)
+-XX:+UseG1GC                         # G1GC — default, tốt cho heap &gt; 4GB
+-XX:MaxGCPauseMillis=100             # Target pause time
+-XX:+PrintGCDetails                  # GC logging
+-XX:+HeapDumpOnOutOfMemoryError      # Tự động dump heap khi OOM
+
+# Monitoring
+# - Actuator + Micrometer + Prometheus + Grafana
+# - JVM metrics: heap, GC, thread, class loading</code></pre>
+    </div>
+  </div>
+
+  <!-- 9. Architecture Patterns -->
+  <div class="section" id="arch">
+    <div class="section-title">9. Architecture Patterns</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>Monolithic</h4><p>1 ứng dụng, 1 DB. Đơn giản, dễ develop. Giới hạn: scaling, team size. Phù hợp: startup, MVP.</p></div>
+        <div class="card"><h4>Microservices</h4><p>Nhiều service nhỏ, độc lập. Deploy riêng, team riêng. Cần: API Gateway, service discovery, distributed tracing, orchestrator.</p></div>
+        <div class="card"><h4>CQRS + Event Sourcing</h4><p>Tách read/write model. Lưu events thay vì state. Dùng cho: audit, complex business rules, temporal queries.</p></div>
+        <div class="card"><h4>Event-Driven</h4><p>Service giao tiếp qua events (Kafka). Decouple, scalable. Saga pattern cho distributed transaction. Outbox pattern cho reliable publishing.</p></div>
+      </div>
+
+      <h3>Outbox Pattern</h3>
+      <pre><code>// Vấn đề: ghi DB + publish Kafka — 2 hành động không atomic
+// Outbox: ghi event vào DB cùng transaction, CDC capture và publish
+
+@Entity
+@Table(name = "outbox")
+public class OutboxEvent {
+    @Id @GeneratedValue
+    private Long id;
+    private String aggregateType;   // "order"
+    private String aggregateId;     // "123"
+    private String eventType;       // "OrderCreated"
+    private String payload;         // JSON
+    private LocalDateTime createdAt;
+}
+
+// Service — atomic với DB transaction
+@Transactional
+public Order createOrder(CreateOrderRequest req) {
+    Order order = orderRepo.save(toEntity(req));
+    outboxRepo.save(new OutboxEvent("order", order.getId(), "OrderCreated", serialize(req)));
+    return order;
+}
+
+// CDC Worker — Debezium (Kafka Connect) capture changes từ outbox → publish lên Kafka</code></pre>
+    </div>
+  </div>
+
+  <!-- 10. Interview Questions -->
+  <div class="section" id="interview">
+    <div class="section-title">10. Câu hỏi phỏng vấn Backend</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>🌱 Junior</h4><ul><li>ACID là gì?</li><li>INNER JOIN vs LEFT JOIN?</li><li>INDEX hoạt động thế nào?</li><li>Transaction isolation levels?</li><li>GET vs POST?</li></ul></div>
+        <div class="card"><h4>📈 Middle</h4><ul><li>N+1 problem + fix?</li><li>Optimistic vs Pessimistic lock?</li><li>Redis dùng để làm gì?</li><li>Kafka partition + consumer group?</li><li>Docker multi-stage build?</li></ul></div>
+        <div class="card"><h4>🎯 Senior</h4><ul><li>CAP theorem + PACELC?</li><li>Saga pattern: choreography vs orchestration?</li><li>Distributed caching strategy?</li><li>K8s HPA + Cluster Autoscaler?</li><li>Circuit Breaker + Bulkhead?</li></ul></div>
+        <div class="card"><h4>🏗️ Architect</h4><ul><li>Design URL shortener?</li><li>Design real-time chat 10M users?</li><li>CQRS + Event Sourcing?</li><li>Raft consensus algorithm?</li><li>CRDT vs OT?</li></ul></div>
+      </div>
+      <div style="margin-top:1rem;padding:1rem;background:var(--surface2);border-radius:var(--radius);text-align:center;">
+        <a href="../salary-interview.html" style="color:var(--accent);font-weight:600;text-decoration:none;">💰 Luyện phỏng vấn theo mức lương →</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
