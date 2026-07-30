@@ -7,12 +7,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/variables.css" />
-  <link rel="stylesheet" href="../css/base.css" />
   <link rel="stylesheet" href="../css/forge-tokens.css" />
   <link rel="stylesheet" href="../css/subpage.css" />
   <link rel="stylesheet" href="../css/timer.css" />
   <link rel="stylesheet" href="../css/agents/bmad-chat.css" />
+  <style>
+    .page { max-width:var(--forge-max-width,960px); margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:var(--forge-text-2xl,1.5rem); font-weight:800; color:var(--forge-text,#f1f5f9); letter-spacing:-0.02em; }
+    .topbar a.back { color:var(--forge-text-link,#fbbf24); text-decoration:none; font-size:var(--forge-text-sm); font-weight:600; transition:color 0.2s; }
+    .topbar a.back:hover { text-decoration:underline; }
+    .desc { color:var(--forge-text-secondary,#94a3b8); margin-bottom:2rem; font-size:var(--forge-text-base); line-height:1.6; }
+  </style>
 </head>
 <body class="subpage">
 <div class="page">
@@ -21,24 +27,24 @@
     <a class="back" href="../index.html">← Trang chủ</a>
   </div>
   <p class="desc">7 trợ lý AI — chọn 1 để trò chuyện, hoặc Party Mode thảo luận đa chiều.</p>
-  <div class="mode-bar" id="bmad-mode-bar">
+  <div class="mode-bar bmad-mode-bar" id="bmad-mode-bar">
     <button class="bmad-mode-btn active" data-mode="solo">🧑‍💻 Trò chuyện 1-1</button>
     <button class="bmad-mode-btn" data-mode="party">🎉 Party Mode</button>
   </div>
-  <div class="agent-grid" id="bmad-agent-grid"></div>
-  <div class="party-start" id="bmad-party-start" style="display:none;">
+  <div class="agent-grid bmad-agent-grid" id="bmad-agent-grid"></div>
+  <div class="party-start bmad-party-start" id="bmad-party-start" style="display:none;">
     <button id="bmad-party-select-all-btn">✅ Chọn tất cả</button>
     <button id="bmad-party-start-btn">🎉 Bắt đầu Party</button>
   </div>
-  <div class="session-info" id="bmad-session-info" style="display:none;">
+  <div class="session-info bmad-session-info" id="bmad-session-info" style="display:none;">
     <span class="session-label" id="bmad-session-label">Đang trò chuyện</span>
-    <button class="back-btn" id="bmad-back-btn">← Danh sách</button>
-    <button class="clear-btn" id="bmad-clear-btn">🗑️</button>
+    <button class="back-btn bmad-back-btn" id="bmad-back-btn">← Danh sách</button>
+    <button class="clear-btn ai-clear-btn" id="bmad-clear-btn">🗑️</button>
   </div>
   <div class="chat-box" id="bmad-chat-messages" style="display:none;"></div>
   <div class="input-row">
     <textarea id="bmad-chat-input" rows="2" placeholder="Nhập câu hỏi..." maxlength="2000" style="display:none;"></textarea>
-    <button id="bmad-send-btn" style="display:none;">➤</button>
+    <button class="send-btn" id="bmad-send-btn" style="display:none;">➤</button>
   </div>
 </div>
 <script src="../js/agents/agent-constants.js"></script>

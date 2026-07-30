@@ -1,19 +1,6 @@
-/* ===== Interview Page ===== */
-.interview-header {
-  color: white;
-  margin-bottom: 1rem;
-}
+/* ===== Interview Page — Forge Dark Theme ===== */
 
-.interview-header h2 {
-  font-size: 1.85rem;
-  margin-bottom: 0.3rem;
-}
-
-.interview-subtitle {
-  opacity: 0.9;
-  font-size: 1.15rem;
-}
-
+/* ───── Layout ───── */
 .interview-layout {
   display: flex;
   gap: 1rem;
@@ -24,207 +11,207 @@
 .interview-sidebar {
   width: 280px;
   flex-shrink: 0;
-  background: white;
-  border-radius: 20px;
-  padding: 1.2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: var(--forge-bg-card);
+  border: 1px solid var(--forge-border);
+  border-radius: var(--forge-radius-lg);
+  padding: var(--forge-space-xl);
   max-height: calc(100vh - 8rem);
   overflow-y: auto;
   position: sticky;
   top: 1rem;
 }
 
+.interview-sidebar::-webkit-scrollbar { width: 4px; }
+.interview-sidebar::-webkit-scrollbar-track { background: transparent; }
+.interview-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
 .interview-sidebar h3 {
-  color: var(--color-secondary);
-  font-size: 1.35rem;
-  margin-bottom: 1rem;
+  color: var(--forge-ember);
+  font-size: var(--forge-text-lg);
+  font-weight: 700;
+  margin-bottom: var(--forge-space-lg);
 }
 
+/* ───── Topic List ───── */
 .interview-topic-list {
   list-style: none;
 }
 
-.interview-topic-list .intro-item {
-  padding: 0.7rem 0.8rem;
-  border-radius: var(--radius-sm);
+.interview-topic-list .intro-item,
+.interview-topic-list .group-items li {
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--forge-radius-sm);
   cursor: pointer;
-  font-size: 1.25rem;
-  color: var(--text-primary);
-  font-weight: 600;
-  transition: background 0.2s;
-  margin-bottom: 0.4rem;
+  font-size: var(--forge-text-sm);
+  color: var(--forge-text-secondary);
+  font-weight: 500;
+  transition: all var(--forge-transition-fast);
+  margin-bottom: 0.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.interview-topic-list .intro-item:hover {
-  background: #f3e5f5;
+
+.interview-topic-list .intro-item:hover,
+.interview-topic-list .group-items li:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--forge-text);
 }
-.interview-topic-list .intro-item.active {
-  background: var(--color-secondary);
-  color: white;
+
+.interview-topic-list .intro-item.active,
+.interview-topic-list .group-items li.active {
+  background: rgba(249, 115, 22, 0.15);
+  color: var(--forge-accent);
+  font-weight: 600;
 }
 
 .interview-topic-list .group-header {
-  padding: 0.7rem 0.8rem;
-  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--forge-radius-sm);
   cursor: pointer;
-  font-size: 1.3rem;
-  color: var(--color-secondary);
+  font-size: var(--forge-text-sm);
+  color: var(--forge-ember);
   font-weight: 700;
-  transition: background 0.2s;
-  margin-bottom: 0.4rem;
+  transition: background var(--forge-transition-fast);
+  margin-bottom: 0.25rem;
 }
+
 .interview-topic-list .group-header:hover {
-  background: #f3e5f5;
+  background: rgba(255, 255, 255, 0.04);
 }
+
 .interview-topic-list .group-toggle {
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   margin-right: 0.3rem;
   display: inline-block;
-  width: 1rem;
+  width: 0.8rem;
+  color: var(--forge-text-muted);
 }
 
 .interview-topic-list .group-items {
   list-style: none;
-  padding-left: 0;
-  margin-bottom: 0.6rem;
+  padding-left: 0.5rem;
+  margin-bottom: 0.4rem;
 }
+
 .interview-topic-list .group-items.hidden {
   display: none;
 }
 
-.interview-topic-list .group-items li {
-  padding: 0.7rem 0.8rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 1.25rem;
-  color: var(--text-primary);
-  transition: background 0.2s;
-  margin-bottom: 0.4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.interview-topic-list .group-items li:hover {
-  background: #f3e5f5;
-}
-
-.interview-topic-list .group-items li.active {
-  background: var(--color-secondary);
-  color: white;
-}
-
 .interview-topic-list .group-items li .topic-status {
-  font-size: 1.1rem;
+  font-size: var(--forge-text-xs);
 }
 
+/* ───── Progress ───── */
 .interview-progress {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #eee;
+  margin-top: var(--forge-space-lg);
+  padding-top: var(--forge-space-md);
+  border-top: 1px solid var(--forge-border-light);
 }
 
 .interview-progress span {
   display: block;
-  font-size: 1.15rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.5rem;
+  font-size: var(--forge-text-xs);
+  color: var(--forge-text-muted);
+  margin-bottom: 0.4rem;
   font-weight: 600;
 }
 
 .interview-progress-bar {
   width: 100%;
-  height: 8px;
-  background: #e0e0e0;
-  border-radius: var(--radius-sm);
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--forge-radius-sm);
   overflow: hidden;
 }
 
 #interview-progress-fill {
   height: 100%;
   width: 0%;
-  background: var(--color-primary);
+  background: var(--forge-accent-gradient);
   transition: width 0.3s;
 }
 
+/* ───── Content Card ───── */
 .interview-content-wrapper {
   flex: 1;
   min-width: 0;
 }
 
 .interview-card {
-  background: white;
-  border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: var(--forge-bg-card);
+  border: 1px solid var(--forge-border);
+  border-radius: var(--forge-radius-lg);
+  padding: var(--forge-space-2xl);
   max-height: 70vh;
   overflow-y: auto;
 }
 
+.interview-card::-webkit-scrollbar { width: 4px; }
+.interview-card::-webkit-scrollbar-track { background: transparent; }
+.interview-card::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
 .interview-card h2 {
-  color: var(--color-secondary);
-  font-size: 2rem;
-  margin-bottom: 1.2rem;
-  padding-bottom: 0.7rem;
-  border-bottom: 2px solid #f3e5f5;
+  color: var(--forge-ember);
+  font-size: var(--forge-text-xl);
+  font-weight: 700;
+  margin-bottom: var(--forge-space-lg);
+  padding-bottom: var(--forge-space-md);
+  border-bottom: 1px solid var(--forge-border-light);
 }
 
 .interview-card h3 {
-  color: var(--color-secondary);
-  font-size: 1.6rem;
-  margin: 1.5rem 0 0.8rem;
+  color: var(--forge-text);
+  font-size: var(--forge-text-lg);
+  font-weight: 600;
+  margin: var(--forge-space-2xl) 0 var(--forge-space-md);
 }
 
 .interview-card h4 {
-  color: var(--text-secondary);
-  font-size: 1.35rem;
-  margin: 1.2rem 0 0.5rem;
+  color: var(--forge-text-secondary);
+  font-size: var(--forge-text-base);
+  font-weight: 600;
+  margin: var(--forge-space-xl) 0 var(--forge-space-sm);
 }
 
 .interview-card p,
 .interview-card li {
-  color: var(--text-primary);
-  line-height: 1.8;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
+  color: var(--forge-text-secondary);
+  line-height: 1.7;
+  margin-bottom: var(--forge-space-md);
+  font-size: var(--forge-text-base);
 }
 
 .interview-card ul {
-  margin-bottom: 1rem;
-  padding-left: 1.5rem;
+  margin-bottom: var(--forge-space-lg);
+  padding-left: 1.25rem;
+}
+
+.interview-card ol {
+  margin-bottom: var(--forge-space-lg);
+  padding-left: 1.25rem;
 }
 
 .interview-card pre {
-  background: var(--surface-code);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--forge-border-light);
   color: #d4d4d4;
-  padding: 1.2rem;
-  border-radius: 12px;
+  padding: var(--forge-space-lg);
+  border-radius: var(--forge-radius-sm);
   overflow-x: auto;
-  margin-bottom: 1rem;
-  font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 1.15rem;
+  margin-bottom: var(--forge-space-lg);
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: var(--forge-text-sm);
+  line-height: 1.6;
 }
 
 .interview-card code {
-  font-family: 'Consolas', 'Monaco', monospace;
-  background: #f3f4f6;
-  color: var(--color-secondary);
-  padding: 0.15rem 0.4rem;
-  border-radius: 5px;
-  font-size: 1.05em;
-}
-
-.interview-card a {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.2s;
-}
-.interview-card a:hover {
-  color: var(--color-secondary);
-  text-decoration: underline;
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  background: rgba(249, 115, 22, 0.1);
+  color: var(--forge-accent);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 
 .interview-card pre code {
@@ -233,81 +220,74 @@
   padding: 0;
 }
 
+.interview-card a {
+  color: var(--forge-text-link);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--forge-transition-fast);
+}
+
+.interview-card a:hover {
+  color: var(--forge-accent);
+  text-decoration: underline;
+}
+
+/* ───── Tables ───── */
 .interview-card table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  table-layout: fixed;
-  display: table;
+  margin-bottom: var(--forge-space-lg);
+  font-size: var(--forge-text-sm);
 }
 
 .interview-card th,
 .interview-card td {
-  border: 1px solid #e0e0e0;
-  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--forge-border);
+  padding: 0.5rem 0.75rem;
   text-align: left;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
   word-break: break-word;
   vertical-align: top;
-  box-sizing: border-box;
-}
-
-.interview-card th:first-child,
-.interview-card td:first-child {
-  width: 24%;
-  min-width: 120px;
-  font-weight: 700;
-}
-
-.interview-card tr {
-  display: table-row;
-}
-
-.interview-card td code {
-  word-break: break-word;
-  white-space: normal;
-}
-
-.interview-card thead,
-.interview-card tbody,
-.interview-card tr {
-  width: 100%;
 }
 
 .interview-card th {
-  background: #f3e5f5;
-  color: var(--color-secondary);
+  background: rgba(249, 115, 22, 0.08);
+  color: var(--forge-ember);
   font-weight: 700;
 }
 
-.interview-card tr:nth-child(even) {
-  background: #fafafa;
+.interview-card td {
+  color: var(--forge-text-secondary);
 }
 
+.interview-card tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ───── Horizontal Rule ───── */
 .interview-card hr {
   border: none;
-  border-top: 1px solid #eee;
-  margin: 1.2rem 0;
+  border-top: 1px solid var(--forge-border-light);
+  margin: var(--forge-space-xl) 0;
 }
 
+/* ───── Checklist ───── */
 .checklist-item {
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
-  padding: 0.65rem 0;
+  padding: 0.45rem 0;
   cursor: pointer;
-  color: #444;
-  font-size: 1.2rem;
+  color: var(--forge-text-secondary);
+  font-size: var(--forge-text-base);
 }
 
 .checklist-item input {
-  margin-top: 0.35rem;
-  width: 22px;
-  height: 22px;
-  accent-color: var(--color-secondary);
+  margin-top: 0.3rem;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--forge-accent);
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .checklist-item span {
@@ -317,9 +297,10 @@
 
 .checklist-item.checked span {
   text-decoration: line-through;
-  color: #999;
+  color: var(--forge-text-muted);
 }
 
+/* ───── Responsive ───── */
 @media (max-width: 800px) {
   .interview-layout {
     flex-direction: column;
@@ -327,27 +308,8 @@
   .interview-sidebar {
     width: 100%;
     max-height: 35vh;
-    padding: 1rem;
-  }
-  .interview-sidebar h3 {
-    font-size: 1.2rem;
-  }
-  .interview-topic-list li {
-    font-size: 1.1rem;
   }
   .interview-card {
-    padding: 1.2rem;
-  }
-  .interview-card h2 {
-    font-size: 1.6rem;
-  }
-  .interview-card h3 {
-    font-size: 1.35rem;
-  }
-  .interview-card p,
-  .interview-card li,
-  .checklist-item {
-    font-size: 1.1rem;
+    max-height: none;
   }
 }
-
