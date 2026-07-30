@@ -4,21 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SkillForge — Lò rèn kỹ năng</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/timer.css" />
   <link rel="stylesheet" href="css/home.css" />
 </head>
 <body class="home-page">
+  <!-- Ambient ember particles -->
+  <div class="ember-particles">
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+    <div class="ember"></div>
+  </div>
+
   <div class="container">
     <header class="home-header">
       <div class="home-header-row">
-        <div>
-          <h1 class="brand">⚡ SkillForge</h1>
-          <p class="tagline">Lò rèn kỹ năng — Tiếng Anh & Lập trình mỗi ngày</p>
+        <div class="brand-block">
+          <h1 class="brand">⚒️ SkillForge</h1>
+          <div class="brand-sub">Lò rèn kỹ năng — <span class="highlight">Tiếng Anh</span> &amp; <span class="highlight">Lập trình</span> mỗi ngày</div>
         </div>
         <div class="focus-timer" id="focus-timer">
           <div class="time-display" id="timer-display">30:00</div>
@@ -34,68 +48,88 @@
       </div>
     </header>
 
+    <section class="hero-section">
+      <h2 class="hero-title">Rèn kỹ năng,<br />tự tin chinh phục</h2>
+      <p class="hero-subtitle">Từ Java, AWS Cloud đến Frontend, AI — học có lộ trình, thực hành có bài bản, ôn luyện có hệ thống.</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">50+</div>
+          <div class="hero-stat-label">Chủ đề</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">300+</div>
+          <div class="hero-stat-label">Bài học</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">6</div>
+          <div class="hero-stat-label">AI Agents</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-label">Khám phá</div>
+
     <div class="home-cards">
       <a class="home-card" href="pages/java/hub.html">
-        <div class="icon">☕</div>
+        <span class="icon">☕</span>
         <h2>Java</h2>
-        <p>Học code Java &amp; ôn luyện phỏng vấn backend, cheat sheet có lộ trình.</p>
+        <p>Code Java &amp; ôn luyện phỏng vấn backend, cheat sheet có lộ trình.</p>
       </a>
 
       <a class="home-card" href="pages/english/hub.html">
-        <div class="icon">📖</div>
+        <span class="icon">📖</span>
         <h2>English</h2>
-        <p>Từ vựng, ngữ pháp, đọc truyện, luyện thi & game ghép cặp.</p>
+        <p>Từ vựng, ngữ pháp, đọc truyện, luyện thi &amp; game ghép cặp.</p>
       </a>
 
       <a class="home-card" href="pages/ai/hub.html">
-        <div class="icon">🧠</div>
+        <span class="icon">🧠</span>
         <h2>Học AI</h2>
         <p>AI/ML — kiến thức, thi trắc nghiệm, câu hỏi phỏng vấn.</p>
       </a>
 
       <a class="home-card" href="pages/bmad-agents.html">
-        <div class="icon">🗣️</div>
+        <span class="icon">🗣️</span>
         <h2>BMAD Agents</h2>
         <p>6 trợ lý AI chuyên gia — phân tích, thiết kế, code, Party Mode</p>
       </a>
 
       <a class="home-card" href="pages/skill-tracker.html">
-        <div class="icon">📊</div>
+        <span class="icon">📊</span>
         <h2>Skill Tracker</h2>
         <p>Theo dõi kỹ năng, XP, streak — biến việc học thành game.</p>
       </a>
 
-    <a class="home-card" href="pages/frontend/hub.html">
-      <div class="icon">🌐</div>
-      <h2>Frontend</h2>
-      <p>HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE</p>
-    </a>
+      <a class="home-card" href="pages/frontend/hub.html">
+        <span class="icon">🌐</span>
+        <h2>Frontend</h2>
+        <p>HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE</p>
+      </a>
 
-    <a class="home-card" href="pages/cloud/hub.html">
-      <div class="icon">☁️</div>
-      <h2>AWS Cloud</h2>
-      <p>IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices</p>
-    </a>
+      <a class="home-card" href="pages/cloud/hub.html">
+        <span class="icon">☁️</span>
+        <h2>AWS Cloud</h2>
+        <p>IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices</p>
+      </a>
 
-    <a class="home-card" href="pages/dashboard.html">
-        <div class="icon">📈</div>
+      <a class="home-card" href="pages/dashboard.html">
+        <span class="icon">📈</span>
         <h2>Dashboard</h2>
         <p>Thống kê học tập, lịch sử thi, tổng quan tiến độ.</p>
       </a>
 
       <a class="home-card" href="pages/learning-paths.html">
-        <div class="icon">🗺️</div>
+        <span class="icon">🗺️</span>
         <h2>Lộ trình</h2>
         <p>Lộ trình học có mục tiêu rõ ràng từ cơ bản đến nâng cao.</p>
       </a>
     </div>
 
     <footer class="app-footer">
-      <p>© 2026 SkillForge</p>
+      <p>© 2026 SkillForge — Lò rèn kỹ năng của bạn</p>
     </footer>
   </div>
 
   <script src="js/utils/timer.js"></script>
-  <script src="js/data/interview-data.js"></script>
 </body>
 </html>
