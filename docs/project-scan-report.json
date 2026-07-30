@@ -1,0 +1,82 @@
+{
+  "workflow_version": "1.2.0",
+  "timestamps": {
+    "started": "2026-07-30T05:10:00Z",
+    "last_updated": "2026-07-30T05:58:00Z",
+    "completed": "2026-07-30T05:58:00Z"
+  },
+  "mode": "initial_scan",
+  "scan_level": "exhaustive",
+  "project_root": "/home/giang/WEB_Improve",
+  "project_knowledge": "/home/giang/WEB_Improve/docs",
+  "current_step": "completed",
+  "project_types": [
+    { "part_id": "client", "project_type_id": "web", "display_name": "SkillForge Web Client" },
+    { "part_id": "server", "project_type_id": "backend", "display_name": "SkillForge Node Server" }
+  ],
+  "completed_steps": [
+    { "step": "step_0.5", "status": "completed", "timestamp": "2026-07-30T05:10:00Z", "summary": "Nạp documentation-requirements.csv, khớp project_type_id=web (requires_api_scan, data_models, state_management, ui_components, deployment_config đều true)" },
+    { "step": "step_1", "status": "completed", "timestamp": "2026-07-30T05:14:00Z", "summary": "Phân loại multi-part 2 phần: client (projects/web-en/) + server (projects/web-en/server/). Không có package.json ở bất kỳ đâu — xác nhận zero-dependency, không bundler" },
+    { "step": "step_2", "status": "completed", "timestamp": "2026-07-30T05:16:00Z", "summary": "Tài liệu sẵn có: 1 README.md ở root. 30 file .md trong interview_java/ là nội dung sản phẩm, không phải tài liệu kỹ thuật" },
+    { "step": "step_3", "status": "completed", "timestamp": "2026-07-30T05:20:00Z", "summary": "Tech stack: client=vanilla JS ES2020+/CSS thuần/IndexedDB; server=Node http+https+fs+path, 0 dependency. Kiến trúc: MPA tĩnh, page-scoped module với 2 chuẩn (ESM ở js/features/**, window.* ở phần còn lại)" },
+    { "step": "step_4", "status": "completed", "timestamp": "2026-07-30T05:40:00Z", "summary": "Quét có điều kiện: đọc toàn bộ server/ (3 file), js/utils, js/agents, js/app.js; map import/export 52 file JS; kiểm kê 285 CSS selector; map 28 trang HTML → asset. Ghi api-contracts-server.md, data-models-client.md, component-inventory-client.md" },
+    { "step": "step_5", "status": "completed", "timestamp": "2026-07-30T05:44:00Z", "summary": "Ghi source-tree-analysis.md với chú giải từng thư mục, bảng entry point 28 trang, đánh dấu vùng đã chuẩn vs vùng nợ" },
+    { "step": "step_6", "status": "completed", "timestamp": "2026-07-30T05:48:00Z", "summary": "Trích thông tin dev/vận hành: không package.json, không test, không CI, build step duy nhất là build-interview-data.js chạy tay, khởi chạy bằng start.bat" },
+    { "step": "step_7", "status": "completed", "timestamp": "2026-07-30T05:52:00Z", "summary": "Ghi integration-architecture.md: 11 điểm tích hợp, trong đó I3 (client→/api/bmad/chat) ĐỨT và I6 (static GET) có lỗ bảo mật" },
+    { "step": "step_8", "status": "completed", "timestamp": "2026-07-30T05:54:00Z", "summary": "Ghi architecture-client.md và architecture-server.md" },
+    { "step": "step_9", "status": "completed", "timestamp": "2026-07-30T05:56:00Z", "summary": "Ghi project-overview.md, development-guide.md, deployment-guide.md, project-parts.json" },
+    { "step": "step_10", "status": "completed", "timestamp": "2026-07-30T05:57:00Z", "summary": "Ghi index.md — không có mục (To be generated), toàn bộ 11 tài liệu đã tồn tại trên đĩa" },
+    { "step": "step_11", "status": "completed", "timestamp": "2026-07-30T05:58:00Z", "summary": "Kiểm tra: 0 marker chưa hoàn thành, mọi link trong index.md trỏ tới file có thật" }
+  ],
+  "findings": {
+    "project_classification": "multi-part, 2 parts, vanilla JS + Node built-in",
+    "technology_stack": {
+      "client": "Vanilla JS ES2020+, CSS thuần 58 token, IndexedDB x2, không framework/bundler/test",
+      "server": "Node.js http/https/fs/path, zero dependency, 4 endpoint AI proxy"
+    },
+    "metrics": {
+      "total_code_lines": 17700,
+      "total_code_files": 95,
+      "css_selectors": 285,
+      "card_class_occurrences_in_html": 121,
+      "card_selector_variants": 39,
+      "button_selector_variants": 18,
+      "pages_with_inline_style": 22,
+      "inline_style_lines_estimate": 730,
+      "orphan_css_files": 1,
+      "test_files": 0,
+      "ci_pipelines": 0
+    },
+    "confirmed_defects": 9,
+    "high_severity_defects": ["S1 path traversal + GET /.env", "C1 fetch(undefined) — BMAD chat hỏng"]
+  },
+  "outputs_generated": [
+    "project-scan-report.json",
+    "index.md",
+    "project-overview.md",
+    "source-tree-analysis.md",
+    "architecture-client.md",
+    "architecture-server.md",
+    "api-contracts-server.md",
+    "data-models-client.md",
+    "component-inventory-client.md",
+    "development-guide.md",
+    "deployment-guide.md",
+    "integration-architecture.md",
+    "project-parts.json"
+  ],
+  "verification": {
+    "executed": "Đo bằng shell: đếm dòng/file theo loại, map import/export 52 file JS, map 28 trang HTML → CSS/JS, đếm CSS selector theo tiền tố, dò CSS mồ côi, liệt kê khoá localStorage và object store IndexedDB. Đọc đầy đủ: server/*.js, js/app.js, js/utils/*.js, js/agents/*.js. CHẠY THẬT server và tái hiện 2 lỗi cao: S1 (GET /.env → 200, 192 byte, content-type application/octet-stream; GET /../README.md → 200, 8579 byte, thoát khỏi ROOT) và C1 (POST /undefined → 404 text/html, trong khi POST /api/bmad/chat → 400 application/json vẫn sống)",
+    "not_executed": "7 lỗi còn lại (S2-S5, C2-C4) xác nhận bằng đọc code, chưa tái hiện bằng chạy thử. Chưa mở app trong browser để kiểm tra giao diện",
+    "open_risks": [
+      "Không có test nào — mọi refactor là mù (R1)",
+      "Dependency ngầm qua thứ tự thẻ <script> — đổi sang ESM dễ vỡ im lặng (R2)",
+      "Secret cũ vẫn nằm trong git history (user xác nhận là khoá giả)",
+      "Commit dọn dẹp cfdf237 chưa push — tài khoản chưa có quyền write trên repo"
+    ],
+    "next_checks": [
+      "Chạy node server/index.js và tái hiện C1 (mở pages/bmad-agents.html, gửi tin nhắn) và S1 (curl http://localhost:8080/.env)",
+      "Chạy bmad-prd với docs/index.md làm input để chốt phạm vi refactor"
+    ]
+  }
+}

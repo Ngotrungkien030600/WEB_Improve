@@ -30,7 +30,7 @@
 ## 🏗️ Kiến trúc dự án
 
 ```
-web EN/
+projects/web-en/
 ├── index.html                    # Trang chủ
 ├── css/                          # Style system
 │   ├── variables.css             # Design tokens (colors, shadows, spacing)
@@ -103,7 +103,7 @@ Script tự động:
 ### Chạy thủ công
 
 ```bash
-cd "web EN"
+cd "projects/web-en"
 node server/index.js
 ```
 

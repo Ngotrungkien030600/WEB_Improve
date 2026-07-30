@@ -1,0 +1,86 @@
+{
+  "repository_type": "multi-part",
+  "project_root": "/home/giang/WEB_Improve",
+  "product_root": "projects/web-en",
+  "scanned_at": "2026-07-30",
+  "scan_level": "exhaustive",
+  "parts": [
+    {
+      "part_id": "client",
+      "display_name": "SkillForge Web Client",
+      "project_type_id": "web",
+      "root_path": "projects/web-en",
+      "entry_points": [
+        "index.html",
+        "js/app.js",
+        "js/ai-app.js",
+        "js/exam-app.js",
+        "js/interview-app.js",
+        "js/learn-app.js",
+        "js/skill-app.js",
+        "js/agents/bmad-chat.js"
+      ],
+      "tech": {
+        "language": "JavaScript ES2020+",
+        "framework": null,
+        "bundler": null,
+        "module_system": "hybrid (ESM + window globals)",
+        "css": "plain CSS + 58 custom properties",
+        "storage": ["IndexedDB SkillForgeProgress v2", "IndexedDB SkillForgeSRS v1", "localStorage (8 keys)"]
+      },
+      "metrics": {
+        "html_files": 28,
+        "html_lines": 5308,
+        "js_files": 52,
+        "js_lines": 7600,
+        "css_files": 12,
+        "css_lines": 4282,
+        "css_selectors": 285,
+        "pages_with_inline_style": 22,
+        "test_files": 0
+      }
+    },
+    {
+      "part_id": "server",
+      "display_name": "SkillForge Node Server",
+      "project_type_id": "backend",
+      "root_path": "projects/web-en/server",
+      "entry_points": ["server/index.js"],
+      "tech": {
+        "runtime": "Node.js (version undeclared)",
+        "framework": null,
+        "dependencies": [],
+        "modules_used": ["http", "https", "fs", "path"],
+        "ai_providers": ["gemini-2.0-flash", "gpt-4o-mini", "ollama qwen2.5"]
+      },
+      "metrics": {
+        "js_files": 3,
+        "js_lines": 500,
+        "endpoints": 4,
+        "test_files": 0
+      }
+    }
+  ],
+  "integration_points": [
+    { "from": "client", "to": "server", "type": "REST", "path": "/api/ai-feedback", "status": "ok" },
+    { "from": "client", "to": "server", "type": "REST", "path": "/api/ai-chat", "status": "ok" },
+    { "from": "client", "to": "server", "type": "REST", "path": "/api/bmad/chat", "status": "broken", "issue": "C1 — fetch(undefined)" },
+    { "from": "client", "to": "server", "type": "REST", "path": "/api/salary-interview", "status": "ok" },
+    { "from": "bmad-cli.js", "to": "server", "type": "REST", "path": "/api/bmad/chat", "status": "ok" },
+    { "from": "client", "to": "server", "type": "static", "path": "GET /*", "status": "vulnerable", "issue": "S1 — path traversal + dotfile served" },
+    { "from": "server", "to": "external", "type": "HTTPS", "target": "generativelanguage.googleapis.com" },
+    { "from": "server", "to": "external", "type": "HTTPS", "target": "api.openai.com" },
+    { "from": "server", "to": "local", "type": "HTTP", "target": "127.0.0.1:11434 (Ollama)" }
+  ],
+  "confirmed_defects": [
+    { "id": "C1", "part": "client", "severity": "high", "file": "js/agents/bmad-chat.js:7", "summary": "destructure BMAD_API_ENDPOINT nhưng constants khai BMAD_CHAT → fetch(undefined) → trang chat hỏng hoàn toàn" },
+    { "id": "C2", "part": "client", "severity": "medium", "file": "css/agents/bmad-chat.css", "summary": "342 dòng CSS không trang nào link" },
+    { "id": "C3", "part": "client", "severity": "low", "file": "js/home-ai.js", "summary": "code chết, không trang nào load" },
+    { "id": "C4", "part": "client", "severity": "low", "file": "js/utils/markdown.js", "summary": "hai bản parser markdown song song" },
+    { "id": "S1", "part": "server", "severity": "high", "file": "server/index.js", "summary": "path traversal + MIME fallback → GET /.env trả file secret" },
+    { "id": "S2", "part": "server", "severity": "medium", "file": "server/index.js", "summary": "4 endpoint AI không auth, không rate limit, CORS *" },
+    { "id": "S3", "part": "server", "severity": "low", "file": "server/index.js", "summary": "thân request không giới hạn kích thước" },
+    { "id": "S4", "part": "server", "severity": "low", "file": "server/index.js", "summary": "handleSalaryInterview: biến qMatch chết, fallback gán trùng id" },
+    { "id": "S5", "part": "both", "severity": "low", "file": "server/config.js + js/agents/agents-config.js", "summary": "6 system prompt tồn tại hai bản đã lệch nhau" }
+  ]
+}

@@ -1,6 +1,6 @@
 @echo off
 title SkillForge — Web + Ollama AI
-cd /d "%~dp0web EN"
+cd /d "%~dp0projects\web-en"
 
 echo === Khoi dong Ollama AI (qwen2.5:7b) ===
 start /b "" "%LOCALAPPDATA%\Programs\Ollama\ollama.exe" serve >nul 2>&1

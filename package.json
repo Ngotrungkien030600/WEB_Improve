@@ -1,0 +1,14 @@
+{
+  "name": "web-improve",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Khung điều phối BMAD cho SkillForge — code sản phẩm nằm trong projects/",
+  "scripts": {
+    "legacy": "node projects/web-en/server/index.js",
+    "dev": "npm --prefix projects/web-app run dev",
+    "build": "npm --prefix projects/web-app run build"
+  },
+  "dependencies": {
+    "bmad-method": "^6.10.0"
+  }
+}
