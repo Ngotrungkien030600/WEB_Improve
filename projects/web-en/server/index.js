@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { ROOT, PORT, API_PATHS, AI_CONFIG, MIME_TYPES, AGENTS, AGENT_INFO } = require('./config');
-const { callAI, buildSystemForBundle } = require('./ai-service');
+const { callAI, callAIStream, buildSystemForBundle } = require('./ai-service');
 
 // Read .env file at startup
 const envPath = path.join(ROOT, '.env');
@@ -76,6 +76,71 @@ Tạo 5-8 câu hỏi, focus vào mức lương ${salary}tr.`;
         res.writeHead(502, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: err.message }));
       });
+    } catch (e) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid JSON body' }));
+    }
+  });
+}
+
+/** POST /api/accelerator/stream-feedback — SSE streaming AI feedback for Accelerator typing */
+function handleAcceleratorStream(req, res) {
+  let body = '';
+  req.on('data', chunk => body += chunk);
+  req.on('end', () => {
+    try {
+      const { text, day } = JSON.parse(body);
+      const apiKey = process.env.OPENAI_API_KEY;
+
+      const systemPrompt = `Bạn là senior software engineer mentor. Phân tích câu trả lời của học viên và đưa feedback real-time.
+Phân tích: (1) technical accuracy, (2) English grammar/vocabulary, (3) độ sâu và specific numbers.
+Trả lời ngắn gọn, focus vào 1-2 points quan trọng nhất. Dùng markdown đơn giản.`;
+
+      const userMsg = `Học viên đang học Day ${day}. Câu trả lời:\n\n${text}\n\nFeedback ngắn gọn:`;
+
+      const messages = [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMsg }];
+
+      // Set headers for SSE / streaming
+      res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'X-Accel-Buffering': 'no',
+      });
+
+      if (apiKey) {
+        // Use OpenAI streaming
+        callAIStream(messages, apiKey, (chunk) => {
+          const escaped = chunk.replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+          res.write(`data: ${escaped}\n\n`);
+        }).then(() => {
+          res.write('data: [DONE]\n\n');
+          res.end();
+        }).catch(err => {
+          res.write(`data: [ERROR] ${err.message}\n\n`);
+          res.end();
+        });
+      } else {
+        // Fallback: use Ollama non-streaming + simulate chunks
+        callAI(messages, apiKey, 300).then(reply => {
+          // Send as simulated chunks
+          const words = reply.split(' ');
+          let i = 0;
+          const interval = setInterval(() => {
+            if (i >= words.length) {
+              clearInterval(interval);
+              res.write('data: [DONE]\n\n');
+              res.end();
+              return;
+            }
+            res.write(`data: ${words[i]} \n\n`);
+            i++;
+          }, 40);
+        }).catch(err => {
+          res.write(`data: [ERROR] ${err.message}\n\n`);
+          res.end();
+        });
+      }
     } catch (e) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Invalid JSON body' }));
@@ -255,6 +320,7 @@ const server = http.createServer((req, res) => {
   if (req.method === 'POST' && urlPath === API_PATHS.AI_CHAT) return handleAiChat(req, res);
   if (req.method === 'POST' && urlPath === API_PATHS.BMAD_CHAT) return handleBmadChat(req, res);
   if (req.method === 'POST' && urlPath === API_PATHS.SALARY_INTERVIEW) return handleSalaryInterview(req, res);
+  if (req.method === 'POST' && urlPath === API_PATHS.ACCELERATOR_STREAM) return handleAcceleratorStream(req, res);
 
   let filePath = path.join(ROOT, urlPath === '/' ? 'index.html' : urlPath);
   const ext = path.extname(filePath).toLowerCase();
