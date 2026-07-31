@@ -3,7 +3,79 @@ window.interviewTopics = [
   {
     "file": "README.md",
     "title": "📚 Java Backend Interview Master Guide",
-    "content": "Tổng hợp 20 cheat sheet ôn tập Java Backend Interview.\n\n## 📑 Danh sách phần\n\n1. [Phần 1 — Java Core](./Phan1_Java_Core_CheatSheet.md)\n2. [Phần 2 — Collections](./Phan2_Collections_CheatSheet.md)\n3. [Phần 3 — Exception](./Phan3_Exception_CheatSheet.md)\n4. [Phần 4 — Java 8+](./Phan4_Java8_CheatSheet.md)\n5. [Phần 5 — Multithreading](./Phan5_Multithreading_CheatSheet.md)\n6. [Phần 6 — SQL & Database](./Phan6_SQL_Database_CheatSheet.md)\n7. [Phần 7 — Spring Boot](./Phan7_SpringBoot_CheatSheet.md)\n8. [Phần 8 — REST API](./Phan8_REST_API_CheatSheet.md)\n9. [Phần 9 — DTO & Validation](./Phan9_DTO_Validation_CheatSheet.md)\n10. [Phần 10 — JPA/Hibernate](./Phan10_JPA_Hibernate_CheatSheet.md)\n11. [Phần 11 — Transaction](./Phan11_Transaction_CheatSheet.md)\n12. [Phần 12 — Security & JWT](./Phan12_Security_JWT_CheatSheet.md)\n13. [Phần 13 — Docker](./Phan13_Docker_CheatSheet.md)\n14. [Phần 14 — Kafka](./Phan14_Kafka_CheatSheet.md)\n15. [Phần 15 — AWS](./Phan15_AWS_CheatSheet.md)\n16. [Phần 16 — CI/CD](./Phan16_CICD_CheatSheet.md)\n17. [Phần 17 — Microservices](./Phan17_Microservices_CheatSheet.md)\n18. [Phần 18 — System Design](./Phan18_SystemDesign_CheatSheet.md)\n19. [Phần 19 — Project Mẫu](./Phan19_Project_Mau_CheatSheet.md)\n20. [Phần 20 — Câu Hỏi Tình Huống](./Phan20_Cau_Hoi_Tinh_Huong_CheatSheet.md)\n21. [Phần 21 — 100+ Câu Hỏi Tự Kiểm Tra](./Phan21_100_Cau_Hoi_Tu_Kiem_Tra.md)\n22. [Phần 21 — Đáp án chi tiết](./Phan21_100_Cau_Hoi_Tu_Kiem_Tra_Tra_Loi.md)\n\n## 🎯 Cách dùng\n\n- Mỗi file là một chủ đề riêng, đủ để in ra 1 trang A4.\n- Mỗi phần có code mẫu, câu trả lởi 60 giây và checklist tự kiểm tra.\n- Đi qua từng phần, đánh dấu checklist khi đã nắm chắc.\n\n## ✅ Lộ trình ôn tập đề xuất\n\n**Tuần 1:** Java Core → Collections → Exception → Java 8+ → Multithreading\n**Tuần 2:** SQL & Database → Spring Boot → REST API → DTO & Validation → JPA/Hibernate\n**Tuần 3:** Transaction → Security & JWT → Docker → Kafka → AWS\n**Tuần 4:** CI/CD → Microservices → System Design → Project → Câu hỏi tình huống → 100+ câu hỏi tự kiểm tra → đối chiếu đáp án\n\nChúc bạn thi phỏng vấn thành công! 🚀",
+    "content": "Tổng hợp **39 cheat sheet** ôn tập Java Backend Interview — từ Java Core đến Soft Skills, bao gồm Hibernate nâng cao, DDD, Event-Driven, Microservices, Git, Linux, Redis, HTTP Network, Clean Code, SOLID và Soft Skills.
+
+## 📑 Danh sách phần
+
+### Kiến thức nền tảng
+1. [Phần 1 — Java Core](./Phan1_Java_Core_CheatSheet.md)
+2. [Phần 2 — Collections](./Phan2_Collections_CheatSheet.md)
+3. [Phần 3 — Exception](./Phan3_Exception_CheatSheet.md)
+4. [Phần 4 — Java 8+](./Phan4_Java8_CheatSheet.md)
+5. [Phần 5 — Multithreading](./Phan5_Multithreading_CheatSheet.md)
+6. [Phần 6 — SQL & Database](./Phan6_SQL_Database_CheatSheet.md)
+
+### Spring Boot & Frameworks
+7. [Phần 7 — Spring Boot](./Phan7_SpringBoot_CheatSheet.md)
+8. [Phần 8 — REST API](./Phan8_REST_API_CheatSheet.md)
+9. [Phần 9 — DTO & Validation](./Phan9_DTO_Validation_CheatSheet.md)
+10. [Phần 10 — JPA/Hibernate](./Phan10_JPA_Hibernate_CheatSheet.md)
+11. [Phần 11 — Transaction](./Phan11_Transaction_CheatSheet.md)
+12. [Phần 12 — Security & JWT](./Phan12_Security_JWT_CheatSheet.md)
+
+### DevOps & Infrastructure
+13. [Phần 13 — Docker](./Phan13_Docker_CheatSheet.md)
+14. [Phần 14 — Kafka](./Phan14_Kafka_CheatSheet.md)
+15. [Phần 15 — AWS](./Phan15_AWS_CheatSheet.md)
+16. [Phần 16 — CI/CD](./Phan16_CICD_CheatSheet.md)
+17. [Phần 17 — Microservices](./Phan17_Microservices_CheatSheet.md)
+18. [Phần 18 — System Design](./Phan18_SystemDesign_CheatSheet.md)
+
+### Practice & Nâng cao
+19. [Phần 19 — Project Mẫu](./Phan19_Project_Mau_CheatSheet.md)
+20. [Phần 20 — Câu Hỏi Tình Huống](./Phan20_Cau_Hoi_Tinh_Huong_CheatSheet.md)
+21. [Phần 21 — 100+ Câu Hỏi Tự Kiểm Tra](./Phan21_100_Cau_Hoi_Tu_Kiem_Tra.md)
+22. [Phần 22 — Design Patterns](./Phan22_DesignPatterns_CheatSheet.md)
+23. [Phần 23 — Reactive Programming](./Phan23_Reactive_CheatSheet.md)
+24. [Phần 24 — Kubernetes](./Phan24_Kubernetes_CheatSheet.md)
+25. [Phần 25 — Testing Advanced](./Phan25_TestingAdvanced_CheatSheet.md)
+26. [Phần 26 — Performance Optimization](./Phan26_Performance_CheatSheet.md)
+
+### Advanced Topics
+27. [Phần 27 — Hibernate Deep Dive](./Phan27_Hibernate_DeepDive.md)
+28. [Phần 28 — Software Design (DDD, EDD, Microservices)](./Phan28_Software_Design_DDD_EDD.md)
+29. [Phần 29 — Spring Annotations Deep Dive](./Phan29_Spring_Annotations_DeepDive.md)
+30. [Phần 30 — Real Interview Experiences](./Phan30_Real_Interview_Experiences.md)
+
+### Developer Tools
+31. [Phần 31 — Git & Version Control](./Phan31_Git_VersionControl.md)
+32. [Phần 32 — Linux Basics](./Phan32_Linux_Basics.md)
+33. [Phần 33 — Redis Deep Dive](./Phan33_Redis_DeepDive.md)
+34. [Phần 34 — HTTP & Network](./Phan34_HTTP_Network.md)
+35. [Phần 35 — Clean Code & SOLID](./Phan35_Clean_Code_SOLID.md)
+36. [Phần 36 — Soft Skills & Real Work](./Phan36_Soft_Skills.md)
+
+### Data & Best Practices
+37. [Phần 37 — MongoDB & NoSQL](./Phan37_MongoDB_NoSQL.md)
+38. [Phần 38 — Monitoring & Logging](./Phan38_Monitoring_Logging.md)
+39. [Phần 39 — Code Review & Best Practices](./Phan39_Code_Review.md)
+
+## 🎯 Cách dùng
+
+- Mỗi file là một chủ đề riêng, đủ để in ra 1 trang A4.
+- Mỗi phần có code mẫu, câu trả lời 60 giây và checklist tự kiểm tra.
+- Đi qua từng phần, đánh dấu checklist khi đã nắm chắc.
+
+## ✅ Lộ trình ôn tập đề xuất (8 tuần)
+
+**Tuần 1:** Java Core → Collections → Exception → Java 8+ → Multithreading
+**Tuần 2:** SQL & Database → Spring Boot → REST API → DTO & Validation → JPA/Hibernate
+**Tuần 3:** Transaction → Security & JWT → Docker → Kafka → AWS
+**Tuần 4:** CI/CD → Microservices → System Design → Project Mẫu → Câu hỏi tình huống
+**Tuần 5:** Design Patterns → Reactive → K8s → Testing → Performance
+**Tuần 6:** Hibernate Deep Dive → DDD/EDD → Spring Annotations → Real Experiences
+**Tuần 7:** Git → Linux → Redis → HTTP/Network → Clean Code & SOLID → Soft Skills
+**Tuần 8:** MongoDB/NoSQL → Monitoring/Logging → Code Review → Ôn tập tổng thể\n\n## 📑 Danh sách phần\n\n1. [Phần 1 — Java Core](./Phan1_Java_Core_CheatSheet.md)\n2. [Phần 2 — Collections](./Phan2_Collections_CheatSheet.md)\n3. [Phần 3 — Exception](./Phan3_Exception_CheatSheet.md)\n4. [Phần 4 — Java 8+](./Phan4_Java8_CheatSheet.md)\n5. [Phần 5 — Multithreading](./Phan5_Multithreading_CheatSheet.md)\n6. [Phần 6 — SQL & Database](./Phan6_SQL_Database_CheatSheet.md)\n7. [Phần 7 — Spring Boot](./Phan7_SpringBoot_CheatSheet.md)\n8. [Phần 8 — REST API](./Phan8_REST_API_CheatSheet.md)\n9. [Phần 9 — DTO & Validation](./Phan9_DTO_Validation_CheatSheet.md)\n10. [Phần 10 — JPA/Hibernate](./Phan10_JPA_Hibernate_CheatSheet.md)\n11. [Phần 11 — Transaction](./Phan11_Transaction_CheatSheet.md)\n12. [Phần 12 — Security & JWT](./Phan12_Security_JWT_CheatSheet.md)\n13. [Phần 13 — Docker](./Phan13_Docker_CheatSheet.md)\n14. [Phần 14 — Kafka](./Phan14_Kafka_CheatSheet.md)\n15. [Phần 15 — AWS](./Phan15_AWS_CheatSheet.md)\n16. [Phần 16 — CI/CD](./Phan16_CICD_CheatSheet.md)\n17. [Phần 17 — Microservices](./Phan17_Microservices_CheatSheet.md)\n18. [Phần 18 — System Design](./Phan18_SystemDesign_CheatSheet.md)\n19. [Phần 19 — Project Mẫu](./Phan19_Project_Mau_CheatSheet.md)\n20. [Phần 20 — Câu Hỏi Tình Huống](./Phan20_Cau_Hoi_Tinh_Huong_CheatSheet.md)\n21. [Phần 21 — 100+ Câu Hỏi Tự Kiểm Tra](./Phan21_100_Cau_Hoi_Tu_Kiem_Tra.md)\n22. [Phần 21 — Đáp án chi tiết](./Phan21_100_Cau_Hoi_Tu_Kiem_Tra_Tra_Loi.md)\n\n## 🎯 Cách dùng\n\n- Mỗi file là một chủ đề riêng, đủ để in ra 1 trang A4.\n- Mỗi phần có code mẫu, câu trả lởi 60 giây và checklist tự kiểm tra.\n- Đi qua từng phần, đánh dấu checklist khi đã nắm chắc.\n\n## ✅ Lộ trình ôn tập đề xuất\n\n**Tuần 1:** Java Core → Collections → Exception → Java 8+ → Multithreading\n**Tuần 2:** SQL & Database → Spring Boot → REST API → DTO & Validation → JPA/Hibernate\n**Tuần 3:** Transaction → Security & JWT → Docker → Kafka → AWS\n**Tuần 4:** CI/CD → Microservices → System Design → Project → Câu hỏi tình huống → 100+ câu hỏi tự kiểm tra → đối chiếu đáp án\n\nChúc bạn thi phỏng vấn thành công! 🚀",
     "checklist": []
   },
   {
@@ -522,6 +594,44 @@ window.interviewTopics = [
       "Debug production issue có quy trình.",
       "Hướng dẫn junior developer.",
       "Viết documentation kỹ thuật."
+    ]
+  },
+  {
+    "file": "Phan37_MongoDB_NoSQL.md",
+    "title": "📄 PHẦN 37 — MONGODB & NOSQL",
+    "content": "---\n\n## 1. NoSQL là gì?\n\n**NoSQL** = Not Only SQL. Cơ sở dữ liệu không dùng bảng quan hệ, phù hợp với dữ liệu phi cấu trúc, scale ngang.\n\n**Khi nào dùng NoSQL:**\n- Dữ liệu phi cấu trúc (JSON, document).\n- Cần scale ngang (horizontal scaling).\n- Flexible schema, không fixed columns.\n- High write throughput.\n\n---\n\n## 2. Các loại NoSQL\n\n| Loại | DB | Use case |\n|---|---|---|\n| **Document** | MongoDB, CouchDB | JSON data, content management |\n| **Key-Value** | Redis, DynamoDB | Cache, session |\n| **Column-Family** | Cassandra, HBase | Time-series, IoT |\n| **Graph** | Neo4j | Relationship data (social, recommendation) |\n\n---\n\n## 3. MongoDB Core Concepts\n\n| Khái niệm | Tương đương SQL |\n|---|---|\n| **Database** | Database |\n| **Collection** | Table |\n| **Document** | Row |\n| **Field** | Column |\n| **Index** | Index |\n\n**Ví dụ Document:**\n```json\n{\n    \"_id\": ObjectId(\"...\"),\n    \"name\": \"Alice\",\n    \"email\": \"alice@email.com\",\n    \"skills\": [\"Java\", \"Spring\", \"MongoDB\"],\n    \"address\": {\n        \"city\": \"Hanoi\",\n        \"country\": \"Vietnam\"\n    }\n}\n```\n\n---\n\n## 4. CRUD với MongoDB\n\n```javascript\n// Create\ndb.users.insertOne({ name: \"Alice\", age: 25 })\n\n// Read\ndb.users.find({ age: { $gte: 20 } })\ndb.users.findOne({ email: \"alice@email.com\" })\n\n// Update\ndb.users.updateOne({ _id: id }, { $set: { age: 26 } })\n\n// Delete\ndb.users.deleteOne({ _id: id })\n```\n\n---\n\n## 5. Indexing & Aggregation\n\n**Index:**\n```javascript\ndb.users.createIndex({ email: 1 })\ndb.users.createIndex({ name: \"text\", skills: \"text\" })\n```\n\n**Aggregation Pipeline (giống GROUP BY + window functions):**\n```javascript\ndb.orders.aggregate([\n    { $match: { status: \"completed\" } },\n    { $group: { _id: \"$customerId\", total: { $sum: \"$amount\" } } },\n    { $sort: { total: -1 } },\n    { $limit: 10 }\n])\n```\n\n---\n\n## 6. MongoDB với Spring Boot\n\n**Dependency:**\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-data-mongodb</artifactId>\n</dependency>\n```\n\n**Entity:**\n```java\n@Document(collection = \"products\")\npublic class Product {\n    @Id\n    private String id;\n    private String name;\n    private BigDecimal price;\n    private List<String> tags;\n    private Map<String, String> attributes;\n}\n```\n\n**Repository:**\n```java\npublic interface ProductRepository extends MongoRepository<Product, String> {\n    List<Product> findByNameContaining(String keyword);\n    List<Product> findByPriceBetween(BigDecimal min, BigDecimal max);\n}\n```\n\n---\n\n## 7. SQL vs MongoDB\n\n| SQL | MongoDB |\n|---|---|\n| Database | Database |\n| Table, Row | Collection, Document |\n| JOIN | $lookup (aggregation) |\n| PRIMARY KEY | _id |\n| Index | Index |\n| GROUP BY | $group |\n| Transaction | Transaction (4.0+) |\n\n---\n\n## ✅ CHECKLIST PHẦN 37",
+    "checklist": [
+      "Phân biệt NoSQL vs SQL, khi nào dùng NoSQL.",
+      "Biết các loại NoSQL: Document, Key-Value, Column-Family, Graph.",
+      "CRUD với MongoDB.",
+      "Tạo index và aggregation pipeline.",
+      "Dùng MongoDB với Spring Boot."
+    ]
+  },
+  {
+    "file": "Phan38_Monitoring_Logging.md",
+    "title": "📄 PHẦN 38 — MONITORING & LOGGING",
+    "content": "---\n\n## 1. Tại sao cần Monitoring?\n\n- Phát hiện sự cố trước khi user báo.\n- Tối ưu performance.\n- Capacity planning.\n- SLA compliance.\n\n**4 golden signals:**\n1. **Latency** — thời gian phản hồi.\n2. **Traffic** — số lượng request.\n3. **Errors** — tỷ lệ lỗi.\n4. **Saturation** — mức độ sử dụng tài nguyên.\n\n---\n\n## 2. Metrics & Prometheus\n\n**Prometheus** — hệ thống monitoring mã nguồn mở, pull metrics từ ứng dụng.\n\n**Spring Boot Actuator + Micrometer:**\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-actuator</artifactId>\n</dependency>\n<dependency>\n    <groupId>io.micrometer</groupId>\n    <artifactId>micrometer-registry-prometheus</artifactId>\n</dependency>\n```\n\n**Cấu hình:**\n```yaml\nmanagement:\n  endpoints:\n    web:\n      exposure:\n        include: health,metrics,prometheus\n  metrics:\n    tags:\n      application: myapp\n```\n\n---\n\n## 3. Grafana — Dashboard\n\nGrafana lấy dữ liệu từ Prometheus, visualize dashboard.\n\n| Metric | Ý nghĩa |\n|---|---|\n| `jvm_memory_used_bytes` | Memory usage |\n| `http_server_requests_seconds` | Request latency |\n| `jvm_gc_pause_seconds` | GC pause time |\n| `hikaricp_connections_active` | DB connection pool |\n\n---\n\n## 4. Logging với ELK/EFK\n\n**ELK Stack:** Elasticsearch + Logstash + Kibana\n**EFK Stack:** Elasticsearch + Fluentd + Kibana\n\n**Spring Boot Logging:**\n```yaml\nlogging:\n  level:\n    root: INFO\n    com.example: DEBUG\n  pattern:\n    console: \"%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n\"\n```\n\n**Logstash encoder (JSON format):**\n```xml\n<dependency>\n    <groupId>net.logstash.logback</groupId>\n    <artifactId>logstash-logback-encoder</artifactId>\n</dependency>\n```\n\n---\n\n## 5. Distributed Tracing\n\nTheo dõi request qua nhiều microservices.\n\n**Spring Cloud Sleuth + Zipkin:**\n```xml\n<dependency>\n    <groupId>org.springframework.cloud</groupId>\n    <artifactId>spring-cloud-starter-sleuth</artifactId>\n</dependency>\n<dependency>\n    <groupId>org.springframework.cloud</groupId>\n    <artifactId>spring-cloud-sleuth-zipkin</artifactId>\n</dependency>\n```\n\nMỗi request có **traceId** xuyên suốt các service.\n\n---\n\n## 6. Alerting\n\n**Cảnh báo khi:**\n- Error rate > 1%\n- P99 latency > 500ms\n- CPU > 80%\n- Disk > 85%\n\n**Công cụ:** Alertmanager (Prometheus), PagerDuty, OpsGenie.\n\n---\n\n## ✅ CHECKLIST PHẦN 38",
+    "checklist": [
+      "Giải thích 4 golden signals.",
+      "Dùng Prometheus + Grafana cho metrics.",
+      "Cấu hình Spring Boot Actuator.",
+      "Biết ELK/EFK stack cho logging.",
+      "Dùng distributed tracing với Sleuth + Zipkin.",
+      "Biết alerting rules cơ bản.",
+      "Biết aggregate log từ nhiều service."
+    ]
+  },
+  {
+    "file": "Phan39_Code_Review.md",
+    "title": "📄 PHẦN 39 — CODE REVIEW & BEST PRACTICES",
+    "content": "---\n\n## 1. Code Review là gì?\n\nCode review là quá trình kiểm tra code của người khác (hoặc chính mình) trước khi merge vào main branch.\n\n**Mục đích:**\n- Phát hiện bug sớm.\n- Đảm bảo code quality.\n- Chia sẻ kiến thức trong team.\n- Consistency.\n\n---\n\n## 2. Checklist khi review\n\n### Logic & Correctness\n- [ ] Business logic có đúng không?\n- [ ] Có edge cases không được xử lý?\n- [ ] Null safety đã check chưa?\n- [ ] Có lỗi off-by-one, race condition?\n\n### Performance\n- [ ] N+1 query trong Hibernate?\n- [ ] Loop gọi DB trong transaction?\n- [ ] Có thể cache được không?\n- [ ] Kích thước response có quá lớn?\n\n### Security\n- [ ] SQL injection?\n- [ ] XSS?\n- [ ] Authentication/Authorization đúng?\n- [ ] Sensitive data có bị leak qua log/response?\n\n### Code Style\n- [ ] Naming convention? (camelCase, PascalCase)\n- [ ] Method có quá dài không? (> 50 lines)\n- [ ] Class có quá nhiều responsibility? (SRP)\n- [ ] Magic number/string?\n- [ ] Comment có cần thiết không?\n\n### Testing\n- [ ] Unit test cover critical path?\n- [ ] Edge cases có test không?\n- [ ] Integration test cho API?\n\n---\n\n## 3. Cách review hiệu quả\n\n**Cho reviewer:**\n1. Đọc hiểu business logic trước.\n2. Review code, không review người.\n3. Góp ý cụ thể: \"Dòng 25: dùng Optional thay null check?\"\n4. Nếu có cách tốt hơn, đề xuất bằng code mẫu.\n5. Approve khi: logic đúng, không security issue, test pass.\n\n**Cho author:**\n1. Viết PR description rõ ràng.\n2. Giải thích quyết định design.\n3. Không defensive — feedback giúp code tốt hơn.\n4. Fix hoặc giải thích tại sao không fix.\n\n---\n\n## 4. Best Practices\n\n- **Small PR** (< 400 lines) — dễ review, ít bug.\n- **Single purpose** — 1 PR = 1 feature/fix.\n- **Automated checks** — lint, format, test tự động.\n- **Timebox** — review trong 24h.\n- **Don't nitpick** — chỉ comment chỗ thực sự quan trọng.\n- **Praise good code** — \"Nice use of Stream API here!\"\n\n---\n\n## 5. Common Anti-patterns\n\n| Anti-pattern | Vấn đề |\n|---|---|\n| Giant PR > 1000 lines | Khó review, dễ miss bug |\n| Silent approval | Không review kỹ, merge bừa |\n| Nitpicking style | Lãng phí thời gian, gây friction |\n| Review too late | Review sau khi code xong 2 tuần |\n| I-told-you-so | Dùng review để chứng minh mình đúng |\n\n---\n\n## ✅ CHECKLIST PHẦN 39",
+    "checklist": [
+      "Biết checklist review: logic, perf, security, style, test.",
+      "Review code lịch sự, hiệu quả.",
+      "Viết PR description tốt.",
+      "Biết best practices: small PR, single purpose, timebox.",
+      "Tránh anti-patterns: giant PR, nitpicking, silent approval."
     ]
   }
 ];

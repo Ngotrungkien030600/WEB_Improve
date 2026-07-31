@@ -1,12 +1,6 @@
 # ⚒️ SkillForge — Lò rèn kỹ năng
 
-**SkillForge** là nền tảng học tập toàn diện dành cho lập trình viên Việt Nam, tích hợp AI để hỗ trợ học tiếng Anh, lập trình Java, frontend, AI/ML, AWS Cloud, Backend Engineering và luyện phỏng vấn — tất cả chạy local, miễn phí, không cần internet cho AI.
-
----
-
-## 📸 Giao diện
-
-> Dự án đang trong giai đoạn phát triển — giao diện được thiết kế tối giản, tối ưu cho trải nghiệm học tập.
+**SkillForge** là nền tảng học tập toàn diện dành cho lập trình viên Việt Nam, tích hợp AI để hỗ trợ học tiếng Anh, lập trình Java, Frontend, AI/ML, AWS Cloud, Backend Engineering và luyện phỏng vấn — tất cả chạy local, miễn phí, không cần internet cho AI.
 
 ---
 
@@ -15,13 +9,16 @@
 | Tính năng | Mô tả |
 |-----------|-------|
 | 📖 **Tiếng Anh** | 220+ từ vựng, 70+ idioms, 12 thì, truyện song ngữ, thi thử, 3 games |
-| ☕ **Java** | 10 bài học code + Spring Boot chuyên sâu + phỏng vấn theo lương |
+| ☕ **Java** | 10 bài học code + Spring Boot chuyên sâu + 39 cheat sheet phỏng vấn + 2 guide thực chiến |
 | 🧠 **AI/ML** | 48 concepts flashcard, 50+ quiz, 60+ câu phỏng vấn, 8 projects thực hành |
 | 🌐 **Frontend** | HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE |
 | ⚙️ **Backend Engineering** | SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance |
 | ☁️ **AWS Cloud** | IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices |
-| 🤖 **BMAD Agents** | 6 AI agent chuyên gia: Mary (BA), Paige (Writer), John (PM), Sally (UX), Winston (Architect), Amelia (Developer) |
-| 📊 **Dashboard** | Thống kê XP, streak, lịch sử thi, kỹ năng |
+| 🤖 **BMAD Agents** | 7 AI agent chuyên gia: Mary (BA), Paige (Writer), John (PM), Sally (UX), Winston (Architect), Amelia (Developer), Quinn (QA) |
+| 💰 **Phỏng vấn theo lương** | Chọn mức lương (8-150 triệu) → câu hỏi phù hợp + AI bổ sung |
+| 🇬🇧 **English Interview** | 30-day lộ trình tiếng Anh cho Java Backend interview |
+| 📊 **Skill Tracker** | Theo dõi XP, streak, kỹ năng |
+| 📈 **Dashboard** | Thống kê học tập, lịch sử thi, tổng quan tiến độ |
 | 🗺️ **Lộ trình học** | Beginner → Intermediate → Advanced cho English, Java, AI |
 | ⏱️ **Focus Timer** | SVG ring timer với streak tracking, session history, forge theme |
 
@@ -32,46 +29,64 @@
 ```
 projects/web-en/
 ├── index.html                    # Trang chủ
-├── css/                          # Style system
+├── css/                          # Style system (15 files)
 │   ├── variables.css             # Design tokens (colors, shadows, spacing)
 │   ├── base.css                  # Reset + global utilities + scrollbar
+│   ├── forge-tokens.css          # Forge design tokens (forge-* variables)
 │   ├── home.css                  # Home page
+│   ├── subpage.css               # Sub-page layout (forge dark theme)
+│   ├── interview.css             # Interview page
 │   ├── components.css            # Shared components (tabs, cards, quiz, game)
 │   ├── hub.css                   # Hub pages layout
-│   ├── timer.css                 # Focus timer
-│   ├── interview.css             # Interview page
 │   ├── learn.css                 # Learn code page
+│   ├── timer.css                 # Focus timer
 │   ├── ai.css                    # AI learning page
-│   └── exam.css                  # Exam page
+│   ├── exam.css                  # Exam page
+│   ├── accelerator.css           # Accelerator page
+│   └── agents/bmad-chat.css      # BMAD multi-agent chat styles
 ├── js/
-│   ├── data/                     # All learning data (vocab, idioms, tenses...)
-│   ├── features/                 # Feature modules (vocabulary, quiz, game...)
+│   ├── data/                     # All learning data (18 files)
+│   │   ├── interview-data.js     # 39 cheat sheet topics
+│   │   ├── salary-interview-data.js
+│   │   ├── vocabulary.js, idioms.js, tenses.js
+│   │   ├── learn-data.js, ai-data.js
+│   │   ├── stories.js, practice.js
+│   │   ├── progress-db.js, spaced-repetition.js
+│   │   └── ...
+│   ├── features/                 # Feature modules (logic + UI pattern)
+│   │   ├── interview/            # Interview Q&A (interview-logic + interview-ui)
+│   │   ├── quiz/                 # Quiz engine
+│   │   ├── vocabulary/           # Vocabulary flashcards
+│   │   ├── practice/             # Practice exercises
+│   │   ├── stories/              # Story viewer
+│   │   ├── tenses/               # Grammar tenses
+│   │   ├── game/                 # Games (memory, scramble, speedquiz)
+│   │   ├── accelerator/          # 30-day bootcamp
+│   │   ├── learn/                # Code learning
+│   │   └── skill-tracker/        # Skill tracking
 │   ├── agents/                   # BMAD multi-agent chat system
-│   └── utils/                    # Timer, helpers, markdown
-├── pages/                        # All pages
-│   ├── english/
-│   │   └── hub.html              # English hub
+│   ├── utils/                    # Timer, markdown, helpers
+│   └── *.app.js                  # App entry points
+├── pages/                        # All pages (22 files)
 │   ├── java/
-│   │   ├── hub.html              # Java hub
+│   │   ├── hub.html              # Java Hub
 │   │   ├── spring-boot.html      # Spring Boot deep-dive
-│   │   └── backend.html          # Backend Engineering deep-dive
-│   ├── ai/
-│   │   └── hub.html              # AI hub
-│   ├── frontend/
-│   │   ├── hub.html              # Frontend hub
-│   │   ├── html-css.html
-│   │   ├── javascript.html
-│   │   ├── frameworks.html
-│   │   ├── responsive.html
-│   │   └── ui-interview.html
-│   ├── cloud/
-│   │   └── hub.html              # AWS Cloud hub
-│   ├── cloud.html                # AWS Cloud deep-dive (IAM, VPC, Lambda, ECS...)
-│   ├── bmad-agents.html          # BMAD agents page
-│   ├── dashboard.html            # Progress dashboard
-│   ├── learning-paths.html       # Learning paths
-│   ├── salary-interview.html     # Salary-based interview questions
-│   └── ... (english.html, exam.html, games...)
+│   │   ├── backend.html          # Backend Engineering deep-dive
+│   │   ├── api-guide.html        # [MỚI] Hướng dẫn viết API thực chiến
+│   │   └── integration-guide.html# [MỚI] Kết nối UI với API
+│   ├── english/hub.html          # English Hub
+│   ├── ai/hub.html               # AI Hub
+│   ├── frontend/hub.html         # Frontend Hub (+ html-css, javascript, frameworks, responsive, ui-interview)
+│   ├── cloud/hub.html            # AWS Cloud Hub
+│   ├── interview.html            # 39 cheat sheet phỏng vấn Java Backend
+│   ├── interview-english.html    # English interview 30-day prep
+│   ├── salary-interview.html     # Phỏng vấn theo lương
+│   ├── bmad-agents.html          # 7 AI agents
+│   ├── accelerator.html          # 30-day bootcamp
+│   ├── learning-paths.html       # Lộ trình học
+│   ├── skill-tracker.html        # Skill Tracker
+│   ├── dashboard.html            # Dashboard
+│   └── ... (english, exam, games...)
 ├── server/                       # Node.js backend
 │   ├── index.js                  # HTTP server + API routes
 │   ├── config.js                 # Configuration
@@ -140,14 +155,18 @@ Trang chủ
 ├── ☕ Java → Java Hub
 │   ├── 💻 Học Code
 │   ├── 🍃 Spring Boot
-│   └── 💰 Phỏng vấn theo lương
-├── ⚙️ Backend Engineering (chi tiết: SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance)
+│   ├── 📖 Hướng dẫn viết API (thực chiến)
+│   ├── 🔗 Kết nối UI với API (thực chiến)
+│   ├── 💰 Phỏng vấn theo lương
+│   ├── 🇬🇧 English Interview
+│   └── ☕ Phỏng vấn Backend (39 cheat sheet)
+├── ⚙️ Backend Engineering (SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design)
 ├── 📖 English → English Hub
 │   ├── 📝 Từ vựng & Idioms
 │   ├── ⏰ Các thì & Practice
 │   ├── 📖 Đọc truyện
 │   ├── 📝 Thi thử
-│   └── Games
+│   └── Games (Memory, Scramble, Speed Quiz)
 ├── 🧠 Học AI → AI Hub
 │   ├── 📚 Học Concepts
 │   ├── 🎯 Trắc nghiệm
@@ -159,12 +178,12 @@ Trang chủ
 │   ├── ⚛️ React/Vue/Angular
 │   ├── 📱 Responsive
 │   └── 💼 Phỏng vấn UI/FE
-├── ☁️ AWS Cloud (chi tiết: IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline)
-├── 🗣️ BMAD Agents
-├── 📊 Skill Tracker
-├── 📈 Dashboard
+├── ☁️ AWS Cloud (IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline)
+├── 🗣️ BMAD Agents (7 AI chuyên gia)
+├── 📊 Skill Tracker (XP, streak, kỹ năng)
+├── 📈 Dashboard (thống kê, lịch sử)
 ├── 🗺️ Lộ trình học
-└── 🔥 Forge Timer (SVG ring + streak tracking, góc phải header)
+└── 🔥 Focus Timer (SVG ring + streak tracking)
 ```
 
 ---
@@ -182,22 +201,27 @@ Trang chủ
 
 ## 🎯 Tính năng nổi bật
 
+### 39 Cheat Sheet Phỏng Vấn ☕
+Trang `interview.html` tổng hợp 39 chủ đề từ Java Core, Spring Boot, Hibernate, Microservices đến Git, Linux, Redis, Clean Code, MongoDB, Monitoring và Soft Skills. Mỗi phần có code mẫu, checklist tự kiểm tra và câu trả lời mẫu.
+
+### Hướng dẫn thực chiến 📖
+- **api-guide.html**: Từ requirement → Entity → DTO → Mapper → Repository → Service → Controller → Exception Handler → Testing → Swagger. Ví dụ CRUD Product A-Z.
+- **integration-guide.html**: Kết nối Frontend với Backend — API Contract, Authentication, State Management, Pagination, File Upload, WebSocket.
+
 ### Phỏng vấn theo lương 💰
 Chọn mức lương mong muốn (8-150 triệu/tháng), hệ thống tự động hiển thị câu hỏi phỏng vấn phù hợp và gợi ý trả lời. AI tự động bổ sung câu hỏi theo yêu cầu.
 
 ### BMAD Multi-Agent 🤖
-6 AI agent với 6 chuyên môn khác nhau:
+7 AI agent với 7 chuyên môn khác nhau:
 - **📊 Mary** — Business Analyst
 - **📚 Paige** — Technical Writer
 - **📋 John** — Product Manager
 - **🎨 Sally** — UX Designer
 - **🏗️ Winston** — System Architect
 - **💻 Amelia** — Senior Developer
+- **🧪 Quinn** — QA Engineer
 
 Có thể chat 1-1 hoặc Party Mode (nhiều agent thảo luận cùng lúc).
-
-### Lộ trình học 🗺️
-Lộ trình có cấu trúc từ cơ bản đến nâng cao, mỗi mốc có mục tiêu rõ ràng.
 
 ---
 
@@ -206,13 +230,13 @@ Lộ trình có cấu trúc từ cơ bản đến nâng cao, mỗi mốc có m�
 **Dark Forge** — nền tối `#08080e` với ánh lửa cam:
 - Glassmorphism cards với `backdrop-filter: blur`
 - SVG vòng lửa timer với streak tracking
-- Ember particles bay (CSS animation thuần)
 - Gradient cam logo + hero text
 - Ambient glow radial gradients nền
+- Consistent forge design tokens (`--forge-*` variables)
 
 ## 📚 Công nghệ sử dụng
 
-- **Frontend:** HTML5, CSS3 (Flexbox, Grid, Custom Properties, Animations, backdrop-filter), Vanilla JS
+- **Frontend:** HTML5, CSS3 (Flexbox, Grid, Custom Properties, Animations), Vanilla JS (ES Modules)
 - **Backend:** Node.js (HTTP server thuần, không framework)
 - **AI:** Ollama (local), OpenAI API, Google Gemini API
 - **Lưu trữ:** localStorage, IndexedDB
@@ -223,8 +247,6 @@ Lộ trình có cấu trúc từ cơ bản đến nâng cao, mỗi mốc có m�
 ## 🤝 Đóng góp
 
 Mọi đóng góp đều được hoan nghênh. Hãy tạo issue hoặc pull request.
-
----
 
 ## 📄 Giấy phép
 

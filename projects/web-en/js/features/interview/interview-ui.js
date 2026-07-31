@@ -14,7 +14,8 @@ const GROUPS = [
   { label: '📝 Practice & Testing', indices: [19, 20, 21, 22, 23, 24, 25, 26, 27] },
   { label: '🔧 Advanced', indices: [28, 29, 30, 31] },
   { label: '🛠️ Dev Tools & Infrastructure', indices: [32, 33, 34] },
-  { label: '📐 Clean Code & Soft Skills', indices: [35, 36, 37] },
+  { label: '📐 Clean Code & Soft Skills', indices: [35, 36] },
+  { label: '🗄️ NoSQL & Best Practices', indices: [37, 38, 39] },
 ];
 
 function shortTitle(title) {
