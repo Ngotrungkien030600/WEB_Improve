@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Học AI Agent — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/timer.css" />
+  <link rel="stylesheet" href="css/forge-tokens.css" />
+  <link rel="stylesheet" href="../css/subpage.css" />
+  <link rel="stylesheet" href="../css/ai.css" />
+  <link rel="stylesheet" href="../css/learn.css" />
+  <link rel="stylesheet" href="../css/ai-agent.css" />
+</head>
+<body class="subpage">
+  <div class="ai-page ai-agent-page">
+    <header class="ai-topbar">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;">
+        <div>
+          <h1>🤖 Học AI Agent</h1>
+          <p>Agent — Tools — Token — Quota — AI at Edge</p>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <div class="forge-timer-wrap">
+            <div class="forge-timer-ring">
+              <svg viewBox="0 0 68 68">
+                <circle class="forge-ring-bg" cx="34" cy="34" r="30" />
+                <circle class="forge-ring-progress" id="forge-ring-progress" cx="34" cy="34" r="30" />
+              </svg>
+              <div class="forge-time" id="forge-time">30:00</div>
+            </div>
+            <div class="forge-controls">
+              <select id="forge-select">
+                <option value="30">30p</option>
+                <option value="60">1h</option>
+              </select>
+              <div class="forge-btn-row">
+                <button class="forge-btn forge-btn-primary" id="forge-toggle">⚒️</button>
+                <button class="forge-btn forge-btn-secondary" id="forge-reset">↻</button>
+              </div>
+            </div>
+            <div class="forge-stats">
+              <div class="forge-stat-row">📋 Hôm nay <span class="val fire" id="stat-today">0m</span></div>
+              <div class="forge-stat-row">🔥 Streak <span class="val" id="stat-streak">0🔥</span></div>
+              <div class="forge-stat-row">📦 Đã rèn <span class="val" id="stat-total">0</span></div>
+            </div>
+          </div>
+          <a href="../index.html" style="background:white;color:#764ba2;text-decoration:none;padding:0.4rem 0.8rem;border-radius:30px;font-weight:700;font-size:0.85rem;">🏠</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="ai-tabs">
+      <button class="ai-tab active" data-tab="learn">📚 Học</button>
+      <button class="ai-tab" data-tab="quiz">🎯 Thi</button>
+      <button class="ai-tab" data-tab="lessons">📖 Bài học</button>
+    </div>
+
+    <!-- ===== LEARN (FLASHCARDS) ===== -->
+    <section id="ai-learn" class="ai-section active">
+      <div class="ai-card-filter">
+        <select id="ai-card-filter">
+          <option value="all">📂 Tất cả chủ đề</option>
+          <option value="agent">🤖 Agent Fundamentals</option>
+          <option value="tools">🔧 Tools & MCP</option>
+          <option value="token">🔢 Token & Context</option>
+          <option value="quota">⏳ Quota & Cost</option>
+          <option value="edge">📡 AI at Edge</option>
+        </select>
+      </div>
+
+      <div class="ai-card" id="ai-card-body">
+        <div class="ai-card-inner">
+          <div class="ai-card-front">
+            <span class="ai-card-category" id="ai-card-cat">AGENT</span>
+            <div class="ai-card-en" id="ai-card-en">AI Agent</div>
+            <div class="ai-card-vi" id="ai-card-vi">Tác tử AI</div>
+            <div class="ai-card-def" id="ai-card-def">Hệ thống AI tự chủ...</div>
+          </div>
+          <div class="ai-card-back">
+            <span class="ai-card-category">VÍ DỤ</span>
+            <div class="ai-card-ex" id="ai-card-ex">Ví dụ: Agent đặt vé máy bay...</div>
+            <p style="margin-top:1rem;color:#94a3b8;font-size:0.85rem;text-align:center;">🔄 Click để xem lại mặt trước</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="ai-card-counter" id="ai-card-counter">1 / 45</p>
+      <div class="ai-card-controls">
+        <button class="ai-card-btn" id="ai-card-prev">⬅️ Trước</button>
+        <button class="ai-card-btn" id="ai-card-flip">🔄 Lật</button>
+        <button class="ai-card-btn" id="ai-card-next">Tiếp ➡️</button>
+      </div>
+    </section>
+
+    <!-- ===== QUIZ ===== -->
+    <section id="ai-quiz" class="ai-section">
+      <div class="ai-q-config">
+        <div class="ai-q-tabs">
+          <button class="ai-q-tab active" data-qt="general">🤖 Agent cơ bản</button>
+          <button class="ai-q-tab" data-qt="token">🔢 Token</button>
+          <button class="ai-q-tab" data-qt="quota">⏳ Quota</button>
+          <button class="ai-q-tab" data-qt="edge">📡 Edge</button>
+        </div>
+        <select id="ai-q-count">
+          <option value="5">5 câu</option>
+          <option value="10" selected>10 câu</option>
+          <option value="15">15 câu</option>
+        </select>
+        <select id="ai-q-time">
+          <option value="10">10s</option>
+          <option value="15" selected>15s</option>
+          <option value="20">20s</option>
+          <option value="30">30s</option>
+        </select>
+        <button class="ai-q-start" id="ai-q-start">▶️ Bắt đầu</button>
+      </div>
+
+      <div class="ai-q-timer-bar" id="ai-q-timer-bar"><div class="ai-q-timer-fill" id="ai-q-timer-fill"></div></div>
+      <p class="ai-q-timer-text" id="ai-q-timer-text">--</p>
+
+      <div class="ai-q-card">
+        <span class="ai-q-badge" id="ai-q-badge">Agent cơ bản</span>
+        <span class="ai-q-progress" id="ai-q-progress">Câu 1 / 10</span>
+        <h2 class="ai-q-question" id="ai-q-question">Question</h2>
+        <div class="ai-q-options" id="ai-q-options"></div>
+        <div class="ai-q-feedback" id="ai-q-feedback"></div>
+        <button class="ai-q-next" id="ai-q-next">Câu tiếp theo ➡️</button>
+      </div>
+
+      <div class="ai-q-stats">
+        <div><span class="ai-q-stat-value" id="ai-q-score">0</span><span class="ai-q-stat-label">Đúng</span></div>
+        <div><span class="ai-q-stat-value" id="ai-q-total">0</span><span class="ai-q-stat-label">Tổng</span></div>
+        <div><span class="ai-q-stat-value" id="ai-q-pct">0%</span><span class="ai-q-stat-label">Tỉ lệ</span></div>
+        <div><span class="ai-q-stat-value" id="ai-q-level">--</span><span class="ai-q-stat-label">Trình độ</span></div>
+      </div>
+    </section>
+
+    <!-- ===== LESSONS ===== -->
+    <section id="ai-lessons" class="ai-section">
+      <div class="ai-lesson-layout">
+        <aside class="ai-lesson-sidebar">
+          <h3>📚 Bài học</h3>
+          <ul class="ai-lesson-list" id="ai-lesson-list"></ul>
+          <div class="ai-lesson-progress">
+            <span id="ai-lesson-progress-text">Tiến độ: 0 / 0</span>
+            <div class="ai-lesson-progress-bar"><div id="ai-lesson-progress-fill"></div></div>
+          </div>
+        </aside>
+        <div class="ai-lesson-content">
+          <div class="ai-lesson-card" id="ai-lesson-card">
+            <h2 id="ai-lesson-title">Chọn một bài học</h2>
+            <div id="ai-lesson-body"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="app-footer" style="margin-top:1.5rem;">
+      <p>© 2026 SkillForge — AI Agent Learning</p>
+    </footer>
+  </div>
+
+  <script src="../js/utils/timer.js"></script>
+  <script src="../js/data/data-meta.js"></script>
+  <script src="../js/data/search-index.js"></script>
+  <script src="../js/data/spaced-repetition.js"></script>
+  <script src="../js/data/progress-db.js"></script>
+  <script src="../js/data/ai-agent-data.js"></script>
+  <script type="module" src="../js/ai-agent-app.js"></script>
+</body>
+</html>

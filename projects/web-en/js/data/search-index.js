@@ -82,6 +82,42 @@ window.searchIndex = {
       });
     }
 
+    // Index AI agent concepts
+    if (window.aiAgentConcepts) {
+      window.aiAgentConcepts.forEach((item, i) => {
+        this.index.push({
+          id: `ai-agent-${i}`,
+          type: 'ai-agent-concept',
+          title: item.en,
+          vi: item.vi,
+          category: item.category,
+          text: `${item.en} ${item.vi} ${item.definition} ${item.example}`.toLowerCase(),
+          difficulty: item.difficulty || 2,
+          tags: [item.category, 'ai', 'agent'],
+          icon: '🤖',
+          url: `#ai-agent-${item.en}`,
+        });
+      });
+    }
+
+    // Index AI agent topics
+    if (window.aiAgentTopics) {
+      window.aiAgentTopics.forEach((item, i) => {
+        this.index.push({
+          id: `ai-agent-topic-${i}`,
+          type: 'ai-agent-topic',
+          title: item.title,
+          vi: item.title,
+          category: 'ai-agent',
+          text: `${item.title} ${item.content ? item.content.substring(0, 500) : ''} ${(item.checklist || []).join(' ')}`.toLowerCase(),
+          difficulty: item.difficulty || 2,
+          tags: ['ai', 'agent'],
+          icon: '🤖',
+          url: `#ai-agent-topic-${item.file}`,
+        });
+      });
+    }
+
     // Index interview topics
     if (window.interviewTopics) {
       window.interviewTopics.forEach((item, i) => {

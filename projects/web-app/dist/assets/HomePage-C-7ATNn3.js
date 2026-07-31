@@ -1,1 +1,0 @@
-import{i as e,n as t,r as n,t as r}from"./index-A_JZqCFT.js";var i={},a={id:`app-root`};function o(r,i){return e(),n(`div`,a,[...i[0]||=[t(`p`,null,`SkillForge`,-1)]])}var s=r(i,[[`render`,o],[`__scopeId`,`data-v-778b5faa`]]);export{s as default};
