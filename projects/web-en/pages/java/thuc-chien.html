@@ -3,53 +3,112 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thực chiến — Backend + Frontend Integration — SkillForge</title>
+  <title>Thực chiến — Task thực tế khi đi làm — SkillForge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    :root { --bg:#08080e; --surface:rgba(255,255,255,0.07); --border:rgba(255,255,255,0.12); --text:#f1f5f9; --text2:#94a3b8; --accent:#f97316; --ember:#fbbf24; --radius:12px; --font:'Inter',system-ui,sans-serif; }
+    :root {
+      --bg:#08080e; --surface:rgba(255,255,255,0.07); --surface2:rgba(255,255,255,0.04);
+      --border:rgba(255,255,255,0.12); --text:#f1f5f9; --text2:#94a3b8;
+      --accent:#f97316; --ember:#fbbf24; --radius:12px; --font:'Inter',system-ui,sans-serif;
+    }
     body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
-    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
-    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .page { max-width:1080px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.5rem; }
     .topbar h1 { font-size:1.5rem; font-weight:800; letter-spacing:-0.02em; background:linear-gradient(135deg,#f1f5f9,var(--ember)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     .topbar a { color:var(--ember); text-decoration:none; font-size:0.85rem; font-weight:600; }
     .topbar a:hover { text-decoration:underline; }
-    .desc { color:var(--text2); margin-bottom:2rem; font-size:0.9rem; line-height:1.6; }
+    .desc { color:var(--text2); margin-bottom:1.5rem; font-size:0.9rem; line-height:1.6; }
 
-    .step-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; margin-bottom:1.5rem; transition:border-color 0.25s; }
-    .step-card:hover { border-color:var(--accent); }
-    .step-card .phase-badge { display:inline-block; padding:0.15rem 0.6rem; border-radius:4px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.5rem; }
-    .phase-be { background:rgba(52,211,153,0.12); color:#34d399; border:1px solid rgba(52,211,153,0.15); }
-    .phase-fe { background:rgba(96,165,250,0.12); color:#60a5fa; border:1px solid rgba(96,165,250,0.15); }
-    .step-card h2 { color:var(--ember); font-size:1.2rem; font-weight:700; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem; }
-    .step-card h3 { color:var(--text); font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; }
-    .step-card h4 { color:var(--text2); font-size:0.9rem; font-weight:600; margin:1rem 0 0.4rem; }
-    .step-card p, .step-card li { color:var(--text2); font-size:0.9rem; margin-bottom:0.5rem; line-height:1.7; }
-    .step-card ul, .step-card ol { padding-left:1.25rem; margin-bottom:0.75rem; }
-    .step-card strong { color:var(--text); }
-    .step-card code { font-family:'JetBrains Mono','Consolas',monospace; background:rgba(249,115,22,0.1); color:var(--accent); padding:0.1rem 0.35rem; border-radius:4px; font-size:0.85em; }
-    .step-card pre { background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); color:#d4d4d4; padding:1rem; border-radius:8px; overflow-x:auto; margin:0.75rem 0; font-family:'JetBrains Mono','Consolas',monospace; font-size:0.82rem; line-height:1.6; }
-    .step-card table { width:100%; border-collapse:collapse; margin:0.75rem 0; font-size:0.85rem; }
-    .step-card th { background:rgba(249,115,22,0.08); color:var(--ember); padding:0.5rem 0.75rem; border:1px solid var(--border); text-align:left; font-weight:700; }
-    .step-card td { color:var(--text2); padding:0.5rem 0.75rem; border:1px solid var(--border); }
+    /* ===== Stats ===== */
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:0.75rem; margin-bottom:1.5rem; }
+    .stat { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.85rem 1rem; text-align:center; }
+    .stat .num { font-size:1.5rem; font-weight:800; color:var(--ember); }
+    .stat .label { font-size:0.75rem; color:var(--text2); text-transform:uppercase; letter-spacing:0.05em; }
 
-    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:0.5rem; margin-bottom:2rem; }
-    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.65rem 1rem; text-decoration:none; color:var(--text2); font-size:0.82rem; font-weight:500; transition:all 0.2s; }
-    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+    /* ===== Filters ===== */
+    .filters { display:flex; flex-wrap:wrap; gap:0.75rem; align-items:center; margin-bottom:1.5rem; }
+    .filters input[type="text"] {
+      flex:1; min-width:200px; background:var(--surface); border:1px solid var(--border);
+      border-radius:8px; padding:0.55rem 0.9rem; color:var(--text); font-size:0.9rem; font-family:var(--font); outline:none;
+    }
+    .filters input[type="text"]:focus { border-color:var(--accent); }
+    .filters input[type="text"]::placeholder { color:var(--text2); }
+    .chip-group { display:flex; flex-wrap:wrap; gap:0.4rem; }
+    .chip {
+      background:var(--surface); border:1px solid var(--border); border-radius:999px;
+      padding:0.35rem 0.85rem; color:var(--text2); font-size:0.8rem; font-weight:600;
+      cursor:pointer; transition:all 0.15s; font-family:var(--font); user-select:none;
+    }
+    .chip:hover { border-color:var(--accent); color:var(--accent); }
+    .chip.active { background:var(--accent); border-color:var(--accent); color:#fff; }
 
-    .info-box { background:rgba(249,115,22,0.06); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:1rem; margin:0.75rem 0; font-size:0.85rem; color:var(--text2); }
+    /* ===== Task grid ===== */
+    .task-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1rem; }
+    .task-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+      padding:1.25rem; cursor:pointer; transition:border-color 0.2s, transform 0.15s;
+      display:flex; flex-direction:column; gap:0.6rem;
+    }
+    .task-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+    .task-card .top { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
+    .task-card h3 { font-size:0.95rem; font-weight:700; color:var(--text); line-height:1.4; flex:1; min-width:150px; }
+    .badge { display:inline-block; padding:0.15rem 0.55rem; border-radius:4px; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; white-space:nowrap; }
+    .badge-lv1 { background:rgba(52,211,153,0.12); color:#34d399; border:1px solid rgba(52,211,153,0.15); }
+    .badge-lv2 { background:rgba(96,165,250,0.12); color:#60a5fa; border:1px solid rgba(96,165,250,0.15); }
+    .badge-lv3 { background:rgba(248,113,113,0.12); color:#f87171; border:1px solid rgba(248,113,113,0.15); }
+    .badge-cat { background:rgba(249,115,22,0.1); color:var(--ember); border:1px solid rgba(249,115,22,0.15); }
+    .task-card .summary { color:var(--text2); font-size:0.83rem; line-height:1.55; }
+    .task-card .stack { display:flex; flex-wrap:wrap; gap:0.35rem; }
+    .task-card .stack span {
+      font-family:'JetBrains Mono','Consolas',monospace; font-size:0.7rem; color:var(--text2);
+      background:var(--surface2); border:1px solid var(--border); border-radius:4px; padding:0.15rem 0.45rem;
+    }
+    .task-card .foot { display:flex; justify-content:space-between; align-items:center; margin-top:auto; }
+    .task-card .foot .detail-link { color:var(--accent); font-size:0.78rem; font-weight:600; }
 
-    .section-divider { text-align:center; margin:2.5rem 0; position:relative; }
-    .section-divider::before { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:var(--border); }
-    .section-divider span { background:var(--bg); padding:0 1rem; color:var(--text2); font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; position:relative; }
+    .empty-state { text-align:center; color:var(--text2); padding:3rem 1rem; border:1px dashed var(--border); border-radius:var(--radius); }
+    .empty-state .icon { font-size:2.5rem; margin-bottom:0.5rem; }
 
-    .flow-diagram { background:rgba(0,0,0,0.2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--ember); font-weight:600; line-height:2; font-family:monospace; letter-spacing:0.02em; }
+    /* ===== Modal ===== */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none;
+      align-items:flex-start; justify-content:center; z-index:100; padding:2rem 1rem; overflow-y:auto;
+    }
+    .modal-overlay.open { display:flex; }
+    .modal {
+      background:#12121b; border:1px solid var(--border); border-radius:16px;
+      max-width:720px; width:100%; padding:1.75rem; position:relative; margin-top:3rem;
+      animation:modalIn 0.2s ease;
+    }
+    @keyframes modalIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    .modal .close-btn {
+      position:absolute; top:1rem; right:1rem; background:var(--surface); border:1px solid var(--border);
+      color:var(--text2); width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:1rem; line-height:1;
+    }
+    .modal .close-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .modal h2 { font-size:1.2rem; font-weight:800; color:var(--ember); margin-bottom:0.75rem; padding-right:2.5rem; line-height:1.4; }
+    .modal .meta { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem; }
+    .modal .summary { color:var(--text2); font-size:0.9rem; margin-bottom:1rem; }
+    .modal h4 { color:var(--text); font-size:0.85rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem; }
+    .modal .stack { display:flex; flex-wrap:wrap; gap:0.35rem; margin-bottom:1.25rem; }
+    .modal .stack span {
+      font-family:'JetBrains Mono','Consolas',monospace; font-size:0.75rem; color:var(--text2);
+      background:var(--surface2); border:1px solid var(--border); border-radius:4px; padding:0.2rem 0.5rem;
+    }
+    .modal ul { list-style:none; }
+    .modal ul li { color:var(--text2); font-size:0.87rem; padding:0.5rem 0 0.5rem 1.6rem; border-bottom:1px solid rgba(255,255,255,0.06); position:relative; }
+    .modal ul li:last-child { border-bottom:none; }
+    .modal ul li::before { content:'✅'; position:absolute; left:0; top:0.5rem; font-size:0.8rem; }
+    .modal .keywords { margin-top:1.25rem; display:flex; flex-wrap:wrap; gap:0.35rem; }
+    .modal .keywords span { font-size:0.7rem; color:var(--text2); background:rgba(249,115,22,0.08); border-radius:4px; padding:0.15rem 0.5rem; }
 
     @media (max-width:600px) {
-      .toc { grid-template-columns:1fr; }
-      .step-card { padding:1.2rem; }
+      .task-grid { grid-template-columns:1fr; }
+      .filters { flex-direction:column; align-items:stretch; }
+      .filters input[type="text"] { width:100%; }
     }
   </style>
 </head>
@@ -57,637 +116,191 @@
 <div class="page">
 
   <div class="topbar">
-    <h1>⚔️ Thực chiến — Từ Requirement đến UI hoàn chỉnh</h1>
+    <h1>⚔️ Thực chiến — Task thực tế khi đi làm</h1>
     <div>
       <a href="hub.html">← Java Hub</a>
       <a href="../../index.html" style="margin-left:0.75rem;">Trang chủ</a>
     </div>
   </div>
-  <p class="desc">Cầm tay chỉ việc từ A-Z: phân tích requirement → thiết kế BE (Entity, Service, Controller) → kết nối FE (API Client, Auth, Pagination). Ví dụ xuyên suốt: <strong>CRUD Product</strong> cho e-commerce. Đây là task điển hình ở mọi công ty.</p>
+  <p class="desc">Đây là các <strong>task thực tế</strong> bạn sẽ nhận khi đi làm — từ ticket CRUD, tích hợp thanh toán, fix bug production cho đến microservices. Lọc theo độ khó hoặc lĩnh vực, bấm vào task để xem danh sách việc cần làm (<strong>deliverables</strong>).</p>
 
-  <div class="toc">
-    <a href="#req">1. Phân tích Requirement</a>
-    <a href="#entity">2. Entity</a>
-    <a href="#dto">3. DTO & Validation</a>
-    <a href="#service">4. Service</a>
-    <a href="#controller">5. Controller & Exception</a>
-    <a href="#apicontract">6. API Contract</a>
-    <a href="#httpclient">7. HTTP Client & Auth</a>
-    <a href="#state">8. State & Pagination</a>
-    <a href="#full">9. Ví dụ hoàn chỉnh</a>
+  <div class="stats" id="stats"></div>
+
+  <div class="filters">
+    <input type="text" id="search-input" placeholder="🔍 Tìm task... (ví dụ: payment, jwt, cache, N+1)" />
+    <div class="chip-group" id="level-filters"></div>
+    <div class="chip-group" id="category-filters"></div>
   </div>
 
-  <!-- ==================== PHẦN BE ==================== -->
-  <div class="section-divider"><span>🔧 Backend — Xây dựng API</span></div>
-
-  <!-- 1 -->
-  <div class="step-card" id="req">
-    <div class="phase-badge phase-be">BACKEND</div>
-    <h2>1. 📋 Phân tích Requirement</h2>
-    <p><strong>Business requirement:</strong> "Xây dựng tính năng quản lý sản phẩm cho hệ thống e-commerce. Admin có thể thêm, sửa, xóa, xem danh sách sản phẩm. Mỗi sản phẩm thuộc một danh mục."</p>
-
-    <h3>Bước 1: Xác định Entity</h3>
-    <ul>
-      <li><strong>Product</strong> — id, name, description, price, quantity, categoryId, createdAt, updatedAt</li>
-      <li><strong>Category</strong> — id, name, description</li>
-    </ul>
-
-    <h3>Bước 2: Xác định API endpoints</h3>
-    <pre>GET    /api/products?page=0&size=10&sort=name,asc   # Danh sách (phân trang)
-GET    /api/products/{id}                              # Chi tiết
-POST   /api/products                                   # Tạo mới
-PUT    /api/products/{id}                              # Cập nhật
-DELETE /api/products/{id}                              # Xóa
-GET    /api/products/search?q=keyword                  # Tìm kiếm</pre>
-
-    <h3>Bước 3: Business Rules</h3>
-    <ul>
-      <li>Tên sản phẩm không được trùng</li>
-      <li>Giá phải &gt; 0</li>
-      <li>Số lượng tồn kho &gt;= 0</li>
-      <li>Không xóa sản phẩm đang có trong đơn hàng (chỉ soft delete)</li>
-    </ul>
-
-    <div class="info-box">💡 <strong>Mẹo:</strong> Ghi lại business rule ngay từ đầu. Đây là thứ hay bị quên và gây bug nhất khi code.</div>
-  </div>
-
-  <!-- 2 -->
-  <div class="step-card" id="entity">
-    <div class="phase-badge phase-be">BACKEND</div>
-    <h2>2. 🏛️ Thiết kế Entity + Repository</h2>
-
-    <pre>@Entity
-@Table(name = "products")
-public class Product {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true, length = 200)
-    private String name;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Column(nullable = false) @Min(0)
-    private BigDecimal price;
-
-    @Column(nullable = false) @Min(0)
-    private Integer quantity;
-
-    @Column(name = "is_deleted")
-    private Boolean isDeleted = false;  // soft delete
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @CreatedDate @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-}</pre>
-
-    <h3>Repository</h3>
-    <pre>public interface ProductRepository extends JpaRepository&lt;Product, Long&gt; {
-    Optional&lt;Product&gt; findByName(String name);
-    Page&lt;Product&gt; findByIsDeletedFalse(Pageable pageable);
-
-    @Query("SELECT p FROM Product p WHERE p.isDeleted = false " +
-           "AND (LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-           "OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    Page&lt;Product&gt; searchProducts(@Param("keyword") String keyword, Pageable pageable);
-
-    boolean existsByNameAndIsDeletedFalse(String name);
-}</pre>
-
-    <div class="info-box">⚠️ <strong>Lưu ý:</strong> Dùng LocalDateTime thay vì Date (Java 8+). FetchType.LAZY cho mọi relationship. Thêm @CreatedDate/@LastModifiedDate với @EntityListeners(AuditingEntityListener.class).</div>
-  </div>
-
-  <!-- 3: DTO -->
-  <div class="step-card" id="dto">
-    <div class="phase-badge phase-be">BACKEND</div>
-    <h2>3. 📦 DTO + Mapper</h2>
-    <p>Không expose Entity ra ngoài API — luôn dùng DTO. MapStruct chuyển đổi Entity ↔ DTO.</p>
-
-    <table>
-      <tr><th>Request DTO (validation)</th><th>Response DTO</th></tr>
-      <tr><td style="vertical-align:top;"><pre style="margin:0;">public record ProductRequest(
-    @NotBlank String name,
-    @NotNull @DecimalMin("0.01") BigDecimal price,
-    @NotNull @Min(0) Integer quantity,
-    @NotNull Long categoryId
-) {}</pre></td><td style="vertical-align:top;"><pre style="margin:0;">public record ProductResponse(
-    Long id, String name, String description,
-    BigDecimal price, Integer quantity,
-    String categoryName,
-    LocalDateTime createdAt
-) {}</pre></td></tr>
-    </table>
-
-    <h3>MapStruct Mapper</h3>
-    <pre>@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ProductMapper {
-    ProductResponse toResponse(Product product);
-    Product toEntity(ProductRequest request);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "category", expression = "java(category)")
-    @Mapping(target = "createdAt", ignore = true)
-    Product toEntityWithCategory(ProductRequest request, Category category);
-
-    void updateEntity(@MappingTarget Product product, ProductRequest request);
-}</pre>
-  </div>
-
-  <!-- 4: Service -->
-  <div class="step-card" id="service">
-    <div class="phase-badge phase-be">BACKEND</div>
-    <h2>4. ⚙️ Service Layer — Business Logic</h2>
-    <p>Controller chỉ gọi Service, không chứa business logic.</p>
-
-    <pre>@Service
-@Transactional
-public class ProductService {
-
-    private final ProductRepository productRepo;
-    private final CategoryRepository categoryRepo;
-    private final ProductMapper mapper;
-
-    public ProductService(ProductRepository productRepo,
-                          CategoryRepository categoryRepo,
-                          ProductMapper mapper) {
-        this.productRepo = productRepo;
-        this.categoryRepo = categoryRepo;
-        this.mapper = mapper;
-    }
-
-    public Page&lt;ProductResponse&gt; getAllProducts(Pageable pageable) {
-        return productRepo.findByIsDeletedFalse(pageable).map(mapper::toResponse);
-    }
-
-    public ProductResponse getProduct(Long id) {
-        Product product = productRepo.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
-        return mapper.toResponse(product);
-    }
-
-    public ProductResponse createProduct(ProductRequest request) {
-        if (productRepo.existsByNameAndIsDeletedFalse(request.name())) {
-            throw new BusinessException("Tên sản phẩm đã tồn tại");
-        }
-        Category category = categoryRepo.findById(request.categoryId())
-            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-        Product product = mapper.toEntityWithCategory(request, category);
-        return mapper.toResponse(productRepo.save(product));
-    }
-
-    public ProductResponse updateProduct(Long id, ProductRequest request) {
-        Product product = productRepo.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
-        if (!product.getName().equals(request.name())
-            && productRepo.existsByNameAndIsDeletedFalse(request.name())) {
-            throw new BusinessException("Tên sản phẩm đã tồn tại");
-        }
-        Category category = categoryRepo.findById(request.categoryId())
-            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-        product.setCategory(category);
-        mapper.updateEntity(product, request);
-        return mapper.toResponse(productRepo.save(product));
-    }
-
-    public void deleteProduct(Long id) {
-        Product product = productRepo.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
-        product.setIsDeleted(true);  // soft delete
-        productRepo.save(product);
-    }
-
-    public Page&lt;ProductResponse&gt; searchProducts(String keyword, Pageable pageable) {
-        return productRepo.searchProducts(keyword, pageable).map(mapper::toResponse);
-    }
-}</pre>
-
-    <div class="info-box">💡 <strong>Mẹo:</strong> Luôn validate business rule ở Service, không chỉ ở Controller. Controller chỉ là HTTP layer.</div>
-  </div>
-
-  <!-- 5: Controller + Exception -->
-  <div class="step-card" id="controller">
-    <div class="phase-badge phase-be">BACKEND</div>
-    <h2>5. 🎮 Controller + Exception Handler</h2>
-
-    <pre>@RestController
-@RequestMapping("/api/products")
-public class ProductController {
-
-    private final ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
-
-    @GetMapping
-    public ResponseEntity&lt;Page&lt;ProductResponse&gt;&gt; getAll(
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
-            Pageable pageable) {
-        return ResponseEntity.ok(productService.getAllProducts(pageable));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity&lt;ProductResponse&gt; getById(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.getProduct(id));
-    }
-
-    @PostMapping
-    public ResponseEntity&lt;ProductResponse&gt; create(@RequestBody @Valid ProductRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(request));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity&lt;ProductResponse&gt; update(@PathVariable Long id,
-                                                   @RequestBody @Valid ProductRequest request) {
-        return ResponseEntity.ok(productService.updateProduct(id, request));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity&lt;Void&gt; delete(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity&lt;Page&lt;ProductResponse&gt;&gt; search(@RequestParam String q,
-                                                           @PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(productService.searchProducts(q, pageable));
-    }
-}</pre>
-
-    <h3>Global Exception Handler</h3>
-    <pre>@RestControllerAdvice
-public class GlobalExceptionHandler {
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity&lt;ErrorResponse&gt; handleNotFound(ResourceNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(new ErrorResponse("NOT_FOUND", ex.getMessage()));
-    }
-
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity&lt;ErrorResponse&gt; handleBusiness(BusinessException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(new ErrorResponse("BUSINESS_ERROR", ex.getMessage()));
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity&lt;ErrorResponse&gt; handleValidation(MethodArgumentNotValidException ex) {
-        String errors = ex.getBindingResult().getFieldErrors().stream()
-            .map(e -> e.getField() + ": " + e.getDefaultMessage())
-            .collect(Collectors.joining("; "));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(new ErrorResponse("VALIDATION_ERROR", errors));
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity&lt;ErrorResponse&gt; handleGeneral(Exception ex) {
-        log.error("Unhandled exception", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(new ErrorResponse("INTERNAL_ERROR", "Lỗi hệ thống, vui lòng thử lại sau"));
-    }
-}
-
-public record ErrorResponse(String code, String message) {}</pre>
-
-    <h3>Status Code Reference</h3>
-    <table>
-      <tr><th>Method</th><th>Thành công</th><th>Lỗi validation</th><th>Không tìm thấy</th></tr>
-      <tr><td>GET</td><td>200</td><td>-</td><td>404</td></tr>
-      <tr><td>POST</td><td>201</td><td>400</td><td>404 (nếu dependency không tồn tại)</td></tr>
-      <tr><td>PUT</td><td>200</td><td>400</td><td>404</td></tr>
-      <tr><td>DELETE</td><td>204</td><td>-</td><td>404</td></tr>
-    </table>
-
-    <div class="info-box">💡 Tích hợp Swagger: thêm springdoc-openapi, vào <code>/swagger-ui.html</code> xem API docs. FE team đọc contract và gọi API ngay.</div>
-  </div>
-
-  <!-- ==================== PHẦN FE ==================== -->
-  <div class="section-divider"><span>🌐 Frontend — Kết nối UI với API</span></div>
-
-  <!-- 6 -->
-  <div class="step-card" id="apicontract">
-    <div class="phase-badge phase-fe">FRONTEND</div>
-    <h2>6. 📋 API Contract + HTTP Client</h2>
-    <p>Trước khi code FE, thống nhất API contract với BE qua Swagger.</p>
-
-    <h3>Response từ BE</h3>
-    <pre>GET /api/products?page=0&size=10
-
-Response 200:
-{
-  "content": [
-    { "id": 1, "name": "Laptop", "price": 15000000,
-      "quantity": 10, "categoryName": "Điện tử",
-      "createdAt": "2026-07-30T10:00:00" }
-  ],
-  "totalElements": 50,
-  "totalPages": 5,
-  "number": 0,
-  "size": 10
-}</pre>
-
-    <h3>HTTP Client — fetch + Axios interceptor</h3>
-    <pre>// ===== 1. Khởi tạo client =====
-const API = 'http://localhost:8080/api';
-
-// Dùng fetch thuần
-async function apiGet(path) {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API}${path}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    if (!res.ok) {
-        if (res.status === 401) { logout(); return; }
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || 'Lỗi kết nối');
-    }
-    return res.json();
-}
-
-// Hoặc dùng Axios (nếu có thư viện)
-// Tự động gắn token + xử lý lỗi tập trung qua interceptor</pre>
-
-    <div class="info-box">💡 Khi BE chưa kịp làm API, dùng mock data (JSON server) để FE phát triển song song.</div>
-  </div>
-
-  <!-- 7 -->
-  <div class="step-card" id="httpclient">
-    <div class="phase-badge phase-fe">FRONTEND</div>
-    <h2>7. 🔐 Authentication — Login + JWT + Refresh Token</h2>
-
-    <div class="flow-diagram">
-Login → Server trả accessToken + refreshToken<br>
-→ Lưu vào localStorage<br>
-→ Mỗi request gắn Authorization: Bearer &lt;token&gt;<br>
-→ Token hết hạn → Refresh token → Lấy token mới<br>
-→ Refresh hết hạn → Redirect login
-    </div>
-
-    <pre>async function login(username, password) {
-    const res = await fetch(`${API}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    });
-    if (!res.ok) throw new Error('Sai tài khoản hoặc mật khẩu');
-    const data = await res.json();
-    localStorage.setItem('token', data.accessToken);
-    localStorage.setItem('refreshToken', data.refreshToken);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    return data;
-}
-
-function logout() {
-    ['token','refreshToken','user'].forEach(k => localStorage.removeItem(k));
-    window.location.href = '/login.html';
-}
-
-async function refreshAccessToken() {
-    const refreshToken = localStorage.getItem('refreshToken');
-    if (!refreshToken) { logout(); return; }
-    const res = await fetch(`${API}/auth/refresh`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refreshToken })
-    });
-    if (!res.ok) { logout(); return; }
-    const data = await res.json();
-    localStorage.setItem('token', data.accessToken);
-    return data.accessToken;
-}</pre>
-  </div>
-
-  <!-- 8: State + Pagination -->
-  <div class="step-card" id="state">
-    <div class="phase-badge phase-fe">FRONTEND</div>
-    <h2>8. 🎯 State Management + Pagination</h2>
-    <p>Mỗi API call có 4 trạng thái: Loading, Empty, Error, Success — đây là điều phân biệt Senior với Junior.</p>
-
-    <pre>class ProductList {
-    constructor() {
-        this.page = 0;
-        this.size = 10;
-        this.keyword = '';
-        this.totalPages = 0;
-        // state
-        this.loading = false;
-        this.error = null;
-        this.data = [];
-    }
-
-    async load() {
-        this.loading = true;
-        this.error = null;
-        this.render();
-
-        try {
-            const params = new URLSearchParams({
-                page: this.page, size: this.size
-            });
-            if (this.keyword) params.append('q', this.keyword);
-
-            const pageData = await apiGet(`/products?${params}`);
-            this.data = pageData.content;
-            this.totalPages = pageData.totalPages;
-        } catch (err) {
-            this.error = err.message;
-        } finally {
-            this.loading = false;
-            this.render();
-        }
-    }
-
-    search(keyword) {
-        this.keyword = keyword;
-        this.page = 0;
-        this.load();
-    }
-
-    goToPage(page) {
-        if (page &lt; 0 || page &gt;= this.totalPages) return;
-        this.page = page;
-        this.load();
-    }
-
-    render() {
-        const container = document.getElementById('product-list');
-        const pagination = document.getElementById('pagination');
-
-        // Loading
-        if (this.loading) {
-            container.innerHTML = '&lt;div class="loading"&gt;⏳ Đang tải...&lt;/div&gt;';
-            return;
-        }
-        // Error
-        if (this.error) {
-            container.innerHTML = `&lt;div class="error"&gt;❌ ${this.error}
-                &lt;button onclick="productList.load()"&gt;🔄 Thử lại&lt;/button&gt;&lt;/div&gt;`;
-            return;
-        }
-        // Empty
-        if (this.data.length === 0) {
-            container.innerHTML = '&lt;div class="empty"&gt;📭 Không tìm thấy sản phẩm&lt;/div&gt;';
-            return;
-        }
-        // Success
-        container.innerHTML = this.data.map(p =&gt; `
-            &lt;div class="product-row"&gt;
-                &lt;span class="name"&gt;${p.name}&lt;/span&gt;
-                &lt;span class="price"&gt;${p.price.toLocaleString('vi-VN')}đ&lt;/span&gt;
-                &lt;span class="category"&gt;${p.categoryName}&lt;/span&gt;
-            &lt;/div&gt;
-        `).join('');
-
-        // Pagination buttons
-        let html = '';
-        for (let i = 0; i &lt; this.totalPages; i++) {
-            html += `&lt;button class="${i === this.page ? 'active' : ''}"
-                          onclick="productList.goToPage(${i})"&gt;${i + 1}&lt;/button&gt;`;
-        }
-        pagination.innerHTML = html;
-    }
-}
-
-const productList = new ProductList();
-productList.load();</pre>
-
-    <div class="info-box">⚠️ Khi search, luôn reset page về 0. Khi chuyển trang mà có keyword đang active, vẫn giữ keyword. Xử lý loading state cho mỗi lần chuyển trang.</div>
-  </div>
-
-  <!-- 9: Ví dụ hoàn chỉnh -->
-  <div class="step-card" id="full">
-    <div class="phase-badge phase-fe">FRONTEND</div>
-    <h2>9. 🎯 Ví dụ hoàn chỉnh — Product List FE</h2>
-    <p>Gom tất cả: search + list + pagination + error handling trong 1 component.</p>
-
-    <h3>HTML</h3>
-    <pre>&lt;div class="product-page"&gt;
-    &lt;div class="toolbar"&gt;
-        &lt;input type="text" id="search-input" placeholder="🔍 Tìm kiếm sản phẩm..." /&gt;
-        &lt;button onclick="showAddForm()"&gt;+ Thêm sản phẩm&lt;/button&gt;
-    &lt;/div&gt;
-    &lt;div id="product-list"&gt;&lt;/div&gt;     &lt;!-- 4 states: loading/error/empty/data --&gt;
-    &lt;div id="pagination"&gt;&lt;/div&gt;        &lt;!-- page buttons --&gt;
-&lt;/div&gt;</pre>
-
-    <h3>JS hoàn chỉnh</h3>
-    <pre>const API = 'http://localhost:8080/api';
-
-// ===== 1. HTTP Client =====
-async function apiGet(path) {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`${API}${path}`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
-    if (!res.ok) {
-        if (res.status === 401) { logout(); return; }
-        throw new Error((await res.json().catch(() => ({}))).message || 'Lỗi kết nối');
-    }
-    return res.json();
-}
-
-// ===== 2. State & Logic =====
-const state = { page: 0, size: 10, keyword: '', totalPages: 0, loading: false, error: null, data: [] };
-
-async function loadProducts() {
-    state.loading = true; state.error = null; render();
-
-    try {
-        const params = new URLSearchParams({ page: state.page, size: state.size });
-        if (state.keyword) params.append('q', state.keyword);
-
-        const pageData = await apiGet(`/products?${params}`);
-        state.data = pageData.content;
-        state.totalPages = pageData.totalPages;
-    } catch (err) { state.error = err.message; }
-    finally { state.loading = false; render(); }
-}
-
-// ===== 3. Render UI =====
-function render() {
-    const container = document.getElementById('product-list');
-    const pagination = document.getElementById('pagination');
-
-    if (state.loading) {
-        container.innerHTML = '&lt;div class="loading"&gt;⏳ Đang tải...&lt;/div&gt;';
-        return;
-    }
-    if (state.error) {
-        container.innerHTML = `&lt;div class="error"&gt;❌ ${state.error}
-            &lt;button onclick="loadProducts()"&gt;🔄 Thử lại&lt;/button&gt;&lt;/div&gt;`;
-        return;
-    }
-    if (state.data.length === 0) {
-        container.innerHTML = '&lt;div class="empty"&gt;📭 Không tìm thấy sản phẩm&lt;/div&gt;';
-        return;
-    }
-    container.innerHTML = state.data.map(p =&gt; `
-        &lt;div class="product-row"&gt;
-            &lt;span class="name"&gt;${p.name}&lt;/span&gt;
-            &lt;span class="price"&gt;${p.price.toLocaleString('vi-VN')}đ&lt;/span&gt;
-            &lt;span class="category"&gt;${p.categoryName}&lt;/span&gt;
-        &lt;/div&gt;
-    `).join('');
-
-    let html = '';
-    for (let i = 0; i &lt; state.totalPages; i++)
-        html += `&lt;button class="${i === state.page ? 'active' : ''}"
-                      onclick="goToPage(${i})"&gt;${i + 1}&lt;/button&gt;`;
-    pagination.innerHTML = html;
-}
-
-// ===== 4. Events =====
-function goToPage(page) {
-    if (page &lt; 0 || page &gt;= state.totalPages) return;
-    state.page = page;
-    loadProducts();
-}
-
-document.getElementById('search-input')?.addEventListener('input', (e) => {
-    state.keyword = e.target.value;
-    state.page = 0;
-    loadProducts();
-});
-
-// ===== 5. Init =====
-loadProducts();</pre>
-
-    <div class="info-box">💡 <strong>Pattern này áp dụng cho mọi feature FE cần gọi API.</strong> Chỉ khác nhau ở API endpoint và render template. Áp dụng cho: User list, Order list, Category list... bất kỳ CRUD nào.</div>
-  </div>
-
-  <!-- Tổng kết -->
-  <div class="step-card">
-    <h2>🎯 Tổng kết — Flow thực chiến từ A-Z</h2>
-    <div class="flow-diagram" style="font-size:0.9rem;">
-Requirement → Entity → DTO/Mapper → Service → Controller/Exception → Swagger<br>
-                                          ↓<br>
-                            API Contract → HTTP Client → Auth → State → Pagination → UI
-    </div>
-    <ol>
-      <li><strong>Phân tích</strong> requirement → entity + business rules</li>
-      <li><strong>Entity</strong> + Repository — JPA, relationships, indexes</li>
-      <li><strong>DTO</strong> (Request validation + Response) + <strong>Mapper</strong></li>
-      <li><strong>Service</strong> — business logic, @Transactional, validate</li>
-      <li><strong>Controller</strong> — REST endpoints, đúng status code</li>
-      <li><strong>Exception Handler</strong> — @ControllerAdvice tập trung</li>
-      <li>Thống nhất <strong>API Contract</strong> qua Swagger</li>
-      <li><strong>HTTP Client</strong> — interceptors, token, error handling</li>
-      <li><strong>State</strong> — loading / error / empty / success</li>
-      <li><strong>Pagination + Search</strong> — đúng UX pattern</li>
-    </ol>
+  <div class="task-grid" id="task-grid"></div>
+
+  <div id="empty" class="empty-state" style="display:none;">
+    <div class="icon">🔍</div>
+    Không tìm thấy task phù hợp. Thử từ khóa khác hoặc xóa filter.
   </div>
 
 </div>
+
+<!-- Modal chi tiết -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="close-btn" id="modal-close" aria-label="Đóng">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script src="../../js/data/thuc-chien-data.js"></script>
+<script>
+(function () {
+  const tasks = window.thucChienTasks || [];
+  const CATEGORIES = [
+    { id: 'crud',        label: '🗄️ CRUD & Data' },
+    { id: 'auth',        label: '🔐 Auth' },
+    { id: 'api',         label: '🔌 API & Tích hợp' },
+    { id: 'feature',     label: '✨ Business Feature' },
+    { id: 'bugfix',      label: '🐛 Bugfix & Refactor' },
+    { id: 'performance', label: '⚡ Performance' },
+    { id: 'devops',      label: '🚀 DevOps & Deploy' },
+    { id: 'microservice',label: '🏗️ Microservices' },
+  ];
+  const LEVELS = [
+    { id: 1, label: '🌱 Junior' },
+    { id: 2, label: '📗 Middle' },
+    { id: 3, label: '🔥 Senior' },
+  ];
+
+  const state = { keyword: '', level: null, category: null };
+
+  // ===== Stats =====
+  function renderStats() {
+    const byLevel = { 1: 0, 2: 0, 3: 0 };
+    tasks.forEach(t => { byLevel[t.level] = (byLevel[t.level] || 0) + 1; });
+    document.getElementById('stats').innerHTML = [
+      { num: tasks.length, label: 'Tổng task' },
+      { num: byLevel[1], label: 'Junior' },
+      { num: byLevel[2], label: 'Middle' },
+      { num: byLevel[3], label: 'Senior' },
+    ].map(s => `<div class="stat"><div class="num">${s.num}</div><div class="label">${s.label}</div></div>`).join('');
+  }
+
+  // ===== Filters UI =====
+  function buildChips(containerId, items, onPick) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = items.map((it, i) =>
+      `<button class="chip${i === 0 ? ' active' : ''}" data-id="${it.id}">${it.label}</button>`
+    ).join('');
+    container.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        container.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        onPick(chip.dataset.id);
+      });
+    });
+  }
+
+  // ===== Filtering =====
+  function getFiltered() {
+    const kw = state.keyword.trim().toLowerCase();
+    return tasks.filter(t => {
+      if (state.level !== null && t.level !== state.level) return false;
+      if (state.category !== null && t.category !== state.category) return false;
+      if (kw) {
+        const haystack = [t.title, t.summary, t.stack.join(' '), t.keywords.join(' ')].join(' ').toLowerCase();
+        if (!haystack.includes(kw)) return false;
+      }
+      return true;
+    });
+  }
+
+  // ===== Card render =====
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function levelLabel(lv) {
+    const l = LEVELS.find(x => x.id === lv);
+    return l ? l.label.split(' ')[1] : 'lv' + lv;
+  }
+  function catLabel(id) {
+    const c = CATEGORIES.find(x => x.id === id);
+    return c ? c.label : id;
+  }
+
+  function renderCards() {
+    const list = getFiltered();
+    const grid = document.getElementById('task-grid');
+    const empty = document.getElementById('empty');
+
+    if (list.length === 0) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+
+    grid.innerHTML = list.map(t => `
+      <div class="task-card" data-id="${t.id}">
+        <div class="top">
+          <h3>${escapeHtml(t.title)}</h3>
+          <span class="badge badge-lv${t.level}">${levelLabel(t.level)}</span>
+          <span class="badge badge-cat">${catLabel(t.category)}</span>
+        </div>
+        <p class="summary">${escapeHtml(t.summary)}</p>
+        <div class="stack">${t.stack.map(s => `<span>${escapeHtml(s)}</span>`).join('')}</div>
+        <div class="foot">
+          <span class="detail-link">Xem chi tiết →</span>
+        </div>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.task-card').forEach(card => {
+      card.addEventListener('click', () => openModal(parseInt(card.dataset.id, 10)));
+    });
+  }
+
+  // ===== Modal =====
+  function openModal(id) {
+    const t = tasks.find(x => x.id === id);
+    if (!t) return;
+    document.getElementById('modal-body').innerHTML = `
+      <h2>${escapeHtml(t.title)}</h2>
+      <div class="meta">
+        <span class="badge badge-lv${t.level}">${levelLabel(t.level)}</span>
+        <span class="badge badge-cat">${catLabel(t.category)}</span>
+      </div>
+      <p class="summary">${escapeHtml(t.summary)}</p>
+      <h4>🛠️ Tech Stack</h4>
+      <div class="stack">${t.stack.map(s => `<span>${escapeHtml(s)}</span>`).join('')}</div>
+      <h4>📋 Deliverables — việc cần hoàn thành</h4>
+      <ul>${t.deliverables.map(d => `<li>${escapeHtml(d)}</li>`).join('')}</ul>
+      <div class="keywords">${t.keywords.map(k => `<span>#${escapeHtml(k)}</span>`).join('')}</div>
+    `;
+    document.getElementById('modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ===== Events =====
+  document.getElementById('search-input').addEventListener('input', e => {
+    state.keyword = e.target.value;
+    renderCards();
+  });
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // ===== Init =====
+  renderStats();
+  buildChips('level-filters', [{ id: 'all', label: '📊 Tất cả' }, ...LEVELS], id => {
+    state.level = id === 'all' ? null : parseInt(id, 10);
+    renderCards();
+  });
+  buildChips('category-filters', [{ id: 'all', label: '🗂️ Mọi lĩnh vực' }, ...CATEGORIES], id => {
+    state.category = id === 'all' ? null : id;
+    renderCards();
+  });
+  renderCards();
+})();
+</script>
 </body>
 </html>
