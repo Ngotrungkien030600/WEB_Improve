@@ -1,0 +1,95 @@
+/* ───── Motivation Popup (hiện lâu lâu, không làm phiền) ───── */
+.moti-popup {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 10000;
+  width: min(360px, calc(100vw - 2.5rem));
+  background: #12121b;
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  border-radius: 16px;
+  padding: 1.25rem 1.4rem 1.1rem;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.moti-popup.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.moti-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.7rem;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+  font-size: 0.8rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.15s;
+}
+.moti-close:hover { background: rgba(255, 255, 255, 0.12); color: #f1f5f9; }
+
+.moti-icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.moti-text {
+  margin: 0;
+  color: #f1f5f9;
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.6;
+  font-style: normal;
+  quotes: none;
+}
+
+.moti-author {
+  margin-top: 0.6rem;
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.moti-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.moti-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.moti-btn-primary {
+  background: #f97316;
+  color: #fff;
+}
+.moti-btn-primary:hover { background: #fb923c; }
+.moti-btn-ghost {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.moti-btn-ghost:hover { color: #f1f5f9; border-color: rgba(255, 255, 255, 0.3); }
+
+@media (max-width: 480px) {
+  .moti-popup { right: 0.75rem; bottom: 0.75rem; }
+}
