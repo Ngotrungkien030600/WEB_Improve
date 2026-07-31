@@ -1,0 +1,78 @@
+# Sprint Status - WEB_Improve (SkillForge Vue port)
+# Generated: 2026-07-31
+# Brownfield ratification: story 1.1 done — path traversal S1 fixed in server/index.js
+#
+# Reference:
+#   docs/repo-risks.md           — invariant surfaces (R1-R8) + known bugs
+#   docs/development-guide-legacy.md — Legacy app conventions
+#   docs/development-guide-vue.md    — Vue app conventions
+#   docs/index.md                 — project entry point
+
+sprint_name: "skillforge-vue-port"
+last_updated: 2026-07-31
+
+# STATUS DEFINITIONS:
+# ===================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in implementation-artifacts
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; sprint-status surfaces open ones
+
+generated: 2026-07-31
+last_updated: 2026-07-31
+project: SkillForge Vue Port
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # ---- Epic Status ----
+  epic-1: in-progress   # 1.1 done, 1.2 done (code-review + P-fixes)
+  epic-2: in-progress   # 2.1 ready-for-dev
+  epic-3: backlog          # Interactive pages with data persistence — 3.1 → 3.2 → 3.3
+
+  # ---- Epic 1: Legacy app không rò file bí mật, màn chat hoạt động ----
+  1-1-chan-duong-lay-file-bi-mat: done   # ✅ DEV + CODE-REVIEW 2026-07-31 (fix S1 path traversal). path.resolve guard + dotfile reject + unknown ext 404. server/index.js:325-359. Full test: GET /.env → 404, GET /../README.md → 404, GET /index.html → 200. Next: none (Epic 1 complete).
+  1-2-man-chat-6-persona: ready-for-dev   # story-ready LIGHT 2026-07-31 → 8 cases (happy 2, edge 2, error 3, scope 1), no guard needed
+  epic-1-retrospective: optional
+
+  # ---- Epic 2: Bản Vue phục vụ trang chủ và điều hướng được cả app ----
+  2-1-vue-app-scaffold-va-api-proxy: done   # ✅ DEV 2026-07-31. Scaffold + proxy done, build verified.
+  2-2-trang-chu-tren-vue: backlog              # CCard/CGrid/CTopbar, 5 mục so khớp. FR4/FR5/FR6.
+  2-3-dieu-huong-giua-hai-app: backlog         # AD-7 registry + helper, proxy /pages/**. FR3.
+  2-4-cung-origin-voi-legacy: backlog          # npm run build + serving strategy. FR6 partial.
+  epic-2-retrospective: optional
+
+  # ---- Epic 3: Màn có logic chạy trên bản Vue, tiến độ cũ còn nguyên ----
+  3-1-hub-voi-mau-nhan: backlog                # Java hub, AD-17 accent mapping, 5 mục so khớp.
+  3-2-man-phong-van-voi-checklist: backlog      # AD-5 + AD-16 + AD-6, interview-logic reuse, checklist localStorage.
+  3-3-khuon-port-trang-moi: backlog            # Ghi lại khuôn, dùng khuôn port thêm 1 trang.
+  epic-3-retrospective: optional

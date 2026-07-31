@@ -138,7 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (currentMode === 'solo') {
       const a = agents.find(x => x.id === selectedAgents[0]);
-      sessionLabel.textContent = `${a.icon} ${a.name} — ${a.title}`;
+      if (!a) { sessionLabel.textContent = 'Chat'; }
+      else { sessionLabel.textContent = `${a.icon} ${a.name} — ${a.title}`; }
     } else {
       const names = selectedAgents.map(id => {
         const a = agents.find(x => x.id === id);
@@ -307,15 +308,17 @@ document.addEventListener('DOMContentLoaded', () => {
           agentDiv.className = 'party-agent-reply';
           agentDiv.style.borderLeft = `3px solid ${a.color}`;
           agentDiv.innerHTML = `
-            <div class="party-agent-icon">${reply.icon}</div>
+            <div class="party-agent-icon">${escHtml(reply.icon || '')}</div>
             <div class="party-agent-body">
-              <div class="party-agent-name">${reply.name}</div>
+              <div class="party-agent-name">${escHtml(reply.name || '')}</div>
               <div class="party-agent-text">${renderMd(reply.text)}</div>
             </div>
           `;
           roundDiv.appendChild(agentDiv);
 
-          conversations[reply.agentId].push({ role: 'assistant', content: reply.text });
+          if (reply.agentId && conversations[reply.agentId]) {
+            conversations[reply.agentId].push({ role: 'assistant', content: reply.text });
+          }
         });
 
         chatMessages.appendChild(roundDiv);

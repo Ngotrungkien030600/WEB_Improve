@@ -322,9 +322,32 @@ const server = http.createServer((req, res) => {
   if (req.method === 'POST' && urlPath === API_PATHS.SALARY_INTERVIEW) return handleSalaryInterview(req, res);
   if (req.method === 'POST' && urlPath === API_PATHS.ACCELERATOR_STREAM) return handleAcceleratorStream(req, res);
 
-  let filePath = path.join(ROOT, urlPath === '/' ? 'index.html' : urlPath);
+  // Security: normalize path and verify it stays within ROOT
+  const rawFileName = urlPath === '/' ? 'index.html' : urlPath;
+  const filePath = path.join(ROOT, rawFileName);
+  const resolvedPath = path.resolve(filePath);
+  if (!resolvedPath.startsWith(path.resolve(ROOT))) {
+    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.end('<h1>404</h1>');
+    return;
+  }
+  // Reject dotfiles and dot-segments (e.g., /.env, /../README.md)
+  const baseName = path.basename(rawFileName);
+  if (baseName.startsWith('.') || rawFileName.includes('..')) {
+    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.end('<h1>404</h1>');
+    return;
+  }
+
   const ext = path.extname(filePath).toLowerCase();
   const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+
+  // Refuse unknown extensions to avoid octet-stream leakage
+  if (ext && !MIME_TYPES[ext]) {
+    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.end('<h1>404</h1>');
+    return;
+  }
 
   fs.readFile(filePath, (err, data) => {
     if (err) {

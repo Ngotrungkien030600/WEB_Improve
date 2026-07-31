@@ -1,0 +1,12 @@
+@import '@legacy/css/variables.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
