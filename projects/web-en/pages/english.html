@@ -60,6 +60,7 @@
     <button class="tab" data-mode="tense">⏰ Các thì</button>
     <button class="tab" data-mode="story">📖 Đọc truyện</button>
     <button class="tab" data-mode="game">🎮 Game</button>
+    <button class="tab" data-mode="question">❓ Hỏi & Đáp</button>
     <a class="tab exam-link" href="exam.html">📝 Thi</a>
   </nav>
 
@@ -186,6 +187,82 @@
         <a class="game-link" href="game-memory.html">🃏 Ghép cặp từ vựng</a>
         <a class="game-link" href="game-scramble.html">🔀 Xếp chữ</a>
         <a class="game-link" href="game-speedquiz.html">⚡ Trắc nghiệm nhanh</a>
+      </div>
+    </section>
+
+    <!-- Hỏi & Đáp — Question Words -->
+    <section id="question-section" class="section">
+      <div class="question-subtabs">
+        <button class="question-subtab active" data-question-mode="learn">📚 Học từ để hỏi</button>
+        <button class="question-subtab" data-question-mode="practice">✍️ Thực hành</button>
+      </div>
+
+      <!-- Lý thuyết: flip-card từng từ để hỏi -->
+      <div id="qw-learn" class="question-panel active">
+        <div class="subpage-card">
+          <div class="flip-card" id="qw-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <h2 id="qw-word">What</h2>
+                <p id="qw-usage">Hỏi về vật, việc, thông tin</p>
+                <span class="tag">Từ để hỏi</span>
+              </div>
+              <div class="flip-card-back">
+                <h3 id="qw-structure">What + is/are + S?</h3>
+                <p id="qw-example-q">❓ What is your name?</p>
+                <p id="qw-example-vi">Tên bạn là gì?</p>
+                <p class="qw-answer" id="qw-example-a">💬 My name is Lan.</p>
+              </div>
+            </div>
+          </div>
+          <div class="controls">
+            <button id="qw-prev">⬅️ Trước</button>
+            <button id="qw-flip">🔄 Lật</button>
+            <button id="qw-next">Tiếp ➡️</button>
+          </div>
+          <p class="counter" id="qw-counter">1 / 12</p>
+        </div>
+      </div>
+
+      <!-- Thực hành: scramble + quiz -->
+      <div id="qw-practice" class="question-panel">
+        <div class="question-practice-tabs">
+          <button class="question-practice-tab active" data-qp="scramble">🧩 Sắp xếp câu hỏi</button>
+          <button class="question-practice-tab" data-qp="quiz">🎯 Chọn từ để hỏi</button>
+        </div>
+
+        <!-- Dạng 1: sắp xếp từ -->
+        <div id="qw-practice-scramble" class="question-practice-panel active">
+          <div class="subpage-card">
+            <p class="tense-label" id="qw-scramble-label">What</p>
+            <p class="counter" id="qw-scramble-counter">1 / 19</p>
+            <h3 id="qw-practice-vi">Tên bạn là gì?</h3>
+            <div class="dropzone" id="qw-dropzone"></div>
+            <div class="word-bank" id="qw-words"></div>
+            <div class="practice-actions">
+              <button id="qw-check">✅ Kiểm tra</button>
+              <button id="qw-reset">🔄 Làm lại</button>
+              <button id="qw-next-scramble">Tiếp ➡️</button>
+            </div>
+            <div class="practice-feedback" id="qw-feedback"></div>
+          </div>
+        </div>
+
+        <!-- Dạng 2: trắc nghiệm chọn từ để hỏi -->
+        <div id="qw-practice-quiz" class="question-practice-panel">
+          <div class="subpage-card">
+            <p class="counter" id="qw-quiz-progress">1 / 20</p>
+            <h3 id="qw-quiz-question">____ is your name?</h3>
+            <div class="options" id="qw-quiz-options"></div>
+            <div class="quiz-feedback" id="qw-quiz-feedback"></div>
+            <div class="practice-actions">
+              <button id="qw-quiz-next">Câu tiếp ➡️</button>
+            </div>
+            <div class="quiz-stats" style="margin-top:0.75rem;">
+              <span>✅ Đúng: <strong id="qw-quiz-score">0</strong></span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>

@@ -1627,3 +1627,110 @@
     transform: none;
   }
 }
+
+/* ───── Question Words (Hỏi & Đáp) — forge dark ───── */
+.subpage .question-subtabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.subpage .question-subtab {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text2, #94a3b8);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.subpage .question-subtab:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.18);
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .question-subtab.active {
+  background: white;
+  color: var(--forge-bg, #08080e);
+  border-color: white;
+}
+
+.subpage .question-panel { display: none; }
+.subpage .question-panel.active { display: block; }
+
+/* Practice sub-tabs (scramble / quiz) */
+.subpage .question-practice-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.subpage .question-practice-tab {
+  background: rgba(255,255,255,0.06);
+  color: var(--forge-text2, #94a3b8);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 0.4rem 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.subpage .question-practice-tab:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.18);
+  color: var(--forge-text, #f1f5f9);
+}
+
+.subpage .question-practice-tab.active {
+  background: white;
+  color: var(--forge-bg, #08080e);
+  border-color: white;
+}
+
+.subpage .question-practice-panel { display: none; }
+.subpage .question-practice-panel.active { display: block; }
+
+/* Câu trả lời mẫu trên mặt sau flip-card */
+.subpage .qw-answer {
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  color: var(--color-success, #22c55e) !important;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Flip-card cho từ để hỏi: làm mặt trước rõ hơn */
+.subpage #qw-card .flip-card-front h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--forge-ember, #fbbf24);
+}
+
+.subpage #qw-card .flip-card-front p {
+  font-size: 1rem;
+  color: var(--forge-text2, #94a3b8);
+}
+
+.subpage #qw-card .flip-card-back h3 {
+  font-size: 1.1rem;
+  color: var(--forge-ember, #fbbf24);
+  margin-bottom: 0.6rem;
+}
+
+.subpage #qw-card .flip-card-back p {
+  font-size: 0.95rem;
+  color: var(--forge-text2, #94a3b8);
+  margin-bottom: 0.4rem;
+}

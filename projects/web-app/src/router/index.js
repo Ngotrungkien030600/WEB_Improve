@@ -14,6 +14,11 @@ const routes = [
     props: { hubPath: '/ai/hub' },
   },
   {
+    path: '/ai/agent',
+    name: 'ai-agent',
+    component: () => import('../pages/AiAgentPage.vue'),
+  },
+  {
     path: '/java/hub',
     name: 'java-hub',
     component: () => import('../pages/JavaHubPage.vue'),
@@ -21,8 +26,7 @@ const routes = [
   {
     path: '/frontend/hub',
     name: 'frontend-hub',
-    component: () => import('../components/HubPlaceholder.vue'),
-    props: { hubPath: '/frontend/hub' },
+    component: () => import('../pages/FrontendHubPage.vue'),
   },
   {
     path: '/cloud/hub',
@@ -81,9 +85,14 @@ const routes = [
     component: () => import('../pages/LearningPathsPage.vue'),
   },
   {
-    path: '/frontend/hub',
-    name: 'frontend-hub',
-    component: () => import('../pages/FrontendHubPage.vue'),
+    path: '/accelerator',
+    name: 'accelerator',
+    component: () => import('../pages/AcceleratorPage.vue'),
+  },
+  {
+    path: '/salary-interview',
+    name: 'salary-interview',
+    component: () => import('../pages/SalaryInterviewPage.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

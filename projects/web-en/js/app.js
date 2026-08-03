@@ -6,6 +6,7 @@ import { initVocabularyUI } from './features/vocabulary/vocabulary-ui.js';
 import { initTensesUI } from './features/tenses/tenses-ui.js';
 import { initPracticeUI } from './features/practice/practice-ui.js';
 import { initStoriesUI } from './features/stories/stories-ui.js';
+import { initQuestionWordsUI } from './features/question-words/question-words-ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Tab switching
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tense: document.getElementById('tense-section'),
     story: document.getElementById('story-section'),
     game: document.getElementById('game-section'),
+    question: document.getElementById('question-section'),
   };
 
   let activeMode = 'vocab';
@@ -41,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize feature UIs
   const { onArrowRight: vocabRight, onArrowLeft: vocabLeft, onSpaceEnter: vocabEnter } = initVocabularyUI();
   const { onArrowRight: tenseRight, onArrowLeft: tenseLeft, onSpaceEnter: tenseEnter } = initTensesUI();
+  const { onArrowRight: qwRight, onArrowLeft: qwLeft, onSpaceEnter: qwEnter } = initQuestionWordsUI();
   initPracticeUI();
   initStoriesUI();
 
@@ -57,6 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'ArrowRight') tenseRight();
       else if (e.key === 'ArrowLeft') tenseLeft();
       else if (e.key === ' ' || e.key === 'Enter') tenseEnter(e);
+    } else if (activeMode === 'question') {
+      if (e.key === 'ArrowRight') qwRight();
+      else if (e.key === 'ArrowLeft') qwLeft();
+      else if (e.key === ' ' || e.key === 'Enter') qwEnter(e);
     }
   });
 });

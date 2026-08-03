@@ -346,3 +346,5 @@ window.salaryInterviewData = {
     return this.tiers.reduce((sum, t) => sum + t.questions.length, 0);
   }
 };
+
+export const salaryInterviewData = window.salaryInterviewData;

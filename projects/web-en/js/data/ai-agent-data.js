@@ -992,3 +992,7 @@ Guardrails, allowlist tools, human-in-the-loop cho hành động nhạy cảm, v
     ]
   },
 ];
+
+export const aiAgentConcepts = window.aiAgentConcepts;
+export const aiAgentQuizData = window.aiAgentQuizData;
+export const aiAgentLessons = window.aiAgentTopics;

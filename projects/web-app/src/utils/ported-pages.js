@@ -1,6 +1,7 @@
 export const PORTED_PAGES = [
   '/',
   '/ai/hub',
+  '/ai/agent',
   '/java/hub',
   '/frontend/hub',
   '/cloud/hub',
@@ -14,11 +15,14 @@ export const PORTED_PAGES = [
   '/exam',
   '/skill-tracker',
   '/sentence-practice',
+  '/accelerator',
+  '/salary-interview',
 ];
 
 export const PORTED_PAGE_LABELS = {
   '/': 'Trang chủ',
   '/ai/hub': 'Học AI',
+  '/ai/agent': 'AI Agent',
   '/java/hub': 'Java',
   '/frontend/hub': 'Frontend',
   '/cloud/hub': 'AWS Cloud',
@@ -32,4 +36,6 @@ export const PORTED_PAGE_LABELS = {
   '/exam': 'Thi Tiếng Anh',
   '/skill-tracker': 'Skill Tracker',
   '/sentence-practice': 'Luyện nói & Viết',
+  '/accelerator': 'Accelerator 30-Day',
+  '/salary-interview': 'Phỏng vấn theo lương',
 };
