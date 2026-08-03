@@ -9,7 +9,7 @@
 #   docs/index.md                 — project entry point
 
 sprint_name: "skillforge-vue-port"
-last_updated: 2026-07-31
+last_updated: 2026-08-03
 
 # STATUS DEFINITIONS:
 # ===================
@@ -47,7 +47,7 @@ last_updated: 2026-07-31
 # - Retrospective appends its action items to action_items; sprint-status surfaces open ones
 
 generated: 2026-08-01
-last_updated: 2026-08-01
+last_updated: 2026-08-03
 project: SkillForge Vue Port
 project_key: NOKEY
 tracking_system: file-system
@@ -79,3 +79,15 @@ development_status:
   3-2-man-phong-van-voi-checklist: backlog          # Legacy key (see 3-2-man-phong-van-tren-vue above)
   3-3-khuon-port-trang-moi: done   # ✅ CODE-REVIEWED 2026-08-03 — 0 🔴
   epic-3-retrospective: optional
+
+  # ---- Epic 4: Port 23 trang còn lại sang Vue ----
+  epic-4: in-progress
+  4-1-port-game-pages: done          # memory, scramble, speedquiz ✅ CODE-REVIEWED 2026-08-03 — 1 fix (hex colors → CSS fallback vars)
+  4-2-port-exam-skill-tracker: done          # exam + skill-tracker ✅ CODE-REVIEWED 2026-08-03 — 1 fix (hex → CSS vars)
+  4-3-port-sentence-practice: backlog    # sentence-practice
+  4-4-port-hub-pages: backlog           # english, learning-paths, frontend hubs
+  4-5-port-info-pages: backlog          # ai-agent, accelerator, salary
+  4-6-port-code-learn: backlog           # code-learn (đang fix bug)
+  4-7-port-interview-english: backlog   # interview-english + bmad-agents update
+  4-8-final-routing-verify: backlog      # verify + cập nhật registry
+  epic-4-retrospective: optional

@@ -1,0 +1,1 @@
+function e(e){let t=e.slice();for(let e=t.length-1;e>0;e--){let n=Math.floor(Math.random()*(e+1));[t[e],t[n]]=[t[n],t[e]]}return t}function t(e){let t=document.createElement(`div`);return t.appendChild(document.createTextNode(e)),t.innerHTML}export{e as n,t};

@@ -41,6 +41,31 @@ const routes = [
     component: () => import('../pages/InterviewPage.vue'),
   },
   {
+    path: '/game-memory',
+    name: 'game-memory',
+    component: () => import('../pages/GameMemoryPage.vue'),
+  },
+  {
+    path: '/game-scramble',
+    name: 'game-scramble',
+    component: () => import('../pages/GameScramblePage.vue'),
+  },
+  {
+    path: '/game-speedquiz',
+    name: 'game-speedquiz',
+    component: () => import('../pages/GameSpeedQuizPage.vue'),
+  },
+  {
+    path: '/exam',
+    name: 'exam',
+    component: () => import('../pages/ExamPage.vue'),
+  },
+  {
+    path: '/skill-tracker',
+    name: 'skill-tracker',
+    component: () => import('../pages/SkillTrackerPage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'nav-redirect',
     component: CNavRedirect,

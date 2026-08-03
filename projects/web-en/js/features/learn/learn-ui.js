@@ -6,11 +6,15 @@ import { markdownToHTML } from '../../utils/markdown.js';
 let currentIndex = 0;
 
 export function initLearnUI() {
+  console.log('[LearnUI] Starting initLearnUI...');
+  console.log('[LearnUI] window.learnTopics:', typeof window.learnTopics, window.learnTopics ? `(${window.learnTopics.length} items)` : 'undefined');
   const topicList = document.getElementById('learn-topic-list');
   const topicTitle = document.getElementById('learn-topic-title');
   const topicBody = document.getElementById('learn-topic-body');
   const progressText = document.getElementById('learn-progress-text');
   const progressFill = document.getElementById('learn-progress-fill');
+
+  console.log('[LearnUI] Elements:', { topicList: !!topicList, topicTitle: !!topicTitle, topicBody: !!topicBody, progressText: !!progressText, progressFill: !!progressFill });
 
   function getTopics() { return window.learnTopics || []; }
   function getTopic(index) { return getTopics()[index] || null; }
@@ -44,7 +48,11 @@ export function initLearnUI() {
 
   function renderSidebar() {
     const topics = getTopics();
-    if (!topicList || !topics.length) return;
+    console.log('[LearnUI] renderSidebar - topics:', topics ? topics.length : 'null/undefined');
+    if (!topicList || !topics || !topics.length) {
+      console.log('[LearnUI] renderSidebar: returning early, topicList or topics missing/empty');
+      return;
+    }
 
     topicList.innerHTML = '';
     // Intro item
@@ -82,7 +90,14 @@ export function initLearnUI() {
     topicTitle.textContent = topic.title;
 
     let html = '';
-    if (topic.content) html += markdownToHTML(topic.content);
+    if (topic.content) {
+      try {
+        html += markdownToHTML(topic.content);
+      } catch (e) {
+        console.error('[LearnUI] markdownToHTML error:', e);
+        html += '<p>' + topic.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</p>';
+      }
+    }
     if (topic.checklist && topic.checklist.length > 0) {
       const checked = getChecklist();
       html += '<h3>📝 Checklist</h3>';

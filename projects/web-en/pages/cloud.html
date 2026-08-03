@@ -84,6 +84,7 @@
     <a href="#rds">7. RDS &amp; DynamoDB</a>
     <a href="#cicd">8. CodePipeline &amp; DevOps</a>
     <a href="#arch">9. Architecture &amp; Best Practices</a>
+    <a href="#bastion">10. Bastion &amp; Jump Host</a>
   </div>
 
   <!-- ===== 1. IAM ===== -->
@@ -1114,6 +1115,129 @@ Observability: CloudWatch Logs + X-Ray + Prometheus + Grafana
         <li><strong>Security:</strong> KMS (encryption), Secrets Manager (rotation), WAF (web firewall), Shield (DDoS), GuardDuty (threat detection), Inspector (vulnerability)</li>
         <li><strong>Migration:</strong> DMS (Database Migration Service), MGN (Application Migration Service), DataSync (file), Snowball (petabyte-scale physical)</li>
         <li><strong>Cost:</strong> Compute Optimizer, Trusted Advisor, Cost Explorer, Budgets, Reserved Instances vs Savings Plans (RI: instance-specific, SP: flexible)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 10. BASTION & JUMP HOST ===== -->
+  <div class="section" id="bastion">
+    <div class="section-title">10. Bastion &amp; Jump Host</div>
+    <div class="section-body">
+      <h3>Bastion Host là gì?</h3>
+      <p><strong>Bastion Host</strong> (Jump Host / Jump Box) là máy chủ hardened đặt ở <strong>public subnet</strong>, là <strong>cổng vào duy nhất (single entry point)</strong> để SSH/RDP vào các máy trong <strong>private subnet</strong> — nơi không có public IP.</p>
+
+      <div class="diagram">
+        Internet ──SSH:22──▶ [ BASTION ] ──SSH──▶ [ App 10.0.1.10 ]<br />
+        (chỉ từ IP của bạn)  Public subnet      │ [ DB  10.0.1.20 ]<br />
+                                             Private subnet (không public IP)
+      </div>
+
+      <h3>Bastion vs Jump Host</h3>
+      <p>Hai thuật ngữ <strong>dùng thay thế được</strong>. Bastion nhấn mạnh tính <em>bảo mật</em> (hardened, 2FA, audit), Jump Host nhấn mạnh chức năng <em>trung chuyển</em>.</p>
+
+      <h3>Vì sao cần?</h3>
+      <ul>
+        <li><strong>Private subnet không có public IP</strong> — không SSH trực tiếp từ internet được</li>
+        <li><strong>Giảm attack surface</strong> — chỉ 1 máy lộ ra internet, không phải tất cả</li>
+        <li><strong>Kiểm soát tập trung</strong> — 1 điểm duy nhất để log, audit, giám sát truy cập</li>
+        <li><strong>Security Group gọn</strong> — private instance chỉ mở port 22 từ bastion SG</li>
+        <li><strong>Compliance</strong> — biết chính xác ai vào hệ thống lúc nào</li>
+      </ul>
+
+      <h3>Kiến trúc + Security Group chuẩn</h3>
+      <pre><code>VPC (10.0.0.0/16)
+├── Public Subnet 10.0.1.0/24 → IGW + Bastion (EIP) + NAT Gateway
+└── Private Subnet 10.0.2.0/24 → App + DB
+
+Bastion-SG (inbound): SSH 22 ← Chỉ IP công ty/VPn (VD 203.0.113.5/32)
+App-SG (inbound):     SSH 22 ← source = Bastion-SG (không phải 0.0.0.0/0!)
+DB-SG (inbound):      MySQL 3306 ← source = App-SG</code></pre>
+      <p><strong>Nguyên tắc vàng:</strong> private instance KHÔNG BAO GIỜ mở port 22 cho <code>0.0.0.0/0</code> — chỉ mở cho security group của bastion.</p>
+
+      <h3>3 cách SSH qua Bastion</h3>
+      <h4>1. SSH Agent Forwarding (tiện, rủi ro hơn)</h4>
+      <pre><code>ssh-add ~/.ssh/my-key.pem          # thêm key vào agent (local)
+ssh -A ec2-user@bastion-ip        # -A = agent forwarding
+ssh ec2-user@10.0.2.10            # từ bastion SSH tiếp (mượn key local)</code></pre>
+      <p>⚠️ Mọi tiến trình trên bastion có thể mượn key của bạn — chỉ dùng khi bastion cực tin cậy, thêm <code>ssh-add -t 3600</code> (key hết hạn sau 1h).</p>
+
+      <h4>2. ProxyJump — an toàn nhất (khuyến nghị)</h4>
+      <p>Key <strong>không đặt trên bastion</strong>, máy local tự đi qua bastion tới đích.</p>
+      <pre><code># 1 lần
+ssh -J ec2-user@bastion-ip ec2-user@10.0.2.10
+
+# ~/.ssh/config — dùng lâu dài
+Host bastion
+    HostName 203.0.113.5
+    User ec2-user
+    IdentityFile ~/.ssh/aws-bastion.pem
+
+Host 10.0.2.*
+    User ec2-user
+    IdentityFile ~/.ssh/aws-app.pem
+    ProxyJump bastion
+# Sau đó chỉ cần: ssh 10.0.2.10</code></pre>
+
+      <h4>3. SCP / SFTP qua bastion</h4>
+      <pre><code>scp -o ProxyJump=ec2-user@bastion-ip ./file.txt ec2-user@10.0.2.10:/tmp/
+sftp -J ec2-user@bastion-ip ec2-user@10.0.2.10</code></pre>
+
+      <h3>Bảo mật — Checklist</h3>
+      <ul>
+        <li>SG chỉ mở SSH từ IP của bạn — <strong>không bao giờ</strong> <code>0.0.0.0/0</code></li>
+        <li>Dùng key riêng cho bastion, tắt password auth (<code>PasswordAuthentication no</code>)</li>
+        <li><strong>Không đặt private key lên bastion</strong> — dùng ProxyJump / SSM</li>
+        <li>Cài <strong>fail2ban</strong> chống brute-force + giới hạn MaxAuthTries</li>
+        <li><strong>MFA</strong> cho SSH (Google Authenticator PAM)</li>
+        <li>Log SSH → <strong>CloudWatch Logs / S3</strong> để audit</li>
+        <li>Patch định kỳ bằng <strong>SSM Patch Manager</strong></li>
+        <li>Bastion chỉ làm đúng 1 việc — không cài tool thừa</li>
+      </ul>
+
+      <h3>Thay thế hiện đại: SSM Session Manager (khuyến nghị)</h3>
+      <p>SSH vào private instance <strong>không cần bastion, không mở port 22, không public IP</strong>. Dùng IAM thay vì SSH keys, log đầy đủ, tích hợp MFA, chi phí 0$.</p>
+      <pre><code># Điều kiện: SSM agent + IAM role (AmazonSSMManagedInstanceCore) + route/NAT hoặc VPC Endpoint
+aws ssm start-session --target i-xxxxx
+
+# Port forward qua SSM — truy cập RDS private không cần bastion
+aws ssm start-session --target i-xxxxx \
+  --document-name AWS-StartPortForwardingSession \
+  --parameters '{"portNumber":["3306"],"localPortNumber":["8080"]}'
+mysql -h localhost -P 8080 -u admin -p</code></pre>
+
+      <h3>Bastion vs NAT Gateway — đừng nhầm!</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🛡️ Bastion Host</h4><p><strong>Inbound</strong> — cho người từ ngoài SSH vào private subnet. Cần public IP, SG hẹp.</p></div>
+        <div class="card"><h4>🌐 NAT Gateway</h4><p><strong>Outbound</strong> — cho private instances đi ra internet. Không cho ai vào từ ngoài.</p></div>
+      </div>
+
+      <h3>Bastion vs SSM — khi nào dùng gì?</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:0.85rem;margin-bottom:0.75rem;">
+        <tr style="background:var(--surface2);"><th style="padding:0.5rem;text-align:left;color:var(--accent);">Tiêu chí</th><th style="padding:0.5rem;text-align:left;color:var(--accent);">Bastion</th><th style="padding:0.5rem;text-align:left;color:var(--accent);">SSM Session Manager</th></tr>
+        <tr><td style="padding:0.5rem;border:1px solid var(--border);">Mở port 22</td><td style="padding:0.5rem;border:1px solid var(--border);">Có</td><td style="padding:0.5rem;border:1px solid var(--border);">Không cần</td></tr>
+        <tr><td style="padding:0.5rem;border:1px solid var(--border);">Public IP</td><td style="padding:0.5rem;border:1px solid var(--border);">Cần</td><td style="padding:0.5rem;border:1px solid var(--border);">Không cần</td></tr>
+        <tr><td style="padding:0.5rem;border:1px solid var(--border);">Auth</td><td style="padding:0.5rem;border:1px solid var(--border);">SSH keys</td><td style="padding:0.5rem;border:1px solid var(--border);">IAM + MFA</td></tr>
+        <tr><td style="padding:0.5rem;border:1px solid var(--border);">Audit</td><td style="padding:0.5rem;border:1px solid var(--border);">Log thủ công</td><td style="padding:0.5rem;border:1px solid var(--border);">CloudTrail + S3 đầy đủ</td></tr>
+        <tr><td style="padding:0.5rem;border:1px solid var(--border);">Chi phí</td><td style="padding:0.5rem;border:1px solid var(--border);">1 EC2 luôn chạy</td><td style="padding:0.5rem;border:1px solid var(--border);">0$</td></tr>
+      </table>
+      <p><strong>Vẫn nên dùng bastion khi:</strong> cần NAT/forward proxy, app legacy yêu cầu SSH trực tiếp, cần điểm chạy tool migration (mysqldump, rsync), hoặc team chưa có SSM.</p>
+
+      <h3>Troubleshooting nhanh</h3>
+      <ul>
+        <li><strong>Connection timed out</strong> → SG chưa mở port 22 / sai IP → kiểm tra inbound rule bastion SG</li>
+        <li><strong>Permission denied (publickey)</strong> → sai key hoặc permission file key (cần 600)</li>
+        <li><strong>SSH vào private bị treo</strong> → App-SG chưa cho source = Bastion-SG; thử <code>ssh -vvv</code></li>
+        <li><strong>Agent forwarding không chạy</strong> → <code>eval $(ssh-agent)</code>; kiểm tra <code>ssh-add -l</code></li>
+        <li><strong>429 rate limit khi SSH</strong> → brute-force → bật fail2ban, giới hạn IP SG</li>
+      </ul>
+
+      <h3>Câu hỏi phỏng vấn / exam nhanh</h3>
+      <ul>
+        <li><strong>Bastion vs NAT?</strong> Bastion = inbound (vào), NAT = outbound (ra)</li>
+        <li><strong>Cách vào private subnet an toàn nhất?</strong> 1) SSM Session Manager, 2) ProxyJump qua bastion, 3) Agent Forwarding (rủi ro nhất)</li>
+        <li><strong>SG private instance mở port 22 cho ai?</strong> Chỉ cho security group của bastion — không bao giờ 0.0.0.0/0</li>
+        <li><strong>Bastion là single point of failure?</strong> Đúng — giải pháp: 2 bastion 2 AZ + Route 53 health check, hoặc Auto Scaling, hoặc bỏ hẳn dùng SSM</li>
+        <li><strong>Exam SAA thường chọn đáp án nào?</strong> SSM Session Manager thay bastion (an toàn, free, audit tốt)</li>
       </ul>
     </div>
   </div>

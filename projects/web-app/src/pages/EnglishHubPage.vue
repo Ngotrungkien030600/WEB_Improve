@@ -57,25 +57,31 @@ const cards = [
     icon: '📝',
     title: 'Thi thử',
     description: 'Bài thi tổng hợp, chấm điểm, lưu sử',
-    path: '/pages/exam.html',
+    path: '/exam',
+  },
+  {
+    icon: '📊',
+    title: 'Skill Tracker',
+    description: 'Theo dõi kỹ năng, XP, streak',
+    path: '/skill-tracker',
   },
   {
     icon: '🃏',
     title: 'Memory Game',
     description: 'Ghép từ vựng với nghĩa',
-    path: '/pages/game-memory.html',
+    path: '/game-memory',
   },
   {
     icon: '🔀',
     title: 'Xếp chữ',
     description: 'Sắp xếp từ thành câu',
-    path: '/pages/game-scramble.html',
+    path: '/game-scramble',
   },
   {
     icon: '⚡',
     title: 'Speed Quiz',
     description: 'Trắc nghiệm nhanh có thời gian',
-    path: '/pages/game-speedquiz.html',
+    path: '/game-speedquiz',
   },
 ];
 
