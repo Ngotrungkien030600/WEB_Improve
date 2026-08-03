@@ -33,8 +33,7 @@ const routes = [
   {
     path: '/english/hub',
     name: 'english-hub',
-    component: () => import('../components/HubPlaceholder.vue'),
-    props: { hubPath: '/english/hub' },
+    component: () => import('../pages/EnglishHubPage.vue'),
   },
   {
     path: '/interview',

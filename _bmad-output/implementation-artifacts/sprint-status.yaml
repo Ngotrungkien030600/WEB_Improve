@@ -57,7 +57,7 @@ development_status:
   # ---- Epic Status ----
   epic-1: in-progress   # 1.1 done, 1.2 done (code-review + P-fixes)
   epic-2: in-progress   # 2.1 ready-for-dev
-  epic-3: backlog          # Interactive pages with data persistence — 3.1 → 3.2 → 3.3
+  epic-3: in-progress   # 3.1 done, 3.2 review, 3.3 done
 
   # ---- Epic 1: Legacy app không rò file bí mật, màn chat hoạt động ----
   1-1-chan-duong-lay-file-bi-mat: done   # ✅ DEV + CODE-REVIEW 2026-07-31 (fix S1 path traversal). path.resolve guard + dotfile reject + unknown ext 404. server/index.js:325-359. Full test: GET /.env → 404, GET /../README.md → 404, GET /index.html → 200. Next: none (Epic 1 complete).
@@ -76,5 +76,5 @@ development_status:
   3-1-hub-voi-mau-nhan: backlog          # Legacy key (see 3-1-hub-java-tren-vue above)
   3-2-man-phong-van-tren-vue: review   # ✅ DEV 2026-08-03 — 5 files + router + registry + CRLF fix. Next: /code-review 3-2
   3-2-man-phong-van-voi-checklist: backlog          # Legacy key (see 3-2-man-phong-van-tren-vue above)
-  3-3-khuon-port-trang-moi: backlog            # Ghi lại khuôn, dùng khuôn port thêm 1 trang.
+  3-3-khuon-port-trang-moi: done   # ✅ CODE-REVIEWED 2026-08-03 — 0 🔴
   epic-3-retrospective: optional

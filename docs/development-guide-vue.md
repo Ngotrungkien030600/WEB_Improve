@@ -262,3 +262,220 @@ export default defineConfig({
   }
 });
 ```
+
+---
+
+## §Port Template — Thêm một trang mới
+
+Mỗi trang port gồm 4 bước chính. Đọc khuôn này TRƯỚC KHI bắt đầu port.
+
+### Bước 0 — Phân loại trang
+
+| Loại | Pattern | Ví dụ |
+|------|---------|--------|
+| **Hub page** | `CTopbar` + `CGrid` + `CHubCard` | JavaHub, English hub, AI hub |
+| **Logic page** | `@legacy` logic + localStorage + Markdown | Interview, Review |
+| **Hybrid page** | Hub cards + logic content | Dashboard |
+
+**Hub page → dùng pattern JavaHubPage. Logic page → dùng pattern InterviewPage.**
+
+Nếu trang đang ở `HubPlaceholder` → route đã có trong router, chỉ cần thay component.
+
+### Bước 1 — Tạo Page Component
+
+**Vị trí:** `src/pages/<PascalName>Page.vue`
+
+Pattern hub page (cấu trúc chuẩn):
+
+```vue
+<template>
+  <div class="page-root">
+    <div class="container">
+      <CTopbar
+        title="☕ Java"
+        back-label="← Trang chủ"
+        @go-home="handleNavigate('/')"
+      />
+      <p class="hub-description">Mô tả hub.</p>
+      <CGrid>
+        <CHubCard
+          v-for="card in cards"
+          :key="card.title"
+          :icon="card.icon"
+          :title="card.title"
+          :description="card.description"
+          :path="card.path"
+          @navigate="handleNavigate"
+        />
+      </CGrid>
+    </div>
+  </div>
+</template>
+
+<script>
+import { navigate } from '../utils/navigate.js';
+import CTopbar from '../components/CTopbar.vue';
+import CGrid from '../components/CGrid.vue';
+import CHubCard from '../components/CHubCard.vue';
+
+const cards = [
+  {
+    icon: '💻',
+    title: 'Học Code',
+    description: 'Mô tả',
+    path: '/code-learn',
+  },
+];
+
+export default {
+  name: 'XxxPage',
+  components: { CTopbar, CGrid, CHubCard },
+  methods: {
+    handleNavigate(path) {
+      navigate(path);
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Hub page: không cần CSS mới nếu dùng CTopbar + CGrid + CHubCard */
+</style>
+```
+
+**AD rules áp dụng:**
+- **AD-12:** Không markup riêng — dùng `CTopbar`/`CGrid`/`CHubCard`
+- **AD-9:** Tên component theo role, không chứa tên trang (`CHubCard` thay vì `EnglishCard`)
+- **AD-17:** Override `--color-accent` trên `.page-root` để đổi màu nhấn (VD: `style="--color-accent: #34d399"` cho English hub)
+- **AD-10:** `<style scoped>`, không import CSS file mới
+- **AD-8:** Không hex cứng trong CSS
+
+### Bước 2 — Thêm Route
+
+**File:** `src/router/index.js`
+
+```js
+{
+  path: '/xxx/hub',
+  name: 'xxx-hub',
+  component: () => import('../pages/XxxPage.vue'),
+},
+```
+
+**AD-1:** Route trong `pages/` import component → đúng layer boundary.
+
+### Bước 3 — Thêm Registry
+
+**File:** `src/utils/ported-pages.js`
+
+```js
+export const PORTED_PAGES = [
+  // ... existing entries
+  '/xxx/hub',
+];
+
+export const PORTED_PAGE_LABELS = {
+  // ... existing entries
+  '/xxx/hub': 'Tên hiển thị',
+};
+```
+
+**AD-7:** Navigation helper đọc PORTED_PAGES → trong-danh-sách → router, ngoài → Legacy.
+
+### Bước 4 — Thêm Link (nếu cần)
+
+Trên trang chủ hoặc hub cha, thêm entry vào `homeCards` (HomePage) hoặc `cards` array (hub cha).
+
+Dùng `navigate(path)` từ helper, không `$router.push` trực tiếp.
+
+---
+
+### AD Mapping tổng hợp
+
+| Bước | AD | Quy tắc |
+|------|----|---------|
+| B1 | AD-12 | `CTopbar`/`CGrid`/`CHubCard` — không markup riêng |
+| B1 | AD-9 | Tên component theo role, không chứa tên trang |
+| B1 | AD-17 | Override `--color-accent` trên root element |
+| B1 | AD-10 | `<style scoped>`, 0 CSS file mới |
+| B1 | AD-8 | Không hex cứng, dùng token |
+| B2 | AD-1 | Layer boundary: pages/ import components/ |
+| B3 | AD-7 | PORTED_PAGES + navigate helper |
+| B4 | — | Dùng `navigate()` từ helper |
+
+---
+
+### Legacy Data & Logic
+
+#### Data (AD-16)
+
+| Tình huống | Xử lý |
+|------------|--------|
+| Data nằm trong HTML cứng | Hardcode inline trong Vue component |
+| Data nằm trong JS file | Import qua `@legacy/js/data/<file>.js` — thêm `export` nếu chưa có |
+| Data cần regenerate | Sửa build script giữ `export` |
+
+```js
+// Thêm export VÀO CUỐI file data (sau window.* = ...)
+export const dataName = window.dataName;
+
+// Import trong Vue
+import { dataName } from '@legacy/js/data/<file>.js';
+```
+
+#### Logic (AD-5)
+
+| Tình huống | Xử lý |
+|------------|--------|
+| Logic không đọc `window.*` | Import trực tiếp qua `@legacy/features/...` |
+| Logic đọc `window.*` | Sửa signature: `fn(data)` với default `window.*` |
+| Logic ghi localStorage | Dùng `toggleXxx()` từ `@legacy`, không tạo adapter riêng |
+
+```js
+// Sửa signature AD-5:
+// TRƯỚC:
+export function getData() { return window.data; }
+
+// SAU:
+export function getData(data) { return data || window.data; }
+```
+
+---
+
+### Five-Point UI Comparison (FR-6 / NFR5)
+
+Sau khi port xong, so sánh **Legacy vs Vue side-by-side**:
+
+1. **Block layout** — khối xếp đúng vị trí
+2. **Color** — màu khớp (dùng CSS token, không hex cứng)
+3. **Spacing** — khoảng cách khớp
+4. **Font/size** — cỡ/kiểu chữ khớp
+5. **Hover state** — trạng thái hover khớp
+
+---
+
+### Timing Template
+
+Ghi lại thời gian thực tế sau khi port:
+
+```
+| Bước | Estimate | Actual | Notes |
+|-------|----------|--------|-------|
+| Setup | 10p | — | — |
+| Page component | 30p | — | — |
+| Route + registry | 5p | — | — |
+| Test (FR-6) | 15p | — | — |
+| Total | 60p | — | — |
+```
+
+---
+
+### Checklist trước khi commit
+
+- [ ] Build pass: `npm run build`
+- [ ] 0 CSS file mới được tạo
+- [ ] 0 component mới được tạo
+- [ ] Không hex cứng trong `<style>`
+- [ ] Route + registry đã cập nhật
+- [ ] Link đã thêm vào trang cha (nếu cần)
+- [ ] FR-6 five-point comparison done
