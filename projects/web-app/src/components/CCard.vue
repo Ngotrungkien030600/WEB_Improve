@@ -1,9 +1,9 @@
 <template>
-  <a :href="href" class="home-card">
+  <div class="home-card" role="button" tabindex="0" @click="$emit('navigate', path)" @keydown.enter="$emit('navigate', path)">
     <span class="icon">{{ icon }}</span>
     <h2>{{ title }}</h2>
     <p>{{ description }}</p>
-  </a>
+  </div>
 </template>
 
 <script>
@@ -13,8 +13,9 @@ export default {
     icon: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String, default: '' },
-    href: { type: String, required: true },
+    path: { type: String, required: true },
   },
+  emits: ['navigate'],
 };
 </script>
 

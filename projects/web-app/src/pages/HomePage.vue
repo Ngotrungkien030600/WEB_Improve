@@ -41,7 +41,8 @@
           :icon="card.icon"
           :title="card.title"
           :description="card.description"
-          :href="card.href"
+          :path="card.path"
+          @navigate="navigate"
         />
       </CGrid>
 
@@ -58,19 +59,20 @@ import CGrid from '../components/CGrid.vue';
 import CHomeHeader from '../components/CHomeHeader.vue';
 import CHomeTimer from '../components/CHomeTimer.vue';
 import CHeroStats from '../components/CHeroStats.vue';
+import { navigate } from '../utils/navigate.js';
 
 const cards = [
-  { icon: '🚀', title: 'Accelerator 30-Day', description: 'Lộ trình cấp tốc — 1h/ngày — 30 ngày lên Senior. Technical + English real-time.', href: 'pages/accelerator.html' },
-  { icon: '🗺️', title: 'Lộ trình', description: 'Lộ trình học có mục tiêu rõ ràng từ cơ bản đến nâng cao.', href: 'pages/learning-paths.html' },
-  { icon: '🧠', title: 'Học AI', description: 'AI/ML — kiến thức, thi trắc nghiệm, câu hỏi phỏng vấn, 8 dự án thực hành.', href: 'pages/ai/hub.html' },
-  { icon: '☕', title: 'Java', description: 'Code Java, Spring Boot, phỏng vấn backend (tiếng Việt & English).', href: 'pages/java/hub.html' },
-  { icon: '⚙️', title: 'Backend Engineering', description: 'SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance.', href: 'pages/java/backend.html' },
-  { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE', href: 'pages/frontend/hub.html' },
-  { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices', href: 'pages/cloud/hub.html' },
-  { icon: '📖', title: 'English', description: 'Từ vựng, ngữ pháp, đọc truyện, luyện thi & game ghép cặp.', href: 'pages/english/hub.html' },
-  { icon: '🗣️', title: 'BMAD Agents', description: '7 trợ lý AI chuyên gia — phân tích, thiết kế, code, test, Party Mode', href: 'pages/bmad-agents.html' },
-  { icon: '📊', title: 'Skill Tracker', description: 'Theo dõi kỹ năng, XP, streak — biến việc học thành game.', href: 'pages/skill-tracker.html' },
-  { icon: '📈', title: 'Dashboard', description: 'Thống kê học tập, lịch sử thi, tổng quan tiến độ.', href: 'pages/dashboard.html' },
+  { icon: '🚀', title: 'Accelerator 30-Day', description: 'Lộ trình cấp tốc — 1h/ngày — 30 ngày lên Senior. Technical + English real-time.', path: '/accelerator' },
+  { icon: '🗺️', title: 'Lộ trình', description: 'Lộ trình học có mục tiêu rõ ràng từ cơ bản đến nâng cao.', path: '/learning-paths' },
+  { icon: '🧠', title: 'Học AI', description: 'AI/ML — kiến thức, thi trắc nghiệm, câu hỏi phỏng vấn, 8 dự án thực hành.', path: '/ai/hub' },
+  { icon: '☕', title: 'Java', description: 'Code Java, Spring Boot, phỏng vấn backend (tiếng Việt & English).', path: '/java/hub' },
+  { icon: '⚙️', title: 'Backend Engineering', description: 'SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance.', path: '/backend' },
+  { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE', path: '/frontend/hub' },
+  { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices', path: '/cloud/hub' },
+  { icon: '📖', title: 'English', description: 'Từ vựng, ngữ pháp, đọc truyện, luyện thi & game ghép cặp.', path: '/english/hub' },
+  { icon: '🗣️', title: 'BMAD Agents', description: '7 trợ lý AI chuyên gia — phân tích, thiết kế, code, test, Party Mode', path: '/bmad-agents' },
+  { icon: '📊', title: 'Skill Tracker', description: 'Theo dõi kỹ năng, XP, streak — biến việc học thành game.', path: '/skill-tracker' },
+  { icon: '📈', title: 'Dashboard', description: 'Thống kê học tập, lịch sử thi, tổng quan tiến độ.', path: '/dashboard' },
 ];
 
 export default {
@@ -78,6 +80,11 @@ export default {
   components: { CCard, CGrid, CHomeHeader, CHomeTimer, CHeroStats },
   data() {
     return { cards };
+  },
+  methods: {
+    navigate(path) {
+      navigate(path);
+    },
   },
 };
 </script>
