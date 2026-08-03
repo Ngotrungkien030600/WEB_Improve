@@ -68,7 +68,7 @@ development_status:
   2-1-vue-app-scaffold-va-api-proxy: done   # ✅ DEV 2026-07-31. Scaffold + proxy done, build verified.
   2-2-trang-chu-tren-vue: done   # ✅ CODE-REVIEWED 2026-08-01 — 2 fixes (animation delay 11 cards, comment removed)   # Story file: _bmad-output/implementation-artifacts/2-2-trang-chu-tren-vue.md
   2-3-dieu-huong-giua-hai-app: done   # ✅ CODE-REVIEWED 2026-08-03 — 0 🔴
-  2-4-cung-origin-voi-legacy: backlog          # npm run build + serving strategy. FR6 partial.
+  2-4-cung-origin-voi-legacy: done   # ✅ CODE-REVIEWED 2026-08-03 — 0 🔴 (doc-only story)
   epic-2-retrospective: optional
 
   # ---- Epic 3: Màn có logic chạy trên bản Vue, tiến độ cũ còn nguyên ----
