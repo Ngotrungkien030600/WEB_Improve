@@ -383,4 +383,3 @@ window.interviewTopics = [
     ]
   }
 ];
-export const interviewTopics = window.interviewTopics;

@@ -11,6 +11,7 @@ export const PORTED_PAGES = [
   '/game-speedquiz',
   '/exam',
   '/skill-tracker',
+  '/sentence-practice',
 ];
 
 export const PORTED_PAGE_LABELS = {
@@ -26,4 +27,5 @@ export const PORTED_PAGE_LABELS = {
   '/game-speedquiz': 'Trắc nghiệm nhanh',
   '/exam': 'Thi Tiếng Anh',
   '/skill-tracker': 'Skill Tracker',
+  '/sentence-practice': 'Luyện nói & Viết',
 };

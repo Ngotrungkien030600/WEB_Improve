@@ -66,6 +66,11 @@ const routes = [
     component: () => import('../pages/SkillTrackerPage.vue'),
   },
   {
+    path: '/sentence-practice',
+    name: 'sentence-practice',
+    component: () => import('../pages/SentencePracticePage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'nav-redirect',
     component: CNavRedirect,

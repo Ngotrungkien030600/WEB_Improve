@@ -368,3 +368,5 @@ window.sentencePractice = {
     }
   ]
 };
+
+export const sentencePractice = window.sentencePractice;

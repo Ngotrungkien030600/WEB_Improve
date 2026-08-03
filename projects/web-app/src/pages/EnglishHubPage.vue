@@ -51,7 +51,7 @@ const cards = [
     icon: '🗣️',
     title: 'Luyện nói & Viết',
     description: '400+ câu ngắn — xem Việt, viết Anh, kiểm tra, thuộc lâu',
-    path: '/pages/sentence-practice.html',
+    path: '/sentence-practice',
   },
   {
     icon: '📝',
