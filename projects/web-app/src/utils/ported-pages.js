@@ -2,6 +2,7 @@ export const PORTED_PAGES = [
   '/',
   '/ai/hub',
   '/ai/agent',
+  '/dashboard',
   '/java/hub',
   '/frontend/hub',
   '/cloud/hub',
@@ -44,4 +45,5 @@ export const PORTED_PAGE_LABELS = {
   '/code-learn': 'Học Code',
   '/interview-english': 'Interview English',
   '/bmad-agents': 'BMAD Agents',
+  '/dashboard': 'Dashboard',
 };

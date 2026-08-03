@@ -110,6 +110,11 @@ const routes = [
     component: () => import('../pages/BmadAgentsPage.vue'),
   },
   {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('../pages/DashboardPage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'nav-redirect',
     component: CNavRedirect,

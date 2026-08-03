@@ -92,3 +92,14 @@ development_status:
   4-7-port-interview-english: done   # ✅ CODE-REVIEWED 2026-08-03 — 1 🔴 fix (R8: 8 hex → CSS vars), 1 🟡 fix (stale isLoading)   # interview-english + bmad-agents ✅ STORY CREATED — story file: 4-7-port-interview-english.md
   4-8-final-routing-verify: done   # ✅ DEV 2026-08-03 — AC-1/AC-2 automated PASS; AC-3 build ✓; AC-4 manual; R8 debt ghi nhận    # verify + cập nhật registry ✅ STORY CREATED — story file: 4-8-final-routing-verify.md
   epic-4-retrospective: optional
+
+  # ---- Epic 5: Complete Vue Port — 3 pages còn lại + nav verify ----
+  epic-5: in-progress
+  5-1-port-dashboard: done   # ✅ CODE-REVIEWED 2026-08-03 — 0 🔴, 1 🟡 fix (empty catch → console.warn)
+  5-2-port-ai-hub: ready-for-dev        # Story: _bmad-output/implementation-artifacts/5-2-port-ai-hub.md
+  5-3-port-cloud: ready-for-dev          # Story: _bmad-output/implementation-artifacts/5-3-port-cloud.md
+  5-4-navigation-registry-verify: ready-for-dev  # Story: _bmad-output/implementation-artifacts/5-4-navigation-registry-verify.md
+  epic-5-retrospective: optional
+
+  # ---- Epic 6: R8 CSS Audit (tech debt) ----
+  # epic-6: backlog  # Chưa tạo — ~210 hex instances trong 13 files, cần script detect + replace
