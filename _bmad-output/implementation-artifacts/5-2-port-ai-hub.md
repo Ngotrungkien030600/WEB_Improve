@@ -4,7 +4,9 @@
 - **Epic:** 5 — Complete Vue Port (final 3 pages)
 - **Story ID:** 5.2
 - **Status:** ready-for-dev
-- **Hardened:** light (2026-08-03) — 4 AC, complex logic page
+- **Hardened:** light (2026-08-03) — 4 AC, 25 cases (verified)
+
+**Implemented:** dev-story (2026-08-03) — 3 files (AiHubPage.vue, router/index.js, ai-data.js)
 - **Created:** 2026-08-03
 
 ---

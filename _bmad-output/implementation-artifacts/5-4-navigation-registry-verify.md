@@ -3,8 +3,9 @@
 
 - **Epic:** 5 — Complete Vue Port (final 3 pages)
 - **Story ID:** 5.4
-- **Status:** ready-for-dev
+- **Status:** review
 - **Hardened:** light (2026-08-03) — registry + verify, no new pages
+- **Implemented:** dev-story (2026-08-03) — verify only, no files created
 - **Created:** 2026-08-03
 
 ---

@@ -10,8 +10,7 @@ const routes = [
   {
     path: '/ai/hub',
     name: 'ai-hub',
-    component: () => import('../components/HubPlaceholder.vue'),
-    props: { hubPath: '/ai/hub' },
+    component: () => import('../pages/AiHubPage.vue'),
   },
   {
     path: '/ai/agent',

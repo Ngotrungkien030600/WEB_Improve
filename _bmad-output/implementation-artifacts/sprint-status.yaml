@@ -96,9 +96,9 @@ development_status:
   # ---- Epic 5: Complete Vue Port — 3 pages còn lại + nav verify ----
   epic-5: in-progress
   5-1-port-dashboard: done   # ✅ CODE-REVIEWED 2026-08-03 — 0 🔴, 1 🟡 fix (empty catch → console.warn)
-  5-2-port-ai-hub: ready-for-dev        # Story: _bmad-output/implementation-artifacts/5-2-port-ai-hub.md
-  5-3-port-cloud: ready-for-dev          # Story: _bmad-output/implementation-artifacts/5-3-port-cloud.md
-  5-4-navigation-registry-verify: ready-for-dev  # Story: _bmad-output/implementation-artifacts/5-4-navigation-registry-verify.md
+  5-2-port-ai-hub: review   # ✅ DEV 2026-08-03 — 4 files, build pass, review pending        # Story: _bmad-output/implementation-artifacts/5-2-port-ai-hub.md
+  5-3-port-cloud: cancelled   # AD-14 conflict (cloud.html: 1,121 lines skip). Keep HubPlaceholder. Replaced by: none.
+  5-4-navigation-registry-verify: done   # ✅ CODE-REVIEW 2026-08-03 (verify only — no files, AC1/2/4 pass)
   epic-5-retrospective: optional
 
   # ---- Epic 6: R8 CSS Audit (tech debt) ----

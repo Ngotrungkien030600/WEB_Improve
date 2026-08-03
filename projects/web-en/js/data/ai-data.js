@@ -206,3 +206,9 @@ window.aiProjects = [
     steps: ["pip install langchain chromadb sentence-transformers", "Load tài liệu: PDF, TXT, Web pages", "Split thành chunks (500 tokens)", "Tạo embeddings all-MiniLM-L6-v2", "Lưu vào ChromaDB vector store", "Retrieval: similarity search top-k", "LLM: Ollama qwen2.5:7b hoặc OpenAI", "RetrievalQA chain + Streamlit UI"],
     code: `from langchain_community.document_loaders import TextLoader\nfrom langchain.text_splitter import RecursiveCharacterTextSplitter\nfrom langchain_community.vectorstores import Chroma\nfrom langchain_community.embeddings import HuggingFaceEmbeddings\nfrom langchain_community.llms import Ollama\nfrom langchain.chains import RetrievalQA\n\nloader = TextLoader('document.txt')\ndocs = loader.load()\nsplitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)\nchunks = splitter.split_documents(docs)\n\nembeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')\nvectorstore = Chroma.from_documents(chunks, embeddings)\n\nllm = Ollama(model='qwen2.5:7b')\nqa = RetrievalQA.from_chain_type(llm, retriever=vectorstore.as_retriever())\nprint(qa.run('Tài liệu nói gì về machine learning?'))` },
 ];
+
+// ESM exports for Vue app (AD-16)
+export const aiConcepts = window.aiConcepts;
+export const aiQuizData = window.aiQuizData;
+export const aiInterviewTopics = window.aiInterviewTopics;
+export const aiProjects = window.aiProjects;
