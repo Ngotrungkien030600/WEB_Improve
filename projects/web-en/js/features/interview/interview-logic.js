@@ -36,8 +36,8 @@ export function toggleChecklistItem(item, checked) {
   return data;
 }
 
-export function calcProgress() {
-  const topics = getTopics();
+export function calcProgress(topics) {
+  const list = getTopics(topics);
   const checked = loadChecklist();
   let total = 0;
   let done = 0;
