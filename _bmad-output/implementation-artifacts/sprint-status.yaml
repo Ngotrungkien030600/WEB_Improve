@@ -74,6 +74,7 @@ development_status:
   # ---- Epic 3: Màn có logic chạy trên bản Vue, tiến độ cũ còn nguyên ----
   3-1-hub-java-tren-vue: done   # ✅ CODE-REVIEWED 2026-08-03 — 2 fixes (R1: CTopbar/CHubCard emit events instead of routing)
   3-1-hub-voi-mau-nhan: backlog          # Legacy key (see 3-1-hub-java-tren-vue above)
-  3-2-man-phong-van-voi-checklist: backlog
+  3-2-man-phong-van-tren-vue: review   # ✅ DEV 2026-08-03 — 5 files + router + registry + CRLF fix. Next: /code-review 3-2
+  3-2-man-phong-van-voi-checklist: backlog          # Legacy key (see 3-2-man-phong-van-tren-vue above)
   3-3-khuon-port-trang-moi: backlog            # Ghi lại khuôn, dùng khuôn port thêm 1 trang.
   epic-3-retrospective: optional

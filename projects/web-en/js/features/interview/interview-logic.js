@@ -16,8 +16,8 @@ function saveChecklist(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
-export function getTopics() {
-  return window.interviewTopics || [];
+export function getTopics(topics) {
+  return topics || window.interviewTopics || [];
 }
 
 export function getTopic(index) {

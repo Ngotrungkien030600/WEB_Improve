@@ -1,1 +1,0 @@
-var e=[`/`,`/ai/hub`,`/java/hub`,`/frontend/hub`,`/cloud/hub`,`/english/hub`],t={"/":`Trang chủ`,"/ai/hub":`Học AI`,"/java/hub":`Java`,"/frontend/hub":`Frontend`,"/cloud/hub":`AWS Cloud`,"/english/hub":`English`};export{t as n,e as t};

@@ -5,6 +5,7 @@ export const PORTED_PAGES = [
   '/frontend/hub',
   '/cloud/hub',
   '/english/hub',
+  '/interview',
 ];
 
 export const PORTED_PAGE_LABELS = {
@@ -14,4 +15,5 @@ export const PORTED_PAGE_LABELS = {
   '/frontend/hub': 'Frontend',
   '/cloud/hub': 'AWS Cloud',
   '/english/hub': 'English',
+  '/interview': 'Phỏng vấn Backend',
 };

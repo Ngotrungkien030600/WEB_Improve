@@ -37,6 +37,11 @@ const routes = [
     props: { hubPath: '/english/hub' },
   },
   {
+    path: '/interview',
+    name: 'interview',
+    component: () => import('../pages/InterviewPage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'nav-redirect',
     component: CNavRedirect,

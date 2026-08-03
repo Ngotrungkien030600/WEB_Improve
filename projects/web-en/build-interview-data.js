@@ -12,7 +12,7 @@ const files = fs.readdirSync(folder)
   });
 
 function parseMarkdown(md) {
-  const lines = md.split(/\r?\n/);
+  const lines = md.replace(/\r/g, '').split('\n');
   let title = '';
   let contentLines = [];
   const checklist = [];
@@ -58,7 +58,7 @@ function parseMarkdown(md) {
 
   return {
     title,
-    content: contentLines.join('\n').trim(),
+    content: contentLines.join('').trim(),
     checklist
   };
 }
@@ -70,11 +70,12 @@ const topics = files.map(file => {
     file,
     title: parsed.title,
     content: parsed.content,
-    checklist: parsed.checklist
+    checklist: parsed.checklist,
   };
 });
 
-const output = `// Auto-generated from interview_java/*.md
-window.interviewTopics = ${JSON.stringify(topics, null, 2)};`;
+const json = JSON.stringify(topics).replace(/\r/g, '');
+const output = '// Auto-generated from interview_java/*.md\nwindow.interviewTopics = ' + json + ';\n\nexport const interviewTopics = window.interviewTopics;\n';
 
-fs.writeFileSync(path.join(__dirname, 'interview-data.js'), output, 'utf-8');
+const outputPath = path.join(__dirname, 'js/data/interview-data.js');
+fs.writeFileSync(outputPath, output, 'utf-8');
