@@ -16,8 +16,7 @@ const routes = [
   {
     path: '/java/hub',
     name: 'java-hub',
-    component: () => import('../components/HubPlaceholder.vue'),
-    props: { hubPath: '/java/hub' },
+    component: () => import('../pages/JavaHubPage.vue'),
   },
   {
     path: '/frontend/hub',

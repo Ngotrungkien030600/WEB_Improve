@@ -72,7 +72,8 @@ development_status:
   epic-2-retrospective: optional
 
   # ---- Epic 3: Màn có logic chạy trên bản Vue, tiến độ cũ còn nguyên ----
-  3-1-hub-voi-mau-nhan: backlog                # Java hub, AD-17 accent mapping, 5 mục so khớp.
-  3-2-man-phong-van-voi-checklist: backlog      # AD-5 + AD-16 + AD-6, interview-logic reuse, checklist localStorage.
+  3-1-hub-java-tren-vue: done   # ✅ CODE-REVIEWED 2026-08-03 — 2 fixes (R1: CTopbar/CHubCard emit events instead of routing)
+  3-1-hub-voi-mau-nhan: backlog          # Legacy key (see 3-1-hub-java-tren-vue above)
+  3-2-man-phong-van-voi-checklist: backlog
   3-3-khuon-port-trang-moi: backlog            # Ghi lại khuôn, dùng khuôn port thêm 1 trang.
   epic-3-retrospective: optional
