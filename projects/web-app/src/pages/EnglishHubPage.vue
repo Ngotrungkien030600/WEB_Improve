@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     handleNavigate(path) {
-      navigate(path);
+      navigate('/english');
     },
   },
 };

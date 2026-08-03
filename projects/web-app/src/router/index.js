@@ -71,6 +71,21 @@ const routes = [
     component: () => import('../pages/SentencePracticePage.vue'),
   },
   {
+    path: '/english',
+    name: 'english',
+    component: () => import('../pages/EnglishPage.vue'),
+  },
+  {
+    path: '/learning-paths',
+    name: 'learning-paths',
+    component: () => import('../pages/LearningPathsPage.vue'),
+  },
+  {
+    path: '/frontend/hub',
+    name: 'frontend-hub',
+    component: () => import('../pages/FrontendHubPage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'nav-redirect',
     component: CNavRedirect,

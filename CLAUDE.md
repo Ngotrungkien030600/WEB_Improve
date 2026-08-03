@@ -42,6 +42,29 @@ Nguồn sự thật khi port một trang: đọc HTML/CSS gốc trong `projects/
 | Tên file | `kebab-case.js`, component Vue `PascalCase.vue` |
 | Tính năng mới trong `web-en/` | Theo khuôn `<tên>-logic.js` (hàm thuần) + `<tên>-ui.js` (DOM) |
 
+## Legacy data files — quy tắc kép
+
+`projects/web-en/js/data/*.js` chạy trong 2 ngữ cảnh:
+
+- **Legacy HTML**: `<script src="...">` (non-module) → `window.X = ...` — **export keyword gây SyntaxError**
+- **Vue component**: `import { X } from '@legacy/js/data/...'` → cần ESM export
+
+### Nguyên tắc
+
+**Tuyệt đối: KHÔNG thêm `export` vào source files `data/*.js`**
+Dù là `export const X = window.X;` hay bất cứ `export` nào — Legacy browser sẽ SyntaxError.
+
+### Cơ chế hai lớp
+
+1. **Source file (`data/*.js`)**: CHỈ dùng `window.X = ...` — sạch, không export
+2. **Vite plugin** (`vite-plugin-legacy-strip-export.js`): Tự inject `export const X = window.X;` khi Vue build → Vue không lỗi, Legacy không bị ảnh hưởng
+
+### Khi thêm data file mới
+
+- Dùng `window.X = [...]` → plugin tự handle, source sạch
+- Dùng `export const X = [...]` → hoạt động trực tiếp (vocabulary.js, idioms.js, stories.js...)
+- **KHÔNG** thêm `export const X = window.X;` vào cuối source
+
 ## Trước khi tin trạng thái nào đó
 
 Kiểm chứng bằng chạy thật, đừng khẳng định từ artifact. 9 lỗi đã ghi trong `docs/index.md` — S1 và C1 đã tái hiện, 7 lỗi còn lại mới đọc code.

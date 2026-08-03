@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import legacyStripExport from './vite-plugin-legacy-strip-export.js';
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), legacyStripExport()],
   resolve: {
     alias: {
       '@legacy': path.resolve(__dirname, '../web-en')

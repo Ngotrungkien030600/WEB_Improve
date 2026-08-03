@@ -69,7 +69,7 @@ const cards = [
   { icon: '⚙️', title: 'Backend Engineering', description: 'SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance.', path: '/backend' },
   { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE', path: '/frontend/hub' },
   { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices', path: '/cloud/hub' },
-  { icon: '📖', title: 'English', description: 'Từ vựng, ngữ pháp, đọc truyện, luyện thi & game ghép cặp.', path: '/english/hub' },
+  { icon: '📖', title: 'English', description: 'Từ vựng, ngữ pháp, đọc truyện, luyện thi & game ghép cặp.', path: '/english' },
   { icon: '🗣️', title: 'BMAD Agents', description: '7 trợ lý AI chuyên gia — phân tích, thiết kế, code, test, Party Mode', path: '/bmad-agents' },
   { icon: '📊', title: 'Skill Tracker', description: 'Theo dõi kỹ năng, XP, streak — biến việc học thành game.', path: '/skill-tracker' },
   { icon: '📈', title: 'Dashboard', description: 'Thống kê học tập, lịch sử thi, tổng quan tiến độ.', path: '/dashboard' },
