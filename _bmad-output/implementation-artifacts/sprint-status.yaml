@@ -55,13 +55,13 @@ story_location: _bmad-output/implementation-artifacts
 
 development_status:
   # ---- Epic Status ----
-  epic-1: in-progress   # 1.1 done, 1.2 done (code-review + P-fixes)
-  epic-2: in-progress   # 2.1 ready-for-dev
-  epic-3: in-progress   # 3.1 done, 3.2 done, 3.3 done
+  epic-1: done   # 1.1 done, 1.2 done
+  epic-2: done   # 2.1 ready-for-dev
+  epic-3: done   # 3.1 done, 3.2 done, 3.3 done
 
   # ---- Epic 1: Legacy app không rò file bí mật, màn chat hoạt động ----
   1-1-chan-duong-lay-file-bi-mat: done   # ✅ DEV + CODE-REVIEW 2026-07-31 (fix S1 path traversal). path.resolve guard + dotfile reject + unknown ext 404. server/index.js:325-359. Full test: GET /.env → 404, GET /../README.md → 404, GET /index.html → 200. Next: none (Epic 1 complete).
-  1-2-man-chat-6-persona: ready-for-dev   # story-ready LIGHT 2026-07-31 → 8 cases (happy 2, edge 2, error 3, scope 1), no guard needed
+  1-2-man-chat-6-persona: done   # ✅ CODE-REVIEWED 2026-08-03 — 0 🔴 (0 files changed, code đã thỏa AC từ ed11880). Epic 1 complete.
   epic-1-retrospective: optional
 
   # ---- Epic 2: Bản Vue phục vụ trang chủ và điều hướng được cả app ----

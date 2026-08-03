@@ -90,6 +90,8 @@ Thêm `.catch()` trên fetch để hiện lỗi UI thay vì im lặng. Dùng ch�
 
 ### **Hardened:** light (2026-07-31) — 5 AC, 8 cases (happy 2, edge 2, error 3, scope 1), guard=n/a
 
+### **Implemented:** dev-story (2026-08-03) — 0 files changed (code đã thỏa AC từ ed11880)
+
 ## Tasks / Subtasks
 
 - [ ] Task 1 (AC: #1) — Sửa endpoint key trong `bmad-chat.js` từ `/undefined` sang `API_PATHS.BMAD_CHAT`
@@ -107,11 +109,27 @@ Thêm `.catch()` trên fetch để hiện lỗi UI thay vì im lặng. Dùng ch�
 
 ### Baseline Commit
 
-`[sẽ capture trước khi dev]`
+`ed11880` (refactor: dựng khung BMAD ở gốc, dời code sản phẩm vào projects/web-en) — code đã đúng từ lúc tạo.
 
 ### Completion Notes
 
-_(chưa dev)_
+- AC #1: Endpoint `BMAD_API_ENDPOINT = '/api/bmad/chat'` — đúng từ commit ed11880, không phải `/undefined`
+- AC #2: CSS `<link href="../css/agents/bmad-chat.css">` đã có từ ed11880
+- AC #3: Party mode dùng `Promise.allSettled` + `replies[]`, agent error không mất reply
+- AC #4: Error handling có `.catch()` + `resp.ok` + `data.error` checks
+- AC #5: Chỉ 2 files trong scope (bmad-chat.js + bmad-agents.html)
+- Bug C1 (`fetch(undefined)`): không tái hiện — `BMAD_API_ENDPOINT` luôn là string
+
+### File List
+
+```
+projects/web-en/js/agents/bmad-chat.js       (verified — đúng từ ed11880)
+projects/web-en/pages/bmad-agents.html       (verified — đúng từ ed11880)
+```
+
+### Change Log
+
+_(không sửa gì — code đã thỏa mọi AC)_
 
 ### File List
 
