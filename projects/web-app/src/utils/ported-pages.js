@@ -18,6 +18,8 @@ export const PORTED_PAGES = [
   '/accelerator',
   '/salary-interview',
   '/code-learn',
+  '/interview-english',
+  '/bmad-agents',
 ];
 
 export const PORTED_PAGE_LABELS = {
@@ -40,4 +42,6 @@ export const PORTED_PAGE_LABELS = {
   '/accelerator': 'Accelerator 30-Day',
   '/salary-interview': 'Phỏng vấn theo lương',
   '/code-learn': 'Học Code',
+  '/interview-english': 'Interview English',
+  '/bmad-agents': 'BMAD Agents',
 };

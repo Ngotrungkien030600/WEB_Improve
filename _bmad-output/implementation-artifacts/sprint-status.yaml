@@ -89,6 +89,6 @@ development_status:
   4-4-port-hub-pages: done    # english, learning-paths, frontend hubs ✅ CODE-REVIEWED 2026-08-03 — 3 fixes (rgba → CSS fallback vars, links, import thừa)
   4-5-port-info-pages: done          # ai-agent, accelerator, salary-interview ✅ CODE-REVIEWED 2026-08-03 — 0 🔴 (fix: CSS vars + forge ring + log)
   4-6-port-code-learn: done   # ✅ CODE-REVIEWED 2026-08-03 — 1 🔴 fix (R8: 11 hex → CSS vars), 2 🟡 fix (duplicate selector, unused block)
-  4-7-port-interview-english: backlog   # interview-english + bmad-agents ✅ STORY CREATED — story file: 4-7-port-interview-english.md
+  4-7-port-interview-english: done   # ✅ CODE-REVIEWED 2026-08-03 — 1 🔴 fix (R8: 8 hex → CSS vars), 1 🟡 fix (stale isLoading)   # interview-english + bmad-agents ✅ STORY CREATED — story file: 4-7-port-interview-english.md
   4-8-final-routing-verify: backlog    # verify + cập nhật registry ✅ STORY CREATED — story file: 4-8-final-routing-verify.md
   epic-4-retrospective: optional

@@ -100,6 +100,16 @@ const routes = [
     component: () => import('../pages/CodeLearnPage.vue'),
   },
   {
+    path: '/interview-english',
+    name: 'interview-english',
+    component: () => import('../pages/InterviewEnglishPage.vue'),
+  },
+  {
+    path: '/bmad-agents',
+    name: 'bmad-agents',
+    component: () => import('../pages/BmadAgentsPage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'nav-redirect',
     component: CNavRedirect,

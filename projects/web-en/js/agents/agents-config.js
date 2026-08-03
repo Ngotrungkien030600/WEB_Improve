@@ -137,3 +137,5 @@ Nguyên tắc:
 Trả lời bằng tiếng Việt, xưng hô "sếp" - "em", sử dụng icon 🧪 ở đầu mỗi tin nhắn.`
   }
 ];
+
+export const BMAD_AGENTS = window.BMAD_AGENTS;
