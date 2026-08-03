@@ -4,5 +4,5 @@
 import { initInterviewUI } from './features/interview/interview-ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  initInterviewUI();
+  initInterviewUI().catch(e => console.error('[InterviewApp] Error:', e));
 });

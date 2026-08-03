@@ -1,19 +1,57 @@
 /**
  * Interview — State & Business Logic
  * Manages topic list, checklist persistence, progress calculation.
+ * Uses IndexedDB via progressDB for persistent storage.
  */
-const STORAGE_KEY = 'interviewChecklist';
 
-function loadChecklist() {
+let checklistCache = {};
+let isInitialized = false;
+
+async function loadChecklistFromIDB() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-  } catch {
+    const completed = await window.progressDB.getCompletedByType('checklist');
+    return completed.reduce((acc, item) => {
+      acc[item.itemId] = true;
+      return acc;
+    }, {});
+  } catch (e) {
+    console.warn('Failed to load checklist from IndexedDB:', e);
     return {};
   }
 }
 
-function saveChecklist(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+async function migrateFromLocalStorage() {
+  try {
+    const localData = localStorage.getItem('interviewChecklist');
+    if (localData) {
+      const parsed = JSON.parse(localData);
+      for (const item of Object.keys(parsed)) {
+        if (parsed[item]) {
+          await window.progressDB.markCompleted(item, 'interview', 'checklist', { title: item });
+        }
+      }
+      localStorage.removeItem('interviewChecklist');
+    }
+  } catch (e) {
+    console.warn('Migration from localStorage failed:', e);
+  }
+}
+
+export async function initChecklist() {
+  if (isInitialized) return;
+  await migrateFromLocalStorage();
+  checklistCache = await loadChecklistFromIDB();
+  isInitialized = true;
+}
+
+async function toggleChecklistItem(item, checked) {
+  if (checked) {
+    await window.progressDB.markCompleted(item, 'interview', 'checklist', { title: item });
+  } else {
+    await window.progressDB.uncomplete(item, 'checklist');
+  }
+  checklistCache[item] = checked;
+  return checklistCache;
 }
 
 export function getTopics(topics) {
@@ -26,26 +64,20 @@ export function getTopic(index) {
 }
 
 export function getChecklist() {
-  return loadChecklist();
+  return checklistCache;
 }
 
-export function toggleChecklistItem(item, checked) {
-  const data = loadChecklist();
-  data[item] = checked;
-  saveChecklist(data);
-  return data;
-}
+export { toggleChecklistItem };
 
 export function calcProgress(topics) {
   const list = getTopics(topics);
-  const checked = loadChecklist();
   let total = 0;
   let done = 0;
-  topics.forEach(topic => {
+  list.forEach(topic => {
     if (topic.checklist) {
       topic.checklist.forEach(item => {
         total++;
-        if (checked[item]) done++;
+        if (checklistCache[item]) done++;
       });
     }
   });
@@ -53,8 +85,7 @@ export function calcProgress(topics) {
 }
 
 export function calcTopicProgress(topic) {
-  const checked = loadChecklist();
   const total = topic.checklist ? topic.checklist.length : 0;
-  const done = topic.checklist ? topic.checklist.filter(item => checked[item]).length : 0;
+  const done = topic.checklist ? topic.checklist.filter(item => checklistCache[item]).length : 0;
   return { done, total };
 }

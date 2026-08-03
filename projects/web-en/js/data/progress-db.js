@@ -271,6 +271,19 @@ window.progressDB = {
     });
   },
 
+  /** Remove completed item */
+  async uncomplete(itemId, type) {
+    await this.init();
+    const key = `${type}-${itemId}`;
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction('completed', 'readwrite');
+      const store = tx.objectStore('completed');
+      const req = store.delete(key);
+      req.onsuccess = () => resolve();
+      req.onerror = (e) => reject(e.target.error);
+    });
+  },
+
   /** Migrate from localStorage to IndexedDB */
   async migrateFromLocalStorage() {
     try {

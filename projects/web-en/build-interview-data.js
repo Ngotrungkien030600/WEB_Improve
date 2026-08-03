@@ -11,6 +11,15 @@ const files = fs.readdirSync(folder)
     return a.localeCompare(b);
   });
 
+function escapeJsonString(str) {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t');
+}
+
 function parseMarkdown(md) {
   const lines = md.replace(/\r/g, '').split('\n');
   let title = '';
@@ -58,7 +67,7 @@ function parseMarkdown(md) {
 
   return {
     title,
-    content: contentLines.join('').trim(),
+    content: contentLines.join('\n').trim(),
     checklist
   };
 }
@@ -74,8 +83,9 @@ const topics = files.map(file => {
   };
 });
 
-const json = JSON.stringify(topics).replace(/\r/g, '');
-const output = '// Auto-generated from interview_java/*.md\nwindow.interviewTopics = ' + json + ';\n\nexport const interviewTopics = window.interviewTopics;\n';
+const json = JSON.stringify(topics, null, 2);
+const output = '// Auto-generated from interview_java/*.md\nwindow.interviewTopics = ' + json + ';\n';
 
 const outputPath = path.join(__dirname, 'js/data/interview-data.js');
 fs.writeFileSync(outputPath, output, 'utf-8');
+console.log('Generated', topics.length, 'topics');

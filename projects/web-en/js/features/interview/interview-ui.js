@@ -2,7 +2,7 @@
  * Interview — DOM / UI Layer
  * Renders the sidebar, topic content, checklist, and progress bar.
  */
-import { getTopics, getTopic, getChecklist, toggleChecklistItem, calcProgress, calcTopicProgress } from './interview-logic.js';
+import { getTopics, getTopic, getChecklist, toggleChecklistItem, initChecklist, calcProgress, calcTopicProgress } from './interview-logic.js';
 import { markdownToHTML } from '../../utils/markdown.js';
 
 let currentIndex = 0;
@@ -11,18 +11,15 @@ const GROUPS = [
   { label: '📘 Java Core', indices: [1, 2, 3, 4, 5] },
   { label: '🗄️ Database & Spring', indices: [6, 7, 8, 9, 10, 11, 12] },
   { label: '☁️ DevOps & Architecture', indices: [13, 14, 15, 16, 17, 18] },
-  { label: '📝 Practice & Testing', indices: [19, 20, 21, 22, 23, 24, 25, 26, 27] },
-  { label: '🔧 Advanced', indices: [28, 29, 30, 31] },
-  { label: '🛠️ Dev Tools & Infrastructure', indices: [32, 33, 34] },
-  { label: '📐 Clean Code & Soft Skills', indices: [35, 36] },
-  { label: '🗄️ NoSQL & Best Practices', indices: [37, 38, 39] },
+  { label: '📝 Practice & Testing', indices: [19, 20, 21, 22, 23, 24, 25, 26] },
 ];
 
 function shortTitle(title) {
   return title.replace(/^📄 /, '').replace(/^Phần (\d+) — /i, '$1 — ');
 }
 
-export function initInterviewUI() {
+export async function initInterviewUI() {
+  await initChecklist();
   const topicList = document.getElementById('interview-topic-list');
   const topicTitle = document.getElementById('interview-topic-title');
   const topicBody = document.getElementById('interview-topic-body');
@@ -31,7 +28,7 @@ export function initInterviewUI() {
 
   function renderSidebar() {
     const topics = getTopics();
-    if (!topicList || !topics.length) return;
+    if (!topicList || !topics || !topics.length) return;
 
     topicList.innerHTML = '';
     // README intro — always shown at top
@@ -125,8 +122,8 @@ export function initInterviewUI() {
 
     // Bind checklist events
     topicBody.querySelectorAll('.checklist-item input').forEach(input => {
-      input.addEventListener('change', () => {
-        toggleChecklistItem(input.dataset.item, input.checked);
+      input.addEventListener('change', async () => {
+        await toggleChecklistItem(input.dataset.item, input.checked);
         input.closest('.checklist-item').classList.toggle('checked', input.checked);
         renderProgress();
         // Update the status count for the active topic's group

@@ -80,21 +80,30 @@
   }
 
   function updateStats() {
-    const h = getHistory();
-    const today = getTodayKey();
-    const todayMin = h.dates[today] || 0;
-    const elTotal = document.getElementById('stat-total');
-    const elStreak = document.getElementById('stat-streak');
-    const elToday = document.getElementById('stat-today');
-    if (elTotal) elTotal.textContent = h.sessions;
-    if (elStreak) elStreak.textContent = `${h.streak}🔥`;
-    if (elToday) elToday.textContent = `${todayMin}m`;
+    Promise.all([
+      window.progressDB.getRecentSessions(1),
+      window.progressDB.getStreak(),
+    ]).then(([sessions, streak]) => {
+      const today = getTodayKey();
+      const todaySessions = sessions.filter(s => s.date.startsWith(today));
+      const todayMin = todaySessions.reduce((sum, s) => sum + (s.duration || 0), 0);
+      const elTotal = document.getElementById('stat-total');
+      const elStreak = document.getElementById('stat-streak');
+      const elToday = document.getElementById('stat-today');
+      if (elTotal) elTotal.textContent = streak.current;
+      if (elStreak) elStreak.textContent = `${streak.current}🔥`;
+      if (elToday) elToday.textContent = `${todayMin}m`;
+    }).catch(err => console.warn('Failed to update stats:', err));
   }
 
-  /* ───── Modal ───── */
-  function showCongrats(minutes) {
+  async function showCongrats(minutes) {
     playAlarm();
-    const h = getHistory();
+    const streak = await window.progressDB.getStreak();
+    const todaySessions = await window.progressDB.getRecentSessions(1);
+    const today = getTodayKey();
+    const todayMin = todaySessions
+      .filter(s => s.date.startsWith(today))
+      .reduce((sum, s) => sum + (s.duration || 0), 0);
     const modal = document.createElement('div');
     modal.innerHTML = `
       <div class="forge-modal-overlay">
@@ -103,7 +112,7 @@
           <h2>Rèn thành công!</h2>
           <div class="forge-modal-stats">
             Bạn đã hoàn thành <strong>${minutes} phút</strong> tập trung.<br>
-            Hôm nay: <strong>${h.dates[getTodayKey()] || 0}m</strong> &middot; Streak: <strong>${h.streak}🔥</strong>
+            Hôm nay: <strong>${todayMin}m</strong> &middot; Streak: <strong>${streak.current}🔥</strong>
           </div>
           <button class="forge-modal-btn">Tiếp tục</button>
         </div>
@@ -113,7 +122,7 @@
     modal.querySelector('.forge-modal-btn').addEventListener('click', () => modal.remove());
 
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('SkillForge', { body: `⚒️ Rèn xong! ${minutes} phút tập trung. Streak: ${h.streak}🔥` });
+      new Notification('SkillForge', { body: `⚒️ Rèn xong! ${minutes} phút tập trung. Streak: ${streak.current}🔥` });
     }
   }
 
@@ -154,8 +163,7 @@
       timeEl.classList.remove('warning', 'danger');
       toggleBtn.textContent = '⚒️';
       document.title = 'SkillForge — Lò rèn kỹ năng';
-      // Record session
-      recordSession(minutes);
+      window.progressDB.logSession({ type: 'focus', itemId: 'pomodoro', duration: minutes });
       updateStats();
       setTimeout(() => showCongrats(minutes), 300);
     }
