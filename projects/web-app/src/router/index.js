@@ -95,6 +95,11 @@ const routes = [
     component: () => import('../pages/SalaryInterviewPage.vue'),
   },
   {
+    path: '/code-learn',
+    name: 'code-learn',
+    component: () => import('../pages/CodeLearnPage.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'nav-redirect',
     component: CNavRedirect,

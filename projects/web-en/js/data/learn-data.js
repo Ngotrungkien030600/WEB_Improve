@@ -236,3 +236,5 @@ window.learnTopics = [
     ]
   }
 ];
+
+export const learnTopics = window.learnTopics;

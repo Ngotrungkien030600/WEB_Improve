@@ -17,6 +17,7 @@ export const PORTED_PAGES = [
   '/sentence-practice',
   '/accelerator',
   '/salary-interview',
+  '/code-learn',
 ];
 
 export const PORTED_PAGE_LABELS = {
@@ -38,4 +39,5 @@ export const PORTED_PAGE_LABELS = {
   '/sentence-practice': 'Luyện nói & Viết',
   '/accelerator': 'Accelerator 30-Day',
   '/salary-interview': 'Phỏng vấn theo lương',
+  '/code-learn': 'Học Code',
 };

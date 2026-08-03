@@ -46,8 +46,9 @@ last_updated: 2026-08-03
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; sprint-status surfaces open ones
 
-generated: 2026-08-01
 last_updated: 2026-08-03
+sprint_name: "skillforge-vue-port"
+generated: 2026-08-01
 project: SkillForge Vue Port
 project_key: NOKEY
 tracking_system: file-system
@@ -87,7 +88,7 @@ development_status:
   4-3-port-sentence-practice: done    # sentence-practice ✅ CODE-REVIEWED 2026-08-03 — 1 fix (rgba → CSS fallback vars)
   4-4-port-hub-pages: done    # english, learning-paths, frontend hubs ✅ CODE-REVIEWED 2026-08-03 — 3 fixes (rgba → CSS fallback vars, links, import thừa)
   4-5-port-info-pages: done          # ai-agent, accelerator, salary-interview ✅ CODE-REVIEWED 2026-08-03 — 0 🔴 (fix: CSS vars + forge ring + log)
-  4-6-port-code-learn: backlog           # code-learn (đang fix bug)
-  4-7-port-interview-english: backlog   # interview-english + bmad-agents update
-  4-8-final-routing-verify: backlog      # verify + cập nhật registry
+  4-6-port-code-learn: done   # ✅ CODE-REVIEWED 2026-08-03 — 1 🔴 fix (R8: 11 hex → CSS vars), 2 🟡 fix (duplicate selector, unused block)
+  4-7-port-interview-english: backlog   # interview-english + bmad-agents ✅ STORY CREATED — story file: 4-7-port-interview-english.md
+  4-8-final-routing-verify: backlog    # verify + cập nhật registry ✅ STORY CREATED — story file: 4-8-final-routing-verify.md
   epic-4-retrospective: optional
