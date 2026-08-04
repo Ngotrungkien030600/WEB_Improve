@@ -28,6 +28,31 @@ const routes = [
     component: () => import('../pages/FrontendHubPage.vue'),
   },
   {
+    path: '/frontend/ui-interview',
+    name: 'frontend-ui-interview',
+    component: () => import('../pages/FrontendUiInterviewPage.vue'),
+  },
+  {
+    path: '/frontend/responsive',
+    name: 'frontend-responsive',
+    component: () => import('../pages/FrontendResponsivePage.vue'),
+  },
+  {
+    path: '/frontend/javascript',
+    name: 'frontend-javascript',
+    component: () => import('../pages/FrontendJavaScriptPage.vue'),
+  },
+  {
+    path: '/frontend/html-css',
+    name: 'frontend-html-css',
+    component: () => import('../pages/FrontendHtmlCssPage.vue'),
+  },
+  {
+    path: '/frontend/frameworks',
+    name: 'frontend-frameworks',
+    component: () => import('../pages/FrontendFrameworksPage.vue'),
+  },
+  {
     path: '/cloud',
     name: 'cloud',
     component: () => import('../pages/CloudHubPage.vue'),
@@ -111,6 +136,21 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('../pages/DashboardPage.vue'),
+  },
+  {
+    path: '/java/thuc-chien',
+    name: 'java-thuc-chien',
+    component: () => import('../pages/JavaThucChienPage.vue'),
+  },
+  {
+    path: '/java/spring-boot',
+    name: 'java-spring-boot',
+    component: () => import('../pages/JavaSpringBootPage.vue'),
+  },
+  {
+    path: '/java/backend',
+    name: 'java-backend',
+    component: () => import('../pages/JavaBackendPage.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

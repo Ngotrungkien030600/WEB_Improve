@@ -9,7 +9,7 @@
 #   docs/index.md                 — project entry point
 
 sprint_name: "skillforge-vue-port"
-last_updated: 2026-08-04
+last_updated: 2026-08-05
 
 # STATUS DEFINITIONS:
 # ===================
@@ -46,7 +46,7 @@ last_updated: 2026-08-04
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; sprint-status surfaces open ones
 
-last_updated: 2026-08-04
+last_updated: 2026-08-05
 sprint_name: "skillforge-vue-port"
 generated: 2026-08-01
 project: SkillForge Vue Port
@@ -113,11 +113,11 @@ development_status:
   epic-6-retrospective: optional
 
   # ---- Epic 7: Complete Vue Port — 10 pages còn lại ----
-  epic-7: backlog
+  epic-7: done   # ✅ EPIC COMPLETE 2026-08-05 — all stories done
   7-1-ai-cloud-hubs: done          # ✅ CODE-REVIEWED 2026-08-04 — /ai, /cloud routes, CloudHubPage created
-  7-2-java-sub-pages: backlog          # thuc-chien, spring-boot, backend
-  7-3-frontend-ui-responsive: backlog          # ui-interview, responsive
-  7-4-frontend-js-htmlcss: backlog          # javascript, html-css
-  7-5-frontend-frameworks: backlog          # frameworks
-  7-6-navigation-registry-verify: backlog          # verify all + PORTED_PAGES
+  7-2-java-sub-pages: done          # thuc-chien, spring-boot, backend (override AD-14)
+  7-3-frontend-ui-responsive: done          # ✅ CODE-REVIEWED 2026-08-04 — 0 🔴, 1 🟡 (dead field removed)
+  7-4-frontend-js-htmlcss: done          # javascript, html-css ✅ CODE-REVIEWED 2026-08-05 — 0 🔴, 1 🟡 (dead .tag CSS removed)
+  7-5-frontend-frameworks: done          # frameworks ✅ CODE-REVIEWED 2026-08-05
+  7-6-navigation-registry-verify: done   # ✅ CODE-REVIEWED 2026-08-05 — 0 🔴 (data-only change)
   epic-7-retrospective: optional

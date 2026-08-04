@@ -66,31 +66,31 @@ const cards = [
     icon: '🎨',
     title: 'HTML & CSS',
     description: 'HTML5 semantic, CSS Flexbox/Grid, Animation, Variables, BEM, Responsive, 25+ kỹ thuật',
-    path: '/pages/frontend/html-css.html',
+    path: '/frontend/html-css',
   },
   {
     icon: '⚡',
     title: 'JavaScript',
     description: 'ES6+, DOM, Async/Await, Closure, Promise, Event Loop, Web API, Module, TypeScript cơ bản',
-    path: '/pages/frontend/javascript.html',
+    path: '/frontend/javascript',
   },
   {
     icon: '⚛️',
     title: 'React / Vue / Angular',
     description: 'Component lifecycle, Hooks, State management, Router, Composition API, Directive, Signals',
-    path: '/pages/frontend/frameworks.html',
+    path: '/frontend/frameworks',
   },
   {
     icon: '📱',
     title: 'Responsive Design',
     description: 'Media Queries, Container Queries, Mobile-first, Fluid typography, Breakpoint system',
-    path: '/pages/frontend/responsive.html',
+    path: '/frontend/responsive',
   },
   {
     icon: '💼',
     title: 'Phỏng vấn UI/FE',
     description: 'Câu hỏi phỏng vấn Frontend theo cấp độ: Junior, Middle, Senior — kèm câu trả lời mẫu',
-    path: '/pages/frontend/ui-interview.html',
+    path: '/frontend/ui-interview',
   },
 ];
 

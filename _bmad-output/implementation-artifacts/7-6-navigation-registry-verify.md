@@ -4,7 +4,7 @@
 
 - **Story:** 7.6 — Navigation Registry & Final Verify
 - **Epic:** 7 — Complete Vue Port
-- **Status:** backlog
+- **Status:** ready-for-dev
 - **Created:** 2026-08-04
 
 ---
@@ -60,6 +60,27 @@ So that Epic 7 is complete and the Vue app is fully functional.
 ### AC6: Epic Sign-off
 - [ ] Epic 7 status → `done`
 - [ ] Sprint summary
+
+---
+
+## Cases
+
+**Happy path (1):**
+1. Build passes — `npm run build` → exit 0
+
+**Verification (3):**
+2. All routes registered in router — `router/index.js` has all 10 routes
+3. All routes in ported-pages registry — `/frontend/javascript`, `/frontend/responsive`, `/frontend/ui-interview`, `/java/thuc-chien`, `/java/spring-boot`, `/java/backend`
+4. All routes have labels in `PORTED_PAGE_LABELS`
+
+**Edge (1):**
+5. Orphan routes — routes in router without ported-pages entry (should be 0)
+
+---
+
+## **Hardened:** light (2026-08-05) — 6 AC, 5 cases (happy/verify/edge), guard=n/a
+
+## **Implemented:** 2026-08-05
 
 ---
 

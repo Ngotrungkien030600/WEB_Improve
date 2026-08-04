@@ -5,6 +5,11 @@ export const PORTED_PAGES = [
   '/dashboard',
   '/java/hub',
   '/frontend/hub',
+  '/frontend/frameworks',
+  '/frontend/html-css',
+  '/frontend/javascript',
+  '/frontend/responsive',
+  '/frontend/ui-interview',
   '/cloud',
   '/english/hub',
   '/english',
@@ -21,6 +26,9 @@ export const PORTED_PAGES = [
   '/code-learn',
   '/interview-english',
   '/bmad-agents',
+  '/java/thuc-chien',
+  '/java/spring-boot',
+  '/java/backend',
 ];
 
 export const PORTED_PAGE_LABELS = {
@@ -29,6 +37,8 @@ export const PORTED_PAGE_LABELS = {
   '/ai/agent': 'AI Agent',
   '/java/hub': 'Java',
   '/frontend/hub': 'Frontend',
+  '/frontend/frameworks': 'React / Vue / Angular',
+  '/frontend/html-css': 'HTML & CSS',
   '/cloud': 'AWS Cloud',
   '/english/hub': 'English',
   '/english': 'Học Tiếng Anh',
@@ -46,4 +56,7 @@ export const PORTED_PAGE_LABELS = {
   '/interview-english': 'Interview English',
   '/bmad-agents': 'BMAD Agents',
   '/dashboard': 'Dashboard',
+  '/java/thuc-chien': 'Thực chiến',
+  '/java/spring-boot': 'Spring Boot',
+  '/java/backend': 'Backend',
 };
