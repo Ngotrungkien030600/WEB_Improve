@@ -282,8 +282,8 @@ export default {
 @import '@legacy/css/agents/bmad-chat.css';
 
 :root {
-  --forge-error: #ef4444;
-  --forge-accent-inverse: #000;
+  --forge-error: var(--color-error, #ef4444);
+  --forge-accent-inverse: var(--color-text-inverse, #000000);
 }
 
 .mode-bar {

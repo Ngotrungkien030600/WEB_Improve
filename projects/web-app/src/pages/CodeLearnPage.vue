@@ -199,8 +199,8 @@ export default {
   background-size: 400% 400%;
   animation: gradientMove 12s ease infinite;
   --color-accent: #1565c0;
-  --color-accent-light: #e3f2fd;
-  --color-accent-mid: #1565c0;
+  --color-accent-light: var(--color-info-bg, #e3f2fd);
+  --color-accent-mid: var(--color-accent-mid, #1565c0);
 }
 
 @keyframes gradientMove {

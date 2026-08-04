@@ -108,5 +108,6 @@ development_status:
   6-2-page-components: done
   6-3-remaining-pages: done
   6-4-shared-components: done
-  6-5-build-regression: backlog
+  6-5-pages-r8: done  # ✅ CODE-REVIEWED 2026-08-04
+  6-6-build-regression: backlog
   epic-6-retrospective: optional

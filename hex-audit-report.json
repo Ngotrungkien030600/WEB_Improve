@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-08-04T09:13:30.656Z",
+  "timestamp": "2026-08-04T10:28:38.056Z",
   "total": 210,
   "categories": {
-    "replaceable": 10,
-    "fallback": 195,
+    "replaceable": 2,
+    "fallback": 203,
     "code": 3,
     "accent": 2
   },
@@ -89,20 +89,20 @@
     {
       "file": "components/CHomeTimer.vue",
       "line": 266,
-      "column": 10,
+      "column": 30,
       "hex": "#1e293b",
       "hexRaw": "#1e293b",
-      "context": "color: #1e293b;",
-      "category": "replaceable"
+      "context": "color: var(--text-primary, #1e293b);",
+      "category": "fallback"
     },
     {
       "file": "components/CHomeTimer.vue",
       "line": 267,
-      "column": 15,
+      "column": 33,
       "hex": "#fff",
       "hexRaw": "#fff",
-      "context": "background: #fff;",
-      "category": "replaceable"
+      "context": "background: var(--text-white, #fff);",
+      "category": "fallback"
     },
     {
       "file": "components/CHubCard.vue",
@@ -224,11 +224,11 @@
     {
       "file": "components/MotivationPopup.vue",
       "line": 164,
-      "column": 10,
+      "column": 33,
       "hex": "#764ba2",
       "hexRaw": "#764ba2",
-      "context": "color: #764ba2;",
-      "category": "replaceable"
+      "context": "color: var(--color-secondary, #764ba2);",
+      "category": "fallback"
     },
     {
       "file": "pages/AcceleratorPage.vue",
@@ -980,11 +980,11 @@
     {
       "file": "pages/AiHubPage.vue",
       "line": 1015,
-      "column": 28,
+      "column": 51,
       "hex": "#f3e5f5",
       "hexRaw": "#f3e5f5",
-      "context": "border-bottom: 2px solid #f3e5f5;",
-      "category": "replaceable"
+      "context": "border-bottom: 2px solid var(--color-accent-bg, #f3e5f5);",
+      "category": "fallback"
     },
     {
       "file": "pages/AiHubPage.vue",
@@ -1007,20 +1007,20 @@
     {
       "file": "pages/BmadAgentsPage.vue",
       "line": 285,
-      "column": 18,
+      "column": 37,
       "hex": "#ef4444",
       "hexRaw": "#ef4444",
-      "context": "--forge-error: #ef4444;",
-      "category": "replaceable"
+      "context": "--forge-error: var(--color-error, #ef4444);",
+      "category": "fallback"
     },
     {
       "file": "pages/BmadAgentsPage.vue",
       "line": 286,
-      "column": 27,
-      "hex": "#000",
-      "hexRaw": "#000",
-      "context": "--forge-accent-inverse: #000;",
-      "category": "replaceable"
+      "column": 53,
+      "hex": "#000000",
+      "hexRaw": "#000000",
+      "context": "--forge-accent-inverse: var(--color-text-inverse, #000000);",
+      "category": "fallback"
     },
     {
       "file": "pages/CodeLearnPage.vue",
@@ -1034,20 +1034,20 @@
     {
       "file": "pages/CodeLearnPage.vue",
       "line": 202,
-      "column": 25,
+      "column": 46,
       "hex": "#e3f2fd",
       "hexRaw": "#e3f2fd",
-      "context": "--color-accent-light: #e3f2fd;",
-      "category": "replaceable"
+      "context": "--color-accent-light: var(--color-info-bg, #e3f2fd);",
+      "category": "fallback"
     },
     {
       "file": "pages/CodeLearnPage.vue",
       "line": 203,
-      "column": 23,
+      "column": 47,
       "hex": "#1565c0",
       "hexRaw": "#1565c0",
-      "context": "--color-accent-mid: #1565c0;",
-      "category": "replaceable"
+      "context": "--color-accent-mid: var(--color-accent-mid, #1565c0);",
+      "category": "fallback"
     },
     {
       "file": "pages/CodeLearnPage.vue",

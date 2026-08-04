@@ -1012,7 +1012,7 @@ export default {
   font-size: 1.4rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #f3e5f5;
+  border-bottom: 2px solid var(--color-accent-bg, #f3e5f5);
 }
 
 .checklist {
