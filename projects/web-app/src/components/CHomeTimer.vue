@@ -263,8 +263,8 @@ export default {
 }
 
 .forge-controls select option {
-  color: #1e293b;
-  background: #fff;
+  color: var(--text-primary, #1e293b);
+  background: var(--text-white, #fff);
 }
 
 .forge-btn-row {

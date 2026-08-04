@@ -161,7 +161,7 @@ export default {
 
 .moti-btn-primary {
   background: white;
-  color: #764ba2;
+  color: var(--color-secondary, #764ba2);
 }
 
 .moti-btn-primary:hover {
