@@ -1,11 +1,11 @@
 export const PORTED_PAGES = [
   '/',
-  '/ai/hub',
+  '/ai',
   '/ai/agent',
   '/dashboard',
   '/java/hub',
   '/frontend/hub',
-  '/cloud/hub',
+  '/cloud',
   '/english/hub',
   '/english',
   '/learning-paths',
@@ -25,11 +25,11 @@ export const PORTED_PAGES = [
 
 export const PORTED_PAGE_LABELS = {
   '/': 'Trang chủ',
-  '/ai/hub': 'Học AI',
+  '/ai': 'Học AI',
   '/ai/agent': 'AI Agent',
   '/java/hub': 'Java',
   '/frontend/hub': 'Frontend',
-  '/cloud/hub': 'AWS Cloud',
+  '/cloud': 'AWS Cloud',
   '/english/hub': 'English',
   '/english': 'Học Tiếng Anh',
   '/learning-paths': 'Lộ trình học',

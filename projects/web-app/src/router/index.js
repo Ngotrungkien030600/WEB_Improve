@@ -8,8 +8,8 @@ const routes = [
     component: () => import('../pages/HomePage.vue'),
   },
   {
-    path: '/ai/hub',
-    name: 'ai-hub',
+    path: '/ai',
+    name: 'ai',
     component: () => import('../pages/AiHubPage.vue'),
   },
   {
@@ -28,10 +28,9 @@ const routes = [
     component: () => import('../pages/FrontendHubPage.vue'),
   },
   {
-    path: '/cloud/hub',
-    name: 'cloud-hub',
-    component: () => import('../components/HubPlaceholder.vue'),
-    props: { hubPath: '/cloud/hub' },
+    path: '/cloud',
+    name: 'cloud',
+    component: () => import('../pages/CloudHubPage.vue'),
   },
   {
     path: '/english/hub',

@@ -89,7 +89,7 @@ const paths = [
     duration: '14 ngày',
     level: 'Người mới bắt đầu',
     description: 'Nắm vững concepts Machine Learning cốt lõi.',
-    link: '/ai/hub',
+    link: '/ai',
     milestones: [
       { title: 'ML Concepts', desc: 'Supervised/Unsupervised/Reinforcement Learning' },
       { title: 'Deep Learning', desc: 'Neural Network, Backpropagation, CNN, Transformer' },

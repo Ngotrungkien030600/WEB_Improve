@@ -111,3 +111,13 @@ development_status:
   6-5-pages-r8: done  # ✅ CODE-REVIEWED 2026-08-04
   6-6-build-regression: done  # ✅ DEV 2026-08-04 — build pass, audit final
   epic-6-retrospective: optional
+
+  # ---- Epic 7: Complete Vue Port — 10 pages còn lại ----
+  epic-7: backlog
+  7-1-ai-cloud-hubs: done          # ✅ CODE-REVIEWED 2026-08-04 — /ai, /cloud routes, CloudHubPage created
+  7-2-java-sub-pages: backlog          # thuc-chien, spring-boot, backend
+  7-3-frontend-ui-responsive: backlog          # ui-interview, responsive
+  7-4-frontend-js-htmlcss: backlog          # javascript, html-css
+  7-5-frontend-frameworks: backlog          # frameworks
+  7-6-navigation-registry-verify: backlog          # verify all + PORTED_PAGES
+  epic-7-retrospective: optional

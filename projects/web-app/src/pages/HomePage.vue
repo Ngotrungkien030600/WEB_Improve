@@ -64,11 +64,11 @@ import { navigate } from '../utils/navigate.js';
 const cards = [
   { icon: '🚀', title: 'Accelerator 30-Day', description: 'Lộ trình cấp tốc — 1h/ngày — 30 ngày lên Senior. Technical + English real-time.', path: '/accelerator' },
   { icon: '🗺️', title: 'Lộ trình', description: 'Lộ trình học có mục tiêu rõ ràng từ cơ bản đến nâng cao.', path: '/learning-paths' },
-  { icon: '🧠', title: 'Học AI', description: 'AI/ML — kiến thức, thi trắc nghiệm, câu hỏi phỏng vấn, 8 dự án thực hành.', path: '/ai/hub' },
+  { icon: '🧠', title: 'Học AI', description: 'AI/ML — kiến thức, thi trắc nghiệm, câu hỏi phỏng vấn, 8 dự án thực hành.', path: '/ai' },
   { icon: '☕', title: 'Java', description: 'Code Java, Spring Boot, phỏng vấn backend (tiếng Việt & English).', path: '/java/hub' },
   { icon: '⚙️', title: 'Backend Engineering', description: 'SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance.', path: '/backend' },
   { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE', path: '/frontend/hub' },
-  { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices', path: '/cloud/hub' },
+  { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices', path: '/cloud' },
   { icon: '📖', title: 'English', description: 'Từ vựng, ngữ pháp, đọc truyện, luyện thi & game ghép cặp.', path: '/english' },
   { icon: '🗣️', title: 'BMAD Agents', description: '7 trợ lý AI chuyên gia — phân tích, thiết kế, code, test, Party Mode', path: '/bmad-agents' },
   { icon: '📊', title: 'Skill Tracker', description: 'Theo dõi kỹ năng, XP, streak — biến việc học thành game.', path: '/skill-tracker' },
