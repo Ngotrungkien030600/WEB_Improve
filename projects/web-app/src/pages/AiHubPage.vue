@@ -208,6 +208,7 @@ import { navigate } from '../utils/navigate.js';
 import { aiConcepts, aiQuizData, aiInterviewTopics, aiProjects } from '@legacy/js/data/ai-data.js';
 
 const STORAGE_KEY = 'skillforge_ai_interview';
+const CHECKLIST_KEY = 'aiChecklist';
 
 export default {
   name: 'AiHubPage',
@@ -252,6 +253,7 @@ export default {
       interviewTopics: aiInterviewTopics,
       selectedTopic: null,
       interviewProgress: {},
+      checklist: {},
 
       // Projects tab
       projects: aiProjects,
@@ -305,6 +307,7 @@ export default {
   mounted() {
     this.filterCards();
     this.loadInterviewProgress();
+    this.loadChecklist();
   },
 
   beforeUnmount() {
@@ -314,6 +317,27 @@ export default {
   methods: {
     handleBack() {
       navigate('/');
+    },
+
+    // ===== CHECKLIST (migrated from Legacy aiChecklist) =====
+    loadChecklist() {
+      try {
+        const raw = localStorage.getItem(CHECKLIST_KEY);
+        if (raw) {
+          this.checklist = JSON.parse(raw);
+        }
+      } catch (e) {
+        this.checklist = {};
+      }
+    },
+    saveChecklist() {
+      try {
+        localStorage.setItem(CHECKLIST_KEY, JSON.stringify(this.checklist));
+      } catch (e) {}
+    },
+    toggleChecklistItem(item, checked) {
+      this.checklist[item] = checked;
+      this.saveChecklist();
     },
 
     // ===== LEARN =====

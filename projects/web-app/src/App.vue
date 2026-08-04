@@ -1,6 +1,16 @@
 <template>
   <RouterView />
+  <MotivationPopup />
 </template>
+
+<script>
+import MotivationPopup from './components/MotivationPopup.vue';
+
+export default {
+  name: 'App',
+  components: { MotivationPopup },
+};
+</script>
 
 <style>
 html, body {

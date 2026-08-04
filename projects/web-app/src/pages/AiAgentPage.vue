@@ -86,17 +86,21 @@
                 :class="{ active: selectedLesson === i }"
                 @click="selectedLesson = i"
               >
-                {{ lesson.title }}
+                <span>{{ lesson.title?.replace(/^📄 /, '') }}</span>
+                <span class="ai-lesson-stat">{{ getLessonProgress(i) }}</span>
               </li>
             </ul>
             <div class="ai-lesson-progress">
-              <span>{{ selectedLesson + 1 }} / {{ lessons.length }}</span>
+              <span>{{ lessonProgress.done }} / {{ lessonProgress.total }}</span>
+              <div class="progress-track">
+                <div class="progress-fill" :style="{ width: lessonProgress.percent + '%' }"></div>
+              </div>
             </div>
           </aside>
           <div class="ai-lesson-content">
             <div class="ai-lesson-card">
               <h2>{{ lessons[selectedLesson]?.title }}</h2>
-              <div class="lesson-body" v-html="renderMarkdown(lessons[selectedLesson]?.content)"></div>
+              <div class="lesson-body" v-html="renderedLesson"></div>
             </div>
           </div>
         </div>
@@ -109,6 +113,32 @@
 import { navigate } from '../utils/navigate.js';
 import { aiAgentConcepts, aiAgentLessons } from '@legacy/js/data/ai-agent-data.js';
 import ForgeTimer from '../components/ForgeTimer.vue';
+
+const STORAGE_KEY = 'aiAgentChecklist';
+
+function loadChecklist() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+  catch { return {}; }
+}
+function saveChecklist(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function calcProgress(topics, checked) {
+  let total = 0, done = 0;
+  topics.forEach(topic => {
+    if (topic.checklist) {
+      topic.checklist.forEach(item => { total++; if (checked[item]) done++; });
+    }
+  });
+  return { done, total, percent: total > 0 ? Math.round((done / total) * 100) : 0 };
+}
+
+function calcTopicProgress(topic, checked) {
+  const items = topic.checklist || [];
+  const done = items.filter(item => checked[item]).length;
+  return { done, total: items.length };
+}
 
 const tabs = [
   { id: 'learn', label: 'Học', icon: '📚' },
@@ -129,6 +159,7 @@ export default {
       selectedLesson: 0,
       concepts: aiAgentConcepts,
       lessons: aiAgentLessons,
+      checklist: {},
     };
   },
   computed: {
@@ -139,12 +170,42 @@ export default {
     currentCard() {
       return this.filteredCards[this.currentIndex];
     },
+    lessonProgress() {
+      return calcProgress(this.lessons, this.checklist);
+    },
+    renderedLesson() {
+      const topic = this.lessons[this.selectedLesson];
+      if (!topic) return '';
+      let html = topic.content ? this.renderMarkdown(topic.content) : '';
+      if (topic.checklist && topic.checklist.length > 0) {
+        html += '<h3>📝 Checklist</h3>';
+        topic.checklist.forEach(item => {
+          const isChecked = !!this.checklist[item];
+          const safeItem = item.replace(/"/g, '&quot;');
+          html += `
+            <label class="checklist-item ${isChecked ? 'checked' : ''}">
+              <input type="checkbox" ${isChecked ? 'checked' : ''} data-item="${safeItem}">
+              <span>${item}</span>
+            </label>`;
+        });
+      }
+      return html;
+    },
   },
-  watch: {
+  mounted() {
+    this.checklist = loadChecklist();
+    this.$nextTick(() => this.bindLessonEvents());
+  },
+  updated() {
+    this.$nextTick(() => this.bindLessonEvents());
+  },
     filterCategory() {
       this.currentIndex = 0;
       this.isFlipped = false;
     },
+  },
+  mounted() {
+    this.checklist = loadChecklist();
   },
   methods: {
     handleNavigate(path) {
@@ -161,6 +222,27 @@ export default {
         this.currentIndex++;
         this.isFlipped = false;
       }
+    },
+    toggleLessonItem(item, checked) {
+      this.checklist = { ...this.checklist, [item]: checked };
+      saveChecklist(this.checklist);
+    },
+    getLessonProgress(idx) {
+      const topic = this.lessons[idx];
+      if (!topic) return '0/0';
+      const { done, total } = calcTopicProgress(topic, this.checklist);
+      return `${done}/${total}`;
+    },
+    bindLessonEvents() {
+      document.querySelectorAll('.ai-lesson-content .checklist-item input').forEach(input => {
+        if (input._bound) return;
+        input._bound = true;
+        input.addEventListener('change', () => {
+          this.toggleLessonItem(input.dataset.item, input.checked);
+          const label = input.closest('.checklist-item');
+          if (label) label.classList.toggle('checked', input.checked);
+        });
+      });
     },
     renderMarkdown(text) {
       if (!text) return '';
@@ -443,6 +525,9 @@ export default {
 }
 
 .ai-lesson-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
   font-size: 0.82rem;
@@ -450,6 +535,11 @@ export default {
   color: var(--color-text2, #9d9bb5);
   transition: all 0.15s;
   margin-bottom: 0.25rem;
+}
+
+.ai-lesson-stat {
+  font-size: 0.7rem;
+  opacity: 0.7;
 }
 
 .ai-lesson-item:hover {
@@ -466,6 +556,21 @@ export default {
   margin-top: 1rem;
   font-size: 0.75rem;
   color: var(--color-text2, #9d9bb5);
+}
+
+.progress-track {
+  height: 4px;
+  background: var(--color-surface2, #22213a);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-accent, #f472b6);
+  border-radius: 2px;
+  transition: width 0.3s;
 }
 
 .ai-lesson-card {
@@ -515,5 +620,24 @@ export default {
 
 .lesson-body :deep(th) {
   background: var(--color-surface2, #22213a);
+}
+
+.lesson-body :deep(.checklist-item) {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  cursor: pointer;
+}
+
+.lesson-body :deep(.checklist-item input) {
+  margin-top: 0.15rem;
+  accent-color: var(--color-accent, #f472b6);
+  flex-shrink: 0;
+}
+
+.lesson-body :deep(.checklist-item.checked > span) {
+  text-decoration: line-through;
+  opacity: 0.6;
 }
 </style>
