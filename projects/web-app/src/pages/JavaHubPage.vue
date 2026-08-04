@@ -89,14 +89,14 @@ export default {
 /* Accent amber override — AD-17 */
 .java-hub-page {
   --color-accent: #f59e0b;
-  --color-surface: #1a1928;
-  --color-surface2: #22213a;
-  --color-border: #2d2b44;
-  --color-text: #e4e2f0;
-  --color-text2: #9d9bb5;
+  --color-surface: var(--color-surface-dark, #1a1928);
+  --color-surface2: var(--color-surface-dark-2, #22213a);
+  --color-border: var(--color-border-dark, #2d2b44);
+  --color-text: var(--text-secondary-muted, #e4e2f0);
+  --color-text2: var(--text-secondary-muted, #9d9bb5);
   --border-radius: 10px;
 
-  background: #0f0e17;
+  background: var(--color-bg-surface-dark, #0f0e17);
   min-height: 100vh;
   padding: 2.5rem 1.5rem;
 }

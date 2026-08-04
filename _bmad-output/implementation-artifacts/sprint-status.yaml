@@ -106,7 +106,7 @@ development_status:
   6-1-detection-token-mapping: done
   # ✅ CODE-REVIEWED 2026-08-04
   6-2-page-components: done
-  6-3-remaining-pages: backlog
+  6-3-remaining-pages: done
   6-4-shared-components: backlog
   6-5-build-regression: backlog
   epic-6-retrospective: optional

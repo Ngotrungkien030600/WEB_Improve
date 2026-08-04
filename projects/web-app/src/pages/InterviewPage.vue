@@ -200,13 +200,13 @@ export default {
 
 <style scoped>
 .interview-page {
-  --forge-bg: #08080e;
+  --forge-bg: var(--color-bg-page, #08080e);
   --forge-bg-card: rgba(255, 255, 255, 0.04);
   --forge-border: rgba(255, 255, 255, 0.08);
-  --forge-text: #e4e2f0;
-  --forge-text-secondary: #9d9bb5;
-  --forge-ember: #fbbf24;
-  --forge-fire: #f97316;
+  --forge-text: var(--text-secondary-muted, #e4e2f0);
+  --forge-text-secondary: var(--text-secondary-muted, #9d9bb5);
+  --forge-ember: var(--color-warning, #fbbf24);
+  --forge-fire: var(--color-warning-alt, #f97316);
   --forge-surface: rgba(255, 255, 255, 0.04);
   --forge-surface-hover: rgba(255, 255, 255, 0.08);
   --forge-radius-sm: 8px;
@@ -215,7 +215,7 @@ export default {
   --forge-space-lg: 2.5rem;
   --forge-transition-fast: 0.15s ease;
 
-  background: #0f0e17;
+  background: var(--color-bg-surface-dark, #0f0e17);
   min-height: 100vh;
   padding: 1rem;
   font-family: 'Inter', system-ui, sans-serif;

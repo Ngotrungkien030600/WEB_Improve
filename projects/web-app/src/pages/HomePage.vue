@@ -91,22 +91,22 @@ export default {
 
 <style scoped>
 :root {
-  --forge-bg: #08080e;
-  --forge-bg2: #0d0d1a;
+  --forge-bg: var(--color-bg-page, #08080e);
+  --forge-bg2: var(--color-bg-page-alt, #0d0d1a);
   --forge-surface: rgba(255, 255, 255, 0.04);
   --forge-surface-hover: rgba(255, 255, 255, 0.08);
   --forge-glass: rgba(255, 255, 255, 0.06);
   --forge-glass-border: rgba(255, 255, 255, 0.08);
   --forge-glass-hover: rgba(255, 255, 255, 0.12);
   --forge-glass-hover-border: rgba(255, 255, 255, 0.18);
-  --forge-fire: #f97316;
-  --forge-fire-glow: #ea580c;
-  --forge-ember: #fbbf24;
+  --forge-fire: var(--color-warning-alt, #f97316);
+  --forge-fire-glow: var(--color-warning-alt, #ea580c);
+  --forge-ember: var(--color-warning, #fbbf24);
   --forge-glow: rgba(249, 115, 22, 0.25);
   --forge-glow-strong: rgba(249, 115, 22, 0.4);
-  --forge-text: #f1f5f9;
-  --forge-text2: #94a3b8;
-  --forge-text3: #64748b;
+  --forge-text: var(--text-primary-dark, #f1f5f9);
+  --forge-text2: var(--text-muted-dark, #94a3b8);
+  --forge-text3: var(--text-tertiary, #64748b);
   --forge-card-radius: 16px;
 }
 

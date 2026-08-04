@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-08-04T05:07:16.712Z",
+  "timestamp": "2026-08-04T09:13:30.656Z",
   "total": 210,
   "categories": {
-    "replaceable": 30,
-    "fallback": 175,
+    "replaceable": 10,
+    "fallback": 195,
     "code": 3,
     "accent": 2
   },
@@ -1358,128 +1358,128 @@
     {
       "file": "pages/HomePage.vue",
       "line": 94,
-      "column": 15,
+      "column": 36,
       "hex": "#08080e",
       "hexRaw": "#08080e",
-      "context": "--forge-bg: #08080e;",
-      "category": "replaceable"
+      "context": "--forge-bg: var(--color-bg-page, #08080e);",
+      "category": "fallback"
     },
     {
       "file": "pages/HomePage.vue",
       "line": 95,
-      "column": 16,
+      "column": 41,
       "hex": "#0d0d1a",
       "hexRaw": "#0d0d1a",
-      "context": "--forge-bg2: #0d0d1a;",
-      "category": "replaceable"
+      "context": "--forge-bg2: var(--color-bg-page-alt, #0d0d1a);",
+      "category": "fallback"
     },
     {
       "file": "pages/HomePage.vue",
       "line": 102,
-      "column": 17,
+      "column": 42,
       "hex": "#f97316",
       "hexRaw": "#f97316",
-      "context": "--forge-fire: #f97316;",
-      "category": "replaceable"
+      "context": "--forge-fire: var(--color-warning-alt, #f97316);",
+      "category": "fallback"
     },
     {
       "file": "pages/HomePage.vue",
       "line": 103,
-      "column": 22,
+      "column": 47,
       "hex": "#ea580c",
       "hexRaw": "#ea580c",
-      "context": "--forge-fire-glow: #ea580c;",
-      "category": "replaceable"
+      "context": "--forge-fire-glow: var(--color-warning-alt, #ea580c);",
+      "category": "fallback"
     },
     {
       "file": "pages/HomePage.vue",
       "line": 104,
-      "column": 18,
+      "column": 39,
       "hex": "#fbbf24",
       "hexRaw": "#fbbf24",
-      "context": "--forge-ember: #fbbf24;",
-      "category": "replaceable"
+      "context": "--forge-ember: var(--color-warning, #fbbf24);",
+      "category": "fallback"
     },
     {
       "file": "pages/HomePage.vue",
       "line": 107,
-      "column": 17,
+      "column": 42,
       "hex": "#f1f5f9",
       "hexRaw": "#f1f5f9",
-      "context": "--forge-text: #f1f5f9;",
-      "category": "replaceable"
+      "context": "--forge-text: var(--text-primary-dark, #f1f5f9);",
+      "category": "fallback"
     },
     {
       "file": "pages/HomePage.vue",
       "line": 108,
-      "column": 18,
+      "column": 41,
       "hex": "#94a3b8",
       "hexRaw": "#94a3b8",
-      "context": "--forge-text2: #94a3b8;",
-      "category": "replaceable"
+      "context": "--forge-text2: var(--text-muted-dark, #94a3b8);",
+      "category": "fallback"
     },
     {
       "file": "pages/HomePage.vue",
       "line": 109,
-      "column": 18,
+      "column": 39,
       "hex": "#64748b",
       "hexRaw": "#64748b",
-      "context": "--forge-text3: #64748b;",
-      "category": "replaceable"
+      "context": "--forge-text3: var(--text-tertiary, #64748b);",
+      "category": "fallback"
     },
     {
       "file": "pages/InterviewPage.vue",
       "line": 203,
-      "column": 15,
+      "column": 36,
       "hex": "#08080e",
       "hexRaw": "#08080e",
-      "context": "--forge-bg: #08080e;",
-      "category": "replaceable"
+      "context": "--forge-bg: var(--color-bg-page, #08080e);",
+      "category": "fallback"
     },
     {
       "file": "pages/InterviewPage.vue",
       "line": 206,
-      "column": 17,
+      "column": 45,
       "hex": "#e4e2f0",
       "hexRaw": "#e4e2f0",
-      "context": "--forge-text: #e4e2f0;",
-      "category": "replaceable"
+      "context": "--forge-text: var(--text-secondary-muted, #e4e2f0);",
+      "category": "fallback"
     },
     {
       "file": "pages/InterviewPage.vue",
       "line": 207,
-      "column": 27,
+      "column": 55,
       "hex": "#9d9bb5",
       "hexRaw": "#9d9bb5",
-      "context": "--forge-text-secondary: #9d9bb5;",
-      "category": "replaceable"
+      "context": "--forge-text-secondary: var(--text-secondary-muted, #9d9bb5);",
+      "category": "fallback"
     },
     {
       "file": "pages/InterviewPage.vue",
       "line": 208,
-      "column": 18,
+      "column": 39,
       "hex": "#fbbf24",
       "hexRaw": "#fbbf24",
-      "context": "--forge-ember: #fbbf24;",
-      "category": "replaceable"
+      "context": "--forge-ember: var(--color-warning, #fbbf24);",
+      "category": "fallback"
     },
     {
       "file": "pages/InterviewPage.vue",
       "line": 209,
-      "column": 17,
+      "column": 42,
       "hex": "#f97316",
       "hexRaw": "#f97316",
-      "context": "--forge-fire: #f97316;",
-      "category": "replaceable"
+      "context": "--forge-fire: var(--color-warning-alt, #f97316);",
+      "category": "fallback"
     },
     {
       "file": "pages/InterviewPage.vue",
       "line": 218,
-      "column": 15,
+      "column": 44,
       "hex": "#0f0e17",
       "hexRaw": "#0f0e17",
-      "context": "background: #0f0e17;",
-      "category": "replaceable"
+      "context": "background: var(--color-bg-surface-dark, #0f0e17);",
+      "category": "fallback"
     },
     {
       "file": "pages/JavaHubPage.vue",
@@ -1493,56 +1493,56 @@
     {
       "file": "pages/JavaHubPage.vue",
       "line": 92,
-      "column": 20,
+      "column": 46,
       "hex": "#1a1928",
       "hexRaw": "#1a1928",
-      "context": "--color-surface: #1a1928;",
-      "category": "replaceable"
+      "context": "--color-surface: var(--color-surface-dark, #1a1928);",
+      "category": "fallback"
     },
     {
       "file": "pages/JavaHubPage.vue",
       "line": 93,
-      "column": 21,
+      "column": 49,
       "hex": "#22213a",
       "hexRaw": "#22213a",
-      "context": "--color-surface2: #22213a;",
-      "category": "replaceable"
+      "context": "--color-surface2: var(--color-surface-dark-2, #22213a);",
+      "category": "fallback"
     },
     {
       "file": "pages/JavaHubPage.vue",
       "line": 94,
-      "column": 19,
+      "column": 44,
       "hex": "#2d2b44",
       "hexRaw": "#2d2b44",
-      "context": "--color-border: #2d2b44;",
-      "category": "replaceable"
+      "context": "--color-border: var(--color-border-dark, #2d2b44);",
+      "category": "fallback"
     },
     {
       "file": "pages/JavaHubPage.vue",
       "line": 95,
-      "column": 17,
+      "column": 45,
       "hex": "#e4e2f0",
       "hexRaw": "#e4e2f0",
-      "context": "--color-text: #e4e2f0;",
-      "category": "replaceable"
+      "context": "--color-text: var(--text-secondary-muted, #e4e2f0);",
+      "category": "fallback"
     },
     {
       "file": "pages/JavaHubPage.vue",
       "line": 96,
-      "column": 18,
+      "column": 46,
       "hex": "#9d9bb5",
       "hexRaw": "#9d9bb5",
-      "context": "--color-text2: #9d9bb5;",
-      "category": "replaceable"
+      "context": "--color-text2: var(--text-secondary-muted, #9d9bb5);",
+      "category": "fallback"
     },
     {
       "file": "pages/JavaHubPage.vue",
       "line": 99,
-      "column": 15,
+      "column": 44,
       "hex": "#0f0e17",
       "hexRaw": "#0f0e17",
-      "context": "background: #0f0e17;",
-      "category": "replaceable"
+      "context": "background: var(--color-bg-surface-dark, #0f0e17);",
+      "category": "fallback"
     },
     {
       "file": "pages/SalaryInterviewPage.vue",
