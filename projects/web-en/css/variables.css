@@ -98,9 +98,16 @@
 
   /* Background extended */
   --color-bg-subtle: #f1f5f9;
+  --color-bg-white: #f8fafc;
   --color-info-bg: #e3f2fd;
   --color-warning-bg: #fef3c7;
   --color-accent-bg: #f3e5f5;
+  --color-accent-bg-light: #f5f3ff;
+
+  /* Text colors */
+  --color-text-dark: #1e293b;
+  --color-text-darker: #444444;
+  --color-text-muted: #999999;
 
   /* Border extended */
   --color-border-light: #e0e0e0;

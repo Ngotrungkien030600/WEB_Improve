@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-08-04T04:29:23.183Z",
-  "total": 242,
+  "timestamp": "2026-08-04T05:07:16.712Z",
+  "total": 210,
   "categories": {
-    "replaceable": 63,
-    "fallback": 174,
+    "replaceable": 30,
+    "fallback": 175,
     "code": 3,
     "accent": 2
   },
@@ -21,16 +21,12 @@
       35
     ],
     [
-      "pages/AiHubPage.vue",
-      27
+      "pages/ExamPage.vue",
+      12
     ],
     [
       "pages/CodeLearnPage.vue",
-      19
-    ],
-    [
-      "pages/ExamPage.vue",
-      12
+      11
     ],
     [
       "components/ForgeTimer.vue",
@@ -47,6 +43,10 @@
     [
       "pages/JavaHubPage.vue",
       7
+    ],
+    [
+      "pages/InterviewPage.vue",
+      6
     ]
   ],
   "results": [
@@ -979,227 +979,11 @@
     },
     {
       "file": "pages/AiHubPage.vue",
-      "line": 659,
-      "column": 10,
-      "hex": "#64748b",
-      "hexRaw": "#64748b",
-      "context": "color: #64748b;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 663,
-      "column": 15,
-      "hex": "#f8fafc",
-      "hexRaw": "#f8fafc",
-      "context": "background: #f8fafc;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 668,
-      "column": 10,
-      "hex": "#94a3b8",
-      "hexRaw": "#94a3b8",
-      "context": "color: #94a3b8;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 724,
-      "column": 23,
-      "hex": "#e2e8f0",
-      "hexRaw": "#e2e8f0",
-      "context": "border: 1.5px solid #e2e8f0;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 827,
-      "column": 10,
-      "hex": "#1e293b",
-      "hexRaw": "#1e293b",
-      "context": "color: #1e293b;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 840,
-      "column": 15,
-      "hex": "#f8fafc",
-      "hexRaw": "#f8fafc",
-      "context": "background: #f8fafc;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 841,
-      "column": 21,
-      "hex": "#e2e8f0",
-      "hexRaw": "#e2e8f0",
-      "context": "border: 2px solid #e2e8f0;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 853,
-      "column": 17,
-      "hex": "#a78bfa",
-      "hexRaw": "#a78bfa",
-      "context": "border-color: #a78bfa;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 854,
-      "column": 15,
-      "hex": "#f5f3ff",
-      "hexRaw": "#f5f3ff",
-      "context": "background: #f5f3ff;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 860,
-      "column": 10,
-      "hex": "#166534",
-      "hexRaw": "#166534",
-      "context": "color: #166534;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 866,
-      "column": 10,
-      "hex": "#991b1b",
-      "hexRaw": "#991b1b",
-      "context": "color: #991b1b;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 888,
-      "column": 10,
-      "hex": "#166534",
-      "hexRaw": "#166534",
-      "context": "color: #166534;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 893,
-      "column": 10,
-      "hex": "#991b1b",
-      "hexRaw": "#991b1b",
-      "context": "color: #991b1b;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 984,
-      "column": 15,
-      "hex": "#f3e5f5",
-      "hexRaw": "#f3e5f5",
-      "context": "background: #f3e5f5;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
       "line": 1015,
       "column": 28,
       "hex": "#f3e5f5",
       "hexRaw": "#f3e5f5",
       "context": "border-bottom: 2px solid #f3e5f5;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1029,
-      "column": 10,
-      "hex": "#444",
-      "hexRaw": "#444",
-      "context": "color: #444;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1042,
-      "column": 10,
-      "hex": "#999",
-      "hexRaw": "#999",
-      "context": "color: #999;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1069,
-      "column": 10,
-      "hex": "#1e293b",
-      "hexRaw": "#1e293b",
-      "context": "color: #1e293b;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1078,
-      "column": 10,
-      "hex": "#64748b",
-      "hexRaw": "#64748b",
-      "context": "color: #64748b;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1092,
-      "column": 10,
-      "hex": "#166534",
-      "hexRaw": "#166534",
-      "context": "color: #166534;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1096,
-      "column": 15,
-      "hex": "#fef3c7",
-      "hexRaw": "#fef3c7",
-      "context": "background: #fef3c7;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1097,
-      "column": 10,
-      "hex": "#92400e",
-      "hexRaw": "#92400e",
-      "context": "color: #92400e;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1102,
-      "column": 10,
-      "hex": "#991b1b",
-      "hexRaw": "#991b1b",
-      "context": "color: #991b1b;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1121,
-      "column": 21,
-      "hex": "#e2e8f0",
-      "hexRaw": "#e2e8f0",
-      "context": "border: 1px solid #e2e8f0;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/AiHubPage.vue",
-      "line": 1132,
-      "column": 15,
-      "hex": "#f3e5f5",
-      "hexRaw": "#f3e5f5",
-      "context": "background: #f3e5f5;",
       "category": "replaceable"
     },
     {
@@ -1267,48 +1051,12 @@
     },
     {
       "file": "pages/CodeLearnPage.vue",
-      "line": 249,
-      "column": 15,
-      "hex": "#e3f2fd",
-      "hexRaw": "#e3f2fd",
-      "context": "background: #e3f2fd;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/CodeLearnPage.vue",
       "line": 300,
       "column": 30,
       "hex": "#333",
       "hexRaw": "#333",
       "context": "color: var(--text-primary, #333);",
       "category": "fallback"
-    },
-    {
-      "file": "pages/CodeLearnPage.vue",
-      "line": 315,
-      "column": 15,
-      "hex": "#e3f2fd",
-      "hexRaw": "#e3f2fd",
-      "context": "background: #e3f2fd;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/CodeLearnPage.vue",
-      "line": 335,
-      "column": 15,
-      "hex": "#e0e0e0",
-      "hexRaw": "#e0e0e0",
-      "context": "background: #e0e0e0;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/CodeLearnPage.vue",
-      "line": 366,
-      "column": 28,
-      "hex": "#e3f2fd",
-      "hexRaw": "#e3f2fd",
-      "context": "border-bottom: 2px solid #e3f2fd;",
-      "category": "replaceable"
     },
     {
       "file": "pages/CodeLearnPage.vue",
@@ -1357,15 +1105,6 @@
     },
     {
       "file": "pages/CodeLearnPage.vue",
-      "line": 429,
-      "column": 21,
-      "hex": "#e0e0e0",
-      "hexRaw": "#e0e0e0",
-      "context": "border: 1px solid #e0e0e0;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/CodeLearnPage.vue",
       "line": 436,
       "column": 41,
       "hex": "#e3f2fd",
@@ -1376,38 +1115,11 @@
     {
       "file": "pages/CodeLearnPage.vue",
       "line": 442,
-      "column": 15,
+      "column": 37,
       "hex": "#fafafa",
       "hexRaw": "#fafafa",
-      "context": "background: #fafafa;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/CodeLearnPage.vue",
-      "line": 447,
-      "column": 25,
-      "hex": "#eee",
-      "hexRaw": "#eee",
-      "context": "border-top: 1px solid #eee;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/CodeLearnPage.vue",
-      "line": 457,
-      "column": 10,
-      "hex": "#444",
-      "hexRaw": "#444",
-      "context": "color: #444;",
-      "category": "replaceable"
-    },
-    {
-      "file": "pages/CodeLearnPage.vue",
-      "line": 476,
-      "column": 10,
-      "hex": "#999",
-      "hexRaw": "#999",
-      "context": "color: #999;",
-      "category": "replaceable"
+      "context": "background: var(--color-bg-white, #fafafa);",
+      "category": "fallback"
     },
     {
       "file": "pages/EnglishPage.vue",

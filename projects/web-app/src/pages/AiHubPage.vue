@@ -656,16 +656,16 @@ export default {
 
 .flashcard-ex {
   font-size: 0.95rem;
-  color: #64748b;
+  color: var(--text-tertiary);
   font-style: italic;
   margin-top: 1rem;
   padding: 0.8rem;
-  background: #f8fafc;
+  background: var(--color-bg-white);
   border-radius: var(--radius-sm);
 }
 
 .flip-hint {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 0.85rem;
   text-align: center;
   margin-top: 1rem;
@@ -721,7 +721,7 @@ export default {
 
 .quiz-config select {
   padding: 0.4rem 0.7rem;
-  border: 1.5px solid #e2e8f0;
+  border: 1.5px solid var(--color-border-subtle);
   border-radius: 8px;
   font-size: 0.9rem;
   cursor: pointer;
@@ -824,7 +824,7 @@ export default {
 .quiz-question {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--color-text-dark);
   margin-bottom: 1rem;
   line-height: 1.5;
 }
@@ -837,8 +837,8 @@ export default {
 }
 
 .quiz-option {
-  background: #f8fafc;
-  border: 2px solid #e2e8f0;
+  background: var(--color-bg-white);
+  border: 2px solid var(--color-border-subtle);
   border-radius: 12px;
   padding: 0.75rem 1rem;
   font-size: 0.95rem;
@@ -850,20 +850,20 @@ export default {
 }
 
 .quiz-option:hover:not(:disabled) {
-  border-color: #a78bfa;
-  background: #f5f3ff;
+  border-color: var(--color-accent-light);
+  background: var(--color-accent-bg-light);
 }
 
 .quiz-option.correct {
   background: var(--color-success-bg);
   border-color: var(--color-success);
-  color: #166534;
+  color: var(--color-success-dark);
 }
 
 .quiz-option.wrong {
   background: var(--color-error-bg);
   border-color: var(--color-error);
-  color: #991b1b;
+  color: var(--color-error-dark);
 }
 
 .quiz-option:disabled {
@@ -885,12 +885,12 @@ export default {
 
 .quiz-feedback.correct {
   background: var(--color-success-bg);
-  color: #166534;
+  color: var(--color-success-dark);
 }
 
 .quiz-feedback.wrong {
   background: var(--color-error-bg);
-  color: #991b1b;
+  color: var(--color-error-dark);
 }
 
 .quiz-next {
@@ -981,7 +981,7 @@ export default {
 }
 
 .interview-item:hover {
-  background: #f3e5f5;
+  background: var(--color-accent-bg);
 }
 
 .interview-item.active {
@@ -1026,7 +1026,7 @@ export default {
   padding: 0.5rem 0;
   cursor: pointer;
   font-size: 0.95rem;
-  color: #444;
+  color: var(--color-text-darker);
 }
 
 .checklist-item input {
@@ -1039,7 +1039,7 @@ export default {
 
 .checklist-item.checked span {
   text-decoration: line-through;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 /* ===== PROJECTS ===== */
@@ -1066,7 +1066,7 @@ export default {
 .project-title {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--color-text-dark);
   margin-bottom: 0.5rem;
 }
 
@@ -1075,7 +1075,7 @@ export default {
   gap: 0.6rem;
   margin-bottom: 0.5rem;
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--text-tertiary);
   align-items: center;
 }
 
@@ -1089,17 +1089,17 @@ export default {
 
 .project-level.beginner {
   background: var(--color-success-bg);
-  color: #166534;
+  color: var(--color-success-dark);
 }
 
 .project-level.intermediate {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--color-warning-bg);
+  color: var(--color-warning-dark);
 }
 
 .project-level.advanced {
   background: var(--color-error-bg);
-  color: #991b1b;
+  color: var(--color-error-dark);
 }
 
 .project-desc {
@@ -1118,7 +1118,7 @@ export default {
 .project-back {
   background: transparent;
   color: var(--color-accent);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-sm);
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
@@ -1129,7 +1129,7 @@ export default {
 }
 
 .project-back:hover {
-  background: #f3e5f5;
+  background: var(--color-accent-bg);
 }
 
 .project-detail h2 {

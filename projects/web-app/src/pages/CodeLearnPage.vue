@@ -246,7 +246,7 @@ export default {
 }
 
 .learn-topbar .back-link:hover {
-  background: #e3f2fd;
+  background: var(--color-accent-light);
 }
 
 .learn-progress {
@@ -312,7 +312,7 @@ export default {
 
 .learn-topic-list .intro-item:hover,
 .learn-topic-list li:hover {
-  background: #e3f2fd;
+  background: var(--color-accent-light);
 }
 
 .learn-topic-list .intro-item.active {
@@ -332,7 +332,7 @@ export default {
 .learn-progress-bar {
   width: 100%;
   height: 8px;
-  background: #e0e0e0;
+  background: var(--color-border-light);
   border-radius: var(--radius-sm, 8px);
   overflow: hidden;
 }
@@ -363,7 +363,7 @@ export default {
   font-size: 2rem;
   margin-bottom: 1.2rem;
   padding-bottom: 0.7rem;
-  border-bottom: 2px solid #e3f2fd;
+  border-bottom: 2px solid var(--color-accent-light);
 }
 
 .learn-card h3 {
@@ -426,7 +426,7 @@ export default {
 
 .learn-card :deep(th),
 .learn-card :deep(td) {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border-light);
   padding: 0.7rem 0.9rem;
   text-align: left;
   vertical-align: top;
@@ -439,12 +439,12 @@ export default {
 }
 
 .learn-card :deep(tr:nth-child(even)) {
-  background: #fafafa;
+  background: var(--color-bg-white, #fafafa);
 }
 
 .learn-card :deep(hr) {
   border: none;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--color-border-subtle);
   margin: 1.2rem 0;
 }
 
@@ -454,7 +454,7 @@ export default {
   gap: 0.6rem;
   padding: 0.65rem 0;
   cursor: pointer;
-  color: #444;
+  color: var(--color-text-darker);
   font-size: 1.2rem;
 }
 
@@ -473,7 +473,7 @@ export default {
 
 .checklist-item.checked :deep(span) {
   text-decoration: line-through;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .app-footer {
