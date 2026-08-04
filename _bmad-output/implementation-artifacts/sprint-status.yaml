@@ -102,12 +102,12 @@ development_status:
   epic-5-retrospective: optional
 
   # ---- Epic 6: R8 CSS Audit (tech debt) ----
-  epic-6: in-progress
+  epic-6: done   # ✅ EPIC COMPLETE 2026-08-04
   6-1-detection-token-mapping: done
   # ✅ CODE-REVIEWED 2026-08-04
   6-2-page-components: done
   6-3-remaining-pages: done
   6-4-shared-components: done
   6-5-pages-r8: done  # ✅ CODE-REVIEWED 2026-08-04
-  6-6-build-regression: backlog
+  6-6-build-regression: done  # ✅ DEV 2026-08-04 — build pass, audit final
   epic-6-retrospective: optional
