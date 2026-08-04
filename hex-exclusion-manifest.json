@@ -1,0 +1,48 @@
+{
+  "patterns": [
+    {
+      "pattern": "^--[\\w-]+:\\s*#[0-9a-fA-F]{3,6}",
+      "reason": "CSS custom property definition"
+    },
+    {
+      "pattern": "\\/\\*[\\s\\S]*?\\*\\/",
+      "reason": "CSS comment"
+    },
+    {
+      "pattern": "<!--[\\s\\S]*?-->",
+      "reason": "HTML comment"
+    },
+    {
+      "pattern": "\\/\\/.*$",
+      "reason": "JS comment"
+    },
+    {
+      "pattern": "style=\"[^\"]*--color-accent[^\"]*#[0-9a-fA-F]{3,6}",
+      "reason": "Accent override (AD-17)"
+    },
+    {
+      "pattern": "linear-gradient\\([^)]*#[0-9a-fA-F]{3,6}[^)]*\\)",
+      "reason": "Linear gradient"
+    },
+    {
+      "pattern": "%23[0-9a-fA-F]{3,6}",
+      "reason": "URL-encoded hex"
+    },
+    {
+      "pattern": "v-bind\\(['\"][^)]*#[0-9a-fA-F]{3,6}[^)]*['\"]\\)",
+      "reason": "v-bind reactive color"
+    },
+    {
+      "pattern": "data-[\\w-]+=\"[^\"]*#[0-9a-fA-F]{3,6}[^\"]*\"",
+      "reason": "Data attribute"
+    },
+    {
+      "pattern": "rgba\\s*\\([^)]*#[0-9a-fA-F]{3,6}[^)]*\\)",
+      "reason": "RGBA with hex"
+    },
+    {
+      "pattern": "hsla\\s*\\([^)]*#[0-9a-fA-F]{3,6}[^)]*\\)",
+      "reason": "HSLA with hex"
+    }
+  ]
+}

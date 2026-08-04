@@ -77,6 +77,34 @@
   --bg-surface-dark: #1e293b;
   --bg-subtle-dark: #334155;
   --border-dark: #475569;
+
+  /* Dark mode extended (for Vue components) */
+  --color-bg-page: #08080e;
+  --color-bg-page-alt: #0d0d1a;
+  --color-bg-surface-dark: #0f0e17;
+  --color-surface-dark: #1a1928;
+  --color-surface-dark-2: #22213a;
+  --color-border-dark: #2d2b44;
+
+  /* Text extended */
+  --text-tertiary: #64748b;
+  --text-secondary-muted: #9d9bb5;
+
+  /* Semantic extended */
+  --color-link: #1565c0;
+  --color-warning-dark: #92400e;
+  --color-warning-alt: #ea580c;
+  --color-accent-light: #a78bfa;
+
+  /* Background extended */
+  --color-bg-subtle: #f1f5f9;
+  --color-info-bg: #e3f2fd;
+  --color-warning-bg: #fef3c7;
+  --color-accent-bg: #f3e5f5;
+
+  /* Border extended */
+  --color-border-light: #e0e0e0;
+  --color-border-subtle: #e2e8f0;
 }
 
 /* Gradient text utility */

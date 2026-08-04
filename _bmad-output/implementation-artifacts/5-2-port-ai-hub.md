@@ -7,6 +7,7 @@
 - **Hardened:** light (2026-08-03) — 4 AC, 25 cases (verified)
 
 **Implemented:** dev-story (2026-08-03) — 3 files (AiHubPage.vue, router/index.js, ai-data.js)
+**Code-Reviewed:** 2026-08-04 — 0 🔴, 1 🟡 (R8: ~30 hardcoded hex in scoped CSS — accepted, see Epic 6)
 - **Created:** 2026-08-03
 
 ---

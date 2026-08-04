@@ -199,17 +199,13 @@ export default {
   updated() {
     this.$nextTick(() => this.bindLessonEvents());
   },
-    filterCategory() {
-      this.currentIndex = 0;
-      this.isFlipped = false;
-    },
-  },
-  mounted() {
-    this.checklist = loadChecklist();
-  },
   methods: {
     handleNavigate(path) {
       navigate(path);
+    },
+    filterCategory() {
+      this.currentIndex = 0;
+      this.isFlipped = false;
     },
     prevCard() {
       if (this.currentIndex > 0) {

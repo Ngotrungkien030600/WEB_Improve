@@ -9,7 +9,7 @@
 #   docs/index.md                 — project entry point
 
 sprint_name: "skillforge-vue-port"
-last_updated: 2026-08-03
+last_updated: 2026-08-04
 
 # STATUS DEFINITIONS:
 # ===================
@@ -46,7 +46,7 @@ last_updated: 2026-08-03
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; sprint-status surfaces open ones
 
-last_updated: 2026-08-03
+last_updated: 2026-08-04
 sprint_name: "skillforge-vue-port"
 generated: 2026-08-01
 project: SkillForge Vue Port
@@ -94,12 +94,19 @@ development_status:
   epic-4-retrospective: optional
 
   # ---- Epic 5: Complete Vue Port — 3 pages còn lại + nav verify ----
-  epic-5: in-progress
+  epic-5: done   # ✅ EPIC COMPLETE 2026-08-04
   5-1-port-dashboard: done   # ✅ CODE-REVIEWED 2026-08-03 — 0 🔴, 1 🟡 fix (empty catch → console.warn)
-  5-2-port-ai-hub: review   # ✅ DEV 2026-08-03 — 4 files, build pass, review pending        # Story: _bmad-output/implementation-artifacts/5-2-port-ai-hub.md
+  5-2-port-ai-hub: done   # ✅ CODE-REVIEWED 2026-08-04 — 0 🔴, 1 🟡 (R8: hardcoded hex ~30 instances — accepted, see Epic 6 CSS audit)
   5-3-port-cloud: cancelled   # AD-14 conflict (cloud.html: 1,121 lines skip). Keep HubPlaceholder. Replaced by: none.
   5-4-navigation-registry-verify: done   # ✅ CODE-REVIEW 2026-08-03 (verify only — no files, AC1/2/4 pass)
   epic-5-retrospective: optional
 
   # ---- Epic 6: R8 CSS Audit (tech debt) ----
-  # epic-6: backlog  # Chưa tạo — ~210 hex instances trong 13 files, cần script detect + replace
+  epic-6: in-progress
+  6-1-detection-token-mapping: done
+  # ✅ CODE-REVIEWED 2026-08-04
+  6-2-page-components: backlog
+  6-3-remaining-pages: backlog
+  6-4-shared-components: backlog
+  6-5-build-regression: backlog
+  epic-6-retrospective: optional
