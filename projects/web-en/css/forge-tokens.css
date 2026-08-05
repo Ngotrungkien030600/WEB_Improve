@@ -60,6 +60,26 @@
   --forge-space-xl: 1.25rem;
   --forge-space-2xl: 1.5rem;
 
+  /* ───── Legacy aliases (for ported pages) ───── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+
+  /* ───── Typography aliases ───── */
+  --font-sm: 0.82rem;
+  --font-base: 0.9rem;
+  --font-lg: 1rem;
+  --font-xl: 1.2rem;
+  --font-2xl: 1.5rem;
+
+  /* ───── Border Radius aliases ───── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+
   /* ───── Transitions ───── */
   --forge-transition: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   --forge-transition-fast: 0.15s ease;

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import '@legacy/css/variables.css';
+@import '@legacy/css/forge-tokens.css';
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -52,4 +53,41 @@ a {
   --forge-btn-primary-start: #f97316;
   --forge-btn-primary-end: #ea580c;
   --forge-btn-primary-color: white;
+
+  /* Legacy page variables — mapped to dark theme */
+  --color-bg: #08080e;
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-surface2: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-text: #f1f5f9;
+  --color-text2: #94a3b8;
+  --color-radius: 10px;
+
+  /* Typography scale */
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  --font-3xl: 1.875rem;
+  --font-4xl: 2.25rem;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
 }

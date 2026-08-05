@@ -388,17 +388,20 @@ export default {
         { id: 'game', icon: '🎮', label: 'Game' },
       ],
 
-      // Vocab
-      vocabCategory: 'all',
+      // Data arrays - must be in data() for template access
+      vocabData,
       vocabCategories: ['greetings', 'daily', 'food', 'shopping', 'travel', 'work', 'school', 'health', 'emotion', 'opinion', 'requests', 'technology', 'time', 'weather', 'idioms'],
       vocabCategoryLabels,
+      vocabCategory: 'all',
       vocabIndex: 0,
       vocabFlipped: false,
 
       // Tense
+      tenses,
       tenseMode: 'learn',
       tenseIndex: 0,
       tenseFlipped: false,
+      practiceSentences,
       practiceIndex: 0,
       userSentence: '',
       usedWords: [],
@@ -406,6 +409,7 @@ export default {
       practiceCorrect: false,
 
       // Story
+      stories,
       storyIndex: 0,
 
       // Game
@@ -419,17 +423,17 @@ export default {
 
   computed: {
     filteredVocab() {
-      if (this.vocabCategory === 'all') return vocabData;
-      return vocabData.filter(v => v.tag === this.vocabCategory);
+      if (this.vocabCategory === 'all') return this.vocabData;
+      return this.vocabData.filter(v => v.tag === this.vocabCategory);
     },
     vocabCard() {
       return this.filteredVocab[this.vocabIndex];
     },
     tenseCard() {
-      return tenses[this.tenseIndex];
+      return this.tenses[this.tenseIndex];
     },
     practiceCard() {
-      return practiceSentences[this.practiceIndex];
+      return this.practiceSentences[this.practiceIndex];
     },
     shuffledWords() {
       return this.shuffle([...this.practiceCard.words]);
@@ -508,7 +512,7 @@ export default {
 
     // Tense
     tenseNext() {
-      if (this.tenseIndex < tenses.length - 1) {
+      if (this.tenseIndex < this.tenses.length - 1) {
         this.tenseIndex++;
         this.tenseFlipped = false;
       }
@@ -540,7 +544,7 @@ export default {
       this.practiceFeedback = false;
     },
     nextPractice() {
-      if (this.practiceIndex < practiceSentences.length - 1) {
+      if (this.practiceIndex < this.practiceSentences.length - 1) {
         this.practiceIndex++;
       } else {
         this.practiceIndex = 0;
@@ -550,7 +554,7 @@ export default {
 
     // Story
     storyNext() {
-      if (this.storyIndex < stories.length - 1) {
+      if (this.storyIndex < this.stories.length - 1) {
         this.storyIndex++;
       }
     },
@@ -578,8 +582,7 @@ export default {
 </script>
 
 <style scoped>
-@import '@legacy/css/variables.css';
-@import '@legacy/css/forge-tokens.css';
+/* CSS variables are inherited from main.css global imports */
 
 .english-page {
   background: var(--color-bg);

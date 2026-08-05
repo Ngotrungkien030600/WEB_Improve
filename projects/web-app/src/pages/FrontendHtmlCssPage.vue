@@ -138,6 +138,7 @@ export default {
 
 <style scoped>
 @import '@legacy/css/variables.css';
+@import '@legacy/css/forge-tokens.css';
 
 .htmlcss-page {
   background: var(--color-bg);

@@ -89,7 +89,7 @@ onMounted(() => fetchData())
 function increment() { count.value++ }
 &lt;/script&gt;
 &lt;template&gt;
-  &lt;button @click="increment"&gt;{{ count }} x2 = {{ doubled }}&lt;/button&gt;
+  &lt;button @click="increment"&gt;&#123;&#123; count &#125;&#125; x2 = &#123;&#123; doubled &#125;&#125;&lt;/button&gt;
 &lt;/template&gt;</code></pre>
       </div>
 
@@ -105,7 +105,7 @@ data$ = this.http.get('/api/users');
 this.data$.subscribe(data => this.users = data);
 
 // Async pipe in template
-// &lt;li *ngFor="let u of users$ | async"&gt;{{ u.name }}&lt;/li&gt;</code></pre>
+// &lt;li *ngFor="let u of users$ | async"&gt;&#123;&#123; u.name &#125;&#125;&lt;/li&gt;</code></pre>
       </div>
 
       <div class="section">
@@ -157,6 +157,7 @@ export default {
 
 <style scoped>
 @import '@legacy/css/variables.css';
+@import '@legacy/css/forge-tokens.css';
 
 .frameworks-page {
   background: var(--color-bg);

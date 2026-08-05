@@ -295,9 +295,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          docker build -t registry.example.com/app:${{ github.sha }} .
-          docker push registry.example.com/app:${{ github.sha }}
-      - run: kubectl set image deployment/app app=registry.example.com/app:${{ github.sha }}</code></pre>
+          docker build -t registry.example.com/app:$&#123;&#123; github.sha &#125;&#125; .
+          docker push registry.example.com/app:$&#123;&#123; github.sha &#125;&#125;
+      - run: kubectl set image deployment/app app=registry.example.com/app:$&#123;&#123; github.sha &#125;&#125;</code></pre>
 
           <h3>Git Flow</h3>
           <div class="grid-2">

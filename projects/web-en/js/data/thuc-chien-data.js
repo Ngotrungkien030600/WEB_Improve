@@ -712,3 +712,5 @@ window.thucChienTasks = [
     keywords: ['reuse', 'refactor', 'rest', 'generics', 'deduplicate', 'api-design'],
   },
 ];
+
+export const thucChienTasks = window.thucChienTasks;
