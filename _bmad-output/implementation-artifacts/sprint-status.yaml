@@ -121,3 +121,16 @@ development_status:
   7-5-frontend-frameworks: done          # frameworks ✅ CODE-REVIEWED 2026-08-05
   7-6-navigation-registry-verify: done   # ✅ CODE-REVIEWED 2026-08-05 — 0 🔴 (data-only change)
   epic-7-retrospective: optional
+
+  # ---- Epic 8: Unify & Elevate Design System ----
+  epic-8: in-progress   # UI Redesign - Unified Forge Design
+  8-1-design-tokens: done          # ✅ Design tokens extended, semantic colors added
+  8-2-component-library: done     # ✅ CButton, CStatCard, CTable created; CTopbar, CHubCard fixed
+  8-3-animation-system: done    # ✅ CODE-REVIEWED 2026-08-06 — 0 🔴, 0 🟡, 1 🟢    # Page transitions, stagger, micro-interactions
+  8-4-hub-pages-unification: done  # ✅ Java, Frontend, English, Cloud hubs fixed
+  8-5-dashboard-unification: done  # ✅ Dashboard fixed with Forge design
+  8-6-ai-hub-unification: review   # ✅ DONE 2026-08-06 — AiHub Forge design
+  8-7-game-pages-unification: done   # ✅ CODE-REVIEWED 2026-08-06
+  8-8-interview-pages-unification: done   # ✅ CODE-REVIEWED 2026-08-06
+  epic-8-retrospective: optional
+

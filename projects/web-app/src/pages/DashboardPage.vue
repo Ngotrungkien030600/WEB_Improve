@@ -1,88 +1,65 @@
 <template>
-  <div class="dashboard-page" style="--color-accent: #7c5cfc">
+  <div class="dashboard-page">
     <div class="page">
-      <div class="topbar">
-        <h1>📊 Dashboard</h1>
-        <a class="back" href="#" @click.prevent="handleBack">← Trang chủ</a>
-      </div>
+      <CTopbar
+        title="📊 Dashboard"
+        back-label="← Trang chủ"
+        @go-home="handleNavigate('/')"
+      />
 
       <div class="stat-grid">
-        <div class="stat-card">
-          <div class="val">{{ totalXp }}</div>
-          <div class="lbl">Tổng XP</div>
-        </div>
-        <div class="stat-card">
-          <div class="val">{{ streak }}</div>
-          <div class="lbl">Streak (ngày)</div>
-        </div>
-        <div class="stat-card">
-          <div class="val">{{ level }}</div>
-          <div class="lbl">Level</div>
-        </div>
+        <CStatCard
+          :value="totalXp"
+          label="Tổng XP"
+          icon="⭐"
+          accent-color="var(--forge-ember)"
+        />
+        <CStatCard
+          :value="streak"
+          label="Streak (ngày)"
+          icon="🔥"
+          accent-color="var(--forge-fire)"
+        />
+        <CStatCard
+          :value="level"
+          label="Level"
+          icon="🏆"
+          accent-color="var(--forge-success)"
+        />
       </div>
 
       <div class="section">
-        <h2>🎯 Kỹ năng</h2>
+        <h2 class="section-title">🎯 Kỹ năng</h2>
         <div v-if="skills.length === 0" class="empty-state">
           <div class="icon">📝</div>
           <p>Chưa có dữ liệu. Học để tích XP!</p>
         </div>
-        <table v-else>
-          <thead>
-            <tr>
-              <th>Kỹ năng</th>
-              <th>Level</th>
-              <th>XP</th>
-              <th>Tiến độ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="skill in skills" :key="skill.name">
-              <td>{{ skill.icon || '📌' }} {{ skill.name }}</td>
-              <td>{{ skill.level || 0 }}</td>
-              <td>{{ skill.xp || 0 }}</td>
-              <td>
-                <div class="skill-bar">
-                  <div class="skill-bar-fill">
-                    <div :style="{ width: getSkillPct(skill) + '%' }"></div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <CTable v-else :columns="skillColumns" :data="skills">
+          <template #cell-name="{ row }">
+            <span class="skill-name">{{ row.icon || '📌' }} {{ row.name }}</span>
+          </template>
+          <template #cell-progress="{ row }">
+            <div class="skill-bar">
+              <div class="skill-bar-fill">
+                <div :style="{ width: getSkillPct(row) + '%' }"></div>
+              </div>
+              <span class="skill-xp">{{ row.xp || 0 }} XP</span>
+            </div>
+          </template>
+        </CTable>
       </div>
 
       <div class="section">
-        <h2>📝 Lịch sử thi</h2>
+        <h2 class="section-title">📝 Lịch sử thi</h2>
         <div v-if="examHistory.length === 0" class="empty-state">
           <div class="icon">📝</div>
           <p>Chưa có bài thi nào.</p>
         </div>
-        <table v-else>
-          <thead>
-            <tr>
-              <th>Ngày</th>
-              <th>Đúng</th>
-              <th>Tổng</th>
-              <th>%</th>
-              <th>ĐG</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(exam, i) in examHistory" :key="i">
-              <td>{{ formatDate(exam.date || exam.completedAt) }}</td>
-              <td>{{ exam.correct || 0 }}</td>
-              <td>{{ exam.total || 0 }}</td>
-              <td>{{ getExamPct(exam) }}%</td>
-              <td>{{ getExamLabel(exam) }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <CTable v-else :columns="examColumns" :data="examHistory" />
       </div>
 
       <div class="section">
-        <h2>🔥 Streak 7 ngày</h2>
+        <h2 class="section-title">🔥 Streak 7 ngày</h2>
         <div class="streak-box">
           <div
             v-for="(day, i) in streakDays"
@@ -101,9 +78,13 @@
 
 <script>
 import { navigate } from '../utils/navigate.js';
+import CTopbar from '../components/CTopbar.vue';
+import CStatCard from '../components/CStatCard.vue';
+import CTable from '../components/CTable.vue';
 
 export default {
   name: 'DashboardPage',
+  components: { CTopbar, CStatCard, CTable },
 
   data() {
     return {
@@ -111,6 +92,19 @@ export default {
       examHistory: [],
       streak: 0,
       streakDays: [],
+      skillColumns: [
+        { key: 'name', label: 'Kỹ năng' },
+        { key: 'level', label: 'Level' },
+        { key: 'xp', label: 'XP' },
+        { key: 'progress', label: 'Tiến độ' },
+      ],
+      examColumns: [
+        { key: 'date', label: 'Ngày' },
+        { key: 'correct', label: 'Đúng' },
+        { key: 'total', label: 'Tổng' },
+        { key: 'pct', label: '%' },
+        { key: 'label', label: 'ĐG' },
+      ],
     };
   },
 
@@ -131,8 +125,8 @@ export default {
   },
 
   methods: {
-    handleBack() {
-      navigate('/');
+    handleNavigate(path) {
+      navigate(path);
     },
 
     loadSkills() {
@@ -150,7 +144,12 @@ export default {
         const raw = localStorage.getItem('skillforge_exam_history');
         if (raw) {
           const parsed = JSON.parse(raw);
-          this.examHistory = parsed.slice().reverse().slice(0, 20);
+          this.examHistory = parsed.slice().reverse().slice(0, 20).map(exam => ({
+            ...exam,
+            date: this.formatDate(exam.date || exam.completedAt),
+            pct: exam.total > 0 ? Math.round((exam.correct / exam.total) * 100) : 0,
+            label: this.getExamLabel(exam),
+          }));
         }
       } catch (e) {
         console.warn('Dashboard: exam history parse failed', e);
@@ -251,175 +250,135 @@ export default {
 </script>
 
 <style scoped>
-/* CSS variables inherited from main.css */
-@import '@legacy/css/subpage.css';
-
 .dashboard-page {
+  background: var(--forge-bg);
   min-height: 100vh;
-  background: var(--color-bg);
+  padding: 2.5rem 1.5rem;
 }
 
 .page {
   max-width: 960px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem;
-}
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.topbar h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-text);
-  margin: 0;
-}
-
-.back {
-  color: var(--color-accent);
-  text-decoration: none;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-.back:hover {
-  text-decoration: underline;
 }
 
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.stat-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.stat-card .val {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--color-accent);
-}
-
-.stat-card .lbl {
-  font-size: 0.85rem;
-  color: var(--color-text2);
-  margin-top: 0.25rem;
+  margin-bottom: 2.5rem;
 }
 
 .section {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
-.section h2 {
+.section-title {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text);
+  border-bottom: 1px solid var(--forge-glass-border);
+  color: var(--forge-text);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  text-align: left;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-text2);
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-td {
-  font-size: 0.85rem;
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text);
-}
-
-tr:hover td {
-  background: var(--color-surface2);
+.skill-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .skill-bar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .skill-bar-fill {
   height: 6px;
   border-radius: 3px;
   flex: 1;
-  background: var(--color-surface2);
+  max-width: 120px;
+  background: var(--forge-glass);
   overflow: hidden;
 }
 
 .skill-bar-fill div {
   height: 100%;
   border-radius: 3px;
-  background: var(--color-accent);
+  background: var(--forge-ember);
   transition: width 0.3s;
+}
+
+.skill-xp {
+  font-size: 0.8rem;
+  color: var(--forge-text3);
+  min-width: 50px;
 }
 
 .streak-box {
   display: flex;
   gap: 0.75rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .streak-day {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: var(--color-surface2);
-  color: var(--color-text2);
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--forge-glass);
+  border: 2px solid transparent;
+  color: var(--forge-text3);
+  transition: all var(--transition-spring);
 }
 
 .streak-day.active {
-  background: var(--color-accent);
+  background: var(--forge-fire);
   color: white;
 }
 
 .streak-day.today {
-  border: 2px solid var(--color-accent);
+  border-color: var(--forge-ember);
+  color: var(--forge-ember);
+}
+
+.streak-day.active.today {
+  border-color: var(--forge-ember);
+  box-shadow: 0 0 16px rgba(249, 115, 22, 0.4);
 }
 
 .empty-state {
   text-align: center;
-  padding: 2.5rem 1rem;
-  color: var(--color-text2);
+  padding: 3rem 1rem;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
 }
 
 .empty-state .icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state p {
+  color: var(--forge-text3);
+  font-size: 0.95rem;
 }
 
 @media (max-width: 600px) {
   .stat-grid {
     grid-template-columns: 1fr;
+  }
+
+  .streak-day {
+    width: 36px;
+    height: 36px;
+    font-size: 0.7rem;
   }
 }
 </style>

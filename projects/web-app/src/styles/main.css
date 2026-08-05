@@ -24,6 +24,7 @@ a {
 
 /* Forge theme tokens — shared across home page components */
 :root {
+  /* Core colors */
   --forge-bg: #08080e;
   --forge-bg2: #0d0d1a;
   --forge-surface: rgba(255, 255, 255, 0.04);
@@ -32,27 +33,57 @@ a {
   --forge-glass-border: rgba(255, 255, 255, 0.08);
   --forge-glass-hover: rgba(255, 255, 255, 0.12);
   --forge-glass-hover-border: rgba(255, 255, 255, 0.18);
+
+  /* Accent colors */
   --forge-fire: #f97316;
   --forge-fire-glow: #ea580c;
   --forge-ember: #fbbf24;
   --forge-glow: rgba(249, 115, 22, 0.25);
   --forge-glow-strong: rgba(249, 115, 22, 0.4);
+
+  /* Text colors */
   --forge-text: #f1f5f9;
   --forge-text2: #94a3b8;
   --forge-text3: #64748b;
+
+  /* Semantic colors */
+  --forge-success: #22c55e;
+  --forge-error: #ef4444;
+  --forge-warning: #f59e0b;
+  --forge-info: #3b82f6;
+
+  /* Card */
   --forge-card-radius: 16px;
+
+  /* Brand gradient */
   --forge-brand-start: #fbbf24;
   --forge-brand-mid: #f97316;
   --forge-brand-end: #ea580c;
+
+  /* Timer */
   --forge-ring-bg: rgba(255, 255, 255, 0.08);
   --forge-ring-progress: #f97316;
   --forge-ring-warning: #ef4444;
   --forge-ring-danger: #dc2626;
   --forge-time-warning: #fca5a5;
   --forge-time-danger: #f87171;
+
+  /* Button */
   --forge-btn-primary-start: #f97316;
   --forge-btn-primary-end: #ea580c;
   --forge-btn-primary-color: white;
+
+  /* Per-hub accent colors (AD-17) */
+  --accent-ai: #f472b6;
+  --accent-english: #34d399;
+  --accent-java: #f59e0b;
+  --accent-cloud: #7c5cfc;
+  --accent-frontend: #60a5fa;
+
+  /* Animation transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-spring: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Legacy page variables — mapped to dark theme */
   --color-bg: #08080e;
@@ -61,6 +92,7 @@ a {
   --color-border: rgba(255, 255, 255, 0.1);
   --color-text: #f1f5f9;
   --color-text2: #94a3b8;
+  --color-accent: var(--forge-fire);
   --color-radius: 10px;
 
   /* Typography scale */

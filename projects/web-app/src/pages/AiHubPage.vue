@@ -1,5 +1,5 @@
 <template>
-  <div class="ai-hub-page" style="--color-accent: #764ba2">
+  <div class="ai-hub-page" style="--forge-accent: var(--accent-ai)">
     <div class="page">
       <div class="topbar">
         <div class="topbar-left">
@@ -494,18 +494,15 @@ export default {
 </script>
 
 <style scoped>
-/* CSS variables inherited from main.css */
-@import '@legacy/css/subpage.css';
-
 .ai-hub-page {
   min-height: 100vh;
-  background: var(--color-bg);
+  background: var(--forge-bg);
+  padding: 2.5rem 1.5rem;
 }
 
 .page {
   max-width: 900px;
   margin: 0 auto;
-  padding: 1.5rem 1rem;
 }
 
 .topbar {
@@ -520,21 +517,20 @@ export default {
 .topbar-left h1 {
   font-size: 2rem;
   font-weight: 800;
-  color: white;
+  color: var(--forge-text);
   margin: 0;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.15);
 }
 
 .topbar-left p {
   font-size: 1rem;
-  opacity: 0.9;
-  color: rgba(255,255,255,0.9);
+  color: var(--forge-text2);
   margin-top: 0.2rem;
 }
 
 .back-btn {
-  background: white;
-  color: var(--color-accent);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  color: var(--accent-ai);
   text-decoration: none;
   padding: 0.4rem 0.8rem;
   border-radius: 30px;
@@ -550,25 +546,26 @@ export default {
 }
 
 .tab {
-  background: rgba(255,255,255,0.2);
-  color: white;
-  border: 2px solid rgba(255,255,255,0.4);
-  border-radius: 30px;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  color: var(--forge-text2);
+  border-radius: 16px;
   padding: 0.5rem 1.2rem;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .tab:hover {
-  background: rgba(255,255,255,0.35);
+  background: var(--forge-glass-hover);
+  color: var(--forge-text);
 }
 
 .tab.active {
-  background: white;
-  color: var(--color-accent);
-  border-color: white;
+  background: var(--forge-glass-hover);
+  border-color: var(--accent-ai);
+  color: var(--accent-ai);
 }
 
 .section {
@@ -582,23 +579,30 @@ export default {
 
 .filter-row select {
   padding: 0.45rem 0.8rem;
-  border: none;
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 8px;
   font-size: 0.95rem;
   cursor: pointer;
   width: 100%;
   max-width: 300px;
+  background: var(--forge-glass);
+  color: var(--forge-text);
 }
 
 .flashcard {
-  background: white;
-  border-radius: 20px;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   perspective: 1000px;
   cursor: pointer;
   min-height: 280px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .flashcard-inner {
@@ -624,7 +628,7 @@ export default {
 
 .flashcard-category {
   display: inline-block;
-  background: var(--color-primary);
+  background: var(--accent-ai);
   color: white;
   font-size: 0.75rem;
   font-weight: 700;
@@ -637,42 +641,42 @@ export default {
 .flashcard-en {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--color-accent);
+  color: var(--accent-ai);
   margin-bottom: 0.3rem;
 }
 
 .flashcard-vi {
   font-size: 1.3rem;
-  color: var(--color-text2);
+  color: var(--forge-text2);
   font-weight: 600;
   margin-bottom: 1rem;
 }
 
 .flashcard-def {
   font-size: 1.05rem;
-  color: var(--color-text);
+  color: var(--forge-text);
   line-height: 1.6;
 }
 
 .flashcard-ex {
   font-size: 0.95rem;
-  color: var(--text-tertiary);
+  color: var(--forge-text2);
   font-style: italic;
   margin-top: 1rem;
   padding: 0.8rem;
-  background: var(--color-bg-white);
-  border-radius: var(--radius-sm);
+  background: var(--forge-glass);
+  border-radius: 8px;
 }
 
 .flip-hint {
-  color: var(--text-muted);
+  color: var(--forge-text3);
   font-size: 0.85rem;
   text-align: center;
   margin-top: 1rem;
 }
 
 .flashcard-counter {
-  color: rgba(255,255,255,0.85);
+  color: var(--forge-text2);
   text-align: center;
   margin-top: 0.6rem;
   font-weight: 600;
@@ -686,9 +690,9 @@ export default {
 }
 
 .flashcard-btn {
-  background: rgba(255,255,255,0.9);
-  color: var(--color-accent);
-  border: none;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  color: var(--accent-ai);
   border-radius: 12px;
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
@@ -709,8 +713,9 @@ export default {
 
 /* ===== QUIZ ===== */
 .quiz-config {
-  background: white;
-  border-radius: var(--radius-md);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 16px;
   padding: 1rem 1.2rem;
   margin-bottom: 1rem;
   display: flex;
@@ -721,10 +726,12 @@ export default {
 
 .quiz-config select {
   padding: 0.4rem 0.7rem;
-  border: 1.5px solid var(--color-border-subtle);
+  border: 1px solid var(--forge-glass-border);
   border-radius: 8px;
   font-size: 0.9rem;
   cursor: pointer;
+  background: var(--forge-glass);
+  color: var(--forge-text);
 }
 
 .quiz-type-tabs {
@@ -735,10 +742,10 @@ export default {
 }
 
 .quiz-type-tab {
-  background: rgba(255,255,255,0.2);
-  color: var(--color-text);
-  border: 2px solid rgba(255,255,255,0.4);
-  border-radius: 20px;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  color: var(--forge-text2);
+  border-radius: 16px;
   padding: 0.35rem 0.9rem;
   font-size: 0.85rem;
   font-weight: 600;
@@ -747,16 +754,16 @@ export default {
 }
 
 .quiz-type-tab.active {
-  background: white;
-  color: var(--color-accent);
-  border-color: white;
+  background: var(--forge-glass-hover);
+  border-color: var(--accent-ai);
+  color: var(--accent-ai);
 }
 
 .quiz-start-btn {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background: linear-gradient(135deg, var(--forge-fire), var(--accent-ai));
   color: white;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   padding: 0.4rem 1rem;
   font-weight: 700;
   font-size: 0.85rem;
@@ -766,8 +773,8 @@ export default {
 
 .quiz-timer-bar {
   height: 6px;
-  background: rgba(255,255,255,0.3);
-  border-radius: var(--radius-sm);
+  background: var(--forge-glass);
+  border-radius: 8px;
   overflow: hidden;
   margin-bottom: 0.3rem;
   display: none;
@@ -779,12 +786,12 @@ export default {
 
 .quiz-timer-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-warning), var(--color-error));
+  background: linear-gradient(90deg, var(--forge-fire), var(--forge-error));
   transition: width 1s linear;
 }
 
 .quiz-timer-text {
-  color: white;
+  color: var(--forge-text2);
   font-size: 0.8rem;
   text-align: center;
   margin-bottom: 0.8rem;
@@ -796,16 +803,16 @@ export default {
 }
 
 .quiz-card {
-  background: white;
-  border-radius: 20px;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
   margin-bottom: 1rem;
 }
 
 .quiz-badge {
   display: inline-block;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background: linear-gradient(135deg, var(--forge-fire), var(--accent-ai));
   color: white;
   font-size: 0.8rem;
   font-weight: 700;
@@ -817,14 +824,14 @@ export default {
 .quiz-progress {
   float: right;
   font-size: 0.85rem;
-  color: var(--color-text2);
+  color: var(--forge-text2);
   font-weight: 600;
 }
 
 .quiz-question {
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--color-text-dark);
+  color: var(--forge-text);
   margin-bottom: 1rem;
   line-height: 1.5;
 }
@@ -837,8 +844,8 @@ export default {
 }
 
 .quiz-option {
-  background: var(--color-bg-white);
-  border: 2px solid var(--color-border-subtle);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
   border-radius: 12px;
   padding: 0.75rem 1rem;
   font-size: 0.95rem;
@@ -846,24 +853,24 @@ export default {
   text-align: left;
   transition: all 0.15s;
   font-weight: 500;
-  color: var(--color-text);
+  color: var(--forge-text);
 }
 
 .quiz-option:hover:not(:disabled) {
-  border-color: var(--color-accent-light);
-  background: var(--color-accent-bg-light);
+  border-color: var(--accent-ai);
+  background: rgba(244,114,182,0.1);
 }
 
 .quiz-option.correct {
-  background: var(--color-success-bg);
-  border-color: var(--color-success);
-  color: var(--color-success-dark);
+  background: rgba(34,197,94,0.15);
+  border-color: var(--forge-success);
+  color: var(--forge-success);
 }
 
 .quiz-option.wrong {
-  background: var(--color-error-bg);
-  border-color: var(--color-error);
-  color: var(--color-error-dark);
+  background: rgba(239,68,68,0.15);
+  border-color: var(--forge-error);
+  color: var(--forge-error);
 }
 
 .quiz-option:disabled {
@@ -872,7 +879,7 @@ export default {
 
 .quiz-feedback {
   padding: 0.7rem 1rem;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   font-weight: 600;
   font-size: 0.9rem;
   margin-bottom: 1rem;
@@ -884,17 +891,17 @@ export default {
 }
 
 .quiz-feedback.correct {
-  background: var(--color-success-bg);
-  color: var(--color-success-dark);
+  background: rgba(34,197,94,0.15);
+  color: var(--forge-success);
 }
 
 .quiz-feedback.wrong {
-  background: var(--color-error-bg);
-  color: var(--color-error-dark);
+  background: rgba(239,68,68,0.15);
+  color: var(--forge-error);
 }
 
 .quiz-next {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background: linear-gradient(135deg, var(--forge-fire), var(--accent-ai));
   color: white;
   border: none;
   border-radius: 30px;
@@ -920,10 +927,10 @@ export default {
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
   text-align: center;
-  background: white;
-  border-radius: var(--radius-md);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 16px;
   padding: 1rem;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   margin-bottom: 1rem;
 }
 
@@ -931,12 +938,12 @@ export default {
   display: block;
   font-size: 1.4rem;
   font-weight: 800;
-  color: var(--color-accent);
+  color: var(--accent-ai);
 }
 
 .stat-label {
   font-size: 0.8rem;
-  color: var(--color-text2);
+  color: var(--forge-text2);
 }
 
 /* ===== INTERVIEW ===== */
@@ -949,15 +956,15 @@ export default {
 .interview-sidebar {
   width: 260px;
   flex-shrink: 0;
-  background: white;
-  border-radius: var(--radius-md);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 16px;
   padding: 1rem;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
 .interview-progress {
   font-size: 0.85rem;
-  color: var(--color-text2);
+  color: var(--forge-text2);
   margin-bottom: 1rem;
   font-weight: 600;
 }
@@ -972,7 +979,7 @@ export default {
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--forge-text);
   transition: background 0.15s;
   display: flex;
   justify-content: space-between;
@@ -981,38 +988,39 @@ export default {
 }
 
 .interview-item:hover {
-  background: var(--color-accent-bg);
+  background: rgba(244,114,182,0.08);
 }
 
 .interview-item.active {
-  background: var(--color-accent);
-  color: white;
+  background: rgba(244,114,182,0.15);
+  color: var(--accent-ai);
+  border: 1px solid var(--accent-ai);
 }
 
 .interview-item-stat {
   font-size: 0.8rem;
-  color: var(--color-text2);
+  color: var(--forge-text2);
 }
 
 .interview-item.active .interview-item-stat {
-  color: rgba(255,255,255,0.7);
+  color: var(--accent-ai);
 }
 
 .interview-content {
   flex: 1;
-  background: white;
-  border-radius: var(--radius-md);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   min-height: 300px;
 }
 
 .interview-content h2 {
-  color: var(--color-accent);
+  color: var(--accent-ai);
   font-size: 1.4rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--color-accent-bg, #f3e5f5);
+  border-bottom: 2px solid rgba(244,114,182,0.15);
 }
 
 .checklist {
@@ -1026,20 +1034,20 @@ export default {
   padding: 0.5rem 0;
   cursor: pointer;
   font-size: 0.95rem;
-  color: var(--color-text-darker);
+  color: var(--forge-text);
 }
 
 .checklist-item input {
   margin-top: 0.25rem;
   width: 18px;
   height: 18px;
-  accent-color: var(--color-accent);
+  accent-color: var(--accent-ai);
   cursor: pointer;
 }
 
 .checklist-item.checked span {
   text-decoration: line-through;
-  color: var(--color-text-muted);
+  color: var(--forge-text3);
 }
 
 /* ===== PROJECTS ===== */
@@ -1050,23 +1058,24 @@ export default {
 }
 
 .project-card {
-  background: white;
-  border-radius: var(--radius-md);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 16px;
   padding: 1.2rem;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .project-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  border-color: var(--accent-ai);
+  box-shadow: 0 0 20px rgba(244,114,182,0.2);
 }
 
 .project-title {
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--color-text-dark);
+  color: var(--forge-text);
   margin-bottom: 0.5rem;
 }
 
@@ -1075,7 +1084,7 @@ export default {
   gap: 0.6rem;
   margin-bottom: 0.5rem;
   font-size: 0.85rem;
-  color: var(--text-tertiary);
+  color: var(--forge-text2);
   align-items: center;
 }
 
@@ -1088,38 +1097,38 @@ export default {
 }
 
 .project-level.beginner {
-  background: var(--color-success-bg);
-  color: var(--color-success-dark);
+  background: rgba(34,197,94,0.15);
+  color: var(--forge-success);
 }
 
 .project-level.intermediate {
-  background: var(--color-warning-bg);
-  color: var(--color-warning-dark);
+  background: rgba(249,115,22,0.15);
+  color: var(--forge-fire);
 }
 
 .project-level.advanced {
-  background: var(--color-error-bg);
-  color: var(--color-error-dark);
+  background: rgba(239,68,68,0.15);
+  color: var(--forge-error);
 }
 
 .project-desc {
   font-size: 0.9rem;
-  color: var(--color-text2);
+  color: var(--forge-text2);
   line-height: 1.5;
 }
 
 .project-detail {
-  background: white;
-  border-radius: 20px;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
 
 .project-back {
   background: transparent;
-  color: var(--color-accent);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-sm);
+  color: var(--accent-ai);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 8px;
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   font-weight: 600;
@@ -1129,17 +1138,17 @@ export default {
 }
 
 .project-back:hover {
-  background: var(--color-accent-bg);
+  background: var(--forge-glass-hover);
 }
 
 .project-detail h2 {
-  color: var(--color-accent);
+  color: var(--accent-ai);
   font-size: 1.6rem;
   margin-bottom: 1rem;
 }
 
 .project-detail h3 {
-  color: var(--color-accent);
+  color: var(--accent-ai);
   font-size: 1.1rem;
   margin: 1.2rem 0 0.6rem;
 }
@@ -1151,7 +1160,7 @@ export default {
 .project-steps li {
   padding: 0.4rem 0;
   font-size: 0.95rem;
-  color: var(--color-text2);
+  color: var(--forge-text2);
   line-height: 1.5;
 }
 

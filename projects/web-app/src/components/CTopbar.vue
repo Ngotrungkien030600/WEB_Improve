@@ -35,18 +35,22 @@ export default {
 .hub-topbar h1 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-text, var(--forge-text, #e4e2f0));
+  color: var(--forge-text);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .back-link {
-  color: var(--color-accent);
+  color: var(--forge-accent, var(--forge-fire));
   text-decoration: none;
   font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: color var(--transition-fast);
 }
 
 .back-link:hover {
+  color: var(--forge-ember);
   text-decoration: underline;
 }
 </style>

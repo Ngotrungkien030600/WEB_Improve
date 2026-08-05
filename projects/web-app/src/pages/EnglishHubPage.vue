@@ -1,12 +1,14 @@
 <template>
-  <div class="page-root" style="--color-accent: #34d399">
-    <div class="container">
+  <div class="english-hub-page">
+    <div class="hub-container">
       <CTopbar
         title="📖 Tiếng Anh"
         back-label="← Trang chủ"
         @go-home="handleNavigate('/')"
       />
+
       <p class="hub-description">Từ vựng, ngữ pháp, đọc truyện, thi thử và games — tất cả trong một.</p>
+
       <CGrid>
         <CHubCard
           v-for="card in cards"
@@ -98,3 +100,25 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* English Hub uses green accent per AD-17 */
+.english-hub-page {
+  --forge-accent: var(--accent-english);
+  background: var(--forge-bg);
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem;
+}
+
+.hub-container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hub-description {
+  color: var(--forge-text2);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+</style>

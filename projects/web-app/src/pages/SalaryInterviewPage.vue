@@ -173,8 +173,8 @@ export default {
 <style scoped>
 .page-root {
   min-height: 100vh;
-  background: var(--color-bg, #0f0e17);
-  color: var(--color-text, #e4e2f0);
+  background: var(--forge-bg);
+  color: var(--forge-text);
 }
 
 .page {
@@ -200,7 +200,7 @@ export default {
 .back {
   background: none;
   border: none;
-  color: var(--color-accent, #7c5cfc);
+  color: var(--forge-accent);
   font-size: 0.9rem;
   cursor: pointer;
   text-decoration: none;
@@ -211,15 +211,15 @@ export default {
 }
 
 .desc {
-  color: var(--color-text2, #9d9bb5);
+  color: var(--forge-text2);
   margin-bottom: 2rem;
   font-size: 0.95rem;
 }
 
 .salary-card {
-  background: var(--color-surface, #1a1928);
-  border: 1px solid var(--color-border, #2d2b44);
-  border-radius: 10px;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
   padding: 1.75rem;
   margin-bottom: 2rem;
 }
@@ -250,12 +250,12 @@ export default {
 }
 
 .tier-btn {
-  background: var(--color-surface2, #22213a);
-  border: 1px solid var(--color-border, #2d2b44);
-  border-radius: 10px;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
   padding: 1rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--forge-transition-base, 0.2s);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -264,13 +264,14 @@ export default {
 }
 
 .tier-btn:hover {
-  border-color: var(--color-accent, #7c5cfc);
+  border-color: var(--forge-accent);
   transform: translateY(-2px);
+  background: var(--forge-glass-hover);
 }
 
 .tier-btn.active {
-  border-color: var(--color-accent, #7c5cfc);
-  background: rgba(124, 92, 252, 0.1);
+  border-color: var(--forge-accent);
+  background: rgba(124, 92, 252, 0.15);
 }
 
 .tier-icon {
@@ -286,7 +287,7 @@ export default {
 
 .tier-range {
   font-size: 0.75rem;
-  color: var(--color-text2, #9d9bb5);
+  color: var(--forge-text2);
   display: block;
   margin-top: 0.15rem;
 }
@@ -297,15 +298,15 @@ export default {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 2px solid var(--color-text2, #9d9bb5);
+  border: 2px solid var(--forge-text2);
   line-height: 16px;
   font-size: 0.65rem;
   color: transparent;
 }
 
 .tier-btn.active .tier-check {
-  border-color: var(--color-accent, #7c5cfc);
-  background: var(--color-accent, #7c5cfc);
+  border-color: var(--forge-accent);
+  background: var(--forge-accent);
   color: white;
 }
 
@@ -318,24 +319,24 @@ export default {
 
 .custom-label {
   font-size: 0.85rem;
-  color: var(--color-text2, #9d9bb5);
+  color: var(--forge-text2);
 }
 
 .custom-input {
   padding: 0.55rem 0.85rem;
-  border: 1px solid var(--color-border, #2d2b44);
-  border-radius: 10px;
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
   font-size: 0.85rem;
   font-family: inherit;
-  background: var(--color-surface2, #22213a);
-  color: var(--color-text);
+  background: var(--forge-glass);
+  color: var(--forge-text);
   width: 80px;
   text-align: center;
 }
 
 .custom-input:focus {
   outline: none;
-  border-color: var(--color-accent, #7c5cfc);
+  border-color: var(--forge-accent);
 }
 
 .custom-input.full {
@@ -368,24 +369,28 @@ export default {
 }
 
 .gen-btn {
-  background: var(--color-accent, #7c5cfc);
+  background: linear-gradient(135deg, var(--forge-fire), var(--forge-error));
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1.3rem;
-  font-size: 0.85rem;
+  border-radius: var(--forge-card-radius);
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all var(--forge-transition-base, 0.2s);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
 }
 
 .gen-btn:hover {
-  background: var(--forge-purple-dark, #6b4de0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.4);
 }
 
 .gen-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .questions-container {
@@ -405,11 +410,16 @@ export default {
 }
 
 .question {
-  background: var(--color-surface, #1a1928);
-  border: 1px solid var(--color-border, #2d2b44);
-  border-radius: 10px;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
   padding: 1.25rem;
   margin-bottom: 0.75rem;
+  transition: all var(--forge-transition-base, 0.2s);
+}
+
+.question:hover {
+  border-color: var(--forge-glass-hover-border);
 }
 
 .q-head {
@@ -423,15 +433,15 @@ export default {
 .q-topic {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--color-accent, #7c5cfc);
+  color: var(--forge-accent);
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
-  background: rgba(124, 92, 252, 0.1);
+  background: rgba(124, 92, 252, 0.15);
 }
 
 .q-diff {
   font-size: 0.7rem;
-  color: var(--color-text2, #9d9bb5);
+  color: var(--forge-text2);
 }
 
 .q-text {
@@ -443,27 +453,27 @@ export default {
 
 .q-answer {
   font-size: 0.82rem;
-  color: var(--color-text2, #9d9bb5);
+  color: var(--forge-text2);
   line-height: 1.6;
   padding: 0.65rem;
-  background: var(--color-surface2, #22213a);
-  border-radius: 10px;
+  background: var(--forge-glass);
+  border-radius: var(--forge-card-radius);
 }
 
 .q-answer summary {
   cursor: pointer;
   font-weight: 600;
-  color: var(--color-text2, #9d9bb5);
+  color: var(--forge-text2);
   font-size: 0.78rem;
 }
 
 .q-answer[open] {
-  border: 1px solid var(--color-border, #2d2b44);
+  border: 1px solid var(--forge-glass-border);
   margin-top: 0.4rem;
 }
 
 .q-answer[open] summary {
-  color: var(--color-accent, #7c5cfc);
+  color: var(--forge-accent);
   margin-bottom: 0.4rem;
 }
 
@@ -482,23 +492,23 @@ export default {
   font-size: 0.7rem;
   padding: 0.15rem 0.45rem;
   border-radius: 4px;
-  background: rgba(124, 92, 252, 0.08);
-  color: var(--color-accent, #7c5cfc);
-  border: 1px solid rgba(124, 92, 252, 0.15);
+  background: rgba(124, 92, 252, 0.1);
+  color: var(--forge-accent);
+  border: 1px solid rgba(124, 92, 252, 0.2);
 }
 
 .badge {
   font-size: 0.75rem;
-  color: var(--color-text2, #9d9bb5);
+  color: var(--forge-text2);
   padding: 0.5rem 0;
 }
 
 .next-tier {
   margin-top: 1rem;
   padding: 0.75rem;
-  background: var(--color-surface2, #22213a);
-  border-radius: 10px;
+  background: var(--forge-glass);
+  border-radius: var(--forge-card-radius);
   font-size: 0.82rem;
-  color: var(--color-text2, #9d9bb5);
+  color: var(--forge-text2);
 }
 </style>

@@ -173,52 +173,118 @@ export default {
 </script>
 
 <style scoped>
-/* CSS variables inherited from main.css */
-@import '@legacy/css/subpage.css';
-@import '@legacy/css/forge-tokens.css';
+.subpage {
+  background: var(--forge-bg);
+  min-height: 100vh;
+  padding: 2.5rem 1.5rem;
+}
+
+.subpage-container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.subpage-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.subpage-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.subpage-topbar-left .icon {
+  font-size: 2rem;
+}
+
+.subpage-topbar-left h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--forge-text);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: var(--forge-text2);
+}
+
+.subpage-topbar-right {
+  display: flex;
+  gap: 1rem;
+}
+
+.subpage-back {
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  color: var(--forge-text);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--forge-card-radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all var(--forge-transition-base, 0.2s);
+}
+
+.subpage-back:hover {
+  background: var(--forge-glass-hover);
+  border-color: var(--forge-accent);
+  text-decoration: none;
+}
 
 .page-desc {
-  color: var(--forge-text-secondary);
+  color: var(--forge-text2);
   margin-bottom: 2rem;
-  font-size: var(--forge-text-base, 1rem);
+  font-size: 1rem;
   line-height: 1.6;
 }
 
 .week-card {
-  background: var(--forge-bg-card);
-  border: 1px solid var(--forge-border);
-  border-radius: var(--forge-radius-lg);
-  padding: var(--forge-space-2xl);
-  margin-bottom: var(--forge-space-2xl);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: all var(--forge-transition-spring, 0.2s);
+}
+
+.week-card:hover {
+  border-color: var(--forge-glass-hover-border);
 }
 
 .week-card h2 {
-  color: var(--forge-ember);
-  font-size: var(--forge-text-xl);
+  color: var(--forge-ember, #fbbf24);
+  font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: var(--forge-space-lg);
-  padding-bottom: var(--forge-space-md);
-  border-bottom: 1px solid var(--forge-border-light);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--forge-glass-border);
 }
 
 .week-card h3 {
   color: var(--forge-text);
-  font-size: var(--forge-text-lg);
+  font-size: 1rem;
   font-weight: 600;
-  margin: var(--forge-space-xl) 0 var(--forge-space-md);
+  margin: 1.25rem 0 0.75rem;
 }
 
 .week-card p,
 .week-card li {
-  color: var(--forge-text-secondary);
+  color: var(--forge-text2);
   line-height: 1.7;
-  font-size: var(--forge-text-base);
-  margin-bottom: var(--forge-space-md);
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .week-card ul {
   padding-left: 1.25rem;
-  margin-bottom: var(--forge-space-lg);
+  margin-bottom: 1rem;
 }
 
 .week-card code {
@@ -238,27 +304,33 @@ export default {
 }
 
 .day-item {
-  background: var(--forge-bg-glass);
-  border: 1px solid var(--forge-border-light);
-  border-radius: var(--forge-radius-sm);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-radius-sm, 8px);
   padding: 0.6rem 0.8rem;
-  font-size: var(--forge-text-sm);
-  color: var(--forge-text-secondary);
+  font-size: 0.875rem;
+  color: var(--forge-text2);
+  transition: all var(--forge-transition-base, 0.15s);
+}
+
+.day-item:hover {
+  background: var(--forge-glass-hover);
+  border-color: var(--forge-accent);
 }
 
 .day-item strong {
   color: var(--forge-text);
   display: block;
   margin-bottom: 0.2rem;
-  font-size: var(--forge-text-base);
+  font-size: 1rem;
 }
 
 .qa-block {
-  background: var(--forge-bg-glass);
+  background: var(--forge-glass);
   border-left: 3px solid var(--forge-accent);
-  border-radius: 0 var(--forge-radius-sm) var(--forge-radius-sm) 0;
-  padding: var(--forge-space-lg);
-  margin-bottom: var(--forge-space-lg);
+  border-radius: 0 var(--forge-radius-sm, 8px) var(--forge-radius-sm, 8px) 0;
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 .qa-block .q {
@@ -268,7 +340,7 @@ export default {
 }
 
 .qa-block .a {
-  color: var(--forge-text-secondary);
+  color: var(--forge-text2);
   line-height: 1.6;
 }
 
@@ -280,28 +352,34 @@ export default {
 }
 
 .skill-card {
-  background: var(--forge-bg-glass);
-  border: 1px solid var(--forge-border-light);
-  border-radius: var(--forge-radius-sm);
-  padding: var(--forge-space-lg);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-radius-sm, 8px);
+  padding: 1rem;
+  transition: all var(--forge-transition-base, 0.15s);
+}
+
+.skill-card:hover {
+  background: var(--forge-glass-hover);
+  border-color: var(--forge-accent);
 }
 
 .skill-card h5 {
   color: var(--forge-text);
-  font-size: var(--forge-text-base);
+  font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.3rem;
 }
 
 .skill-card p {
-  font-size: var(--forge-text-sm);
-  color: var(--forge-text-muted);
+  font-size: 0.875rem;
+  color: var(--forge-text3);
   margin: 0;
 }
 
 .resources-note {
-  color: var(--forge-text-muted);
-  font-size: var(--forge-text-sm);
+  color: var(--forge-text3);
+  font-size: 0.875rem;
 }
 
 @media (max-width: 600px) {

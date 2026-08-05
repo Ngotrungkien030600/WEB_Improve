@@ -200,22 +200,7 @@ export default {
 
 <style scoped>
 .interview-page {
-  --forge-bg: var(--color-bg-page, #08080e);
-  --forge-bg-card: rgba(255, 255, 255, 0.04);
-  --forge-border: rgba(255, 255, 255, 0.08);
-  --forge-text: var(--text-secondary-muted, #e4e2f0);
-  --forge-text-secondary: var(--text-secondary-muted, #9d9bb5);
-  --forge-ember: var(--color-warning, #fbbf24);
-  --forge-fire: var(--color-warning-alt, #f97316);
-  --forge-surface: rgba(255, 255, 255, 0.04);
-  --forge-surface-hover: rgba(255, 255, 255, 0.08);
-  --forge-radius-sm: 8px;
-  --forge-radius-lg: 14px;
-  --forge-space-xl: 1.25rem;
-  --forge-space-lg: 2.5rem;
-  --forge-transition-fast: 0.15s ease;
-
-  background: var(--color-bg-surface-dark, #0f0e17);
+  background: var(--forge-bg);
   min-height: 100vh;
   padding: 1rem;
   font-family: 'Inter', system-ui, sans-serif;
@@ -244,20 +229,21 @@ export default {
 }
 
 .back-btn {
-  background: var(--forge-surface);
-  border: 1px solid var(--forge-border);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
   color: var(--forge-text);
   text-decoration: none;
   padding: 0.5rem 1rem;
-  border-radius: 30px;
+  border-radius: var(--forge-card-radius);
   font-weight: 700;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all var(--forge-transition-base, 0.2s);
 }
 
 .back-btn:hover {
-  background: var(--forge-surface-hover);
+  background: var(--forge-glass-hover);
+  border-color: var(--forge-accent);
 }
 
 .interview-layout {
@@ -269,10 +255,10 @@ export default {
 .interview-sidebar {
   width: 280px;
   flex-shrink: 0;
-  background: var(--forge-bg-card);
-  border: 1px solid var(--forge-border);
-  border-radius: var(--forge-radius-lg);
-  padding: var(--forge-space-xl);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
+  padding: var(--forge-space-xl, 1.25rem);
   max-height: calc(100vh - 8rem);
   overflow-y: auto;
   position: sticky;
@@ -284,10 +270,10 @@ export default {
 .interview-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
 
 .interview-sidebar h3 {
-  color: var(--forge-ember);
+  color: var(--forge-ember, #fbbf24);
   font-size: 1.125rem;
   font-weight: 700;
-  margin-bottom: var(--forge-space-lg);
+  margin-bottom: var(--forge-space-lg, 2.5rem);
 }
 
 .topic-list {
@@ -298,12 +284,12 @@ export default {
 
 .topic-item {
   padding: 0.5rem 0.7rem;
-  border-radius: var(--forge-radius-sm);
+  border-radius: var(--forge-radius-sm, 8px);
   cursor: pointer;
   font-size: 0.875rem;
-  color: var(--forge-text-secondary);
+  color: var(--forge-text2);
   font-weight: 500;
-  transition: all var(--forge-transition-fast);
+  transition: all var(--forge-transition-fast, 0.15s);
   margin-bottom: 0.2rem;
   display: flex;
   justify-content: space-between;
@@ -311,7 +297,7 @@ export default {
 }
 
 .topic-item:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--forge-glass-hover);
   color: var(--forge-text);
 }
 
@@ -319,10 +305,11 @@ export default {
   background: rgba(249, 115, 22, 0.15);
   color: var(--forge-fire);
   font-weight: 600;
+  border: 1px solid var(--forge-accent);
 }
 
 .topic-item.group-header {
-  color: var(--forge-ember);
+  color: var(--forge-ember, #fbbf24);
   font-weight: 700;
   margin-top: 0.5rem;
 }
@@ -340,18 +327,18 @@ export default {
 .progress-bar-wrap {
   margin-top: 1rem;
   padding-top: 0.75rem;
-  border-top: 1px solid var(--forge-border);
+  border-top: 1px solid var(--forge-glass-border);
 }
 
 .progress-text {
   font-size: 0.8rem;
-  color: var(--forge-text-secondary);
+  color: var(--forge-text2);
   margin-bottom: 0.4rem;
 }
 
 .progress-track {
   height: 6px;
-  background: var(--forge-surface);
+  background: var(--forge-glass);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -366,9 +353,9 @@ export default {
 .interview-card {
   flex: 1;
   min-width: 0;
-  background: var(--forge-bg-card);
-  border: 1px solid var(--forge-border);
-  border-radius: var(--forge-radius-lg);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
   padding: 1.5rem;
   max-height: calc(100vh - 8rem);
   overflow-y: auto;
@@ -402,7 +389,7 @@ export default {
 }
 
 .topic-body :deep(code) {
-  background: var(--forge-surface);
+  background: var(--forge-glass);
   padding: 0.15em 0.4em;
   border-radius: 4px;
   font-size: 0.88em;
@@ -410,9 +397,9 @@ export default {
 }
 
 .topic-body :deep(pre) {
-  background: var(--forge-surface);
+  background: var(--forge-glass);
   padding: 1rem;
-  border-radius: var(--forge-radius-sm);
+  border-radius: var(--forge-radius-sm, 8px);
   overflow-x: auto;
 }
 
@@ -422,10 +409,10 @@ export default {
 }
 
 .topic-body :deep(blockquote) {
-  border-left: 3px solid var(--forge-ember);
+  border-left: 3px solid var(--forge-ember, #fbbf24);
   padding-left: 1rem;
   margin-left: 0;
-  color: var(--forge-text-secondary);
+  color: var(--forge-text2);
 }
 
 .topic-body :deep(table) {
@@ -437,12 +424,12 @@ export default {
 .topic-body :deep(th),
 .topic-body :deep(td) {
   padding: 0.5rem;
-  border: 1px solid var(--forge-border);
+  border: 1px solid var(--forge-glass-border);
   text-align: left;
 }
 
 .topic-body :deep(th) {
-  background: var(--forge-surface);
+  background: var(--forge-glass);
   font-weight: 600;
 }
 
@@ -456,19 +443,19 @@ export default {
   align-items: flex-start;
   gap: 0.5rem;
   padding: 0.4rem 0.5rem;
-  border-radius: var(--forge-radius-sm);
+  border-radius: var(--forge-radius-sm, 8px);
   cursor: pointer;
   transition: background 0.15s;
   margin-bottom: 0.2rem;
 }
 
 .topic-body :deep(.checklist-item:hover) {
-  background: var(--forge-surface-hover);
+  background: var(--forge-glass-hover);
 }
 
 .topic-body :deep(.checklist-item input[type="checkbox"]) {
   margin-top: 0.15rem;
-  accent-color: var(--forge-fire);
+  accent-color: var(--forge-success);
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -476,6 +463,7 @@ export default {
 .topic-body :deep(.checklist-item.checked > span) {
   text-decoration: line-through;
   opacity: 0.6;
+  color: var(--forge-text3);
 }
 
 .topic-body :deep(a) {

@@ -125,4 +125,16 @@ export default {
 .home-card:nth-child(9) { animation-delay: 0.45s; }
 .home-card:nth-child(10) { animation-delay: 0.5s; }
 .home-card:nth-child(11) { animation-delay: 0.55s; }
+
+@media (max-width: 768px) {
+  .home-card {
+    animation-delay: 0s !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-card {
+    animation: none !important;
+  }
+}
 </style>

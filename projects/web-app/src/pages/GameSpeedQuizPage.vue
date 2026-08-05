@@ -67,7 +67,7 @@ export default {
       score: 0,
       timerText: '--',
       timerWidth: 100,
-      timerColor: 'var(--color-accent, #667eea)',
+      timerColor: 'var(--forge-fire)',
       answered: false,
       feedbackShown: false,
       timerInterval: null,
@@ -113,14 +113,14 @@ export default {
       this.stopMyTimer();
       this.currentSeconds = TIME_LIMIT;
       this.timerWidth = 100;
-      this.timerColor = '#667eea';
+      this.timerColor = 'var(--forge-fire)';
 
       this.timerInterval = setInterval(() => {
         this.currentSeconds--;
         const pct = (this.currentSeconds / TIME_LIMIT) * 100;
         this.timerWidth = pct;
         this.timerText = `${this.currentSeconds}s`;
-        this.timerColor = this.currentSeconds <= 3 ? 'var(--color-error, #f5576c)' : 'var(--color-accent, #667eea)';
+        this.timerColor = this.currentSeconds <= 3 ? 'var(--forge-error)' : 'var(--forge-fire)';
 
         if (this.currentSeconds <= 0) {
           this.timerText = '⏰ Hết giờ!';
@@ -215,18 +215,15 @@ export default {
 </script>
 
 <style scoped>
-/* CSS variables inherited from main.css */
-@import '@legacy/css/subpage.css';
-@import '@legacy/css/components.css';
-
 .game-page {
+  background: var(--forge-bg);
   min-height: 100vh;
-  background: var(--color-bg);
+  padding: 2.5rem 1.5rem;
 }
 
 .quiz-timer-bar {
   height: 8px;
-  background: var(--color-surface2);
+  background: var(--forge-glass);
   border-radius: 4px;
   overflow: hidden;
   max-width: 500px;
@@ -235,23 +232,24 @@ export default {
 
 .quiz-timer-bar div {
   height: 100%;
-  transition: width 0.3s ease, background 0.3s ease;
+  background: linear-gradient(90deg, var(--forge-fire), var(--forge-error));
+  transition: width 0.1s linear;
 }
 
 .quiz-timer-text {
   text-align: center;
   margin-bottom: var(--space-3);
   font-size: var(--font-sm);
-  color: var(--color-text2);
+  color: var(--forge-text2);
 }
 
 .sq-card {
   max-width: 500px;
   margin: 0 auto;
   padding: var(--space-4);
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
 }
 
 .sq-question {
@@ -259,6 +257,7 @@ export default {
   font-size: var(--font-lg);
   font-weight: 600;
   margin-bottom: var(--space-4);
+  color: var(--forge-text);
 }
 
 .options {
@@ -269,18 +268,19 @@ export default {
 
 .option {
   padding: var(--space-3) var(--space-4);
-  background: var(--color-surface2);
-  border: 2px solid var(--color-border);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
   border-radius: var(--radius-md);
   font-size: var(--font-base);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--transition-spring);
   text-align: left;
+  color: var(--forge-text);
 }
 
 .option:hover:not(:disabled) {
-  border-color: var(--color-accent);
-  background: var(--color-surface);
+  border-color: var(--forge-accent);
+  background: var(--forge-glass-hover);
 }
 
 .option:disabled {
@@ -288,15 +288,22 @@ export default {
 }
 
 .option.correct {
-  background: var(--color-success-bg, #c8e6c9);
-  border-color: var(--color-success, #2e7d32);
-  color: var(--color-success-text, #1b5e20);
+  background: rgba(34, 197, 94, 0.15);
+  border-color: var(--forge-success);
+  color: var(--forge-success);
 }
 
 .option.wrong {
-  background: var(--color-error-bg, #ffcdd2);
-  border-color: var(--color-error, #c62828);
-  color: var(--color-error-text, #b71c1c);
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--forge-error);
+  color: var(--forge-error);
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 
 .quiz-feedback {
@@ -304,22 +311,24 @@ export default {
   margin-top: var(--space-4);
   font-weight: 500;
   min-height: 1.5em;
+  color: var(--forge-text);
 }
 
 .btn-restart {
   margin-top: var(--space-4);
   padding: var(--space-2) var(--space-4);
-  background: var(--color-accent);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  color: var(--forge-text);
+  border-radius: var(--forge-card-radius);
   font-size: var(--font-base);
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all var(--transition-base);
 }
 
 .btn-restart:hover {
-  opacity: 0.9;
+  background: var(--forge-glass-hover);
+  border-color: var(--forge-accent);
 }
 </style>

@@ -159,13 +159,10 @@ export default {
 </script>
 
 <style scoped>
-/* CSS variables inherited from main.css */
-@import '@legacy/css/subpage.css';
-@import '@legacy/css/components.css';
-
 .game-page {
+  background: var(--forge-bg);
   min-height: 100vh;
-  background: var(--color-bg);
+  padding: 2.5rem 1.5rem;
 }
 
 .game-header {
@@ -185,7 +182,7 @@ export default {
 }
 
 .game-stats strong {
-  color: var(--color-accent);
+  color: var(--forge-accent);
 }
 
 .game-feedback {
@@ -204,6 +201,12 @@ export default {
   padding: var(--space-4);
 }
 
+@media (max-width: 400px) {
+  .game-board {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .game-card {
   aspect-ratio: 1;
   display: flex;
@@ -211,45 +214,46 @@ export default {
   justify-content: center;
   font-size: var(--font-xl);
   font-weight: 700;
-  background: var(--color-surface);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-md);
+  background: var(--forge-glass);
+  border: 2px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-spring);
   user-select: none;
 }
 
 .game-card:hover:not(.flipped):not(.matched) {
-  border-color: var(--color-accent);
+  border-color: var(--forge-accent);
   transform: scale(1.02);
 }
 
 .game-card.flipped {
-  background: var(--color-surface2);
-  border-color: var(--color-accent);
+  background: var(--forge-glass-hover);
+  border-color: var(--forge-accent);
 }
 
 .game-card.matched {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: white;
-  opacity: 0.7;
+  background: rgba(34, 197, 94, 0.15);
+  border-color: var(--forge-success);
+  color: var(--forge-success);
+  opacity: 0.8;
 }
 
 .btn-restart {
   margin-top: var(--space-4);
   padding: var(--space-2) var(--space-4);
-  background: var(--color-accent);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  color: var(--forge-text);
+  border-radius: var(--forge-card-radius);
   font-size: var(--font-base);
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all var(--transition-base);
 }
 
 .btn-restart:hover {
-  opacity: 0.9;
+  background: var(--forge-glass-hover);
+  border-color: var(--forge-accent);
 }
 </style>

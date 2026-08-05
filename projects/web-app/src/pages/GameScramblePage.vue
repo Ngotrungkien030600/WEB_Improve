@@ -166,13 +166,10 @@ export default {
 </script>
 
 <style scoped>
-/* CSS variables inherited from main.css */
-@import '@legacy/css/subpage.css';
-@import '@legacy/css/components.css';
-
 .game-page {
+  background: var(--forge-bg);
   min-height: 100vh;
-  background: var(--color-bg);
+  padding: 2.5rem 1.5rem;
 }
 
 .game-header {
@@ -192,22 +189,22 @@ export default {
 }
 
 .game-stats strong {
-  color: var(--color-accent);
+  color: var(--forge-accent);
 }
 
 .scramble-card {
   max-width: 500px;
   margin: 0 auto;
   padding: var(--space-4);
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
 }
 
 .scramble-hint {
   text-align: center;
   margin-bottom: var(--space-3);
-  color: var(--color-text2);
+  color: var(--forge-text2);
 }
 
 .scramble-letters,
@@ -228,30 +225,31 @@ export default {
   justify-content: center;
   font-size: var(--font-xl);
   font-weight: 700;
-  background: var(--color-surface2);
-  border: 2px solid var(--color-border);
+  background: var(--forge-glass);
+  border: 2px solid var(--forge-glass-border);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--transition-base);
   user-select: none;
+  color: var(--forge-text);
 }
 
 .scramble-tile:hover {
-  border-color: var(--color-accent);
+  border-color: var(--forge-accent);
   transform: scale(1.05);
 }
 
 .scramble-tile.placed {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: white;
+  background: var(--forge-accent);
+  border-color: var(--forge-accent);
+  color: var(--forge-bg);
 }
 
 .scramble-meaning {
   text-align: center;
   margin: var(--space-3) 0;
   font-size: var(--font-base);
-  color: var(--color-text);
+  color: var(--forge-text);
   min-height: 1.5em;
 }
 
@@ -264,25 +262,28 @@ export default {
 
 .practice-actions button {
   padding: var(--space-2) var(--space-4);
-  border: none;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
   border-radius: var(--radius-md);
   font-size: var(--font-base);
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all var(--transition-base);
+  color: var(--forge-text);
 }
 
 .practice-actions button:first-child {
-  background: var(--color-accent);
-  color: white;
-}
-
-.practice-actions button:last-child {
-  background: var(--color-surface2);
-  color: var(--color-text);
+  background: var(--forge-accent);
+  border-color: var(--forge-accent);
+  color: var(--forge-bg);
 }
 
 .practice-actions button:hover {
+  background: var(--forge-glass-hover);
+  border-color: var(--forge-accent);
+}
+
+.practice-actions button:first-child:hover {
   opacity: 0.9;
 }
 
@@ -299,10 +300,17 @@ export default {
 }
 
 .practice-feedback.correct {
-  color: var(--color-success, #2e7d32);
+  color: var(--forge-success);
 }
 
 .practice-feedback.wrong {
-  color: var(--color-error, #c62828);
+  color: var(--forge-error);
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 </style>
