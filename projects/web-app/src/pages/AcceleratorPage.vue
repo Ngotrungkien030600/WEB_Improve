@@ -31,7 +31,7 @@
 
         <div class="acc-session-box">
           <div class="acc-session-ring-wrap">
-            <svg viewBox="0 0 68 68" width="100" height="100">
+            <svg viewBox="0 0 68 68" width="68" height="68">
               <circle class="acc-session-ring-bg" cx="34" cy="34" r="30" />
               <circle
                 class="acc-session-ring-progress"

@@ -10,7 +10,7 @@
       <!-- Forge Timer Widget -->
       <div class="forge-timer-wrap">
         <div class="forge-timer-ring">
-          <svg viewBox="0 0 68 68">
+          <svg viewBox="0 0 68 68" width="68" height="68">
             <circle class="forge-ring-bg" cx="34" cy="34" r="30" />
             <circle class="forge-ring-progress" cx="34" cy="34" r="30" :style="{ strokeDashoffset: ringOffset }" />
           </svg>
