@@ -535,7 +535,7 @@ export default {
 </script>
 
 <style scoped>
-@import '@legacy/css/variables.css';
+/* CSS variables inherited from main.css */
 
 .spring-boot-page {
   background: var(--color-bg);

@@ -494,7 +494,7 @@ export default {
 </script>
 
 <style scoped>
-@import '@legacy/css/variables.css';
+/* CSS variables inherited from main.css */
 @import '@legacy/css/subpage.css';
 
 .ai-hub-page {

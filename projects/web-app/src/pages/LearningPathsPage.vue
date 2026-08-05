@@ -116,8 +116,7 @@ export default {
 </script>
 
 <style scoped>
-@import '@legacy/css/variables.css';
-@import '@legacy/css/forge-tokens.css';
+/* CSS variables inherited from main.css */
 
 .learning-paths-page {
   background: var(--color-bg);

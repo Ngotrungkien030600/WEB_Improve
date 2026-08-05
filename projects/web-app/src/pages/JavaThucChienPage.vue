@@ -220,7 +220,7 @@ export default {
 </script>
 
 <style scoped>
-@import '@legacy/css/variables.css';
+/* CSS variables inherited from main.css */
 
 .thuc-chien-page {
   background: var(--color-bg);
