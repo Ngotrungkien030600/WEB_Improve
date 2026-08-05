@@ -16,7 +16,7 @@
             v-for="tier in tiers"
             :key="tier.id"
             class="tier-btn"
-            :class="{ active: activeSalary >= tier.min && activeSalary <= tier.max }"
+            :class="{ active: activeTier?.id === tier.id }"
             @click="selectTier(tier)"
           >
             <span class="tier-icon">{{ tier.icon }}</span>

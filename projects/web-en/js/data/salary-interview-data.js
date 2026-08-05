@@ -330,10 +330,11 @@ window.salaryInterviewData = {
   ],
 
   getTier(salary) {
-    for (const tier of this.tiers) {
-      if (salary >= tier.min && salary <= tier.max) return tier;
+    // Duyệt từ dưới lên (expert → junior) để boundary values map đúng
+    for (let i = this.tiers.length - 1; i >= 0; i--) {
+      if (salary >= this.tiers[i].min) return this.tiers[i];
     }
-    return this.tiers[this.tiers.length - 1];
+    return this.tiers[0];
   },
 
   getNextTier(currentId) {
