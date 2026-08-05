@@ -7,7 +7,6 @@
           <p class="desc">IAM, VPC, EC2, Lambda, S3, RDS, ECS, CodePipeline — kiến trúc, code mẫu, best practices</p>
         </div>
         <div class="links">
-          <a href="#" @click.prevent="handleNav('/cloud')">← AWS Cloud</a>
           <a href="#" @click.prevent="handleNav('/')">Trang chủ</a>
         </div>
       </div>

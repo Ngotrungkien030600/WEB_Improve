@@ -11,7 +11,7 @@
         </div>
         <div class="subpage-topbar-right">
           <a class="subpage-back" href="#" @click.prevent="goHome">← Trang chủ</a>
-          <a class="subpage-back" href="#" @click.prevent="navigate('/interview')">☕ Java Interview</a>
+          <a class="subpage-back" href="/interview" @click.prevent="goToJavaInterview">☕ Java Interview</a>
         </div>
       </header>
 
@@ -167,7 +167,7 @@ export default {
   name: 'InterviewEnglishPage',
   methods: {
     goHome() { navigate('/'); },
-    navigate(path) { navigate(path); },
+    goToJavaInterview() { navigate('/interview'); },
   },
 };
 </script>

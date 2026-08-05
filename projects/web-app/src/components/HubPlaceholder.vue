@@ -2,11 +2,12 @@
   <div class="hub-placeholder">
     <h1>{{ label }}</h1>
     <p>Trang đang được port sang Vue — quay lại sau.</p>
-    <button class="back-btn" @click="$router.push('/')">← Về trang chủ</button>
+    <button class="back-btn" type="button" @click="goHome">← Về trang chủ</button>
   </div>
 </template>
 
 <script>
+import { navigate } from '../utils/navigate.js';
 import { PORTED_PAGE_LABELS } from '../utils/ported-pages.js';
 
 export default {
@@ -17,6 +18,11 @@ export default {
   computed: {
     label() {
       return PORTED_PAGE_LABELS[this.hubPath] || this.hubPath;
+    },
+  },
+  methods: {
+    goHome() {
+      navigate('/');
     },
   },
 };

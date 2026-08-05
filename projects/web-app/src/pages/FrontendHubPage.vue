@@ -33,7 +33,7 @@
               <div class="forge-stat-row">📦 Đã rèn <span class="val">{{ total }}</span></div>
             </div>
           </div>
-          <a class="subpage-back" @click="handleBack">← Trang chủ</a>
+          <a class="subpage-back" href="/" @click.prevent="handleBack">← Trang chủ</a>
         </div>
       </header>
 

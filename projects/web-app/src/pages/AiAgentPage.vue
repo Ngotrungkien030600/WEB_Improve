@@ -8,7 +8,7 @@
         </div>
         <div class="topbar-right">
           <ForgeTimer />
-          <button class="home-btn" @click="handleNavigate('/')">🏠</button>
+          <button class="home-btn" type="button" aria-label="Về trang chủ" title="Về trang chủ" @click="handleNavigate('/')">🏠</button>
         </div>
       </header>
 

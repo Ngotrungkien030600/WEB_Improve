@@ -6,7 +6,7 @@
           <h1>🤖 Học AI</h1>
           <p>Kiến thức AI/ML — Thi trắc nghiệm — Phỏng vấn</p>
         </div>
-        <a class="back-btn" href="#" @click.prevent="handleBack">🏠</a>
+        <a class="back-btn" href="/" aria-label="Về trang chủ" title="Về trang chủ" @click.prevent="handleBack">🏠</a>
       </div>
 
       <div class="tabs">
