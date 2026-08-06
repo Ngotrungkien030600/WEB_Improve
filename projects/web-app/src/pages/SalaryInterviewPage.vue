@@ -65,7 +65,31 @@
         <h2 class="questions-header">📋 {{ questions.length }} câu hỏi — {{ activeTier?.range }}</h2>
         <p class="questions-desc">{{ activeTier?.icon }} {{ activeTier?.description }}</p>
 
-        <div v-for="(q, i) in questions" :key="q.id" class="question">
+        <div class="topic-filter">
+          <button
+            class="topic-tab"
+            :class="{ active: activeTopic === 'all' }"
+            @click="setTopic('all')"
+          >
+            Tất cả ({{ questions.length }})
+          </button>
+          <button
+            v-for="topic in uniqueTopics"
+            :key="topic"
+            class="topic-tab"
+            :class="{ active: activeTopic === topic }"
+            @click="setTopic(topic)"
+          >
+            {{ topic }} ({{ topicCounts[topic] || 0 }})
+          </button>
+        </div>
+
+        <div v-if="filteredQuestions.length === 0" class="empty-state">
+          Không có câu hỏi nào cho chủ đề này.
+        </div>
+
+        <div v-else>
+          <div v-for="(q, i) in paginatedQuestions" :key="q.id" class="question">
           <div class="q-head">
             <span class="q-topic">{{ q.topic || 'Java' }}{{ q.fromAI ? ' 🤖AI' : '' }}</span>
             <span v-if="q.difficulty" class="q-diff">{{ stars(q.difficulty) }}</span>
@@ -78,6 +102,38 @@
               <span v-for="kw in q.keywords" :key="kw" class="kw">{{ kw }}</span>
             </div>
           </details>
+        </div>
+
+        <div v-if="totalPages > 1" class="pagination">
+          <button
+            class="page-btn prev"
+            :disabled="currentPage === 1"
+            @click="prevPage"
+          >
+            ◀ Trước
+          </button>
+          <button
+            v-for="(page, idx) in pageNumbers"
+            :key="idx"
+            class="page-btn"
+            :class="{ active: page === currentPage, ellipsis: page === '...' }"
+            :disabled="page === '...'"
+            @click="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+          <button
+            class="page-btn next"
+            :disabled="currentPage === totalPages"
+            @click="nextPage"
+          >
+            Sau ▶
+          </button>
+        </div>
+
+        <div class="page-info">
+          Trang {{ currentPage }}/{{ totalPages }} · {{ filteredQuestions.length }} câu
+        </div>
         </div>
 
         <div v-if="activeTier?.topics" class="badge">
@@ -106,6 +162,9 @@ export default {
       customRequest: '',
       isGenerating: false,
       questions: [],
+      activeTopic: 'all',
+      currentPage: 1,
+      pageSize: 10,
     };
   },
   computed: {
@@ -114,6 +173,44 @@ export default {
     },
     nextTier() {
       return salaryInterviewData.getNextTier(this.activeTier?.id);
+    },
+    uniqueTopics() {
+      if (!this.activeTier?.questions?.length) return [];
+      const topics = [...new Set(this.activeTier.questions.map(q => q.topic || 'Java'))];
+      return topics.sort();
+    },
+    topicCounts() {
+      const counts = {};
+      this.questions.forEach(q => {
+        const topic = q.topic || 'Java';
+        counts[topic] = (counts[topic] || 0) + 1;
+      });
+      return counts;
+    },
+    filteredQuestions() {
+      if (!this.questions.length) return [];
+      if (this.activeTopic === 'all') return this.questions;
+      return this.questions.filter(q => (q.topic || 'Java') === this.activeTopic);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredQuestions.length / this.pageSize) || 1;
+    },
+    paginatedQuestions() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      return this.filteredQuestions.slice(start, start + this.pageSize);
+    },
+    pageNumbers() {
+      const total = this.totalPages;
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const pages = [];
+      if (this.currentPage <= 4) {
+        pages.push(1, 2, 3, 4, 5, '...', total);
+      } else if (this.currentPage >= total - 3) {
+        pages.push(1, '...', total - 4, total - 3, total - 2, total - 1, total);
+      } else {
+        pages.push(1, '...', this.currentPage - 1, this.currentPage, this.currentPage + 1, '...', total);
+      }
+      return pages;
     },
   },
   methods: {
@@ -124,6 +221,22 @@ export default {
       this.activeSalary = tier.min;
       this.customSalary = tier.min;
       this.questions = [];
+      this.activeTopic = 'all';
+      this.currentPage = 1;
+    },
+    setTopic(topic) {
+      this.activeTopic = topic;
+      this.currentPage = 1;
+    },
+    goToPage(page) {
+      if (page === '...' || page < 1 || page > this.totalPages) return;
+      this.currentPage = page;
+    },
+    prevPage() {
+      if (this.currentPage > 1) this.currentPage--;
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) this.currentPage++;
     },
     stars(d) {
       return '⭐'.repeat(Math.min(d, 5)) + '○'.repeat(Math.max(0, 5 - d));
@@ -406,6 +519,99 @@ export default {
 .questions-desc {
   font-size: 0.82rem;
   color: var(--color-text2, #9d9bb5);
+  margin-bottom: 1rem;
+}
+
+.topic-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.topic-tab {
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 20px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.78rem;
+  color: var(--forge-text2);
+  cursor: pointer;
+  transition: all var(--forge-transition-base, 0.2s);
+}
+
+.topic-tab:hover {
+  border-color: var(--forge-accent);
+  color: var(--forge-accent);
+}
+
+.topic-tab.active {
+  background: rgba(124, 92, 252, 0.2);
+  border-color: var(--forge-accent);
+  color: var(--forge-accent);
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--forge-text2);
+  font-size: 0.9rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 1.5rem 0 0.5rem;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius);
+  padding: 0.4rem 0.7rem;
+  font-size: 0.82rem;
+  color: var(--forge-text2);
+  cursor: pointer;
+  transition: all var(--forge-transition-base, 0.2s);
+  min-width: 38px;
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: var(--forge-accent);
+  color: var(--forge-accent);
+}
+
+.page-btn.active {
+  background: var(--forge-accent);
+  border-color: var(--forge-accent);
+  color: white;
+  font-weight: 600;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-btn.ellipsis {
+  border: none;
+  background: transparent;
+  cursor: default;
+}
+
+.page-btn.prev,
+.page-btn.next {
+  padding: 0.4rem 0.85rem;
+}
+
+.page-info {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--forge-text2);
   margin-bottom: 1rem;
 }
 

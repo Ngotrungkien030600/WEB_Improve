@@ -62,24 +62,31 @@
       </div>
 
       <!-- Task Grid -->
-      <div class="task-grid">
-        <div
-          v-for="task in filteredTasks"
-          :key="task.id"
-          class="task-card"
-          @click="openModal(task)"
-        >
-          <div class="top">
-            <h3>{{ task.title }}</h3>
-            <span class="badge" :class="'badge-lv' + task.level">{{ levelLabel(task.level) }}</span>
-            <span class="badge badge-cat">{{ categoryLabel(task.category) }}</span>
-          </div>
-          <p class="summary">{{ task.summary }}</p>
-          <div class="stack">
-            <span v-for="s in task.stack" :key="s">{{ s }}</span>
-          </div>
-          <div class="foot">
-            <span class="detail-link">Xem chi tiết →</span>
+      <div class="task-grid" ref="gridRef">
+        <div class="task-grid-spacer" :style="{ height: totalHeight + 'px' }">
+          <div
+            class="task-grid-inner"
+            :style="{ transform: `translateY(${offsetY}px)` }"
+          >
+            <div
+              v-for="task in visibleTasks"
+              :key="task.id"
+              class="task-card"
+              @click="openModal(task)"
+            >
+              <div class="top">
+                <h3>{{ task.title }}</h3>
+                <span class="badge" :class="'badge-lv' + task.level">{{ levelLabel(task.level) }}</span>
+                <span class="badge badge-cat">{{ categoryLabel(task.category) }}</span>
+              </div>
+              <p class="summary">{{ task.summary }}</p>
+              <div class="stack">
+                <span v-for="s in task.stack" :key="s">{{ s }}</span>
+              </div>
+              <div class="foot">
+                <span class="detail-link">Xem chi tiết →</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -152,6 +159,8 @@ export default {
       selectedTask: null,
       levelFilters: [{ id: 'all', label: '📊 Tất cả' }, ...LEVELS],
       categoryFilters: [{ id: 'all', label: '🗂️ Mọi lĩnh vực' }, ...CATEGORIES],
+      scrollTop: 0,
+      rowHeight: 180,
     };
   },
   computed: {
@@ -177,16 +186,67 @@ export default {
         return true;
       });
     },
+    colsCount() {
+      if (typeof document === 'undefined') return 2;
+      const el = this.$refs.gridRef;
+      const gridWidth = el?.clientWidth || 1000;
+      return Math.floor((gridWidth + 16) / 336);
+    },
+    rowsCount() {
+      return Math.ceil(this.filteredTasks.length / this.colsCount);
+    },
+    totalHeight() {
+      return this.rowsCount * this.rowHeight;
+    },
+    visibleStartRow() {
+      return Math.max(0, Math.floor(this.scrollTop / this.rowHeight) - 2);
+    },
+    visibleEndRow() {
+      const gridHeight = this.$refs.gridRef?.clientHeight || 600;
+      return Math.min(this.rowsCount, Math.ceil((this.scrollTop + gridHeight) / this.rowHeight) + 2);
+    },
+    visibleTasks() {
+      const start = this.visibleStartRow * this.colsCount;
+      const end = this.visibleEndRow * this.colsCount;
+      return this.filteredTasks.slice(start, end);
+    },
+    offsetY() {
+      return this.visibleStartRow * this.rowHeight;
+    },
+  },
+  updated() {
+    this.$nextTick(() => {
+      this.bindScroll();
+    });
   },
   mounted() {
     document.addEventListener('keydown', this.handleKeydown);
+    this.bindScroll();
+    window.addEventListener('resize', this.onResize);
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this.handleKeydown);
+    const el = this.$refs.gridRef;
+    if (el) el.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onResize);
   },
   methods: {
     handleNav(path) {
       navigate(path);
+    },
+    bindScroll() {
+      const el = this.$refs.gridRef;
+      if (el && !el._scrollBound) {
+        el.addEventListener('scroll', this.onScroll);
+        el._scrollBound = true;
+      }
+    },
+    onScroll() {
+      const el = this.$refs.gridRef;
+      if (el) this.scrollTop = el.scrollTop;
+    },
+    onResize() {
+      this.scrollTop = 0;
     },
     selectLevel(id) {
       this.selectedLevel = id;
@@ -369,8 +429,19 @@ export default {
   color: #fff;
 }
 
-/* Task Grid */
+/* Task Grid — virtualized */
 .task-grid {
+  height: calc(100vh - 340px);
+  min-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.task-grid-spacer {
+  position: relative;
+}
+
+.task-grid-inner {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1rem;

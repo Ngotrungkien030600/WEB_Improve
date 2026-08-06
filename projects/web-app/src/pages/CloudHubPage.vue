@@ -36,6 +36,7 @@
 import CTopbar from '../components/CTopbar.vue';
 import CGrid from '../components/CGrid.vue';
 import CHubCard from '../components/CHubCard.vue';
+import { navigate } from '../utils/navigate.js';
 
 const tocSections = [
   { id: 'iam', num: '1', title: 'IAM & Security' },
@@ -162,12 +163,12 @@ export default {
   },
   methods: {
     handleNavigate(card) {
-      if (card.hash) {
-        // Navigate sang legacy page với hash
-        window.location.href = '/pages/cloud.html#' + card.hash;
-      } else {
-        window.location.href = '/pages/cloud.html';
+      if (typeof card === 'string') {
+        navigate(card);
+        return;
       }
+      const target = card.hash ? card.path + '#' + card.hash : card.path;
+      navigate(target);
     },
     scrollTo(id) {
       const el = document.getElementById(id);

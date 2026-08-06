@@ -22,20 +22,56 @@
         </button>
       </div>
 
-      <p v-if="currentData" class="count">📋 {{ currentData.questions.length }} câu hỏi — {{ currentData.label }}</p>
+      <p v-if="currentData" class="count">📋 {{ filteredQuestions.length }} / {{ currentData.questions.length }} câu hỏi — {{ currentData.label }}</p>
 
-      <div class="questions">
+      <div class="search-bar">
+        <input
+          type="text"
+          v-model="searchQuery"
+          @input="onSearchInput"
+          placeholder="Tìm kiếm câu hỏi..."
+          class="search-input"
+        />
+        <span v-if="searchQuery" class="search-clear" @click="searchQuery = ''; currentPage = 1">✕</span>
+      </div>
+
+      <div v-if="filteredQuestions.length === 0" class="empty-state">
+        Không tìm thấy câu hỏi nào phù hợp.
+      </div>
+
+      <div v-else class="questions">
         <div
-          v-for="(item, i) in currentData?.questions"
+          v-for="(item, i) in paginatedQuestions"
           :key="i"
           class="q-item"
-          :class="{ show: expanded[i] }"
-          @click="toggleAnswer(i)"
+          @click="openModal(item)"
         >
           <div class="q-topic">{{ item.topic }}</div>
-          <div class="q-text">{{ i + 1 }}. {{ item.q }}</div>
-          <div class="q-answer">{{ item.a }}</div>
-          <span class="q-toggle">{{ expanded[i] ? '🙈 Ẩn trả lời' : '📝 Xem trả lời' }}</span>
+          <div class="q-text" v-html="highlightMatch(item.q)"></div>
+          <span class="q-hint">📝 Xem câu trả lời</span>
+        </div>
+
+        <div v-if="totalPages > 1" class="pagination">
+          <button class="page-btn" :disabled="currentPage === 1" @click="prevPage">◀ Trước</button>
+          <button
+            v-for="(page, idx) in pageNumbers"
+            :key="idx"
+            class="page-btn"
+            :class="{ active: page === currentPage, ellipsis: page === '...' }"
+            :disabled="page === '...'"
+            @click="goToPage(page)"
+          >{{ page }}</button>
+          <button class="page-btn" :disabled="currentPage === totalPages" @click="nextPage">Sau ▶</button>
+        </div>
+      </div>
+
+      <div v-if="selectedQuestion" class="modal-overlay" @click.self="closeModal">
+        <div class="modal">
+          <button class="modal-close" @click="closeModal">✕</button>
+          <div class="modal-topic">{{ selectedQuestion.topic }}</div>
+          <div class="modal-question" v-html="highlightMatch(selectedQuestion.q)"></div>
+          <div class="modal-divider"></div>
+          <div class="modal-answer" v-html="highlightMatch(selectedQuestion.a)"></div>
         </div>
       </div>
     </div>
@@ -98,17 +134,50 @@ export default {
   data() {
     return {
       currentTier: 'junior',
-      expanded: {},
       tiers: [
         { id: 'junior', label: 'Junior (0-2 năm)', emoji: '🌱' },
         { id: 'middle', label: 'Middle (2-5 năm)', emoji: '📈' },
         { id: 'senior', label: 'Senior (5+ năm)', emoji: '🎯' },
       ],
+      searchQuery: '',
+      currentPage: 1,
+      pageSize: 10,
+      debounceTimer: null,
+      selectedQuestion: null,
     };
   },
   computed: {
     currentData() {
       return data[this.currentTier];
+    },
+    filteredQuestions() {
+      const q = this.searchQuery.trim().toLowerCase();
+      if (!q) return this.currentData?.questions || [];
+      return (this.currentData?.questions || []).filter(item =>
+        item.topic.toLowerCase().includes(q) ||
+        item.q.toLowerCase().includes(q) ||
+        item.a.toLowerCase().includes(q)
+      );
+    },
+    totalPages() {
+      return Math.ceil(this.filteredQuestions.length / this.pageSize) || 1;
+    },
+    paginatedQuestions() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      return this.filteredQuestions.slice(start, start + this.pageSize);
+    },
+    pageNumbers() {
+      const total = this.totalPages;
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const pages = [];
+      if (this.currentPage <= 4) {
+        pages.push(1, 2, 3, 4, 5, '...', total);
+      } else if (this.currentPage >= total - 3) {
+        pages.push(1, '...', total - 4, total - 3, total - 2, total - 1, total);
+      } else {
+        pages.push(1, '...', this.currentPage - 1, this.currentPage, this.currentPage + 1, '...', total);
+      }
+      return pages;
     },
   },
   methods: {
@@ -117,11 +186,49 @@ export default {
     },
     switchTier(tier) {
       this.currentTier = tier;
-      this.expanded = {};
+      this.searchQuery = '';
+      this.currentPage = 1;
     },
-    toggleAnswer(index) {
-      this.expanded = { ...this.expanded, [index]: !this.expanded[index] };
+    onSearchInput() {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => {
+        this.currentPage = 1;
+      }, 300);
     },
+    goToPage(page) {
+      if (page === '...' || page < 1 || page > this.totalPages) return;
+      this.currentPage = page;
+    },
+    prevPage() {
+      if (this.currentPage > 1) this.currentPage--;
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) this.currentPage++;
+    },
+    openModal(item) {
+      this.selectedQuestion = item;
+    },
+    closeModal() {
+      this.selectedQuestion = null;
+    },
+    handleKeydown(e) {
+      if (e.key === 'Escape' && this.selectedQuestion) {
+        this.closeModal();
+      }
+    },
+    highlightMatch(text) {
+      const q = this.searchQuery.trim();
+      if (!q) return text;
+      const plain = String(text).replace(/<[^>]*>/g, '');
+      const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return plain.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+    },
+  },
+  mounted() {
+    document.addEventListener('keydown', this.handleKeydown);
+  },
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.handleKeydown);
   },
 };
 </script>
@@ -206,7 +313,7 @@ export default {
 
 .tier-tab.active {
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-surface);
 }
 
 .tier-tab:hover:not(.active) {
@@ -217,6 +324,171 @@ export default {
   font-size: 0.85rem;
   color: var(--color-text2);
   margin-bottom: 1rem;
+}
+
+.search-bar {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  padding-right: 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--color-radius);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.search-input::placeholder {
+  color: var(--color-text2);
+}
+
+.search-clear {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--color-text2);
+  font-size: 0.9rem;
+}
+
+.search-clear:hover {
+  color: var(--color-text);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text2);
+  font-size: 0.9rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--color-radius);
+  padding: 0.4rem 0.7rem;
+  font-size: 0.82rem;
+  color: var(--color-text2);
+  cursor: pointer;
+  min-width: 38px;
+  transition: all 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.page-btn.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+  font-weight: 600;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-btn.ellipsis {
+  border: none;
+  background: transparent;
+  cursor: default;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--color-radius);
+  padding: 1.5rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--color-text2);
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: var(--color-text);
+}
+
+.modal-topic {
+  font-size: 0.7rem;
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.modal-question {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.modal-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 1rem 0;
+}
+
+.modal-answer {
+  font-size: 0.9rem;
+  color: var(--color-text2);
+  line-height: 1.6;
+}
+
+:deep(mark) {
+  background: rgba(244, 114, 182, 0.3);
+  color: inherit;
+  padding: 0.1rem 0.2rem;
+  border-radius: 2px;
 }
 
 .questions {
