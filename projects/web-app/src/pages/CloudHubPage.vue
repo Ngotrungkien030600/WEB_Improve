@@ -24,10 +24,7 @@
         <CHubCard
           v-for="card in hubCards"
           :key="card.title"
-          :icon="card.icon"
-          :title="card.title"
-          :description="card.description"
-          :path="card.path"
+          :card="card"
           @navigate="handleNavigate"
         />
       </CGrid>
@@ -36,7 +33,6 @@
 </template>
 
 <script>
-import { navigate } from '../utils/navigate.js';
 import CTopbar from '../components/CTopbar.vue';
 import CGrid from '../components/CGrid.vue';
 import CHubCard from '../components/CHubCard.vue';
@@ -59,25 +55,29 @@ const hubCards = [
     icon: '🔐',
     title: 'IAM & Security',
     description: 'Users, Roles, Policies, MFA, Least Privilege',
-    path: '/cloud#iam',
+    path: '/cloud',
+    hash: 'iam',
   },
   {
     icon: '🌐',
     title: 'VPC & Networking',
     description: 'Subnets, IGW, NAT, Security Groups, NACL',
-    path: '/cloud#vpc',
+    path: '/cloud',
+    hash: 'vpc',
   },
   {
     icon: '🖥️',
     title: 'EC2 & Auto Scaling',
     description: 'Instance types, ASG, Load Balancer, EBS',
-    path: '/cloud#ec2',
+    path: '/cloud',
+    hash: 'ec2',
   },
   {
     icon: '⚡',
     title: 'Lambda & Serverless',
     description: 'Functions, API Gateway, DynamoDB',
-    path: '/cloud#lambda',
+    path: '/cloud',
+    hash: 'lambda',
   },
 ];
 
@@ -87,9 +87,24 @@ export default {
   data() {
     return { tocSections, hubCards };
   },
+  mounted() {
+    // Scroll to hash if present on page load
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      setTimeout(() => {
+        const el = document.getElementById(hash);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  },
   methods: {
-    handleNavigate(path) {
-      navigate(path);
+    handleNavigate(card) {
+      if (card.hash) {
+        // Navigate sang legacy page với hash
+        window.location.href = '/pages/cloud.html#' + card.hash;
+      } else {
+        window.location.href = '/pages/cloud.html';
+      }
     },
     scrollTo(id) {
       const el = document.getElementById(id);

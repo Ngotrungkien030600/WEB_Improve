@@ -1,9 +1,9 @@
 <template>
   <a class="hub-card" href="#" @click.prevent="handleClick">
-    <span class="hub-card-icon">{{ icon }}</span>
+    <span class="hub-card-icon">{{ card.icon }}</span>
     <div class="hub-card-body">
-      <h3>{{ title }}</h3>
-      <p>{{ description }}</p>
+      <h3>{{ card.title }}</h3>
+      <p>{{ card.description }}</p>
     </div>
   </a>
 </template>
@@ -12,15 +12,12 @@
 export default {
   name: 'CHubCard',
   props: {
-    icon: { type: String, required: true },
-    title: { type: String, required: true },
-    description: { type: String, default: '' },
-    path: { type: String, required: true },
+    card: { type: Object, required: true },
   },
   emits: ['navigate'],
   methods: {
     handleClick() {
-      this.$emit('navigate', this.path);
+      this.$emit('navigate', this.card);
     },
   },
 };
