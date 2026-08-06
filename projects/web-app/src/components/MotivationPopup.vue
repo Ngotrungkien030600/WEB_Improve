@@ -28,11 +28,16 @@ const QUOTES = [
   { text: '30 phút mỗi ngày = 182.5 giờ mỗi năm. Đủ để giỏi bất kỳ kỹ năng nào', author: 'SkillForge Team' },
 ];
 
-const MIN_INTERVAL_HOURS = 6;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 export default {
   name: 'MotivationPopup',
+  props: {
+    minIntervalHours: {
+      type: Number,
+      default: 6,
+    },
+  },
   data() {
     return {
       visible: false,
@@ -59,7 +64,7 @@ export default {
       }
       if (!state.lastShown) return true;
       const elapsed = Date.now() - state.lastShown;
-      return elapsed >= MIN_INTERVAL_HOURS * 60 * 60 * 1000;
+      return elapsed >= this.minIntervalHours * 60 * 60 * 1000;
     },
     pickQuote() {
       const state = getMotivationState();

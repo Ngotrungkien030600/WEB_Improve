@@ -4,15 +4,11 @@
       <component :is="Component" :key="route.path" />
     </Transition>
   </RouterView>
-  <MotivationPopup />
 </template>
 
 <script>
-import MotivationPopup from './components/MotivationPopup.vue';
-
 export default {
   name: 'App',
-  components: { MotivationPopup },
 };
 </script>
 

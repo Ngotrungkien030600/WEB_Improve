@@ -108,8 +108,8 @@
       <!-- History -->
       <section v-if="!started" class="subpage-card exam-history">
         <h3>📜 Lịch sử thi</h3>
-        <ul v-if="history.length > 0" class="history-list">
-          <li v-for="(item, i) in history" :key="i" class="history-item">
+        <ul v-if="displayedHistory.length > 0" class="history-list">
+          <li v-for="(item, i) in displayedHistory" :key="i" class="history-item">
             <span class="history-type">{{ getTypeLabel(item.type) }}</span>
             <span class="history-score">{{ item.score }}/{{ item.total }}</span>
             <span class="history-pct" :class="getPctClass(item.percent)">{{ item.percent }}%</span>
@@ -117,6 +117,13 @@
           </li>
         </ul>
         <p v-else class="history-empty">Chưa có lịch sử thi. Hãy bắt đầu!</p>
+        <button
+          v-if="hasMoreHistory"
+          class="exam-btn-more"
+          @click="loadMoreHistory"
+        >
+          Xem thêm
+        </button>
       </section>
     </div>
   </div>
@@ -182,6 +189,8 @@ export default {
       timerMax: 0,
 
       history: [],
+      historyPage: 1,
+      historyPageSize: 10,
     };
   },
 
@@ -189,10 +198,16 @@ export default {
     isLastQuestion() {
       return this.currentIndex >= parseInt(this.questionCount) - 1;
     },
+    displayedHistory() {
+      return this.history.slice(0, this.historyPage * this.historyPageSize);
+    },
+    hasMoreHistory() {
+      return this.displayedHistory.length < this.history.length;
+    },
   },
 
   mounted() {
-    this.history = loadHistory();
+    this.loadHistoryData();
   },
 
   beforeUnmount() {
@@ -202,6 +217,17 @@ export default {
   methods: {
     handleBack() {
       navigate('/english/hub');
+    },
+
+    loadHistoryData() {
+      try {
+        const fresh = loadHistory();
+        this.history.splice(0, this.history.length, ...fresh);
+      } catch (e) {
+        console.warn('loadHistory failed:', e);
+        this.history = [];
+      }
+      this.historyPage = 1;
     },
 
     startExam() {
@@ -273,7 +299,7 @@ export default {
       this.finished = true;
       this.feedbackText = `🎉 Hoàn thành! Điểm: ${this.score}/${this.total} (${this.percent}%)`;
       saveToHistory();
-      this.history = getHistory();
+      this.loadHistoryData();
     },
 
     updateStats() {
@@ -302,6 +328,10 @@ export default {
       if (pct >= 80) return 'pct-high';
       if (pct >= 60) return 'pct-mid';
       return 'pct-low';
+    },
+
+    loadMoreHistory() {
+      this.historyPage++;
     },
 
     startTimer() {
@@ -639,5 +669,25 @@ export default {
   text-align: center;
   color: var(--color-text2);
   padding: var(--space-4);
+}
+
+.exam-btn-more {
+  display: block;
+  width: 100%;
+  padding: var(--space-2);
+  margin-top: var(--space-3);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-accent);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.exam-btn-more:hover {
+  background: var(--color-surface2);
+  border-color: var(--color-accent);
 }
 </style>

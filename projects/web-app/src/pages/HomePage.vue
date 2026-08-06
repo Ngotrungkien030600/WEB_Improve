@@ -1,19 +1,5 @@
 <template>
   <div class="home-page">
-    <!-- Ambient ember particles -->
-    <div class="ember-particles">
-      <div class="ember"></div>
-      <div class="ember"></div>
-      <div class="ember"></div>
-      <div class="ember"></div>
-      <div class="ember"></div>
-      <div class="ember"></div>
-      <div class="ember"></div>
-      <div class="ember"></div>
-      <div class="ember"></div>
-      <div class="ember"></div>
-    </div>
-
     <div class="container">
       <CHomeHeader>
         <CHomeTimer />
@@ -21,35 +7,39 @@
 
       <section class="hero-section">
         <h2 class="hero-title">Rèn kỹ năng,<br />tự tin chinh phục</h2>
-        <p class="hero-subtitle">Từ Java, AWS Cloud đến Frontend, AI — học có lộ trình, thực hành có bài bản, ôn luyện có hệ thống.</p>
-        <CHeroStats
-          value1="50+"
-          label1="Chủ đề"
-          value2="300+"
-          label2="Bài học"
-          value3="7"
-          label3="AI Agents"
-        />
+        <p class="hero-subtitle">
+          Từ Java, AWS Cloud đến Frontend, AI — học có lộ trình, thực hành có bài bản, ôn luyện có hệ thống.
+        </p>
       </section>
 
-      <div class="section-label">Khám phá</div>
-
-      <CGrid>
-        <CCard
-          v-for="card in cards"
-          :key="card.title"
-          :icon="card.icon"
-          :title="card.title"
-          :description="card.description"
-          :path="card.path"
-          @navigate="navigate"
-        />
-      </CGrid>
+      <section
+        v-for="group in groups"
+        :key="group.title"
+        class="card-group"
+      >
+        <div class="section-label">
+          <span class="section-icon">{{ group.icon }}</span>
+          {{ group.title }}
+        </div>
+        <CGrid>
+          <CCard
+            v-for="card in group.items"
+            :key="card.title"
+            :icon="card.icon"
+            :title="card.title"
+            :description="card.description"
+            :path="card.path"
+            @navigate="navigate"
+          />
+        </CGrid>
+      </section>
 
       <footer class="app-footer">
         <p>© 2026 SkillForge — Lò rèn kỹ năng của bạn</p>
       </footer>
     </div>
+
+    <MotivationPopup />
   </div>
 </template>
 
@@ -58,29 +48,56 @@ import CCard from '../components/CCard.vue';
 import CGrid from '../components/CGrid.vue';
 import CHomeHeader from '../components/CHomeHeader.vue';
 import CHomeTimer from '../components/CHomeTimer.vue';
-import CHeroStats from '../components/CHeroStats.vue';
+import MotivationPopup from '../components/MotivationPopup.vue';
 import { navigate } from '../utils/navigate.js';
 
-const cards = [
-  { icon: '🚀', title: 'Accelerator 30-Day', description: 'Lộ trình cấp tốc — 1h/ngày — 30 ngày lên Senior. Technical + English real-time.', path: '/accelerator' },
-  { icon: '🗺️', title: 'Lộ trình', description: 'Lộ trình học có mục tiêu rõ ràng từ cơ bản đến nâng cao.', path: '/learning-paths' },
-  { icon: '🧠', title: 'Học AI', description: 'AI/ML — kiến thức, thi trắc nghiệm, câu hỏi phỏng vấn, 8 dự án thực hành.', path: '/ai' },
-  { icon: '🤖', title: 'AI Agent', description: 'Agent, Tools & Function Calling, Token, Quota & Cost, AI at Edge — bài học + flashcard + quiz.', path: '/ai/agent' },
-  { icon: '☕', title: 'Java', description: 'Code Java, Spring Boot, phỏng vấn backend (tiếng Việt & English).', path: '/java/hub' },
-  { icon: '⚙️', title: 'Backend Engineering', description: 'SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance.', path: '/java/backend' },
-  { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE', path: '/frontend/hub' },
-  { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline, kiến trúc, best practices', path: '/cloud' },
-  { icon: '📖', title: 'English', description: 'Từ vựng, ngữ pháp, đọc truyện, luyện thi & game ghép cặp.', path: '/english' },
-  { icon: '🗣️', title: 'BMAD Agents', description: '7 trợ lý AI chuyên gia — phân tích, thiết kế, code, test, Party Mode', path: '/bmad-agents' },
-  { icon: '📊', title: 'Skill Tracker', description: 'Theo dõi kỹ năng, XP, streak — biến việc học thành game.', path: '/skill-tracker' },
-  { icon: '📈', title: 'Dashboard', description: 'Thống kê học tập, lịch sử thi, tổng quan tiến độ.', path: '/dashboard' },
+const groups = [
+  {
+    icon: '🧠',
+    title: 'Trí tuệ nhân tạo',
+    items: [
+      { icon: '🤖', title: 'Học AI', description: 'AI/ML — kiến thức, quiz, phỏng vấn, dự án thực hành.', path: '/ai' },
+      { icon: '⚡', title: 'AI Agent', description: 'Agent, Tools, Function Calling, Token & Cost.', path: '/ai/agent' },
+      { icon: '🗣️', title: 'BMAD Agents', description: '7 trợ lý AI chuyên gia — Party Mode.', path: '/bmad-agents' },
+    ],
+  },
+  {
+    icon: '💻',
+    title: 'Lập trình',
+    items: [
+      { icon: '☕', title: 'Java', description: 'Java core, Spring Boot, thực chiến, phỏng vấn backend.', path: '/java/hub' },
+      { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, framework, responsive.', path: '/frontend/hub' },
+      { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, S3, RDS, DevOps.', path: '/cloud' },
+      { icon: '⚙️', title: 'Backend Engineering', description: 'SQL, Kafka, Docker, K8s, CI/CD, System Design.', path: '/java/backend' },
+    ],
+  },
+  {
+    icon: '📖',
+    title: 'Tiếng Anh',
+    items: [
+      { icon: '🗣️', title: 'Tiếng Anh', description: 'Từ vựng, ngữ pháp, truyện, luyện thi.', path: '/english' },
+      { icon: '🎓', title: 'Thi thử', description: 'Exam — kiểm tra trình độ theo chủ đề.', path: '/exam' },
+      { icon: '💬', title: 'Luyện nói & Viết', description: 'Sentence Practice — luyện câu mỗi ngày.', path: '/sentence-practice' },
+      { icon: '🎮', title: 'Game tiếng Anh', description: 'Ghép cặp, xếp chữ, trắc nghiệm nhanh.', path: '/game-memory' },
+    ],
+  },
+  {
+    icon: '🚀',
+    title: 'Lộ trình & Công cụ',
+    items: [
+      { icon: '🚀', title: 'Accelerator 30-Day', description: 'Lộ trình cấp tốc — 1h/ngày — 30 ngày.', path: '/accelerator' },
+      { icon: '🗺️', title: 'Lộ trình học', description: 'Học có mục tiêu rõ ràng từ cơ bản đến nâng cao.', path: '/learning-paths' },
+      { icon: '📊', title: 'Skill Tracker', description: 'Theo dõi kỹ năng, XP, streak.', path: '/skill-tracker' },
+      { icon: '📈', title: 'Dashboard', description: 'Thống kê học tập, tổng quan tiến độ.', path: '/dashboard' },
+    ],
+  },
 ];
 
 export default {
   name: 'HomePage',
-  components: { CCard, CGrid, CHomeHeader, CHomeTimer, CHeroStats },
+  components: { CCard, CGrid, CHomeHeader, CHomeTimer, MotivationPopup },
   data() {
-    return { cards };
+    return { groups };
   },
   methods: {
     navigate(path) {
@@ -125,7 +142,6 @@ export default {
   position: relative;
 }
 
-/* Ambient forge glow */
 .home-page::before {
   content: '';
   position: fixed;
@@ -162,45 +178,6 @@ export default {
   100% { opacity: 0.8; transform: translate(-3%, -5%); }
 }
 
-/* Floating ember particles */
-.ember-particles {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.ember {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  background: var(--forge-fire);
-  border-radius: 50%;
-  box-shadow: 0 0 6px var(--forge-glow), 0 0 12px var(--forge-glow);
-  animation: emberFloat linear infinite;
-  opacity: 0;
-}
-
-.ember:nth-child(1) { left: 15%; animation-duration: 7s; animation-delay: 0s; }
-.ember:nth-child(2) { left: 35%; animation-duration: 9s; animation-delay: 2s; width: 2px; height: 2px; }
-.ember:nth-child(3) { left: 55%; animation-duration: 6s; animation-delay: 4s; }
-.ember:nth-child(4) { left: 75%; animation-duration: 11s; animation-delay: 1s; width: 4px; height: 4px; }
-.ember:nth-child(5) { left: 90%; animation-duration: 8s; animation-delay: 3s; }
-.ember:nth-child(6) { left: 25%; animation-duration: 10s; animation-delay: 5s; width: 2px; height: 2px; }
-.ember:nth-child(7) { left: 50%; animation-duration: 7s; animation-delay: 6s; }
-.ember:nth-child(8) { left: 65%; animation-duration: 12s; animation-delay: 2.5s; width: 3px; height: 3px; }
-.ember:nth-child(9) { left: 10%; animation-duration: 9s; animation-delay: 7s; }
-.ember:nth-child(10) { left: 80%; animation-duration: 6.5s; animation-delay: 4.5s; width: 2px; height: 2px; }
-
-@keyframes emberFloat {
-  0% { transform: translateY(100vh) scale(0); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-}
-
-/* Container */
 .container {
   position: relative;
   z-index: 1;
@@ -209,10 +186,9 @@ export default {
   padding: 1.5rem 1.5rem 1rem;
 }
 
-/* Hero Section */
 .hero-section {
   text-align: center;
-  margin-bottom: 3.5rem;
+  margin-bottom: 2.5rem;
   animation: heroFadeIn 0.8s ease-out;
 }
 
@@ -237,32 +213,31 @@ export default {
   font-size: 1.2rem;
   color: var(--forge-text2);
   max-width: 600px;
-  margin: 0 auto 0.5rem;
+  margin: 0 auto;
   line-height: 1.6;
   font-weight: 400;
 }
 
-/* Section label */
 .section-label {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
   font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--forge-text3);
+  font-weight: 700;
+  color: var(--forge-text2);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, var(--forge-glass-border) 0%, transparent 100%);
+.section-icon {
+  font-size: 1rem;
 }
 
-/* Footer */
+.card-group {
+  margin-bottom: 2.5rem;
+}
+
 .app-footer {
   text-align: center;
   padding: 1.5rem 0 0.5rem;
@@ -272,19 +247,13 @@ export default {
   letter-spacing: 0.02em;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .container { padding: 1rem; }
   .hero-title { font-size: 2.2rem; }
   .hero-subtitle { font-size: 1rem; }
-  .home-page :deep(.home-card) { padding: 1.25rem 1rem; }
-  .home-page :deep(.home-card .icon) { font-size: 2.2rem; }
-  .home-page :deep(.home-card h2) { font-size: 1rem; }
-  .home-page :deep(.home-card p) { font-size: 0.78rem; }
 }
 
 @media (max-width: 400px) {
   .hero-title { font-size: 1.8rem; }
-  .home-page :deep(.home-header-row) { flex-direction: column; align-items: flex-start; }
 }
 </style>

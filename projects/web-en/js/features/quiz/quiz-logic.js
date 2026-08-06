@@ -78,8 +78,17 @@ export function saveToHistory() {
   const percent = total === 0 ? 0 : Math.round((score / total) * 100);
   const entry = { type: currentType, score, total, percent, date: new Date().toLocaleString('vi-VN') };
   history.unshift(entry);
-  if (history.length > 20) history.pop();
-  localStorage.setItem('quizHistory', JSON.stringify(history));
+
+  const MAX_HISTORY = 50;
+  if (history.length > MAX_HISTORY) {
+    history = history.slice(0, MAX_HISTORY);
+  }
+
+  try {
+    localStorage.setItem('quizHistory', JSON.stringify(history));
+  } catch (e) {
+    console.warn('quizHistory: localStorage quota exceeded, skipping save', e);
+  }
 }
 
 export function getHistory() {

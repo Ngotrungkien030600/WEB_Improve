@@ -7,7 +7,7 @@
           <p>Agent — Tools — Token — Quota — AI at Edge</p>
         </div>
         <div class="topbar-right">
-          <ForgeTimer />
+          <CHomeTimer />
           <button class="home-btn" type="button" aria-label="Về trang chủ" title="Về trang chủ" @click="handleNavigate('/')">🏠</button>
         </div>
       </header>
@@ -169,7 +169,7 @@
 <script>
 import { navigate } from '../utils/navigate.js';
 import { aiAgentConcepts, aiAgentLessons, aiAgentQuizData } from '@legacy/js/data/ai-agent-data.js';
-import ForgeTimer from '../components/ForgeTimer.vue';
+import CHomeTimer from '../components/CHomeTimer.vue';
 
 const STORAGE_KEY = 'aiAgentChecklist';
 
@@ -212,7 +212,7 @@ const quizCategories = [
 
 export default {
   name: 'AiAgentPage',
-  components: { ForgeTimer },
+  components: { CHomeTimer },
   data() {
     return {
       tabs,
