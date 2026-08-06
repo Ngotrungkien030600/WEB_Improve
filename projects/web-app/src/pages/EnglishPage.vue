@@ -182,33 +182,71 @@
         </div>
       </section>
 
-      <!-- Q&A Section -->
+      <!-- Q&A Section - Word by Word -->
       <section v-if="currentTab === 'qa'" class="english-section">
         <div class="qa-card">
-          <h2>❓ Đặt câu hỏi</h2>
-          <p class="qa-subtitle">Học cách dùng từ để hỏi: What, Where, Why, When, How...</p>
-          <p class="qa-label">Câu {{ qaIndex + 1 }} / {{ qaData.length }} · <span class="qa-category">{{ qaData[qaIndex]?.category }}</span></p>
+          <h2>❓ Học từ vựng hỏi</h2>
+          <p class="qa-subtitle">Bấm vào từ để xem: nghĩa, cách dùng, và ví dụ</p>
 
-          <div class="qa-question-box">
-            <p class="question-label">📌 Câu hỏi mẫu:</p>
-            <p class="question-text">{{ qaData[qaIndex]?.question }}</p>
+          <!-- Category Filter -->
+          <div class="qa-filter">
+            <button
+              v-for="cat in qaCategories"
+              :key="cat"
+              class="qa-cat-btn"
+              :class="{ active: qaFilterCat === cat }"
+              @click="qaFilterCat = cat; qaShuffle()"
+            >{{ cat }}</button>
           </div>
 
-          <div class="qa-hint-box" v-if="!qaShowAnswer">
-            <p class="hint-label">💡 Công thức:</p>
-            <p class="hint-text">{{ qaData[qaIndex]?.hint }}</p>
+          <p class="qa-counter">Câu {{ qaWordIndex + 1 }} / {{ filteredQaWords.length }}</p>
+
+          <!-- Word Card - Flip Animation -->
+          <div class="qa-card-container" :class="{ flipped: qaWordRevealed }">
+            <!-- Front Side -->
+            <div class="qa-card-face qa-card-front" @click="qaWordReveal">
+              <div class="qa-word-main">
+                <span class="qa-word">{{ qaCurrentWord?.word }}</span>
+                <span class="qa-type">{{ qaCurrentWord?.type }}</span>
+              </div>
+              <p class="hint-emoji">👆 Bấm để xem nghĩa</p>
+            </div>
+
+            <!-- Back Side -->
+            <div class="qa-card-face qa-card-back">
+              <div class="qa-word-main">
+                <span class="qa-word">{{ qaCurrentWord?.word }}</span>
+                <span class="qa-type">{{ qaCurrentWord?.type }}</span>
+              </div>
+              <div class="qa-detail-section">
+                <p class="detail-label">📖 Nghĩa</p>
+                <p class="detail-value">{{ qaCurrentWord?.meaning }}</p>
+              </div>
+              <div class="qa-detail-section">
+                <p class="detail-label">💡 Dùng khi nào</p>
+                <p class="detail-value">{{ qaCurrentWord?.usage }}</p>
+              </div>
+              <div class="qa-detail-section">
+                <p class="detail-label">📝 Ví dụ</p>
+                <div class="detail-examples">
+                  <p v-for="(ex, i) in qaCurrentWord?.examples" :key="i" class="detail-example">{{ ex }}</p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="qa-answer-box" v-if="qaShowAnswer">
-            <p class="answer-label">📝 Trả lời mẫu:</p>
-            <p class="answer-text">{{ qaData[qaIndex]?.answer }}</p>
+          <!-- Formula Box -->
+          <div class="qa-formula-box">
+            <p class="formula-label">🔧 Công thức dùng {{ qaCurrentWord?.word }}:</p>
+            <p class="formula-text">{{ qaCurrentWord?.formula }}</p>
           </div>
 
+          <!-- Navigation -->
           <div class="qa-controls">
-            <button @click="qaPrev">⬅️</button>
-            <button @click="qaReveal" v-if="!qaShowAnswer">👀 Xem đáp án</button>
+            <button @click="qaWordPrev">⬅️</button>
+            <button @click="qaWordRevealed = false; qaWordNext()" v-if="qaWordRevealed">➡️ Tiếp</button>
+            <button @click="qaWordRevealed = false" v-else>🔄 Lại</button>
             <button @click="qaShuffle">🔀 Ngẫu nhiên</button>
-            <button @click="qaNext">➡️</button>
           </div>
         </div>
       </section>
@@ -294,29 +332,238 @@ const practiceSentences = [
   { name: 'Past Perfect', vi: 'Anh ấy đã đi ngủ khi tôi gọi.', en: 'He had gone to bed when I called', words: ['He', 'had', 'gone', 'to', 'bed', 'when', 'I', 'called'] },
 ];
 
-const qaData = [
-  { id: 1, question: 'Where are you from?', answer: 'I am from Vietnam.', hint: 'Dùng My name is...', category: 'WHERE' },
-  { id: 2, question: 'Where do you live?', answer: 'I live in Hanoi.', hint: 'Where + DO/DOES + S + V?', category: 'WHERE' },
-  { id: 3, question: 'Where did you go yesterday?', answer: 'I went to the school.', hint: 'Where + DID + S + V?', category: 'WHERE' },
-  { id: 4, question: 'Why are you late?', answer: 'Because the bus was stuck in traffic.', hint: 'Why + DO/DOES + S + V? | Why + DID + S + V? — TRẢ LỜI: BECAUSE...', category: 'WHY' },
-  { id: 5, question: 'Why do you learn English?', answer: 'Because I want to get a good job.', hint: 'Why + DO + S + V? — TRẢ LỜI: BECAUSE...', category: 'WHY' },
-  { id: 6, question: 'Why did you study hard?', answer: 'Because I had an exam.', hint: 'Why + DID + S + V? — TRẢ LỜI: BECAUSE...', category: 'WHY' },
-  { id: 7, question: 'What is your name?', answer: 'My name is Linh.', hint: 'WHAT + IS/ARE + S?', category: 'WHAT' },
-  { id: 8, question: 'What do you do?', answer: 'I am a student.', hint: 'WHAT + DO/DOES + S + V?', category: 'WHAT' },
-  { id: 9, question: 'What did you eat yesterday?', answer: 'I ate pho.', hint: 'WHAT + DID + S + V?', category: 'WHAT' },
-  { id: 10, question: 'What will you do tomorrow?', answer: 'I will go to school.', hint: 'WHAT + WILL + S + V?', category: 'WHAT' },
-  { id: 11, question: 'When is your birthday?', answer: 'My birthday is on July 15th.', hint: 'WHEN + IS/ARE + S?', category: 'WHEN' },
-  { id: 12, question: 'When do you go to school?', answer: 'I go to school at 7 a.m.', hint: 'WHEN + DO/DOES + S + V?', category: 'WHEN' },
-  { id: 13, question: 'When did you start learning English?', answer: 'I started 3 years ago.', hint: 'WHEN + DID + S + V?', category: 'WHEN' },
-  { id: 14, question: 'How are you today?', answer: 'I am fine, thank you.', hint: 'HOW + IS/ARE + S?', category: 'HOW' },
-  { id: 15, question: 'How do you go to school?', answer: 'I go to school by bike.', hint: 'HOW + DO/DOES + S + V?', category: 'HOW' },
-  { id: 16, question: 'How did you learn English?', answer: 'I learned by watching videos.', hint: 'HOW + DID + S + V?', category: 'HOW' },
-  { id: 17, question: 'How much does this cost?', answer: 'It costs 50,000 VND.', hint: 'HOW MUCH + DO/DOES + S + V?', category: 'HOW' },
-  { id: 18, question: 'How many books do you have?', answer: 'I have 5 books.', hint: 'HOW MANY + N + DO/DOES + S + V?', category: 'HOW' },
-  { id: 19, question: 'Who is your best friend?', answer: 'My best friend is Lan.', hint: 'WHO + IS/ARE + S?', category: 'WHO' },
-  { id: 20, question: 'Who do you love most?', answer: 'I love my mother most.', hint: 'WHO + DO/DOES + S + V?', category: 'WHO' },
-  { id: 21, question: 'Who did you meet yesterday?', answer: 'I met my teacher.', hint: 'WHO + DID + S + V?', category: 'WHO' },
-  { id: 22, question: 'Which color do you like?', answer: 'I like blue.', hint: 'WHICH + N + DO/DOES + S + V?', category: 'WHICH' },
+const qaWords = [
+  // WHERE
+  { word: 'Where', type: 'adv', meaning: 'Ở đâu', category: 'WHERE',
+    usage: 'Hỏi về địa điểm, nơi chốn',
+    formula: 'WHERE + động từ (thường chia: do/does/did/will)',
+    examples: [
+      'Where do you live? — I live in Hanoi.',
+      'Where did you go yesterday? — I went to Da Nang.',
+      'Where is the hospital? — It is near here.',
+      'Where are you from? — I am from Vietnam.',
+      'Where will we meet tomorrow? — At the cafe.',
+    ] },
+  // WHY
+  { word: 'Why', type: 'adv', meaning: 'Tại sao', category: 'WHY',
+    usage: 'Hỏi về lý do, nguyên nhân',
+    formula: 'WHY + động từ. Trả lời: Because...',
+    examples: [
+      'Why are you late? — Because the bus was stuck.',
+      'Why do you learn English? — Because I want a better job.',
+      'Why did she study hard? — Because she had an exam.',
+      'Why is he happy today? — Because it is his birthday.',
+      'Why will you go home early? — Because I am tired.',
+    ] },
+  // WHAT
+  { word: 'What', type: 'pron', meaning: 'Cái gì / Là gì', category: 'WHAT',
+    usage: 'Hỏi về sự vật, công việc, sự việc',
+    formula: 'WHAT + động từ. WHAT IS/ARE + danh từ',
+    examples: [
+      'What is your name? — My name is Linh.',
+      'What do you do? — I am a student.',
+      'What did you eat yesterday? — I ate pho.',
+      'What will you do tomorrow? — I will go to school.',
+      'What is this? — It is a book.',
+    ] },
+  // WHEN
+  { word: 'When', type: 'adv', meaning: 'Khi nào', category: 'WHEN',
+    usage: 'Hỏi về thời gian, ngày tháng',
+    formula: 'WHEN + động từ',
+    examples: [
+      'When is your birthday? — It is on July 15th.',
+      'When do you go to school? — I go at 7 a.m.',
+      'When did you start learning English? — I started 3 years ago.',
+      'When will they arrive? — They will arrive at 9 p.m.',
+      'When is the meeting? — It is on Monday.',
+    ] },
+  // HOW - are
+  { word: 'How', type: 'adv', meaning: 'Như thế nào', category: 'HOW',
+    usage: 'Hỏi về cách thức, tình trạng (chung)',
+    formula: 'HOW + are/is/do/does + S',
+    examples: [
+      'How are you today? — I am fine, thank you.',
+      'How do you go to school? — I go by bike.',
+      'How did she learn English? — She learned by watching videos.',
+      'How is your new job? — It is great.',
+      'How do you cook this? — I follow a recipe.',
+    ] },
+  // HOW MUCH
+  { word: 'How much', type: 'phrase', meaning: 'Bao nhiêu (không đếm được)', category: 'HOW',
+    usage: 'Hỏi về giá tiền, lượng không đếm được',
+    formula: 'HOW MUCH + danh từ + động từ',
+    examples: [
+      'How much does this cost? — It costs 50,000 VND.',
+      'How much water do you drink? — About 2 liters.',
+      'How much time do we have? — We have 30 minutes.',
+      'How much sugar do you want? — Just a little.',
+      'How much does the ticket cost? — It is free.',
+    ] },
+  // HOW MANY
+  { word: 'How many', type: 'phrase', meaning: 'Bao nhiêu (đếm được)', category: 'HOW',
+    usage: 'Hỏi về số lượng đếm được',
+    formula: 'HOW MANY + danh từ số nhiều + động từ',
+    examples: [
+      'How many books do you have? — I have 5 books.',
+      'How many students are in your class? — There are 30.',
+      'How many languages do you speak? — I speak two.',
+      'How many times did you try? — I tried three times.',
+      'How many brothers do you have? — I have one.',
+    ] },
+  // WHO
+  { word: 'Who', type: 'pron', meaning: 'Ai', category: 'WHO',
+    usage: 'Hỏi về người (chủ thể)',
+    formula: 'WHO + động từ. WHO IS/ARE + danh từ',
+    examples: [
+      'Who is your best friend? — My best friend is Lan.',
+      'Who do you love most? — I love my mother.',
+      'Who did you meet yesterday? — I met my teacher.',
+      'Who is calling, please? — It is John.',
+      'Who will help you? — My sister will help me.',
+    ] },
+  // WHICH
+  { word: 'Which', type: 'pron', meaning: 'Cái nào', category: 'WHICH',
+    usage: 'Hỏi lựa chọn trong số ít đã biết',
+    formula: 'WHICH + danh từ + động từ',
+    examples: [
+      'Which color do you like? — I like blue.',
+      'Which book did you read? — I read the red one.',
+      'Which one is yours? — The black one is mine.',
+      'Which class are you in? — I am in class 5A.',
+      'Which movie shall we watch? — The new one.',
+    ] },
+  // WHOSE
+  { word: 'Whose', type: 'pron', meaning: 'Của ai', category: 'WHOSE',
+    usage: 'Hỏi về sở hữu',
+    formula: 'WHOSE + danh từ + động từ',
+    examples: [
+      'Whose book is this? — It is mine.',
+      'Whose car is that? — It is my father\'s.',
+      'Whose bag did you take? — I took my sister\'s.',
+      'Whose idea was it? — It was Tom\'s.',
+      'Whose children are playing outside?',
+    ] },
+  // CAN
+  { word: 'Can', type: 'modal', meaning: 'Có thể', category: 'CAN',
+    usage: 'Hỏi về khả năng, sự cho phép',
+    formula: 'CAN + S + V (nguyên mẫu)',
+    examples: [
+      'Can you speak English? — Yes, I can.',
+      'Can I help you? — Yes, please.',
+      'Can she swim? — No, she can\'t.',
+      'Can you play the piano? — A little.',
+      'Can we sit here? — Sure.',
+    ] },
+  // COULD
+  { word: 'Could', type: 'modal', meaning: 'Có thể (lịch sự hơn)', category: 'CAN',
+    usage: 'Hỏi lịch sự hơn về khả năng',
+    formula: 'COULD + S + V (nguyên mẫu)',
+    examples: [
+      'Could you help me, please?',
+      'Could I borrow your pen? — Sure.',
+      'Could you speak louder? — Of course.',
+      'Could we have more time? — Sorry, no.',
+      'Could she play chess? — Yes, very well.',
+    ] },
+  // WOULD
+  { word: 'Would', type: 'modal', meaning: 'Sẽ / Muốn', category: 'WOULD',
+    usage: 'Hỏi về nguyện vọng, lịch sự',
+    formula: 'WOULD YOU LIKE + N? | WOULD + S + V',
+    examples: [
+      'Would you like some coffee? — Yes, please.',
+      'Would you come to my party? — Sure, I would.',
+      'What would you do in my place?',
+      'Would you mind opening the window?',
+      'Would you like tea or coffee?',
+    ] },
+  // SHOULD
+  { word: 'Should', type: 'modal', meaning: 'Nên', category: 'SHOULD',
+    usage: 'Hỏi về lời khuyên',
+    formula: 'SHOULD + S + V (nguyên mẫu)',
+    examples: [
+      'Should I study today? — Yes, you should.',
+      'What should I do? — You should rest.',
+      'Should we leave now? — Yes, let\'s go.',
+      'Should she apologize? — Yes, she should.',
+      'Should I bring an umbrella? — Maybe.',
+    ] },
+  // WILL
+  { word: 'Will', type: 'modal', meaning: 'Sẽ', category: 'WILL',
+    usage: 'Hỏi về tương lai',
+    formula: 'WILL + S + V (nguyên mẫu)',
+    examples: [
+      'Will you come tomorrow? — Yes, I will.',
+      'Will it rain today? — No, it won\'t.',
+      'Will she be here at 8? — Yes, she will.',
+      'When will you finish? — I will finish soon.',
+      'Will they win the game? — I hope so.',
+    ] },
+  // DO/DOES
+  { word: 'Do / Does', type: 'aux', meaning: 'Dùng hỏi thì hiện tại đơn', category: 'DO',
+    usage: 'Hỏi thói quen, sự thật chung (hiện tại đơn)',
+    formula: 'DO + I/you/we/they + V. DOES + he/she/it + V',
+    examples: [
+      'Do you like coffee? — Yes, I do.',
+      'Does she speak English? — Yes, she does.',
+      'Do they work here? — No, they don\'t.',
+      'Do you exercise every day? — I try to.',
+      'Does he know the answer? — I think so.',
+    ] },
+  // DID
+  { word: 'Did', type: 'aux', meaning: 'Dùng hỏi quá khứ đơn', category: 'DO',
+    usage: 'Hỏi về sự việc đã xảy ra (quá khứ đơn)',
+    formula: 'DID + S + V (nguyên mẫu)',
+    examples: [
+      'Did you eat breakfast? — Yes, I did.',
+      'Did she go to school yesterday? — No, she didn\'t.',
+      'Did you enjoy the movie? — Very much.',
+      'Did they arrive on time? — Yes, they did.',
+      'Did he call you last night? — No, he didn\'t.',
+    ] },
+  // IS/ARE
+  { word: 'Is / Are', type: 'aux', meaning: 'Dùng hỏi về trạng thái', category: 'BE',
+    usage: 'Hỏi về nghề nghiệp, tính chất, trạng thái',
+    formula: 'IS + he/she/it. ARE + I/you/we/they',
+    examples: [
+      'Is she a teacher? — Yes, she is.',
+      'Are they at home? — No, they are not.',
+      'Is it cold today? — Yes, it is.',
+      'Are you ready? — Not yet.',
+      'Is the book on the table? — Yes, it is.',
+    ] },
+  // WAS/WERE
+  { word: 'Was / Were', type: 'aux', meaning: 'Dùng hỏi quá khứ (trạng thái)', category: 'BE',
+    usage: 'Hỏi về trạng thái trong quá khứ',
+    formula: 'WAS + I/he/she/it. WERE + you/we/they',
+    examples: [
+      'Was it raining yesterday? — Yes, it was.',
+      'Were you at school last week? — Yes, I was.',
+      'Was she a doctor then? — No, she was a nurse.',
+      'Were they home last night? — I think so.',
+      'Was he happy yesterday? — Very.',
+    ] },
+  // HAVE/HAS
+  { word: 'Have / Has', type: 'aux', meaning: 'Dùng hỏi HTD, QKHT', category: 'HAVE',
+    usage: 'Hỏi về trải nghiệm, sự sở hữu (HTD, QKHT)',
+    formula: 'HAVE/HAS + S + V3 (quá khứ phân từ)',
+    examples: [
+      'Have you been to Hanoi? — Yes, I have.',
+      'Has she finished her homework? — Not yet.',
+      'Have they eaten yet? — Yes, they have.',
+      'Have you ever eaten sushi? — No, never.',
+      'Has he left? — Yes, just now.',
+    ] },
+  // AM
+  { word: 'Am', type: 'aux', meaning: 'Dùng với chủ ngữ I', category: 'BE',
+    usage: 'Hỏi về bản thân người nói',
+    formula: 'AM + I + ...?',
+    examples: [
+      'Am I late? — No, you are on time.',
+      'Am I going the right way? — Yes, straight ahead.',
+      'Am I interrupting? — No, go ahead.',
+      'Am I invited? — Of course!',
+      'Am I speaking too fast? — A little.',
+    ] },
 ];
 
 const stories = [
@@ -477,7 +724,6 @@ export default {
 
       // Data arrays - must be in data() for template access
       vocabData,
-      qaData,
       vocabCategories: ['greetings', 'daily', 'food', 'shopping', 'travel', 'work', 'school', 'health', 'emotion', 'opinion', 'requests', 'technology', 'time', 'weather', 'idioms'],
       vocabCategoryLabels,
       vocabCategory: 'all',
@@ -500,11 +746,12 @@ export default {
       stories,
       storyIndex: 0,
 
-      // Q&A
-      qaIndex: 0,
-      userAnswer: '',
-      qaShowAnswer: false,
-      qaCorrect: false,
+      // Q&A Word by Word
+      qaWords,
+      qaCategories: ['ALL', 'WHERE', 'WHY', 'WHAT', 'WHEN', 'HOW', 'WHO', 'WHICH', 'WHOSE', 'CAN', 'WOULD', 'SHOULD', 'WILL', 'DO', 'BE', 'HAVE'],
+      qaFilterCat: 'ALL',
+      qaWordIndex: 0,
+      qaWordRevealed: false,
 
       // Game
       gameCards: [
@@ -536,6 +783,13 @@ export default {
       const mins = Math.floor(this.timerSeconds / 60);
       const secs = this.timerSeconds % 60;
       return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    },
+    filteredQaWords() {
+      if (this.qaFilterCat === 'ALL') return this.qaWords;
+      return this.qaWords.filter(w => w.category === this.qaFilterCat);
+    },
+    qaCurrentWord() {
+      return this.filteredQaWords[this.qaWordIndex] || null;
     },
     ringOffset() {
       const circumference = 2 * Math.PI * 30;
@@ -658,35 +912,29 @@ export default {
       }
     },
 
-    // Q&A
-    qaNext() {
-      if (this.qaIndex < this.qaData.length - 1) {
-        this.qaIndex++;
+    // Q&A Word by Word
+    qaWordNext() {
+      if (this.qaWordIndex < this.filteredQaWords.length - 1) {
+        this.qaWordIndex++;
       } else {
-        this.qaIndex = 0;
+        this.qaWordIndex = 0;
       }
-      this.userAnswer = '';
-      this.qaShowAnswer = false;
+      this.qaWordRevealed = false;
     },
-    qaPrev() {
-      if (this.qaIndex > 0) {
-        this.qaIndex--;
+    qaWordPrev() {
+      if (this.qaWordIndex > 0) {
+        this.qaWordIndex--;
       } else {
-        this.qaIndex = this.qaData.length - 1;
+        this.qaWordIndex = this.filteredQaWords.length - 1;
       }
-      this.userAnswer = '';
-      this.qaShowAnswer = false;
+      this.qaWordRevealed = false;
     },
-    qaCheck() {
-      this.qaShowAnswer = true;
-    },
-    qaReveal() {
-      this.qaShowAnswer = true;
+    qaWordReveal() {
+      this.qaWordRevealed = true;
     },
     qaShuffle() {
-      this.qaIndex = Math.floor(Math.random() * this.qaData.length);
-      this.userAnswer = '';
-      this.qaShowAnswer = false;
+      this.qaWordIndex = Math.floor(Math.random() * this.filteredQaWords.length);
+      this.qaWordRevealed = false;
     },
 
     // Helpers
@@ -1526,7 +1774,7 @@ export default {
   font-style: italic;
 }
 
-/* Q&A */
+/* Q&A - Word by Word */
 .qa-card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
@@ -1546,73 +1794,188 @@ export default {
 .qa-subtitle {
   color: #64748b;
   font-size: var(--font-sm);
-  margin-bottom: var(--space-2);
-}
-
-.qa-label {
-  color: #64748b;
-  font-size: var(--font-sm);
   margin-bottom: var(--space-4);
 }
 
-.qa-category {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
-  padding: 4px 12px;
+.qa-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+  margin-bottom: var(--space-4);
+}
+
+.qa-cat-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
+  padding: var(--space-1) var(--space-3);
   font-size: var(--font-xs);
   font-weight: 600;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.qa-question-box {
-  background: rgba(99, 102, 241, 0.1);
-  border-left: 4px solid #6366f1;
-  border-radius: 12px;
-  padding: var(--space-5);
-  margin-bottom: var(--space-3);
-  text-align: left;
-}
-
-.question-label, .hint-label, .answer-label {
-  font-size: var(--font-xs);
-  color: #64748b;
-  margin-bottom: var(--space-2);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.question-text {
-  font-size: var(--font-xl);
-  font-weight: 700;
+.qa-cat-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
   color: #f1f5f9;
 }
 
-.qa-hint-box {
-  background: rgba(255, 193, 7, 0.1);
-  border: 1px solid rgba(255, 193, 7, 0.3);
-  border-radius: 12px;
-  padding: var(--space-3);
+.qa-cat-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: transparent;
+  color: white;
+}
+
+.qa-counter {
+  color: #64748b;
+  font-size: var(--font-sm);
   margin-bottom: var(--space-3);
 }
 
-.hint-text {
-  font-size: var(--font-sm);
-  color: #fbbf24;
-  font-family: 'JetBrains Mono', monospace;
+/* Flip Card Animation */
+.qa-card-container {
+  perspective: 1000px;
+  margin-bottom: var(--space-4);
+  height: 320px;
+  position: relative;
 }
 
-.qa-answer-box {
-  background: rgba(74, 222, 128, 0.1);
-  border: 1px solid rgba(74, 222, 128, 0.3);
-  border-radius: 12px;
-  padding: var(--space-4);
+.qa-card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 320px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 2px solid rgba(99, 102, 241, 0.3);
+  border-radius: 16px;
+  padding: var(--space-6);
+  backface-visibility: hidden;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+  overflow-y: auto;
+}
+
+.qa-card-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.qa-card-front:hover {
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.2);
+  border-color: #6366f1;
+}
+
+.qa-card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+  cursor: default;
+}
+
+.qa-card-container.flipped .qa-card-front {
+  transform: rotateY(180deg);
+}
+
+.qa-card-container.flipped .qa-card-back {
+  transform: rotateY(0deg);
+}
+
+.hint-emoji {
+  font-size: 1.2rem;
+  color: #64748b;
+  margin-top: var(--space-4);
+}
+
+.qa-word-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.qa-word {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f1f5f9, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.qa-type {
+  font-size: var(--font-xs);
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: 6px;
+}
+
+.qa-detail-section {
   margin-bottom: var(--space-4);
 }
 
-.answer-text {
-  font-size: var(--font-lg);
-  color: #4ade80;
+.qa-detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  font-size: var(--font-xs);
+  color: #6366f1;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-2);
+}
+
+.detail-value {
+  font-size: var(--font-base);
+  color: #f1f5f9;
+  line-height: 1.6;
+}
+
+.detail-examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.detail-example {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid #6366f1;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 0 8px 8px 0;
+  font-size: var(--font-sm);
+  color: #e2e8f0;
+  font-style: italic;
+}
+
+.qa-formula-box {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 12px;
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  text-align: left;
+}
+
+.formula-label {
+  font-size: var(--font-xs);
+  color: #fbbf24;
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+}
+
+.formula-text {
+  font-size: var(--font-base);
+  color: #fbbf24;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
 }
 
 .qa-controls {

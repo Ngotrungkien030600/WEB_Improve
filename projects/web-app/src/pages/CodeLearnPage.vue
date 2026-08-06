@@ -1,51 +1,54 @@
 <template>
-  <div class="learn-page-root">
-    <div class="learn-page-container">
-      <header class="learn-topbar">
-        <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+  <div class="page-root" style="--color-accent: #1565c0">
+    <div class="container">
+      <header class="page-topbar">
+        <div class="topbar-left">
           <h1>💻 Học Code</h1>
-          <a class="back-link" href="#" @click.prevent="goHome">⬅ Quay lại Trang chủ</a>
+          <p>Học lập trình từ cơ bản đến nâng cao</p>
         </div>
-        <div class="learn-progress">
-          <span id="learn-progress-text">Tiến độ: {{ progress.done }} / {{ progress.total }}</span>
-          <div class="learn-progress-bar">
-            <div id="learn-progress-fill" :style="{ width: progress.percent + '%' }"></div>
-          </div>
+        <div class="topbar-right">
+          <button class="home-btn" type="button" aria-label="Về trang chủ" title="Về trang chủ" @click="handleNavigate('/')">🏠</button>
         </div>
       </header>
 
-      <div class="learn-layout">
-        <aside class="learn-sidebar">
+      <div class="progress-bar-wrap">
+        <div class="progress-track">
+          <div class="progress-fill" :style="{ width: progress.percent + '%' }"></div>
+        </div>
+        <span class="progress-label">{{ progress.done }} / {{ progress.total }} bài hoàn thành</span>
+      </div>
+
+      <div class="main-layout">
+        <aside class="sidebar">
           <h3>📚 Bài học</h3>
-          <ul class="learn-topic-list" id="learn-topic-list">
+          <ul class="topic-list">
             <li
-              class="intro-item"
+              class="topic-item"
               :class="{ active: currentIndex === 0 }"
               @click="selectTopic(0)"
-            >📋 Danh sách bài học</li>
+            >
+              <span>📋 Danh sách</span>
+            </li>
             <li
               v-for="(topic, i) in topics"
               :key="i"
-              :data-index="i + 1"
+              class="topic-item"
               :class="{ active: currentIndex === i + 1 }"
               @click="selectTopic(i + 1)"
             >
-              <span>{{ topic.title.replace(/^📄 /, '') }}</span>
-              <span class="topic-status">{{ topicStats[i + 1].done }}/{{ topicStats[i + 1].total }}</span>
+              <span>{{ topic.title?.replace(/^📄 /, '') }}</span>
+              <span class="topic-stat">{{ topicStats[i + 1]?.done }}/{{ topicStats[i + 1]?.total }}</span>
             </li>
           </ul>
         </aside>
-        <div class="learn-content-wrapper">
-          <div class="learn-card" id="learn-card">
-            <h2 id="learn-topic-title">{{ currentTopic ? currentTopic.title : 'Chọn một bài học' }}</h2>
-            <div id="learn-topic-body" v-html="renderedContent"></div>
+
+        <div class="content-area">
+          <div class="content-card">
+            <h2>{{ currentTopic?.title || 'Chọn một bài học' }}</h2>
+            <div class="content-body" v-html="renderedContent"></div>
           </div>
         </div>
       </div>
-
-      <footer class="app-footer">
-        <p>© 2026 SkillForge — Học Code</p>
-      </footer>
     </div>
   </div>
 </template>
@@ -69,7 +72,7 @@ function saveChecklist(data) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   } catch {
-    // localStorage unavailable — continue session-only
+    // localStorage unavailable
   }
 }
 
@@ -158,19 +161,15 @@ export default {
     });
   },
   methods: {
+    handleNavigate(path) {
+      navigate(path);
+    },
     selectTopic(index) {
       this.currentIndex = index;
-      this.scrollCardToTop();
-    },
-    scrollCardToTop() {
-      const card = document.getElementById('learn-card');
-      if (card) card.scrollTop = 0;
-    },
-    goHome() {
-      navigate('/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     bindChecklistEvents() {
-      document.querySelectorAll('#learn-topic-body input[type="checkbox"]').forEach(input => {
+      document.querySelectorAll('.content-body input[type="checkbox"]').forEach(input => {
         if (input._bound) return;
         input._bound = true;
         input.addEventListener('change', () => {
@@ -190,317 +189,281 @@ export default {
 </script>
 
 <style scoped>
-/* CSS variables inherited from main.css */
-@import '@legacy/css/learn.css';
-
-.learn-page-root {
+.page-root {
   min-height: 100vh;
-  background: linear-gradient(-45deg, #1a237e, #283593, #1565c0, #0d47a1);
-  background-size: 400% 400%;
-  animation: gradientMove 12s ease infinite;
-  --color-accent: #1565c0;
-  --color-accent-light: var(--color-info-bg, #e3f2fd);
-  --color-accent-mid: var(--color-accent-mid, #1565c0);
+  background: var(--color-bg, #0f0e17);
+  color: var(--color-text, #e4e2f0);
 }
 
-@keyframes gradientMove {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
 }
 
-.learn-page-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100%;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-.learn-topbar {
+.page-topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: white;
-  padding: 0.5rem 0;
-  margin-bottom: 0.8rem;
   flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border, #2d2b44);
+}
+
+.topbar-left h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
-.learn-topbar h1 {
-  font-size: 1.85rem;
-  color: white;
+.topbar-left p {
+  font-size: 0.8rem;
+  color: var(--color-text2, #9d9bb5);
+  margin: 0;
 }
 
-.learn-topbar .back-link {
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.home-btn {
   background: white;
-  color: var(--color-accent);
-  text-decoration: none;
-  padding: 0.5rem 1rem;
+  color: var(--color-accent, #1565c0);
+  border: none;
+  padding: 0.4rem 0.8rem;
   border-radius: 30px;
   font-weight: 700;
-  font-size: 1rem;
-  transition: background 0.2s;
+  font-size: 0.85rem;
   cursor: pointer;
 }
 
-.learn-topbar .back-link:hover {
-  background: var(--color-accent-light);
+.progress-bar-wrap {
+  margin-bottom: 1.5rem;
 }
 
-.learn-progress {
-  text-align: right;
-  color: white;
+.progress-track {
+  height: 6px;
+  background: var(--color-surface2, #22213a);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
 }
 
-.learn-progress span {
-  font-size: 1.1rem;
-  font-weight: 600;
+.progress-fill {
+  height: 100%;
+  background: var(--color-accent, #1565c0);
+  border-radius: 3px;
+  transition: width 0.3s;
 }
 
-.learn-layout {
-  gap: 1rem;
-  flex: 1;
-  min-height: 0;
-  align-items: flex-start;
+.progress-label {
+  font-size: 0.75rem;
+  color: var(--color-text2, #9d9bb5);
 }
 
-.learn-sidebar {
-  width: 280px;
-  flex-shrink: 0;
-  background: white;
-  border-radius: 20px;
-  padding: 1.2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  max-height: calc(100vh - 8rem);
+.content-area {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 700px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sidebar {
+  background: var(--color-surface, #1a1928);
+  border: 1px solid var(--color-border, #2d2b44);
+  border-radius: 12px;
+  padding: 1rem;
+  max-height: calc(100vh - 10rem);
   overflow-y: auto;
   position: sticky;
   top: 1rem;
 }
 
-.learn-sidebar h3 {
-  color: var(--color-accent);
-  font-size: 1.35rem;
-  margin-bottom: 1rem;
+.sidebar h3 {
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text2, #9d9bb5);
 }
 
-.learn-topic-list {
+.topic-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.learn-topic-list .intro-item,
-.learn-topic-list li {
-  padding: 0.7rem 0.8rem;
-  border-radius: var(--radius-sm, 8px);
-  cursor: pointer;
-  font-size: 1.15rem;
-  color: var(--text-primary, #333);
-  transition: background 0.2s;
-  margin-bottom: 0.4rem;
+.topic-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--color-text2, #9d9bb5);
+  transition: background 0.2s, color 0.2s;
+  margin-bottom: 0.2rem;
 }
 
-.learn-topic-list .intro-item {
-  font-size: 1.25rem;
+.topic-item:hover {
+  background: var(--color-surface2, #22213a);
+  color: var(--color-text);
+}
+
+.topic-item.active {
+  background: rgba(21, 101, 192, 0.2);
+  color: var(--color-accent, #1565c0);
   font-weight: 600;
 }
 
-.learn-topic-list .intro-item:hover,
-.learn-topic-list li:hover {
-  background: var(--color-accent-light);
+.topic-stat {
+  font-size: 0.7rem;
+  opacity: 0.7;
 }
 
-.learn-topic-list .intro-item.active {
-  background: var(--color-accent);
-  color: white;
-}
-
-.learn-topic-list li.active {
-  background: var(--color-accent);
-  color: white;
-}
-
-.learn-topic-list li .topic-status {
-  font-size: 1rem;
-}
-
-.learn-progress-bar {
-  width: 100%;
-  height: 8px;
-  background: var(--color-border-light);
-  border-radius: var(--radius-sm, 8px);
-  overflow: hidden;
-}
-
-#learn-progress-fill {
-  height: 100%;
-  width: 0%;
-  background: var(--color-accent);
-  transition: width 0.3s;
-}
-
-.learn-content-wrapper {
-  flex: 1;
-  min-width: 0;
-}
-
-.learn-card {
-  background: white;
-  border-radius: 20px;
+.content-card {
+  background: var(--color-surface, #1a1928);
+  border: 1px solid var(--color-border, #2d2b44);
+  border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  max-height: 70vh;
-  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.learn-card h2 {
-  color: var(--color-accent);
-  font-size: 2rem;
-  margin-bottom: 1.2rem;
-  padding-bottom: 0.7rem;
-  border-bottom: 2px solid var(--color-accent-light);
+.content-card h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border, #2d2b44);
+  color: var(--color-text);
 }
 
-.learn-card h3 {
-  color: var(--color-accent);
-  font-size: 1.6rem;
-  margin: 1.5rem 0 0.8rem;
+.content-body {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--color-text2, #9d9bb5);
 }
 
-.learn-card h4 {
-  color: var(--text-secondary, #666);
-  font-size: 1.35rem;
-  margin: 1.2rem 0 0.5rem;
+.content-body :deep(h1),
+.content-body :deep(h2),
+.content-body :deep(h3) {
+  color: var(--color-text);
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
 }
 
-.learn-card :deep(p),
-.learn-card :deep(li) {
-  color: var(--text-primary, #333);
-  line-height: 1.8;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
+.content-body :deep(h2) {
+  font-size: 1.05rem;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border, #2d2b44);
+  padding-bottom: 0.4rem;
 }
 
-.learn-card :deep(ul) {
-  margin-bottom: 1rem;
-  padding-left: 1.5rem;
+.content-body :deep(h3) {
+  font-size: 0.95rem;
 }
 
-.learn-card :deep(pre) {
-  background: var(--surface-code, #1e1e1e);
-  color: #d4d4d4;
-  padding: 1.2rem;
-  border-radius: 12px;
+.content-body :deep(strong) {
+  color: var(--color-accent, #1565c0);
+}
+
+.content-body :deep(p) {
+  margin-bottom: 0.75rem;
+}
+
+.content-body :deep(ul),
+.content-body :deep(ol) {
+  margin-bottom: 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.content-body :deep(li) {
+  margin-bottom: 0.35rem;
+}
+
+.content-body :deep(pre) {
+  background: var(--color-surface2, #22213a);
+  border: 1px solid var(--color-border, #2d2b44);
+  border-radius: 8px;
+  padding: 1rem;
   overflow-x: auto;
   margin-bottom: 1rem;
-  font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 1.15rem;
+  font-size: 0.85rem;
 }
 
-.learn-card :deep(code) {
+.content-body :deep(code) {
   font-family: 'Consolas', 'Monaco', monospace;
-  background: var(--color-accent-light, #e3f2fd);
-  color: var(--color-accent);
+  background: var(--color-surface2, #22213a);
   padding: 0.15rem 0.4rem;
-  border-radius: 5px;
-  font-size: 1.05em;
+  border-radius: 4px;
+  font-size: 0.85em;
 }
 
-.learn-card :deep(pre code) {
+.content-body :deep(pre code) {
   background: transparent;
-  color: inherit;
   padding: 0;
 }
 
-.learn-card :deep(table) {
+.content-body :deep(table) {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
+  margin: 1rem 0;
 }
 
-.learn-card :deep(th),
-.learn-card :deep(td) {
-  border: 1px solid var(--color-border-light);
-  padding: 0.7rem 0.9rem;
+.content-body :deep(th),
+.content-body :deep(td) {
+  border: 1px solid var(--color-border, #2d2b44);
+  padding: 0.5rem 0.75rem;
   text-align: left;
-  vertical-align: top;
+  font-size: 0.85rem;
 }
 
-.learn-card :deep(th) {
-  background: var(--color-accent-light, #e3f2fd);
-  color: var(--color-accent);
-  font-weight: 700;
+.content-body :deep(th) {
+  background: var(--color-surface2, #22213a);
+  color: var(--color-accent, #1565c0);
+  font-weight: 600;
 }
 
-.learn-card :deep(tr:nth-child(even)) {
-  background: var(--color-bg-white, #fafafa);
-}
-
-.learn-card :deep(hr) {
-  border: none;
-  border-top: 1px solid var(--color-border-subtle);
-  margin: 1.2rem 0;
-}
-
-.checklist-item {
+.content-body :deep(.checklist-item) {
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
-  padding: 0.65rem 0;
+  padding: 0.5rem 0;
   cursor: pointer;
-  color: var(--color-text-darker);
-  font-size: 1.2rem;
+  font-size: 0.88rem;
 }
 
-.checklist-item :deep(input) {
-  margin-top: 0.35rem;
-  width: 22px;
-  height: 22px;
-  accent-color: var(--color-accent);
+.content-body :deep(.checklist-item input) {
+  margin-top: 0.2rem;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent, #1565c0);
   cursor: pointer;
+  flex-shrink: 0;
 }
 
-.checklist-item :deep(span) {
-  flex: 1;
-  line-height: 1.6;
-}
-
-.checklist-item.checked :deep(span) {
+.content-body :deep(.checklist-item.checked > span) {
   text-decoration: line-through;
-  color: var(--color-text-muted);
-}
-
-.app-footer {
-  text-align: center;
-  padding: 1rem;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.9rem;
-}
-
-@media (max-width: 800px) {
-  .learn-layout {
-    flex-direction: column;
-  }
-  .learn-sidebar {
-    width: 100%;
-    max-height: 35vh;
-  }
-  .learn-card {
-    padding: 1.2rem;
-  }
-  .learn-card h2 {
-    font-size: 1.6rem;
-  }
-  .learn-card :deep(p),
-  .learn-card :deep(li),
-  .checklist-item {
-    font-size: 1.1rem;
-  }
+  opacity: 0.6;
 }
 </style>
