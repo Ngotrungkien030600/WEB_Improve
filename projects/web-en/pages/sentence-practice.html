@@ -9,12 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#34d399; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#f97316; --accent2:#fbbf24; --radius:10px; --font:'Inter',system-ui,sans-serif; }
     body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
     .page { max-width:720px; margin:0 auto; padding:2.5rem 1.5rem; }
     .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
     .topbar h1 { font-size:1.5rem; font-weight:700; }
-    .topbar .back { color:var(--accent); text-decoration:none; font-size:0.9rem; }
+    .topbar .back { color:var(--accent2); text-decoration:none; font-size:0.9rem; }
     .topbar .back:hover { text-decoration:underline; }
     .desc { color:var(--text2); margin-bottom:1.5rem; font-size:0.95rem; }
 
@@ -22,7 +22,7 @@
     @media (max-width:600px) { .cat-grid { grid-template-columns:repeat(2,1fr); } }
     .cat-btn { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:0.6rem 0.4rem; cursor:pointer; transition:all 0.15s; text-align:center; font-size:0.75rem; font-weight:500; color:var(--text2); }
     .cat-btn:hover { border-color:var(--accent); color:var(--text); }
-    .cat-btn.active { border-color:var(--accent); background:rgba(52,211,153,0.1); color:var(--accent); }
+    .cat-btn.active { border-color:var(--accent); background:rgba(249,115,22,0.1); color:var(--accent); }
 
     .practice-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:2rem; margin-bottom:1.5rem; }
     .p-counter { font-size:0.8rem; color:var(--text2); margin-bottom:0.5rem; text-align:center; }
@@ -31,12 +31,12 @@
 
     .p-input { width:100%; padding:0.75rem 1rem; border:2px solid var(--border); border-radius:var(--radius); font-size:1rem; font-family:inherit; background:var(--surface2); color:var(--text); text-align:center; transition:border-color 0.2s; }
     .p-input:focus { outline:none; border-color:var(--accent); }
-    .p-input.correct { border-color:var(--accent); background:rgba(52,211,153,0.08); }
+    .p-input.correct { border-color:var(--accent); background:rgba(249,115,22,0.08); }
     .p-input.wrong { border-color:#ef4444; background:rgba(239,68,68,0.08); }
 
     .p-actions { display:flex; justify-content:center; gap:0.75rem; margin-top:1.25rem; flex-wrap:wrap; }
     .p-actions button { border:none; border-radius:6px; padding:0.55rem 1.3rem; font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.15s; }
-    .btn-check { background:var(--accent); color:var(--bg); }
+    .btn-check { background:var(--accent); color:white; }
     .btn-check:hover { opacity:0.9; }
     .btn-next { background:var(--surface2); color:var(--text); border:1px solid var(--border)!important; }
     .btn-next:hover { border-color:var(--accent)!important; }
@@ -46,7 +46,7 @@
 
     .p-result { text-align:center; margin-top:1rem; padding:0.75rem; border-radius:var(--radius); display:none; }
     .p-result.show { display:block; }
-    .p-result.good { background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.2); }
+    .p-result.good { background:rgba(249,115,22,0.1); border:1px solid rgba(249,115,22,0.2); }
     .p-result.bad { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); }
     .p-result .correct-en { font-weight:600; color:var(--accent); font-size:1.05rem; }
     .p-result .note { font-size:0.8rem; color:var(--text2); margin-top:0.3rem; }
@@ -59,7 +59,8 @@
 
     @media (max-width:600px) { .p-vi { font-size:1.1rem; } }
   </style>
-  <link rel="stylesheet" href="../../../css/subpage.css" />
+  <link rel="stylesheet" href="../css/forge-tokens.css" />
+  <link rel="stylesheet" href="../css/subpage.css" />
 </head>
 <body class="subpage">
 <div class="page">

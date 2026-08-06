@@ -9,12 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#34d399; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#f97316; --accent2:#fbbf24; --radius:10px; --font:'Inter',system-ui,sans-serif; }
     body { font-family:var(--font); background:var(--bg); color:var(--text); }
     .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
     .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
     .topbar h1 { font-size:1.5rem; font-weight:700; }
-    .topbar .back { color:var(--accent); text-decoration:none; font-size:0.9rem; }
+    .topbar .back { color:var(--accent2); text-decoration:none; font-size:0.9rem; }
     .topbar .back:hover { text-decoration:underline; }
     .desc { color:var(--text2); margin-bottom:2rem; font-size:0.95rem; }
     .grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:1rem; }
@@ -27,7 +27,8 @@
     .card .body p { font-size:0.85rem; color:var(--text2); line-height:1.5; }
     @media (max-width:600px) { .grid { grid-template-columns:1fr; } }
   </style>
-  <link rel="stylesheet" href="../../../../css/subpage.css" />
+  <link rel="stylesheet" href="../../../css/forge-tokens.css" />
+  <link rel="stylesheet" href="../../../css/subpage.css" />
 </head>
 <body class="subpage">
 <div class="page">

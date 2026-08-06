@@ -30,6 +30,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  padding-right: 20px; /* Story 1: Prevent overlap with close buttons */
 }
 
 .subpage-topbar-left .icon {
@@ -147,12 +148,17 @@
   color: var(--forge-text2, #94a3b8);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 20px;
-  padding: 0.45rem 1rem;
-  font-size: 0.85rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .subpage .tab:hover,
@@ -241,74 +247,141 @@
 }
 
 /* ───── Flip card (forge dark) ───── */
+.flip-card {
+  width: 100%;
+  height: 320px;
+  perspective: 1000px;
+  margin: 0 auto 1.25rem;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  border-radius: 14px;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
 .subpage .flip-card-front,
 .subpage .flip-card-back {
-  background: var(--forge-glass, rgba(255,255,255,0.04));
-  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--forge-bg-card, rgba(255,255,255,0.07));
+  border: 1px solid var(--forge-border, rgba(255,255,255,0.12));
+  border-radius: 14px;
+  padding: 1.5rem;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .subpage .flip-card-front h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
   color: var(--forge-ember, #fbbf24);
+  margin-bottom: 0.5rem;
 }
 
 .subpage .flip-card-front p,
 .subpage .flip-card-back p {
-  color: var(--forge-text2, #94a3b8);
+  color: var(--forge-text-secondary, #94a3b8);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0.3rem 0;
+  text-align: center;
 }
 
 .subpage .flip-card-back {
-  background: rgba(249,115,22,0.06);
-  border-color: rgba(249,115,22,0.12);
+  transform: rotateY(180deg);
+  background: linear-gradient(145deg,
+    rgba(249,115,22,0.08),
+    rgba(249,115,22,0.03));
+  border-color: rgba(249,115,22,0.15);
+}
+
+/* Story 2: Flip card glow hover */
+.subpage .flip-card:hover .flip-card-inner {
+  box-shadow: 0 0 24px rgba(249,115,22,0.18);
 }
 
 .subpage .tag {
-  background: var(--forge-fire, #f97316);
+  background: var(--forge-accent, #f97316);
   color: white;
+  font-weight: 600;
 }
 
 .subpage .counter {
-  color: var(--forge-text2, #94a3b8);
+  color: var(--forge-text-secondary, #94a3b8);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 0.75rem;
 }
 
 /* ───── Practice card (forge dark) ───── */
 .subpage .practice-card {
-  background: var(--forge-glass, rgba(255,255,255,0.04));
-  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  background: var(--forge-bg-card, rgba(255,255,255,0.07));
+  border: 1px solid var(--forge-border, rgba(255,255,255,0.12));
   border-radius: 14px;
   padding: 1.5rem;
 }
 
 .subpage .practice-card h3 {
   color: var(--forge-text, #f1f5f9);
+  font-weight: 600;
 }
 
 .subpage .tense-label {
   background: rgba(249,115,22,0.12);
   color: var(--forge-ember, #fbbf24);
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 /* ───── Controls (forge dark) ───── */
+.subpage .controls,
+.subpage .story-nav,
+.subpage .practice-actions {
+  margin-top: 1rem;
+}
+
 .subpage .controls button,
 .subpage .story-nav button,
 .subpage .practice-actions button {
   background: rgba(255,255,255,0.06);
   color: var(--forge-text, #f1f5f9);
-  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
+  border: 1px solid var(--forge-border, rgba(255,255,255,0.12));
   border-radius: 8px;
-  padding: 0.55rem 1rem;
+  padding: 0.6rem 1.2rem;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
-  box-shadow: none;
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .subpage .controls button:hover,
 .subpage .story-nav button:hover,
 .subpage .practice-actions button:hover {
   background: rgba(255,255,255,0.1);
-  border-color: var(--forge-fire, #f97316);
+  border-color: var(--forge-accent, #f97316);
   color: var(--forge-text, #f1f5f9);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -320,8 +393,9 @@
   transform: scale(0.97);
 }
 
-.subpage .controls button:focus-visible {
-  outline: 2px solid var(--forge-fire, #f97316);
+.subpage .controls button:focus-visible,
+.subpage .practice-actions button:focus-visible {
+  outline: 2px solid var(--forge-accent, #f97316);
   outline-offset: 2px;
 }
 
@@ -386,17 +460,20 @@
 
 /* ───── Dropzone / word-bank ───── */
 .subpage .dropzone {
-  border: 1px dashed var(--forge-glass-border, rgba(255,255,255,0.08));
-  background: rgba(255,255,255,0.02);
+  border: 2px dashed rgba(249,115,22,0.3);
+  background: rgba(249,115,22,0.03);
+  transition: border-color 0.2s, background 0.2s;
 }
 
 .subpage .word-chip {
-  background: rgba(255,255,255,0.08);
-  color: var(--forge-text, #f1f5f9);
+  background: rgba(249,115,22,0.1);
+  border: 1px solid rgba(249,115,22,0.2);
+  transition: all 0.15s;
 }
 
 .subpage .word-chip:hover {
-  background: rgba(249,115,22,0.12);
+  background: rgba(249,115,22,0.18);
+  border-color: rgba(249,115,22,0.3);
   transform: translateY(-2px);
 }
 
@@ -521,9 +598,27 @@
     padding: 1.2rem;
   }
 
-  .subpage-tab {
-    padding: 0.35rem 0.85rem;
-    font-size: 0.8rem;
+  /* Story 4: Larger touch targets on mobile */
+  .subpage-tab,
+  .subpage .tab,
+  .subpage .quiz-tab,
+  .subpage .tense-subtab {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Story 4: Ensure touch targets on small screens */
+  .subpage .tab,
+  .subpage .quiz-tab,
+  .subpage .tense-subtab,
+  .subpage .controls button,
+  .subpage .practice-actions button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.5rem 0.85rem;
   }
 }
 

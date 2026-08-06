@@ -1,53 +1,54 @@
 <template>
-  <div class="english-page" style="--color-accent: #34d399">
+  <div class="english-page" style="--color-accent: #6366f1">
     <CTopbar
-      title="📚 Học Tiếng Anh"
-      back-label="← Trang chủ"
+      title="Học Tiếng Anh"
+      back-label="Trang chủ"
       @go-home="handleNavigate('/')"
     />
 
     <div class="english-container">
-      <!-- Forge Timer Widget -->
-      <div class="forge-timer-wrap">
-        <div class="forge-timer-ring">
-          <svg viewBox="0 0 68 68" width="68" height="68">
-            <circle class="forge-ring-bg" cx="34" cy="34" r="30" />
-            <circle class="forge-ring-progress" cx="34" cy="34" r="30" :style="{ strokeDashoffset: ringOffset }" />
-          </svg>
-          <div class="forge-time">{{ formattedTime }}</div>
+      <!-- Header Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-icon">📋</span>
+          <span class="stat-label">Hôm nay</span>
+          <span class="stat-value">{{ todayMins }}p</span>
         </div>
-        <div class="forge-controls">
-          <select v-model="timerDuration" @change="resetTimer">
-            <option value="30">30p</option>
-            <option value="60">1h</option>
-          </select>
-          <div class="forge-btn-row">
-            <button class="forge-btn forge-btn-primary" @click="toggleTimer">
-              {{ isRunning ? '⏸️' : '⚒️' }}
-            </button>
-            <button class="forge-btn forge-btn-secondary" @click="resetTimer">↻</button>
-          </div>
+        <div class="stat-item">
+          <span class="stat-icon">🔥</span>
+          <span class="stat-label">Streak</span>
+          <span class="stat-value">{{ streak }}</span>
         </div>
-        <div class="forge-stats">
-          <div class="forge-stat-row">📋 Hôm nay <span class="val fire">{{ todayMins }}m</span></div>
-          <div class="forge-stat-row">🔥 Streak <span class="val">{{ streak }}🔥</span></div>
-          <div class="forge-stat-row">📦 Đã rèn <span class="val">{{ total }}</span></div>
+        <div class="stat-item">
+          <span class="stat-icon">📦</span>
+          <span class="stat-label">Đã rèn</span>
+          <span class="stat-value">{{ total }}</span>
+        </div>
+        <div class="stat-timer">
+          <button class="timer-btn" @click="toggleTimer">
+            <span class="timer-icon">{{ isRunning ? '⏸️' : '⚒️' }}</span>
+            <span class="timer-time">{{ formattedTime }}</span>
+          </button>
         </div>
       </div>
 
       <!-- Tabs -->
-      <nav class="subpage-tabs">
+      <div class="tab-bar">
         <button
           v-for="tab in tabs"
           :key="tab.id"
-          class="tab"
+          class="tab-item"
           :class="{ active: currentTab === tab.id }"
           @click="switchTab(tab.id)"
         >
-          {{ tab.icon }} {{ tab.label }}
+          <span class="tab-icon">{{ tab.icon }}</span>
+          <span class="tab-label">{{ tab.label }}</span>
         </button>
-        <a class="tab exam-link" href="/exam">📝 Thi</a>
-      </nav>
+        <a class="tab-item tab-link" href="/exam">
+          <span class="tab-icon">📝</span>
+          <span class="tab-label">Thi</span>
+        </a>
+      </div>
 
       <!-- Vocab Section -->
       <section v-if="currentTab === 'vocab'" class="english-section">
@@ -167,8 +168,48 @@
             <button @click="storyNext">Truyện tiếp theo ➡️</button>
           </div>
           <p class="counter">{{ storyIndex + 1 }} / {{ stories.length }}</p>
-          <div class="story-box" v-html="stories[storyIndex]?.content"></div>
+          <div class="story-box">
+            <p
+              v-for="(sentence, idx) in stories[storyIndex]?.sentences"
+              :key="idx"
+              class="story-sentence"
+            >
+              {{ sentence.en }}
+              <span class="story-hover">{{ sentence.vi }}</span>
+            </p>
+          </div>
           <p class="story-tip">🖱️ Rê chuột vào câu tiếng Anh để xem nghĩa tiếng Việt tương ứng.</p>
+        </div>
+      </section>
+
+      <!-- Q&A Section -->
+      <section v-if="currentTab === 'qa'" class="english-section">
+        <div class="qa-card">
+          <h2>❓ Đặt câu hỏi</h2>
+          <p class="qa-subtitle">Học cách dùng từ để hỏi: What, Where, Why, When, How...</p>
+          <p class="qa-label">Câu {{ qaIndex + 1 }} / {{ qaData.length }} · <span class="qa-category">{{ qaData[qaIndex]?.category }}</span></p>
+
+          <div class="qa-question-box">
+            <p class="question-label">📌 Câu hỏi mẫu:</p>
+            <p class="question-text">{{ qaData[qaIndex]?.question }}</p>
+          </div>
+
+          <div class="qa-hint-box" v-if="!qaShowAnswer">
+            <p class="hint-label">💡 Công thức:</p>
+            <p class="hint-text">{{ qaData[qaIndex]?.hint }}</p>
+          </div>
+
+          <div class="qa-answer-box" v-if="qaShowAnswer">
+            <p class="answer-label">📝 Trả lời mẫu:</p>
+            <p class="answer-text">{{ qaData[qaIndex]?.answer }}</p>
+          </div>
+
+          <div class="qa-controls">
+            <button @click="qaPrev">⬅️</button>
+            <button @click="qaReveal" v-if="!qaShowAnswer">👀 Xem đáp án</button>
+            <button @click="qaShuffle">🔀 Ngẫu nhiên</button>
+            <button @click="qaNext">➡️</button>
+          </div>
         </div>
       </section>
 
@@ -253,96 +294,141 @@ const practiceSentences = [
   { name: 'Past Perfect', vi: 'Anh ấy đã đi ngủ khi tôi gọi.', en: 'He had gone to bed when I called', words: ['He', 'had', 'gone', 'to', 'bed', 'when', 'I', 'called'] },
 ];
 
+const qaData = [
+  { id: 1, question: 'Where are you from?', answer: 'I am from Vietnam.', hint: 'Dùng My name is...', category: 'WHERE' },
+  { id: 2, question: 'Where do you live?', answer: 'I live in Hanoi.', hint: 'Where + DO/DOES + S + V?', category: 'WHERE' },
+  { id: 3, question: 'Where did you go yesterday?', answer: 'I went to the school.', hint: 'Where + DID + S + V?', category: 'WHERE' },
+  { id: 4, question: 'Why are you late?', answer: 'Because the bus was stuck in traffic.', hint: 'Why + DO/DOES + S + V? | Why + DID + S + V? — TRẢ LỜI: BECAUSE...', category: 'WHY' },
+  { id: 5, question: 'Why do you learn English?', answer: 'Because I want to get a good job.', hint: 'Why + DO + S + V? — TRẢ LỜI: BECAUSE...', category: 'WHY' },
+  { id: 6, question: 'Why did you study hard?', answer: 'Because I had an exam.', hint: 'Why + DID + S + V? — TRẢ LỜI: BECAUSE...', category: 'WHY' },
+  { id: 7, question: 'What is your name?', answer: 'My name is Linh.', hint: 'WHAT + IS/ARE + S?', category: 'WHAT' },
+  { id: 8, question: 'What do you do?', answer: 'I am a student.', hint: 'WHAT + DO/DOES + S + V?', category: 'WHAT' },
+  { id: 9, question: 'What did you eat yesterday?', answer: 'I ate pho.', hint: 'WHAT + DID + S + V?', category: 'WHAT' },
+  { id: 10, question: 'What will you do tomorrow?', answer: 'I will go to school.', hint: 'WHAT + WILL + S + V?', category: 'WHAT' },
+  { id: 11, question: 'When is your birthday?', answer: 'My birthday is on July 15th.', hint: 'WHEN + IS/ARE + S?', category: 'WHEN' },
+  { id: 12, question: 'When do you go to school?', answer: 'I go to school at 7 a.m.', hint: 'WHEN + DO/DOES + S + V?', category: 'WHEN' },
+  { id: 13, question: 'When did you start learning English?', answer: 'I started 3 years ago.', hint: 'WHEN + DID + S + V?', category: 'WHEN' },
+  { id: 14, question: 'How are you today?', answer: 'I am fine, thank you.', hint: 'HOW + IS/ARE + S?', category: 'HOW' },
+  { id: 15, question: 'How do you go to school?', answer: 'I go to school by bike.', hint: 'HOW + DO/DOES + S + V?', category: 'HOW' },
+  { id: 16, question: 'How did you learn English?', answer: 'I learned by watching videos.', hint: 'HOW + DID + S + V?', category: 'HOW' },
+  { id: 17, question: 'How much does this cost?', answer: 'It costs 50,000 VND.', hint: 'HOW MUCH + DO/DOES + S + V?', category: 'HOW' },
+  { id: 18, question: 'How many books do you have?', answer: 'I have 5 books.', hint: 'HOW MANY + N + DO/DOES + S + V?', category: 'HOW' },
+  { id: 19, question: 'Who is your best friend?', answer: 'My best friend is Lan.', hint: 'WHO + IS/ARE + S?', category: 'WHO' },
+  { id: 20, question: 'Who do you love most?', answer: 'I love my mother most.', hint: 'WHO + DO/DOES + S + V?', category: 'WHO' },
+  { id: 21, question: 'Who did you meet yesterday?', answer: 'I met my teacher.', hint: 'WHO + DID + S + V?', category: 'WHO' },
+  { id: 22, question: 'Which color do you like?', answer: 'I like blue.', hint: 'WHICH + N + DO/DOES + S + V?', category: 'WHICH' },
+];
+
 const stories = [
   {
     title: 'Cristiano Ronaldo — Discipline and Hard Work',
     subtitle: 'Kỷ luật và chăm chỉ',
-    content: `<p class="story-sentence" data-vi="CR7 là một trong những cầu thủ vĩ đại nhất mọi thời đại.">CR7 is one of the greatest footballers of all time. <span class="story-hover">CR7 là một trong những cầu thủ vĩ đại nhất mọi thời đại.</span></p>
-<p class="story-sentence" data-vi="Anh ấy nổi tiếng với sự chăm chỉ và kỷ luật nghiêm khắc.">He is famous for his hard work and strict discipline. <span class="story-hover">Anh ấy nổi tiếng với sự chăm chỉ và kỷ luật nghiêm khắc.</span></p>
-<p class="story-sentence" data-vi="Ronaldo tập luyện mỗi ngày, kể cả Giáng sinh.">Ronaldo trains every day, even on Christmas. <span class="story-hover">Ronaldo tập luyện mỗi ngày, kể cả Giáng sinh.</span></p>
-<p class="story-sentence" data-vi="Anh ấy ngủ 8 tiếng mỗi đêm để phục hồi cơ thể.">He sleeps 8 hours every night to recover his body. <span class="story-hover">Anh ấy ngủ 8 tiếng mỗi đêm để phục hồi cơ thể.</span></p>
-<p class="story-sentence" data-vi="Bài học: Sự thành công đến từ sự kiên trì.">Lesson: Success comes from persistence. <span class="story-hover">Bài học: Sự thành công đến từ sự kiên trì.</span></p>`
+    sentences: [
+      { en: 'CR7 is one of the greatest footballers of all time.', vi: 'CR7 là một trong những cầu thủ vĩ đại nhất mọi thời đại.' },
+      { en: 'He is famous for his hard work and strict discipline.', vi: 'Anh ấy nổi tiếng với sự chăm chỉ và kỷ luật nghiêm khắc.' },
+      { en: 'Ronaldo trains every day, even on Christmas.', vi: 'Ronaldo tập luyện mỗi ngày, kể cả Giáng sinh.' },
+      { en: 'He sleeps 8 hours every night to recover his body.', vi: 'Anh ấy ngủ 8 tiếng mỗi đêm để phục hồi cơ thể.' },
+      { en: 'Lesson: Success comes from persistence.', vi: 'Bài học: Sự thành công đến từ sự kiên trì.' },
+    ],
   },
   {
     title: 'Steve Jobs — Innovation',
     subtitle: 'Sáng tạo và đổi mới',
-    content: `<p class="story-sentence" data-vi="Steve Jobs là đồng sáng lập Apple.">Steve Jobs was the co-founder of Apple. <span class="story-hover">Steve Jobs là đồng sáng lập Apple.</span></p>
-<p class="story-sentence" data-vi="Ông đã thay đổi cách chúng ta nghĩ về công nghệ.">He changed the way we think about technology. <span class="story-hover">Ông đã thay đổi cách chúng ta nghĩ về công nghệ.</span></p>
-<p class="story-sentence" data-vi="iPhone là sản phẩm thay đổi thế giới.">The iPhone was a world-changing product. <span class="story-hover">iPhone là sản phẩm thay đổi thế giới.</span></p>
-<p class="story-sentence" data-vi="Steve Jobs từng bị đuổi khỏi công ty ông sáng lập.">Steve Jobs was once fired from the company he founded. <span class="story-hover">Steve Jobs từng bị đuổi khỏi công ty ông sáng lập.</span></p>
-<p class="story-sentence" data-vi="Ông trở lại và biến Apple thành công ty giá trị nhất thế giới.">He returned and turned Apple into the most valuable company in the world. <span class="story-hover">Ông trở lại và biến Apple thành công ty giá trị nhất thế giới.</span></p>`
+    sentences: [
+      { en: 'Steve Jobs was the co-founder of Apple.', vi: 'Steve Jobs là đồng sáng lập Apple.' },
+      { en: 'He changed the way we think about technology.', vi: 'Ông đã thay đổi cách chúng ta nghĩ về công nghệ.' },
+      { en: 'The iPhone was a world-changing product.', vi: 'iPhone là sản phẩm thay đổi thế giới.' },
+      { en: 'Steve Jobs was once fired from the company he founded.', vi: 'Steve Jobs từng bị đuổi khỏi công ty ông sáng lập.' },
+      { en: 'He returned and turned Apple into the most valuable company in the world.', vi: 'Ông trở lại và biến Apple thành công ty giá trị nhất thế giới.' },
+    ],
   },
   {
     title: 'Elon Musk — Thinking Big',
     subtitle: 'Nghĩ lớn và dám thất bại',
-    content: `<p class="story-sentence" data-vi="Elon Musk muốn đưa con người lên Sao Hỏa.">Elon Musk wants to send humans to Mars. <span class="story-hover">Elon Musk muốn đưa con người lên Sao Hỏa.</span></p>
-<p class="story-sentence" data-vi="Nhiều người cho rằng ông ấy điên rồ.">Many people thought he was crazy. <span class="story-hover">Nhiều người cho rằng ông ấy điên rồ.</span></p>
-<p class="story-sentence" data-vi="SpaceX đã phóng nhiều tên lửa thành công.">SpaceX has successfully launched many rockets. <span class="story-hover">SpaceX đã phóng nhiều tên lửa thành công.</span></p>
-<p class="story-sentence" data-vi="Tesla đã thay đổi ngành ô tô điện.">Tesla has changed the electric car industry. <span class="story-hover">Tesla đã thay đổi ngành ô tô điện.</span></p>
-<p class="story-sentence" data-vi="Bài học: Đừng sợ nghĩ lớn.">Lesson: Don\'t be afraid to think big. <span class="story-hover">Bài học: Đừng sợ nghĩ lớn.</span></p>`
+    sentences: [
+      { en: 'Elon Musk wants to send humans to Mars.', vi: 'Elon Musk muốn đưa con người lên Sao Hỏa.' },
+      { en: 'Many people thought he was crazy.', vi: 'Nhiều người cho rằng ông ấy điên rồ.' },
+      { en: 'SpaceX has successfully launched many rockets.', vi: 'SpaceX đã phóng nhiều tên lửa thành công.' },
+      { en: 'Tesla has changed the electric car industry.', vi: 'Tesla đã thay đổi ngành ô tô điện.' },
+      { en: "Lesson: Don't be afraid to think big.", vi: 'Bài học: Đừng sợ nghĩ lớn.' },
+    ],
   },
   {
     title: 'Bill Gates — Never Stop Learning',
     subtitle: 'Không ngừng học hỏi',
-    content: `<p class="story-sentence" data-vi="Bill Gates đã rời Đại học Harvard năm 2.">Bill Gates dropped out of Harvard in his second year. <span class="story-hover">Bill Gates đã rời Đại học Harvard năm 2.</span></p>
-<p class="story-sentence" data-vi="Ông bắt đầu Microsoft với bạn cũ Paul Allen.">He started Microsoft with his old friend Paul Allen. <span class="story-hover">Ông bắt đầu Microsoft với bạn cũ Paul Allen.</span></p>
-<p class="story-sentence" data-vi="Bill Gates đọc sách mỗi đêm trước khi ngủ.">Bill Gates reads books every night before sleeping. <span class="story-hover">Bill Gates đọc sách mỗi đêm trước khi ngủ.</span></p>
-<p class="story-sentence" data-vi="Ông ấy quyên góp hàng tỷ đô la cho từ thiện.">He has donated billions of dollars to charity. <span class="story-hover">Ông ấy quyên góp hàng tỷ đô la cho từ thiện.</span></p>
-<p class="story-sentence" data-vi="Bài học: Học hỏi là hành trình không bao giờ kết thúc.">Lesson: Learning is a lifelong journey. <span class="story-hover">Bài học: Học hỏi là hành trình không bao giờ kết thúc.</span></p>`
+    sentences: [
+      { en: 'Bill Gates dropped out of Harvard in his second year.', vi: 'Bill Gates đã rời Đại học Harvard năm 2.' },
+      { en: 'He started Microsoft with his old friend Paul Allen.', vi: 'Ông bắt đầu Microsoft với bạn cũ Paul Allen.' },
+      { en: 'Bill Gates reads books every night before sleeping.', vi: 'Bill Gates đọc sách mỗi đêm trước khi ngủ.' },
+      { en: 'He has donated billions of dollars to charity.', vi: 'Ông ấy quyên góp hàng tỷ đô la cho từ thiện.' },
+      { en: 'Lesson: Learning is a lifelong journey.', vi: 'Bài học: Học hỏi là hành trình không bao giờ kết thúc.' },
+    ],
   },
   {
     title: 'Lionel Messi — Humility',
     subtitle: 'Khiêm nhường dù nổi tiếng',
-    content: `<p class="story-sentence" data-vi="Messi là cầu thủ được yêu mến nhất thế giới.">Messi is the most loved footballer in the world. <span class="story-hover">Messi là cầu thủ được yêu mến nhất thế giới.</span></p>
-<p class="story-sentence" data-vi="Dù rất nổi tiếng, anh ấy vẫn rất khiêm nhường.">Although very famous, he is still very humble. <span class="story-hover">Dù rất nổi tiếng, anh ấy vẫn rất khiêm nhường.</span></p>
-<p class="story-sentence" data-vi="Messi luôn dành thời gian cho gia đình.">Messi always spends time with his family. <span class="story-hover">Messi luôn dành thời gian cho gia đình.</span></p>
-<p class="story-sentence" data-vi="Anh ấy không thích phô trương hay khoe khoang.">He doesn\'t like to show off or brag. <span class="story-hover">Anh ấy không thích phô trương hay khoe khoang.</span></p>
-<p class="story-sentence" data-vi="Bài học: Sự khiêm nhường là phẩm chất của người vĩ đại.">Lesson: Humility is the quality of great people. <span class="story-hover">Bài học: Sự khiêm nhường là phẩm chất của người vĩ đại.</span></p>`
+    sentences: [
+      { en: 'Messi is the most loved footballer in the world.', vi: 'Messi là cầu thủ được yêu mến nhất thế giới.' },
+      { en: 'Although very famous, he is still very humble.', vi: 'Dù rất nổi tiếng, anh ấy vẫn rất khiêm nhường.' },
+      { en: 'Messi always spends time with his family.', vi: 'Messi luôn dành thời gian cho gia đình.' },
+      { en: "He doesn't like to show off or brag.", vi: 'Anh ấy không thích phô trương hay khoe khoang.' },
+      { en: 'Lesson: Humility is the quality of great people.', vi: 'Bài học: Sự khiêm nhường là phẩm chất của người vĩ đại.' },
+    ],
   },
   {
     title: 'Jack Ma — Persistence',
     subtitle: 'Kiên trì không bỏ cuộc',
-    content: `<p class="story-sentence" data-vi="Jack Ma đã bị từ chối 30 lần khi xin việc.">Jack Ma was rejected 30 times when applying for jobs. <span class="story-hover">Jack Ma đã bị từ chối 30 lần khi xin việc.</span></p>
-<p class="story-sentence" data-vi="Ông ấy không bỏ cuộc và tiếp tục cố gắng.">He never gave up and kept trying. <span class="story-hover">Ông ấy không bỏ cuộc và tiếp tục cố gắng.</span></p>
-<p class="story-sentence" data-vi=" Alibaba đã trở thành công ty lớn nhất Trung Quốc.">Alibaba has become the biggest company in China. <span class="story-hover">Alibaba đã trở thành công ty lớn nhất Trung Quốc.</span></p>
-<p class="story-sentence" data-vi="Jack Ma giờ là một trong những người giàu nhất thế giới.">Jack Ma is now one of the richest people in the world. <span class="story-hover">Jack Ma giờ là một trong những người giàu nhất thế giới.</span></p>
-<p class="story-sentence" data-vi="Bài học: Đừng bao giờ từ bỏ ước mơ của bạn.">Lesson: Never give up on your dreams. <span class="story-hover">Bài học: Đừng bao giờ từ bỏ ước mơ của bạn.</span></p>`
+    sentences: [
+      { en: 'Jack Ma was rejected 30 times when applying for jobs.', vi: 'Jack Ma đã bị từ chối 30 lần khi xin việc.' },
+      { en: 'He never gave up and kept trying.', vi: 'Ông ấy không bỏ cuộc và tiếp tục cố gắng.' },
+      { en: 'Alibaba has become the biggest company in China.', vi: 'Alibaba đã trở thành công ty lớn nhất Trung Quốc.' },
+      { en: 'Jack Ma is now one of the richest people in the world.', vi: 'Jack Ma giờ là một trong những người giàu nhất thế giới.' },
+      { en: 'Lesson: Never give up on your dreams.', vi: 'Bài học: Đừng bao giờ từ bỏ ước mơ của bạn.' },
+    ],
   },
   {
     title: 'Marie Curie — Curiosity',
     subtitle: 'Tò mò và đam mê khoa học',
-    content: `<p class="story-sentence" data-vi="Marie Curie là nhà khoa học nữ đầu tiên đoạt giải Nobel.">Marie Curie was the first female scientist to win the Nobel Prize. <span class="story-hover">Marie Curie là nhà khoa học nữ đầu tiên đoạt giải Nobel.</span></p>
-<p class="story-sentence" data-vi="Bà đã phát hiện ra hai nguyên tố hóa học mới.">She discovered two new chemical elements. <span class="story-hover">Bà đã phát hiện ra hai nguyên tố hóa học mới.</span></p>
-<p class="story-sentence" data-vi="Marie Curie làm việc trong phòng thí nghiệm hàng ngày.">Marie Curie worked in the laboratory every day. <span class="story-hover">Marie Curie làm việc trong phòng thí nghiệm hàng ngày.</span></p>
-<p class="story-sentence" data-vi="Bà là người phụ nữ đầu tiên học tại Đại học Sorbonne.">She was the first woman to study at the Sorbonne University. <span class="story-hover">Bà là người phụ nữ đầu tiên học tại Đại học Sorbonne.</span></p>
-<p class="story-sentence" data-vi="Bài học: Tò mò là động lực của mọi phát minh.">Lesson: Curiosity drives every invention. <span class="story-hover">Bài học: Tò mò là động lực của mọi phát minh.</span></p>`
+    sentences: [
+      { en: 'Marie Curie was the first female scientist to win the Nobel Prize.', vi: 'Marie Curie là nhà khoa học nữ đầu tiên đoạt giải Nobel.' },
+      { en: 'She discovered two new chemical elements.', vi: 'Bà đã phát hiện ra hai nguyên tố hóa học mới.' },
+      { en: 'Marie Curie worked in the laboratory every day.', vi: 'Marie Curie làm việc trong phòng thí nghiệm hàng ngày.' },
+      { en: 'She was the first woman to study at the Sorbonne University.', vi: 'Bà là người phụ nữ đầu tiên học tại Đại học Sorbonne.' },
+      { en: 'Lesson: Curiosity drives every invention.', vi: 'Bài học: Tò mò là động lực của mọi phát minh.' },
+    ],
   },
   {
     title: 'Nelson Mandela — Forgiveness',
-    subtitle: ' Tha thứ và hòa giải',
-    content: `<p class="story-sentence" data-vi="Nelson Mandela đã ở tù 27 năm.">Nelson Mandela was in prison for 27 years. <span class="story-hover">Nelson Mandela đã ở tù 27 năm.</span></p>
-<p class="story-sentence" data-vi="Sau khi ra tù, ông đã tha thứ cho những người đối xử tệ với ông.">After leaving prison, he forgave those who had treated him badly. <span class="story-hover">Sau khi ra tù, ông đã tha thứ cho những người đối xử tệ với ông.</span></p>
-<p class="story-sentence" data-vi="Ông trở thành Tổng thống đầu tiên của Nam Phi.">He became the first President of South Africa. <span class="story-hover">Ông trở thành Tổng thống đầu tiên của Nam Phi.</span></p>
-<p class="story-sentence" data-vi="Mandela đã đoạt giải Nobel Hòa bình.">Mandela won the Nobel Peace Prize. <span class="story-hover">Mandela đã đoạt giải Nobel Hòa bình.</span></p>
-<p class="story-sentence" data-vi="Bài học: Tha thứ là sức mạnh của người lớn.">Lesson: Forgiveness is the strength of the great. <span class="story-hover">Bài học: Tha thứ là sức mạnh của người lớn.</span></p>`
+    subtitle: 'Tha thứ và hòa giải',
+    sentences: [
+      { en: 'Nelson Mandela was in prison for 27 years.', vi: 'Nelson Mandela đã ở tù 27 năm.' },
+      { en: 'After leaving prison, he forgave those who had treated him badly.', vi: 'Sau khi ra tù, ông đã tha thứ cho những người đối xử tệ với ông.' },
+      { en: 'He became the first President of South Africa.', vi: 'Ông trở thành Tổng thống đầu tiên của Nam Phi.' },
+      { en: 'Mandela won the Nobel Peace Prize.', vi: 'Mandela đã đoạt giải Nobel Hòa bình.' },
+      { en: 'Lesson: Forgiveness is the strength of the great.', vi: 'Bài học: Tha thứ là sức mạnh của người lớn.' },
+    ],
   },
   {
     title: 'Thomas Edison — Trial and Error',
     subtitle: 'Thử và sai để thành công',
-    content: `<p class="story-sentence" data-vi="Thomas Edison đã thất bại hàng nghìn lần trước khi phát minh bóng đèn.">Thomas Edison failed thousands of times before inventing the light bulb. <span class="story-hover">Thomas Edison đã thất bại hàng nghìn lần trước khi phát minh bóng đèn.</span></p>
-<p class="story-sentence" data-vi="Ông ấy không coi thất bại là kết thúc.">He didn\'t consider failure as the end. <span class="story-hover">Ông ấy không coi thất bại là kết thúc.</span></p>
-<p class="story-sentence" data-vi="Edison nói rằng ông đã tìm ra 1000 cách không làm việc.">Edison said he found 1000 ways that don\'t work. <span class="story-hover">Edison nói rằng ông đã tìm ra 1000 cách không làm việc.</span></p>
-<p class="story-sentence" data-vi="Ông đã đăng ký hơn 1000 bằng sáng chế.">He registered more than 1000 patents. <span class="story-hover">Ông đã đăng ký hơn 1000 bằng sáng chế.</span></p>
-<p class="story-sentence" data-vi="Bài học: Mỗi thất bại là một bài học.">Lesson: Every failure is a lesson. <span class="story-hover">Bài học: Mỗi thất bại là một bài học.</span></p>`
+    sentences: [
+      { en: 'Thomas Edison failed thousands of times before inventing the light bulb.', vi: 'Thomas Edison đã thất bại hàng nghìn lần trước khi phát minh bóng đèn.' },
+      { en: "He didn't consider failure as the end.", vi: 'Ông ấy không coi thất bại là kết thúc.' },
+      { en: "Edison said he found 1000 ways that don't work.", vi: 'Edison nói rằng ông đã tìm ra 1000 cách không làm việc.' },
+      { en: 'He registered more than 1000 patents.', vi: 'Ông đã đăng ký hơn 1000 bằng sáng chế.' },
+      { en: 'Lesson: Every failure is a lesson.', vi: 'Bài học: Mỗi thất bại là một bài học.' },
+    ],
   },
   {
     title: 'Mahatma Gandhi — Simple Living',
     subtitle: 'Sống giản dị và có mục tiêu',
-    content: `<p class="story-sentence" data-vi="Mahatma Gandhi đã lãnh đạo Ấn Độ độc lập khỏi Anh.">Mahatma Gandhi led India to independence from Britain. <span class="story-hover">Mahatma Gandhi đã lãnh đạo Ấn Độ độc lập khỏi Anh.</span></p>
-<p class="story-sentence" data-vi="Ông sống rất giản dị và mặc quần áo truyền thống Ấn Độ.">He lived very simply and wore traditional Indian clothes. <span class="story-hover">Ông sống rất giản dị và mặc quần áo truyền thống Ấn Độ.</span></p>
-<p class="story-sentence" data-vi="Gandhi đọc sách mỗi ngày để nâng cao kiến thức.">Gandhi read books every day to improve his knowledge. <span class="story-hover">Gandhi đọc sách mỗi ngày để nâng cao kiến thức.</span></p>
-<p class="story-sentence" data-vi="Ông tin vào hòa bình và không bạo lực.">He believed in peace and non-violence. <span class="story-hover">Ông tin vào hòa bình và không bạo lực.</span></p>
-<p class="story-sentence" data-vi="Bài học: Sống giản dị nhưng có mục tiêu lớn.">Lesson: Live simply but with a big purpose. <span class="story-hover">Bài học: Sống giản dị nhưng có mục tiêu lớn.</span></p>`
+    sentences: [
+      { en: 'Mahatma Gandhi led India to independence from Britain.', vi: 'Mahatma Gandhi đã lãnh đạo Ấn Độ độc lập khỏi Anh.' },
+      { en: 'He lived very simply and wore traditional Indian clothes.', vi: 'Ông sống rất giản dị và mặc quần áo truyền thống Ấn Độ.' },
+      { en: 'Gandhi read books every day to improve his knowledge.', vi: 'Gandhi đọc sách mỗi ngày để nâng cao kiến thức.' },
+      { en: 'He believed in peace and non-violence.', vi: 'Ông tin vào hòa bình và không bạo lực.' },
+      { en: 'Lesson: Live simply but with a big purpose.', vi: 'Bài học: Sống giản dị nhưng có mục tiêu lớn.' },
+    ],
   },
 ];
 
@@ -385,11 +471,13 @@ export default {
         { id: 'vocab', icon: '📝', label: 'Từ vựng' },
         { id: 'tense', icon: '⏰', label: 'Các thì' },
         { id: 'story', icon: '📖', label: 'Đọc truyện' },
+        { id: 'qa', icon: '❓', label: 'Hỏi & Đáp' },
         { id: 'game', icon: '🎮', label: 'Game' },
       ],
 
       // Data arrays - must be in data() for template access
       vocabData,
+      qaData,
       vocabCategories: ['greetings', 'daily', 'food', 'shopping', 'travel', 'work', 'school', 'health', 'emotion', 'opinion', 'requests', 'technology', 'time', 'weather', 'idioms'],
       vocabCategoryLabels,
       vocabCategory: 'all',
@@ -411,6 +499,12 @@ export default {
       // Story
       stories,
       storyIndex: 0,
+
+      // Q&A
+      qaIndex: 0,
+      userAnswer: '',
+      qaShowAnswer: false,
+      qaCorrect: false,
 
       // Game
       gameCards: [
@@ -564,6 +658,37 @@ export default {
       }
     },
 
+    // Q&A
+    qaNext() {
+      if (this.qaIndex < this.qaData.length - 1) {
+        this.qaIndex++;
+      } else {
+        this.qaIndex = 0;
+      }
+      this.userAnswer = '';
+      this.qaShowAnswer = false;
+    },
+    qaPrev() {
+      if (this.qaIndex > 0) {
+        this.qaIndex--;
+      } else {
+        this.qaIndex = this.qaData.length - 1;
+      }
+      this.userAnswer = '';
+      this.qaShowAnswer = false;
+    },
+    qaCheck() {
+      this.qaShowAnswer = true;
+    },
+    qaReveal() {
+      this.qaShowAnswer = true;
+    },
+    qaShuffle() {
+      this.qaIndex = Math.floor(Math.random() * this.qaData.length);
+      this.userAnswer = '';
+      this.qaShowAnswer = false;
+    },
+
     // Helpers
     shuffle(arr) {
       const a = arr.slice();
@@ -700,40 +825,155 @@ export default {
   color: var(--color-error, #ef4444);
 }
 
-/* Tabs */
-.subpage-tabs {
+/* Page Layout */
+.english-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e2e8f0;
+  padding: var(--space-4);
+}
+
+.english-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-bottom: var(--space-8);
+}
+
+/* Stats Bar */
+.stats-bar {
   display: flex;
-  gap: var(--space-2);
+  align-items: center;
+  gap: var(--space-3);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: var(--space-3) var(--space-4);
   margin-bottom: var(--space-4);
   flex-wrap: wrap;
 }
 
-.tab {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-2) var(--space-3);
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.stat-icon {
+  font-size: var(--font-lg);
+}
+
+.stat-label {
+  font-size: var(--font-xs);
+  color: #94a3b8;
+}
+
+.stat-value {
   font-size: var(--font-sm);
-  font-weight: 500;
-  color: var(--color-text2);
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.stat-timer {
+  margin-left: auto;
+}
+
+.timer-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+  border-radius: 12px;
+  padding: var(--space-2) var(--space-4);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.timer-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+.timer-icon {
+  font-size: var(--font-lg);
+}
+
+.timer-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: white;
+}
+
+/* Tab Bar */
+.tab-bar {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.tab-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tab-bar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.tab-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-3) var(--space-4);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s;
   text-decoration: none;
+  min-width: 72px;
+  flex-shrink: 0;
 }
 
-.tab:hover {
-  border-color: var(--color-accent);
-  color: var(--color-text);
+.tab-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
 }
 
-.tab.active {
-  border-color: var(--color-accent);
-  background: var(--color-accent-bg, rgba(52, 211, 153, 0.1));
-  color: var(--color-accent);
+.tab-item.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: transparent;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
-.exam-link {
-  color: var(--color-text2);
+.tab-icon {
+  font-size: var(--font-xl);
+}
+
+.tab-label {
+  font-size: var(--font-xs);
+  font-weight: 600;
+}
+
+/* English Section */
+.english-section {
+  margin-bottom: var(--space-4);
 }
 
 /* Category Select */
@@ -742,48 +982,59 @@ export default {
   align-items: center;
   gap: var(--space-3);
   margin-bottom: var(--space-4);
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--space-3);
+  border-radius: 12px;
 }
 
 .category-select label {
   font-size: var(--font-sm);
-  color: var(--color-text2);
+  color: #94a3b8;
+  font-weight: 500;
 }
 
 .category-select select {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #f1f5f9;
   padding: var(--space-2) var(--space-3);
   font-size: var(--font-sm);
   flex: 1;
+  cursor: pointer;
 }
 
-/* English Section */
-.english-section {
-  margin-bottom: var(--space-4);
+.category-select select option {
+  background: #1e293b;
+  color: #f1f5f9;
 }
 
 /* Flip Card */
 .flip-card-container {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: var(--space-6);
 }
 
 .flip-card {
-  background: var(--color-surface2);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
   perspective: 1000px;
   cursor: pointer;
   margin-bottom: var(--space-4);
+  transition: transform 0.3s;
+}
+
+.flip-card:hover {
+  transform: scale(1.02);
 }
 
 .flip-card-inner {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 220px;
   transition: transform 0.6s;
   transform-style: preserve-3d;
 }
@@ -801,57 +1052,66 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-4);
-  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  border-radius: 16px;
 }
 
 .flip-card-front {
-  background: var(--color-surface2);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+  border: 1px solid rgba(99, 102, 241, 0.3);
 }
 
 .flip-card-back {
-  background: var(--color-accent);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
   transform: rotateY(180deg);
-  color: var(--color-bg);
+  color: white;
 }
 
 .flip-card-front h2 {
-  font-size: var(--font-2xl);
-  font-weight: 700;
+  font-size: var(--font-3xl);
+  font-weight: 800;
   margin-bottom: var(--space-2);
+  background: linear-gradient(135deg, #f1f5f9, #cbd5e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .phonetic {
-  color: var(--color-text2);
-  font-size: var(--font-sm);
+  color: #94a3b8;
+  font-size: var(--font-base);
   margin-bottom: var(--space-2);
 }
 
 .tag {
-  background: var(--color-accent-bg, rgba(52, 211, 153, 0.2));
-  color: var(--color-accent);
+  background: rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
   padding: var(--space-1) var(--space-3);
   border-radius: 99px;
   font-size: var(--font-xs);
   font-weight: 500;
+  border: 1px solid rgba(99, 102, 241, 0.4);
 }
 
 .btn-speak {
-  background: none;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
-  font-size: var(--font-lg);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: var(--font-xl);
   cursor: pointer;
   margin-bottom: var(--space-2);
-  opacity: 0.6;
-  transition: opacity 0.15s;
+  transition: all 0.2s;
 }
 
 .btn-speak:hover {
-  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
 .flip-card-back h3 {
-  font-size: var(--font-xl);
+  font-size: var(--font-2xl);
   font-weight: 700;
   margin-bottom: var(--space-3);
 }
@@ -860,6 +1120,7 @@ export default {
   font-size: var(--font-base);
   margin-bottom: var(--space-2);
   font-style: italic;
+  opacity: 0.9;
 }
 
 /* Controls */
@@ -872,35 +1133,58 @@ export default {
 }
 
 .controls button {
-  background: var(--color-surface2);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  padding: var(--space-2) var(--space-4);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: var(--space-2) var(--space-5);
   font-size: var(--font-sm);
-  font-weight: 500;
-  color: var(--color-text);
+  font-weight: 600;
+  color: #e2e8f0;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 
 .controls button:hover {
-  border-color: var(--color-accent);
+  background: rgba(99, 102, 241, 0.3);
+  border-color: #6366f1;
+  transform: translateY(-2px);
 }
 
 .counter {
   text-align: center;
   font-size: var(--font-sm);
-  color: var(--color-text2);
+  color: #64748b;
 }
 
 /* Tense */
 .tense-subtabs {
+  display: flex;
+  gap: var(--space-2);
   margin-bottom: var(--space-4);
+}
+
+.tense-subtabs .tab {
+  flex: 1;
+  padding: var(--space-3);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #94a3b8;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tense-subtabs .tab.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: transparent;
+  color: white;
 }
 
 .tense-subtitle {
   font-size: var(--font-sm);
-  color: var(--color-text2);
+  color: #64748b;
   margin-bottom: var(--space-2);
 }
 
@@ -908,20 +1192,132 @@ export default {
   font-size: var(--font-lg);
   font-style: italic;
   margin-bottom: var(--space-2);
+  color: #e2e8f0;
 }
 
 .note {
   font-size: var(--font-sm);
   margin-top: var(--space-2);
-  opacity: 0.8;
+  opacity: 0.7;
+  color: #94a3b8;
 }
 
 /* Practice */
 .practice-container {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: var(--space-6);
+}
+
+.tense-label {
+  font-size: var(--font-sm);
+  color: #64748b;
+  margin-bottom: var(--space-2);
+}
+
+.practice-vietnamese {
+  font-size: var(--font-xl);
+  color: #f1f5f9;
+  margin-bottom: var(--space-4);
+  font-weight: 500;
+}
+
+.word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+  margin-bottom: var(--space-4);
+}
+
+.word-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-sm);
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.word-btn:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.3);
+  border-color: #6366f1;
+}
+
+.word-btn.used {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.dropzone {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: var(--space-4);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+  transition: all 0.2s;
+}
+
+.dropzone.filled {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.drop-hint {
+  color: #64748b;
+  font-size: var(--font-sm);
+}
+
+.practice-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.practice-actions button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.practice-actions button:hover {
+  background: rgba(99, 102, 241, 0.3);
+}
+
+.practice-feedback {
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 600;
+  display: none;
+}
+
+.practice-feedback.show {
+  display: block;
+}
+
+.feedback-correct {
+  color: #4ade80;
+}
+
+.feedback-wrong {
+  color: #f87171;
 }
 
 .tense-label {
@@ -1062,7 +1458,7 @@ export default {
 }
 
 .story-subtitle {
-  color: var(--color-accent);
+  color: #6366f1;
   font-size: var(--font-sm);
   text-align: center;
   margin-bottom: var(--space-4);
@@ -1077,64 +1473,202 @@ export default {
 }
 
 .story-nav button {
-  background: var(--color-surface2);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
   padding: var(--space-2) var(--space-4);
   font-size: var(--font-sm);
-  color: var(--color-text);
+  color: #e2e8f0;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 
 .story-nav button:hover {
-  border-color: var(--color-accent);
+  background: rgba(99, 102, 241, 0.3);
 }
 
 .story-box {
-  background: var(--color-surface2);
-  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
   padding: var(--space-4);
-  margin-bottom: var(--space-3);
-  font-size: var(--font-base);
-  line-height: 2;
+  margin-bottom: var(--space-4);
 }
 
+/* Story */
 .story-sentence {
   position: relative;
-  margin-bottom: var(--space-3);
+  padding: var(--space-3);
+  margin-bottom: var(--space-2);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: var(--font-base);
+  transition: background 0.2s;
+}
+
+.story-sentence:hover {
+  background: rgba(99, 102, 241, 0.2);
 }
 
 .story-hover {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  right: 0;
-  background: var(--color-accent);
-  color: var(--color-bg);
-  padding: var(--space-2);
-  border-radius: var(--radius-sm);
+  display: none;
+  margin-left: var(--space-2);
+  color: #4ade80;
   font-size: var(--font-sm);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-  z-index: 10;
 }
 
 .story-sentence:hover .story-hover {
-  opacity: 1;
+  display: inline;
 }
 
 .story-tip {
-  font-size: var(--font-sm);
-  color: var(--color-text2);
+  font-size: var(--font-xs);
+  color: #64748b;
   font-style: italic;
+}
+
+/* Q&A */
+.qa-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.qa-card h2 {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+  color: #f1f5f9;
+}
+
+.qa-subtitle {
+  color: #64748b;
+  font-size: var(--font-sm);
+  margin-bottom: var(--space-2);
+}
+
+.qa-label {
+  color: #64748b;
+  font-size: var(--font-sm);
+  margin-bottom: var(--space-4);
+}
+
+.qa-category {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: var(--font-xs);
+  font-weight: 600;
+}
+
+.qa-question-box {
+  background: rgba(99, 102, 241, 0.1);
+  border-left: 4px solid #6366f1;
+  border-radius: 12px;
+  padding: var(--space-5);
+  margin-bottom: var(--space-3);
+  text-align: left;
+}
+
+.question-label, .hint-label, .answer-label {
+  font-size: var(--font-xs);
+  color: #64748b;
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.question-text {
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.qa-hint-box {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 12px;
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.hint-text {
+  font-size: var(--font-sm);
+  color: #fbbf24;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.qa-answer-box {
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: 12px;
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.answer-text {
+  font-size: var(--font-lg);
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.qa-controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.qa-controls button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.qa-controls button:hover {
+  background: rgba(99, 102, 241, 0.3);
+  transform: translateY(-2px);
 }
 
 /* Game */
 .game-links {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: var(--space-4);
+}
+
+/* Game Card */
+.game-links :deep(.hub-card) {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: var(--space-4);
+  text-align: center;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.game-links :deep(.hub-card:hover) {
+  transform: translateY(-4px);
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #6366f1;
+}
+
+/* Hide old forge styles */
+.forge-timer-wrap,
+.forge-ring-bg,
+.forge-ring-progress,
+.forge-timer-ring,
+.forge-time {
+  display: none;
 }
 </style>
