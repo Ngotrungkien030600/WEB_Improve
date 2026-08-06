@@ -65,6 +65,7 @@ const cards = [
   { icon: '🚀', title: 'Accelerator 30-Day', description: 'Lộ trình cấp tốc — 1h/ngày — 30 ngày lên Senior. Technical + English real-time.', path: '/accelerator' },
   { icon: '🗺️', title: 'Lộ trình', description: 'Lộ trình học có mục tiêu rõ ràng từ cơ bản đến nâng cao.', path: '/learning-paths' },
   { icon: '🧠', title: 'Học AI', description: 'AI/ML — kiến thức, thi trắc nghiệm, câu hỏi phỏng vấn, 8 dự án thực hành.', path: '/ai' },
+  { icon: '🤖', title: 'AI Agent', description: 'Agent, Tools & Function Calling, Token, Quota & Cost, AI at Edge — bài học + flashcard + quiz.', path: '/ai/agent' },
   { icon: '☕', title: 'Java', description: 'Code Java, Spring Boot, phỏng vấn backend (tiếng Việt & English).', path: '/java/hub' },
   { icon: '⚙️', title: 'Backend Engineering', description: 'SQL/NoSQL, Kafka, Docker, K8s, CI/CD, System Design, Performance.', path: '/java/backend' },
   { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, React/Vue/Angular, Responsive, phỏng vấn UI/FE', path: '/frontend/hub' },

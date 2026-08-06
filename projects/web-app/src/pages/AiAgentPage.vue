@@ -61,16 +61,73 @@
         </div>
       </section>
 
-      <!-- QUIZ: Stub -->
+      <!-- QUIZ -->
       <section v-if="activeTab === 'quiz'" class="ai-section">
-        <div class="quiz-placeholder">
-          <h3>🎯 Quiz AI Agent</h3>
-          <p>Tính năng quiz đang được phát triển. Hiện tại bạn có thể học flashcards và bài học.</p>
-          <p class="quiz-categories">
-            <span class="quiz-cat-tag" @click="activeTab = 'learn'">📚 Học flashcards</span>
-            <span class="quiz-cat-tag" @click="activeTab = 'lessons'">📖 Bài học</span>
-          </p>
+        <div v-if="!quizStarted" class="ai-q-config">
+          <div class="ai-q-tabs">
+            <button
+              v-for="cat in quizCategories"
+              :key="cat.id"
+              class="ai-q-tab"
+              :class="{ active: selectedQuizCategory === cat.id }"
+              @click="selectedQuizCategory = cat.id"
+            >{{ cat.icon }} {{ cat.label }}</button>
+          </div>
+          <div class="ai-q-settings">
+            <select v-model.number="quizCount">
+              <option value="5">5 câu</option>
+              <option value="10">10 câu</option>
+              <option value="15">15 câu</option>
+            </select>
+            <select v-model.number="quizTime">
+              <option value="10">10s</option>
+              <option value="15">15s</option>
+              <option value="20">20s</option>
+              <option value="30">30s</option>
+            </select>
+            <button class="ai-q-start" @click="startQuiz">▶️ Bắt đầu</button>
+          </div>
         </div>
+
+        <template v-if="quizStarted && currentQuizQuestion">
+          <div class="ai-q-timer-bar">
+            <div class="ai-q-timer-fill" :style="{ width: (quizTimeLeft / quizTime * 100) + '%' }"></div>
+          </div>
+          <p class="ai-q-timer-text">{{ quizTimeLeft }}s</p>
+
+          <div class="ai-q-card">
+            <span class="ai-q-badge">{{ quizCategories.find(c => c.id === selectedQuizCategory)?.label }}</span>
+            <span class="ai-q-progress">Câu {{ currentQuestion + 1 }} / {{ quizQuestions.length }}</span>
+            <h2 class="ai-q-question">{{ currentQuizQuestion.question }}</h2>
+            <div class="ai-q-options">
+              <button
+                v-for="(opt, idx) in currentQuizQuestion.options"
+                :key="idx"
+                class="ai-q-option"
+                :class="{
+                  selected: selectedAnswer === idx,
+                  correct: answered && idx === currentQuizQuestion.correct,
+                  wrong: answered && selectedAnswer === idx && idx !== currentQuizQuestion.correct
+                }"
+                :disabled="answered"
+                @click="selectedAnswer = idx; submitQuizAnswer()"
+              >{{ opt }}</button>
+            </div>
+            <div v-if="answered" class="ai-q-feedback" :class="selectedAnswer === currentQuizQuestion.correct ? 'correct' : 'wrong'">
+              {{ selectedAnswer === currentQuizQuestion.correct ? '✅ Chính xác!' : '❌ Chưa đúng. Đáp án đúng: ' + currentQuizQuestion.options[currentQuizQuestion.correct] }}
+            </div>
+            <button v-if="!answered" class="ai-q-submit" @click="submitQuizAnswer">Xác nhận</button>
+            <button v-if="answered && currentQuestion < quizQuestions.length - 1" class="ai-q-next" @click="nextQuestion">Câu tiếp theo ➡️</button>
+            <button v-if="answered && currentQuestion === quizQuestions.length - 1" class="ai-q-restart" @click="resetQuiz">🔄 Làm lại</button>
+          </div>
+
+          <div class="ai-q-stats">
+            <div><span class="ai-q-stat-value">{{ quizScore }}</span><span class="ai-q-stat-label">Đúng</span></div>
+            <div><span class="ai-q-stat-value">{{ quizQuestions.length }}</span><span class="ai-q-stat-label">Tổng</span></div>
+            <div><span class="ai-q-stat-value">{{ quizPercent }}</span><span class="ai-q-stat-label">Tỉ lệ</span></div>
+            <div><span class="ai-q-stat-value">{{ quizLevel }}</span><span class="ai-q-stat-label">Trình độ</span></div>
+          </div>
+        </template>
       </section>
 
       <!-- LESSONS -->
@@ -111,7 +168,7 @@
 
 <script>
 import { navigate } from '../utils/navigate.js';
-import { aiAgentConcepts, aiAgentLessons } from '@legacy/js/data/ai-agent-data.js';
+import { aiAgentConcepts, aiAgentLessons, aiAgentQuizData } from '@legacy/js/data/ai-agent-data.js';
 import ForgeTimer from '../components/ForgeTimer.vue';
 
 const STORAGE_KEY = 'aiAgentChecklist';
@@ -146,6 +203,13 @@ const tabs = [
   { id: 'lessons', label: 'Bài học', icon: '📖' },
 ];
 
+const quizCategories = [
+  { id: 'general', label: 'Agent cơ bản', icon: '🤖' },
+  { id: 'token', label: 'Token', icon: '🔢' },
+  { id: 'quota', label: 'Quota', icon: '⏳' },
+  { id: 'edge', label: 'Edge', icon: '📡' },
+];
+
 export default {
   name: 'AiAgentPage',
   components: { ForgeTimer },
@@ -160,6 +224,19 @@ export default {
       concepts: aiAgentConcepts,
       lessons: aiAgentLessons,
       checklist: {},
+      // Quiz state
+      quizQuestions: [],
+      quizCategories,
+      currentQuestion: 0,
+      selectedAnswer: null,
+      answered: false,
+      quizScore: 0,
+      quizStarted: false,
+      quizCount: 10,
+      quizTime: 15,
+      quizTimer: null,
+      quizTimeLeft: 15,
+      selectedQuizCategory: 'general',
     };
   },
   computed: {
@@ -190,6 +267,21 @@ export default {
         });
       }
       return html;
+    },
+    currentQuizQuestion() {
+      if (!this.quizQuestions[this.currentQuestion]) return null;
+      return this.quizQuestions[this.currentQuestion];
+    },
+    quizPercent() {
+      if (this.quizScore === 0 && !this.quizStarted) return '0%';
+      return Math.round((this.quizScore / this.quizQuestions.length) * 100) + '%';
+    },
+    quizLevel() {
+      const pct = (this.quizScore / this.quizQuestions.length) * 100;
+      if (pct >= 90) return '🟢 Xuất sắc';
+      if (pct >= 70) return '🟡 Tốt';
+      if (pct >= 50) return '🟠 Trung bình';
+      return '🔴 Cần cố gắng';
     },
   },
   mounted() {
@@ -239,6 +331,55 @@ export default {
           if (label) label.classList.toggle('checked', input.checked);
         });
       });
+    },
+    startQuiz() {
+      const pool = aiAgentQuizData[this.selectedQuizCategory] || [];
+      if (pool.length === 0) return;
+      const shuffled = [...pool].sort(() => Math.random() - 0.5);
+      this.quizQuestions = shuffled.slice(0, Math.min(this.quizCount, pool.length));
+      this.currentQuestion = 0;
+      this.selectedAnswer = null;
+      this.answered = false;
+      this.quizScore = 0;
+      this.quizStarted = true;
+      this.startQuizTimer();
+    },
+    startQuizTimer() {
+      if (this.quizTimer) clearInterval(this.quizTimer);
+      this.quizTimeLeft = this.quizTime;
+      this.quizTimer = setInterval(() => {
+        this.quizTimeLeft--;
+        if (this.quizTimeLeft <= 0) {
+          this.submitQuizAnswer();
+        }
+      }, 1000);
+    },
+    submitQuizAnswer() {
+      if (this.answered) return;
+      this.answered = true;
+      if (this.quizTimer) clearInterval(this.quizTimer);
+      const q = this.quizQuestions[this.currentQuestion];
+      if (this.selectedAnswer === q.correct) {
+        this.quizScore++;
+      }
+    },
+    nextQuestion() {
+      if (!this.answered) this.submitQuizAnswer();
+      if (this.currentQuestion < this.quizQuestions.length - 1) {
+        this.currentQuestion++;
+        this.selectedAnswer = null;
+        this.answered = false;
+        this.startQuizTimer();
+      }
+    },
+    resetQuiz() {
+      if (this.quizTimer) clearInterval(this.quizTimer);
+      this.quizStarted = false;
+      this.quizQuestions = [];
+      this.currentQuestion = 0;
+      this.selectedAnswer = null;
+      this.answered = false;
+      this.quizScore = 0;
     },
     renderMarkdown(text) {
       if (!text) return '';
@@ -449,43 +590,235 @@ export default {
   color: var(--color-accent, #f472b6);
 }
 
-/* Quiz stub */
-.quiz-placeholder {
-  text-align: center;
-  padding: 3rem 1rem;
+/* Quiz */
+.ai-q-config {
   background: var(--color-surface, #1a1928);
-  border-radius: 16px;
   border: 1px solid var(--color-border, #2d2b44);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
-.quiz-placeholder h3 {
-  font-size: 1.3rem;
-  margin-bottom: 0.75rem;
-}
-
-.quiz-placeholder p {
-  color: var(--color-text2, #9d9bb5);
+.ai-q-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
   margin-bottom: 1rem;
 }
 
-.quiz-categories {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.quiz-cat-tag {
-  background: var(--color-surface2, #22213a);
+.ai-q-tab {
+  background: transparent;
   border: 1px solid var(--color-border, #2d2b44);
-  padding: 0.5rem 1rem;
+  color: var(--color-text2, #9d9bb5);
+  padding: 0.4rem 0.85rem;
   border-radius: 8px;
+  font-size: 0.82rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.quiz-cat-tag:hover {
+.ai-q-tab:hover {
   border-color: var(--color-accent, #f472b6);
   color: var(--color-accent, #f472b6);
+}
+
+.ai-q-tab.active {
+  background: rgba(244, 114, 182, 0.15);
+  border-color: var(--color-accent, #f472b6);
+  color: var(--color-accent, #f472b6);
+}
+
+.ai-q-settings {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ai-q-settings select {
+  padding: 0.4rem 0.75rem;
+  background: var(--color-surface2, #22213a);
+  color: var(--color-text);
+  border: 1px solid var(--color-border, #2d2b44);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.ai-q-start {
+  background: var(--color-accent, #f472b6);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ai-q-start:hover {
+  opacity: 0.9;
+}
+
+.ai-q-timer-bar {
+  height: 4px;
+  background: var(--color-surface2, #22213a);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.ai-q-timer-fill {
+  height: 100%;
+  background: var(--color-accent, #f472b6);
+  transition: width 1s linear;
+}
+
+.ai-q-timer-text {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text2, #9d9bb5);
+  margin-bottom: 1rem;
+}
+
+.ai-q-card {
+  background: var(--color-surface, #1a1928);
+  border: 1px solid var(--color-border, #2d2b44);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ai-q-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-accent, #f472b6);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(244, 114, 182, 0.1);
+  margin-bottom: 0.75rem;
+}
+
+.ai-q-progress {
+  float: right;
+  font-size: 0.75rem;
+  color: var(--color-text2, #9d9bb5);
+}
+
+.ai-q-question {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0.75rem 0 1.25rem;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.ai-q-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ai-q-option {
+  background: var(--color-surface2, #22213a);
+  border: 1px solid var(--color-border, #2d2b44);
+  color: var(--color-text);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1.4;
+}
+
+.ai-q-option:hover:not(:disabled) {
+  border-color: var(--color-accent, #f472b6);
+  color: var(--color-accent, #f472b6);
+}
+
+.ai-q-option.selected {
+  border-color: var(--color-accent, #f472b6);
+  background: rgba(244, 114, 182, 0.1);
+  color: var(--color-accent, #f472b6);
+}
+
+.ai-q-option.correct {
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
+}
+
+.ai-q-option.wrong {
+  border-color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+  color: #f87171;
+}
+
+.ai-q-feedback {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.ai-q-feedback.correct {
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
+}
+
+.ai-q-feedback.wrong {
+  background: rgba(248, 113, 113, 0.1);
+  color: #f87171;
+}
+
+.ai-q-submit,
+.ai-q-next,
+.ai-q-restart {
+  margin-top: 1rem;
+  background: var(--color-accent, #f472b6);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ai-q-submit:hover,
+.ai-q-next:hover,
+.ai-q-restart:hover {
+  opacity: 0.9;
+}
+
+.ai-q-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+  background: var(--color-surface, #1a1928);
+  border: 1px solid var(--color-border, #2d2b44);
+  border-radius: 12px;
+}
+
+.ai-q-stat-value {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-accent, #f472b6);
+}
+
+.ai-q-stat-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--color-text2, #9d9bb5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* Lessons */
