@@ -140,6 +140,7 @@ development_status:
   9-2-frontend-ui-interview-pagination: done   # ✅ CODE-REVIEWED 2026-08-07 — 0 🔴, 1 🟡 fix (XSS sanitize), 1 🟢 (dead code removed)
   9-3-java-thuc-chien-virtualization: done   # ✅ CODE-REVIEWED 2026-08-07 — 0 🔴, 3 🟡 fixes ($refs vs data, colsCount reactive, bindScroll pattern), 1 🟢
   9-4-exam-history-bounded-storage: done   # ✅ CODE-REVIEWED 2026-08-07 — 0 🔴, 1 🟡 fix (splice vs reassign for reactivity), 1 🟢 note
+  9-5-java-thuc-chien-filter-persistence: done   # ✅ CODE-REVIEWED 2026-08-07 — 0 🔴, 2 🟡 fix (console.warn in catch blocks)
   epic-9-retrospective: optional
 
 last_updated: 2026-08-07

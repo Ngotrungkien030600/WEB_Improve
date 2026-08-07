@@ -141,6 +141,30 @@ const CATEGORIES = [
   { id: 'microservice', label: '🏗️ Microservices' },
 ];
 
+const STORAGE_KEYS = {
+  search: 'thucChien_search',
+  level: 'thucChien_level',
+  category: 'thucChien_cat',
+};
+
+function loadFilter(key, fallback) {
+  try {
+    const val = localStorage.getItem(key);
+    return val !== null ? val : fallback;
+  } catch (e) {
+    console.warn('loadFilter failed:', key, e);
+    return fallback;
+  }
+}
+
+function saveFilter(key, val) {
+  try {
+    localStorage.setItem(key, val);
+  } catch (e) {
+    console.warn('saveFilter failed:', key, e);
+  }
+}
+
 const LEVELS = [
   { id: 1, label: '🌱 Junior' },
   { id: 2, label: '📗 Middle' },
@@ -152,9 +176,9 @@ export default {
   data() {
     return {
       tasks: thucChienTasks,
-      searchKeyword: '',
-      selectedLevel: 'all',
-      selectedCategory: 'all',
+      searchKeyword: loadFilter(STORAGE_KEYS.search, ''),
+      selectedLevel: loadFilter(STORAGE_KEYS.level, 'all'),
+      selectedCategory: loadFilter(STORAGE_KEYS.category, 'all'),
       showModal: false,
       selectedTask: null,
       levelFilters: [{ id: 'all', label: '📊 Tất cả' }, ...LEVELS],
@@ -219,6 +243,11 @@ export default {
       this.bindScroll();
     });
   },
+  watch: {
+    searchKeyword(val) {
+      saveFilter(STORAGE_KEYS.search, val);
+    },
+  },
   mounted() {
     document.addEventListener('keydown', this.handleKeydown);
     this.bindScroll();
@@ -250,9 +279,11 @@ export default {
     },
     selectLevel(id) {
       this.selectedLevel = id;
+      saveFilter(STORAGE_KEYS.level, id);
     },
     selectCategory(id) {
       this.selectedCategory = id;
+      saveFilter(STORAGE_KEYS.category, id);
     },
     levelLabel(lv) {
       const l = LEVELS.find(x => x.id === lv);
