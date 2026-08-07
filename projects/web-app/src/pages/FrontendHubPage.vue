@@ -10,7 +10,7 @@
       <p class="hub-description">Kiến thức frontend toàn diện — từ HTML/CSS cơ bản đến React, Vue, Angular. Có phỏng vấn UI/UX riêng.</p>
 
       <CGrid>
-        <CCard
+        <CHubCard
           v-for="card in cards"
           :key="card.title"
           :icon="card.icon"
@@ -28,7 +28,7 @@
 import { navigate } from '../utils/navigate.js';
 import CTopbar from '../components/CTopbar.vue';
 import CGrid from '../components/CGrid.vue';
-import CCard from '../components/CCard.vue';
+import CHubCard from '../components/CHubCard.vue';
 
 const cards = [
   {
@@ -65,7 +65,7 @@ const cards = [
 
 export default {
   name: 'FrontendHubPage',
-  components: { CTopbar, CGrid, CCard },
+  components: { CTopbar, CGrid, CHubCard },
   data() {
     return { cards };
   },

@@ -22,7 +22,7 @@
           {{ group.title }}
         </div>
         <CGrid>
-          <CCard
+          <CHubCard
             v-for="card in group.items"
             :key="card.title"
             :icon="card.icon"
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import CCard from '../components/CCard.vue';
+import CHubCard from '../components/CHubCard.vue';
 import CGrid from '../components/CGrid.vue';
 import CHomeHeader from '../components/CHomeHeader.vue';
 import CHomeTimer from '../components/CHomeTimer.vue';
@@ -95,7 +95,7 @@ const groups = [
 
 export default {
   name: 'HomePage',
-  components: { CCard, CGrid, CHomeHeader, CHomeTimer, MotivationPopup },
+  components: { CHubCard, CGrid, CHomeHeader, CHomeTimer, MotivationPopup },
   data() {
     return { groups };
   },
