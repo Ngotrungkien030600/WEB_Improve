@@ -1,6 +1,6 @@
 <template>
   <RouterView v-slot="{ Component, route }">
-    <Transition name="page" mode="out-in">
+    <Transition name="page" mode="out-in" appear>
       <component :is="Component" :key="route.path" />
     </Transition>
   </RouterView>
@@ -21,7 +21,7 @@ html, body {
 
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .page-enter-from {
