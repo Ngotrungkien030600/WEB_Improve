@@ -25,7 +25,7 @@
       </nav>
 
       <!-- LEARN: Flashcards -->
-      <section v-if="activeTab === 'learn'" class="ai-section active">
+      <section v-if="activeTab === 'learn'" class="ai-section">
         <div class="ai-card-filter">
           <select v-model="filterCategory">
             <option value="all">📂 Tất cả chủ đề</option>
@@ -475,14 +475,6 @@ export default {
 .ai-tab.active {
   color: var(--color-accent, #f472b6);
   border-bottom: 2px solid var(--color-accent, #f472b6);
-}
-
-.ai-section {
-  display: none;
-}
-
-.ai-section.active {
-  display: block;
 }
 
 .ai-card-filter {
