@@ -36,47 +36,67 @@
 
       <!-- Practice card -->
       <div class="practice-card">
-        <div class="p-counter">{{ currentIndex + 1 }} / {{ pool.length }}</div>
-        <div class="p-vi">{{ currentSentence?.vi }}</div>
-        <div class="p-hint">💡 {{ currentSentence?.note }}</div>
-        <input
-          v-model="userAnswer"
-          class="p-input"
-          :class="{
-            correct: showResult && isCorrect,
-            wrong: showResult && !isCorrect
-          }"
-          placeholder="Gõ câu tiếng Anh của bạn..."
-          autocomplete="off"
-          spellcheck="false"
-          :disabled="showResult"
-          @keydown.enter="handleEnter"
-        />
-        <div class="p-result" :class="{ show: showResult, good: isCorrect, bad: !isCorrect }">
-          <template v-if="isCorrect">
-            <div>✅ <span class="correct-en">{{ currentSentence?.en }}</span></div>
-          </template>
-          <template v-else>
-            <div>Bạn viết: <span class="wrong-text">{{ userAnswer.trim() || '(trống)' }}</span></div>
-            <div class="correct-en">✅ Đúng: {{ currentSentence?.en }}</div>
-          </template>
-        </div>
-        <div class="p-actions">
-          <button
-            v-if="!showResult"
-            class="btn-check"
-            @click="checkAnswer"
-          >
-            ✅ Kiểm tra
-          </button>
-          <button
-            v-else
-            class="btn-next"
-            @click="nextSentence"
-          >
-            {{ isCompleted ? '🔄 Luyện lại' : '➡️ Câu tiếp' }}
-          </button>
-        </div>
+        <!-- Completion summary -->
+        <template v-if="isCompleted">
+          <div class="p-vi">🎉 Hoàn thành!</div>
+          <div class="p-summary">
+            <p>✅ Đúng: <strong>{{ correctCount }}</strong></p>
+            <p>❌ Sai: <strong>{{ wrongCount }}</strong></p>
+            <p>
+              📊 Tỉ lệ đúng:
+              <strong>
+                {{ (correctCount + wrongCount) > 0 ? Math.round((correctCount / (correctCount + wrongCount)) * 100) : 0 }}%
+              </strong>
+            </p>
+          </div>
+          <div class="p-actions">
+            <button class="btn-next" @click="nextSentence">🔄 Luyện lại</button>
+          </div>
+        </template>
+
+        <template v-else>
+          <div class="p-counter">{{ currentIndex + 1 }} / {{ pool.length }}</div>
+          <div class="p-vi">{{ currentSentence?.vi }}</div>
+          <div class="p-hint">💡 {{ currentSentence?.note }}</div>
+          <input
+            v-model="userAnswer"
+            class="p-input"
+            :class="{
+              correct: showResult && isCorrect,
+              wrong: showResult && !isCorrect
+            }"
+            placeholder="Gõ câu tiếng Anh của bạn..."
+            autocomplete="off"
+            spellcheck="false"
+            :disabled="showResult"
+            @keydown.enter="handleEnter"
+          />
+          <div class="p-result" :class="{ show: showResult, good: isCorrect, bad: !isCorrect }">
+            <template v-if="isCorrect">
+              <div>✅ <span class="correct-en">{{ currentSentence?.en }}</span></div>
+            </template>
+            <template v-else>
+              <div>Bạn viết: <span class="wrong-text">{{ userAnswer.trim() || '(trống)' }}</span></div>
+              <div class="correct-en">✅ Đúng: {{ currentSentence?.en }}</div>
+            </template>
+          </div>
+          <div class="p-actions">
+            <button
+              v-if="!showResult"
+              class="btn-check"
+              @click="checkAnswer"
+            >
+              ✅ Kiểm tra
+            </button>
+            <button
+              v-else
+              class="btn-next"
+              @click="nextSentence"
+            >
+              ➡️ Câu tiếp
+            </button>
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -146,7 +166,7 @@ export default {
 
   methods: {
     handleBack() {
-      navigate('/english/hub');
+      navigate('/english');
     },
 
     switchCategory(catId) {
@@ -183,6 +203,9 @@ export default {
         this.correctCount = 0;
         this.wrongCount = 0;
         this.pool = shuffle([...this.pool]);
+      } else if (this.currentIndex >= this.pool.length - 1) {
+        // Last sentence: mark as completed so the user sees the summary
+        this.currentIndex = this.pool.length;
       } else {
         this.currentIndex++;
       }
@@ -317,6 +340,24 @@ export default {
   text-align: center;
   margin-bottom: var(--space-4);
   font-style: italic;
+}
+
+.p-summary {
+  text-align: center;
+  margin: var(--space-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.p-summary p {
+  margin: 0;
+  font-size: var(--font-base);
+  color: var(--color-text2);
+}
+
+.p-summary strong {
+  color: var(--color-text);
 }
 
 .p-input {

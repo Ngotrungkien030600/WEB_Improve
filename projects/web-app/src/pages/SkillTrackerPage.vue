@@ -173,7 +173,7 @@ export default {
 
   methods: {
     handleBack() {
-      navigate('/english/hub');
+      navigate('/english');
     },
 
     loadData() {

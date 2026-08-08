@@ -34,13 +34,13 @@ const cards = [
   {
     icon: '📝',
     title: 'Từ vựng & Idioms',
-    description: '209 từ 14 chủ đề, 70+ idioms, flashcard lật',
+    description: '86 từ 14 chủ đề, 48 idioms & phrasal verbs, flashcard lật',
     path: '/english#vocab',
   },
   {
     icon: '⏰',
     title: 'Các thì & Practice',
-    description: '12 thì, 16+ câu sắp xếp từ',
+    description: '12 thì, 31 câu sắp xếp từ',
     path: '/english#tense',
   },
   {

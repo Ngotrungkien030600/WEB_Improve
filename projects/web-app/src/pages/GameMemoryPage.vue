@@ -152,7 +152,7 @@ export default {
     },
 
     handleBack() {
-      navigate('/english/hub');
+      navigate('/english');
     },
   },
 };

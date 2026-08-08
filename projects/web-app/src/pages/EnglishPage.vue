@@ -62,6 +62,7 @@
         <!-- Vocabulary Section -->
         <section v-show="currentTab === 'vocab'" class="content-section">
           <VocabCard
+            v-if="currentVocab"
             :vocab="currentVocab"
             :index="vocabIndex"
             :total="filteredVocab.length"
@@ -70,6 +71,10 @@
             @next="vocabNext"
             @speak="speakWord"
           />
+          <div v-else class="empty-state">
+            <span class="empty-icon">😕</span>
+            <p>Không có từ vựng nào trong chủ đề này. Thử chọn chủ đề khác nhé!</p>
+          </div>
         </section>
 
         <!-- Tense Section -->
@@ -126,7 +131,7 @@
               <button class="action-btn secondary" @click="resetPractice">🔄 Làm lại</button>
               <button class="action-btn" @click="nextPractice">Tiếp ➡️</button>
             </div>
-            <div v-if="practiceFeedback" class="practice-feedback" :class="{ correct: practiceCorrect }">
+            <div v-if="practiceFeedback" class="practice-feedback" :class="{ correct: practiceCorrect, show: true }">
               <span v-if="practiceCorrect">✅ Đúng!</span>
               <span v-else>❌ Sai. Đáp án: {{ practiceCard?.en }}</span>
             </div>
@@ -283,6 +288,7 @@ import { vocabulary, vocabCategories } from '../data/vocabulary.js';
 import { tenses, practiceSentences } from '../data/tenses.js';
 import { stories } from '../data/stories.js';
 import { idioms, phrasalVerbs, idiomCategories } from '../data/idioms.js';
+import { getHistory } from '../logic/forge-timer-logic.js';
 
 // Timer
 const timerDuration = ref(30);
@@ -292,6 +298,16 @@ let timerInterval = null;
 const todayMins = ref(0);
 const streak = ref(0);
 const total = ref(0);
+
+const loadStats = () => {
+  const h = getHistory();
+  const todayKey = new Date().toISOString().slice(0, 10);
+  todayMins.value = h.dates?.[todayKey] || 0;
+  streak.value = h.streak || 0;
+  total.value = h.totalMinutes || 0;
+};
+
+loadStats();
 
 const formattedTime = computed(() => {
   const mins = Math.floor(timerSeconds.value / 60);
@@ -411,19 +427,32 @@ const tensePrev = () => {
   }
 };
 
+// Helpers
+const shuffle = (arr) => {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
 // Practice
 const practiceIndex = ref(0);
 const userSentence = ref('');
 const usedWords = ref([]);
 const practiceFeedback = ref(false);
 const practiceCorrect = ref(false);
+const wordBank = ref([]);
 
 const practiceCard = computed(() => practiceSentences[practiceIndex.value]);
 
-const shuffledWords = computed(() => {
-  if (!practiceCard.value) return [];
-  return shuffle([...practiceCard.value.words]);
-});
+const shuffledWords = computed(() => wordBank.value);
+
+// Re-shuffle the word bank once when the practice sentence changes
+watch(practiceCard, () => {
+  wordBank.value = practiceCard.value ? shuffle([...practiceCard.value.words]) : [];
+}, { immediate: true });
 
 const selectWord = (word) => {
   if (!usedWords.value.includes(word)) {
@@ -434,6 +463,11 @@ const selectWord = (word) => {
 };
 
 const checkPractice = () => {
+  if (!practiceCard.value || userSentence.value.length === 0) {
+    practiceFeedback.value = true;
+    practiceCorrect.value = false;
+    return;
+  }
   const userNorm = (userSentence.value || '').toLowerCase().trim();
   const correctNorm = (practiceCard.value?.en || '').toLowerCase().trim();
   practiceCorrect.value = userNorm === correctNorm;
@@ -490,6 +524,12 @@ const filteredQaWords = computed(() => {
   return qaWords.filter(w => w.category === qaFilterCat.value);
 });
 
+// Reset position/reveal when the Q&A category changes
+watch(qaFilterCat, () => {
+  qaWordIndex.value = 0;
+  qaWordRevealed.value = false;
+});
+
 const qaCurrentWord = computed(() => filteredQaWords.value[qaWordIndex.value]);
 
 const qaWordNext = () => {
@@ -511,7 +551,7 @@ const qaWordPrev = () => {
 };
 
 const qaWordReveal = () => {
-  qaWordRevealed.value = true;
+  qaWordRevealed.value = !qaWordRevealed.value;
 };
 
 const qaShuffle = () => {
@@ -550,16 +590,6 @@ const gameCards = [
   { icon: '🔀', title: 'Xếp chữ', description: 'Sắp xếp từ thành câu', path: '/game-scramble' },
   { icon: '⚡', title: 'Speed Quiz', description: 'Trắc nghiệm nhanh có thời gian', path: '/game-speedquiz' },
 ];
-
-// Helpers
-const shuffle = (arr) => {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-};
 
 const handleNavigate = (path) => navigate(path);
 
@@ -707,6 +737,26 @@ onUnmounted(() => {
 /* Content */
 .content-section {
   animation: fadeIn 0.3s ease;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: #94a3b8;
+}
+
+.empty-icon {
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state p {
+  font-size: 0.9rem;
+  margin: 0;
 }
 
 @keyframes fadeIn {
@@ -867,10 +917,18 @@ onUnmounted(() => {
   display: none;
 }
 
-.practice-feedback.correct {
+.practice-feedback.show {
   display: block;
+}
+
+.practice-feedback.correct {
   background: rgba(34, 197, 94, 0.2);
   color: #4ade80;
+}
+
+.practice-feedback:not(.correct) {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
 }
 
 /* Story */

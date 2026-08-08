@@ -194,6 +194,8 @@ export default {
     proceedToNext() {
       const next = nextQuestion();
       if (!next) {
+        // Game over — ensure final score is up to date
+        this.score = getScore();
         this.question = `🎉 Hoàn thành! Điểm: ${this.score}/100`;
         this.options = [];
         this.feedback = '';
@@ -208,7 +210,7 @@ export default {
     },
 
     handleBack() {
-      navigate('/english/hub');
+      navigate('/english');
     },
   },
 };

@@ -163,4 +163,19 @@ export const practiceSentences = [
   { name: 'Past Perfect', vi: 'Tôi đã ăn xong trước khi cô ấy đến.', en: 'I had eaten before she came', words: ['I', 'had', 'eaten', 'before', 'she', 'came'] },
   { name: 'Past Perfect', vi: 'Anh ấy đã đi ngủ khi tôi gọi.', en: 'He had gone to bed when I called', words: ['He', 'had', 'gone', 'to', 'bed', 'when', 'I', 'called'] },
   { name: 'Past Perfect', vi: 'Cô ấy đã hoàn thành bài tập trước giờ học.', en: 'She had finished the homework before class', words: ['She', 'had', 'finished', 'the', 'homework', 'before', 'class'] },
+
+  // Past Perfect Continuous
+  { name: 'Past Perfect Continuous', vi: 'Họ đã đợi 1 tiếng trước khi xe buýt đến.', en: 'They had been waiting for an hour before the bus came', words: ['They', 'had', 'been', 'waiting', 'for', 'an', 'hour', 'before', 'the', 'bus', 'came'] },
+  { name: 'Past Perfect Continuous', vi: 'Cô ấy đã học được 2 tiếng trước khi anh ấy đến.', en: 'She had been studying for 2 hours before he came', words: ['She', 'had', 'been', 'studying', 'for', '2', 'hours', 'before', 'he', 'came'] },
+
+  // Future Continuous
+  { name: 'Future Continuous', vi: 'Tôi sẽ đang học lúc 8 giờ tối mai.', en: 'I will be studying at 8 p.m. tomorrow', words: ['I', 'will', 'be', 'studying', 'at', '8', 'p.m.', 'tomorrow'] },
+  { name: 'Future Continuous', vi: 'Họ sẽ đang chơi bóng lúc này ngày mai.', en: 'They will be playing football at this time tomorrow', words: ['They', 'will', 'be', 'playing', 'football', 'at', 'this', 'time', 'tomorrow'] },
+
+  // Future Perfect
+  { name: 'Future Perfect', vi: 'Tôi sẽ hoàn thành dự án trước thứ Sáu.', en: 'I will have finished the project by Friday', words: ['I', 'will', 'have', 'finished', 'the', 'project', 'by', 'Friday'] },
+  { name: 'Future Perfect', vi: 'Cô ấy sẽ xong việc trước 5 giờ chiều.', en: 'She will have finished the work by 5 p.m.', words: ['She', 'will', 'have', 'finished', 'the', 'work', 'by', '5', 'p.m.'] },
+
+  // Future Perfect Continuous
+  { name: 'Future Perfect Continuous', vi: 'Vào tháng sau, tôi sẽ đã làm việc ở đây được 2 năm.', en: 'By next month I will have been working here for 2 years', words: ['By', 'next', 'month', 'I', 'will', 'have', 'been', 'working', 'here', 'for', '2', 'years'] },
 ];

@@ -27,6 +27,18 @@ export const vocabulary = [
   { en: 'Good morning', phonetic: '/ɡʊd ˈmɔːrnɪŋ/', vi: 'Chào buổi sáng', tag: 'greetings', exampleEn: '"Good morning, how are you?"', exampleVi: '"Chào buổi sáng, bạn khỏe không?"' },
   { en: 'Good night', phonetic: '/ɡʊd naɪt/', vi: 'Chúc ngủ ngon', tag: 'greetings', exampleEn: '"Good night, sweet dreams!"', exampleVi: '"Chúc ngủ ngon, mơ đẹp nhé!"' },
 
+  // Daily (Sinh hoạt hàng ngày)
+  { en: 'Wake up', phonetic: '/weɪk ʌp/', vi: 'Thức dậy', tag: 'daily', exampleEn: '"I wake up at 6 a.m. every day."', exampleVi: '"Tôi thức dậy lúc 6 giờ sáng mỗi ngày."' },
+  { en: 'Eat', phonetic: '/iːt/', vi: 'Ăn', tag: 'daily', exampleEn: '"I eat breakfast at 7 o\'clock."', exampleVi: '"Tôi ăn sáng lúc 7 giờ."' },
+  { en: 'Drink', phonetic: '/drɪŋk/', vi: 'Uống', tag: 'daily', exampleEn: '"I drink a glass of water every morning."', exampleVi: '"Tôi uống một cốc nước mỗi sáng."' },
+  { en: 'Sleep', phonetic: '/sliːp/', vi: 'Ngủ', tag: 'daily', exampleEn: '"I sleep 8 hours every night."', exampleVi: '"Tôi ngủ 8 tiếng mỗi đêm."' },
+  { en: 'Bath', phonetic: '/bæθ/', vi: 'Tắm', tag: 'daily', exampleEn: '"I take a bath before going to bed."', exampleVi: '"Tôi tắm trước khi đi ngủ."' },
+  { en: 'Brush teeth', phonetic: '/brʌʃ tiːθ/', vi: 'Đánh răng', tag: 'daily', exampleEn: '"I brush my teeth twice a day."', exampleVi: '"Tôi đánh răng hai lần mỗi ngày."' },
+  { en: 'Work', phonetic: '/wɜːrk/', vi: 'Đi làm', tag: 'daily', exampleEn: '"I go to work at 8 o\'clock."', exampleVi: '"Tôi đi làm lúc 8 giờ."' },
+  { en: 'Cook', phonetic: '/kʊk/', vi: 'Nấu ăn', tag: 'daily', exampleEn: '"I cook dinner for my family."', exampleVi: '"Tôi nấu bữa tối cho gia đình."' },
+  { en: 'Clean', phonetic: '/kliːn/', vi: 'Dọn dẹp', tag: 'daily', exampleEn: '"I clean the house on weekends."', exampleVi: '"Tôi dọn dẹp nhà cửa vào cuối tuần."' },
+  { en: 'Watch TV', phonetic: '/wɒtʃ tiː ˈviː/', vi: 'Xem TV', tag: 'daily', exampleEn: '"I watch TV in the evening."', exampleVi: '"Tôi xem TV vào buổi tối."' },
+
   // Food
   { en: 'Water', phonetic: '/ˈwɔːtər/', vi: 'Nước', tag: 'food', exampleEn: '"Can I have a glass of water?"', exampleVi: '"Tôi có thể xin một ly nước không?"' },
   { en: 'Coffee', phonetic: '/ˈkɒfi/', vi: 'Cà phê', tag: 'food', exampleEn: '"I drink coffee every morning."', exampleVi: '"Tôi uống cà phê mỗi sáng."' },

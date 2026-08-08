@@ -51,9 +51,11 @@ export function clickLetter(index) {
   return { letters: [...letters], answer: [...answer] };
 }
 
-export function undoLetter() {
+export function undoLetter(index) {
   if (answer.length === 0) return null;
-  const ch = answer.pop();
+  // If no index given (or index invalid), undo the last placed letter
+  const i = (typeof index === 'number' && index >= 0 && index < answer.length) ? index : answer.length - 1;
+  const ch = answer.splice(i, 1)[0];
   letters.push(ch);
   return { letters: [...letters], answer: [...answer] };
 }

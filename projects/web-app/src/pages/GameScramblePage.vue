@@ -43,7 +43,7 @@
         <p class="scramble-meaning" id="scramble-meaning">{{ meaning }}</p>
 
         <div class="practice-actions">
-          <button id="scramble-check" @click="checkAnswer">✅ Kiểm tra</button>
+          <button id="scramble-check" :disabled="answered" @click="checkAnswer">✅ Kiểm tra</button>
           <button id="scramble-next" @click="nextWord">Tiếp ➡️</button>
         </div>
 
@@ -82,6 +82,7 @@ export default {
       feedback: '',
       feedbackClass: 'practice-feedback',
       currentWord: null,
+      answered: false,
     };
   },
 
@@ -99,6 +100,7 @@ export default {
       this.meaning = '';
       this.feedback = '';
       this.feedbackClass = 'practice-feedback';
+      this.answered = false;
       const prog = getProgress();
       this.score = prog.score;
       this.current = prog.current;
@@ -115,7 +117,7 @@ export default {
     },
 
     handleAnswerClick(index) {
-      const result = undoLetter();
+      const result = undoLetter(index);
       if (result) {
         this.letters = result.letters;
         this.answer = result.answer;
@@ -123,8 +125,9 @@ export default {
     },
 
     checkAnswer() {
-      if (this.answer.length === 0) return;
+      if (this.answer.length === 0 || this.answered) return;
       const result = checkAnswerLogic();
+      this.answered = true;
       this.score = result.score;
 
       if (result.correct) {
@@ -152,6 +155,7 @@ export default {
       this.meaning = '';
       this.feedback = '';
       this.feedbackClass = 'practice-feedback';
+      this.answered = false;
       this.hint = `👆 Bấm vào chữ để xếp — từ này nghĩa là: ${next.word.vi}`;
       const prog = getProgress();
       this.current = prog.current;
@@ -159,7 +163,7 @@ export default {
     },
 
     handleBack() {
-      navigate('/english/hub');
+      navigate('/english');
     },
   },
 };
@@ -285,6 +289,11 @@ export default {
 
 .practice-actions button:first-child:hover {
   opacity: 0.9;
+}
+
+.practice-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .practice-feedback {

@@ -23,6 +23,7 @@ body {
   background: #08080e;
   min-height: 100vh;
   line-height: 1.6;
+  color-scheme: dark;
 }
 
 /* Custom scrollbar */
