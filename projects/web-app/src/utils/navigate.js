@@ -16,26 +16,31 @@ export function navigate(path, options = {}) {
   // E1: empty path → no-op
   if (!p) return;
 
+  // Split off any hash so we match the route path, then re-append it
+  const hashIndex = p.indexOf('#');
+  const hash = hashIndex >= 0 ? p.slice(hashIndex) : '';
+  const pathOnly = hashIndex >= 0 ? p.slice(0, hashIndex) : p;
+
   const target = options.target;
   if (target === 'router') {
     router.push(p).catch(() => {});
     return;
   }
   if (target === 'window') {
-    window.location.href = '/pages/' + p.slice(1) + '.html';
+    window.location.href = '/pages/' + pathOnly.slice(1) + '.html' + hash;
     return;
   }
   if (target === 'legacy') {
     // Legacy pages are in /pages/ folder with .html extension
-    const base = p.replace(/\/+/g, '/').replace(/^\//, '');
-    window.location.href = '/pages/' + base + '.html';
+    const base = pathOnly.replace(/\/+/g, '/').replace(/^\//, '');
+    window.location.href = '/pages/' + base + '.html' + hash;
     return;
   }
 
   // Mặc định: quyết định theo registry
-  if (PORTED_PAGES.includes(p)) {
+  if (PORTED_PAGES.includes(pathOnly)) {
     router.push(p).catch(() => {});
   } else {
-    window.location.href = '/pages/' + p.slice(1) + '.html';
+    window.location.href = '/pages/' + pathOnly.slice(1) + '.html' + hash;
   }
 }
