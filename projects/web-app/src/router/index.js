@@ -58,6 +58,11 @@ const routes = [
     component: () => import('../pages/CloudHubPage.vue'),
   },
   {
+    path: '/cloud/:sectionId',
+    name: 'cloud-section',
+    component: () => import('../pages/CloudSectionPage.vue'),
+  },
+  {
     path: '/english/hub',
     name: 'english-hub',
     component: () => import('../pages/EnglishHubPage.vue'),

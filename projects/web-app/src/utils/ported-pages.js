@@ -31,6 +31,11 @@ export const PORTED_PAGES = [
   '/java/backend',
 ];
 
+// Dynamic route prefixes that are always handled by the Vue router
+export const PORTED_PREFIXES = [
+  '/cloud/',
+];
+
 export const PORTED_PAGE_LABELS = {
   '/': 'Trang chủ',
   '/ai': 'Học AI',

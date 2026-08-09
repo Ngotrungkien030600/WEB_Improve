@@ -1,5 +1,5 @@
 import router from '../router/index.js';
-import { PORTED_PAGES } from './ported-pages.js';
+import { PORTED_PAGES, PORTED_PREFIXES } from './ported-pages.js';
 
 function normalize(path) {
   if (!path) return '';
@@ -38,7 +38,8 @@ export function navigate(path, options = {}) {
   }
 
   // Mặc định: quyết định theo registry
-  if (PORTED_PAGES.includes(pathOnly)) {
+  const isPorted = PORTED_PAGES.includes(pathOnly) || PORTED_PREFIXES.some(prefix => pathOnly.startsWith(prefix));
+  if (isPorted) {
     router.push(p).catch(() => {});
   } else {
     window.location.href = '/pages/' + pathOnly.slice(1) + '.html' + hash;
