@@ -96,8 +96,13 @@
           <!-- Learn Mode -->
           <div v-if="tenseMode === 'learn'" class="tense-container">
             <FlipCard
-              :front="{ title: tenseCard?.name, subtitle: tenseCard?.title, content: tenseCard?.form }"
-              :back="{ content: tenseCard?.exampleEn, subcontent: tenseCard?.exampleVi, note: tenseCard?.note }"
+              :front="{
+                title: tenseCard?.name,
+                subtitle: tenseCard?.title,
+                content: tenseCard?.form,
+                hint: tenseCard?.signal
+              }"
+              :back="{ examples: tenseCard?.examples, note: tenseCard?.note }"
               :flipped="tenseFlipped"
               @flip="tenseFlipped = !tenseFlipped"
             />

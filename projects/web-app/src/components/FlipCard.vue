@@ -22,7 +22,7 @@
             <p v-if="back.content" class="card-text">{{ back.content }}</p>
             <p v-if="back.subcontent" class="card-subtext">{{ back.subcontent }}</p>
           </template>
-          
+
           <template v-else-if="back.meaning">
             <div class="detail-section">
               <span class="detail-label">📖 Nghĩa</span>
@@ -40,6 +40,17 @@
               <span class="detail-label">📝 Ví dụ</span>
               <div class="examples">
                 <p v-for="(ex, i) in back.examples" :key="i" class="example">{{ ex }}</p>
+              </div>
+            </div>
+          </template>
+
+          <!-- Multiple EN-VI example pairs -->
+          <template v-else-if="back.examples && back.examples.length">
+            <span class="detail-label">📝 Ví dụ</span>
+            <div class="examples">
+              <div v-for="(ex, i) in back.examples" :key="i" class="example-pair">
+                <p class="example-en">{{ ex.en }}</p>
+                <p class="example-vi">{{ ex.vi }}</p>
               </div>
             </div>
           </template>
@@ -90,7 +101,7 @@ defineEmits(['flip']);
 .flip-card-inner {
   position: relative;
   width: 100%;
-  min-height: 280px;
+  min-height: 340px;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
@@ -104,11 +115,12 @@ defineEmits(['flip']);
   inset: 0;
   backface-visibility: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   border-radius: 20px;
   padding: 2rem;
-  min-height: 280px;
+  min-height: 340px;
+  overflow-y: auto;
 }
 
 .flip-card-front {
@@ -233,6 +245,29 @@ defineEmits(['flip']);
   font-size: 0.8rem;
   font-style: italic;
   margin: 0;
+}
+
+/* EN-VI example pairs */
+.example-pair {
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid rgba(255, 255, 255, 0.5);
+  border-radius: 0 8px 8px 0;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.example-pair .example-en {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.example-pair .example-vi {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-style: italic;
+  margin: 0.15rem 0 0;
 }
 
 /* Hover effect */
