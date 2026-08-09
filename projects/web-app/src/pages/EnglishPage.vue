@@ -66,6 +66,7 @@
             :vocab="currentVocab"
             :index="vocabIndex"
             :total="filteredVocab.length"
+            :flipped="vocabFlipped"
             @flip="vocabFlipped = !vocabFlipped"
             @prev="vocabPrev"
             @next="vocabNext"
