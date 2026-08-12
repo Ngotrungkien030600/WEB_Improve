@@ -118,6 +118,11 @@ const routes = [
     component: () => import('../pages/EnglishPage.vue'),
   },
   {
+    path: '/podcast',
+    name: 'podcast',
+    component: () => import('../pages/PodcastPage.vue'),
+  },
+  {
     path: '/learning-paths',
     name: 'learning-paths',
     component: () => import('../pages/LearningPathsPage.vue'),

@@ -32,6 +32,12 @@ import CHubCard from '../components/CHubCard.vue';
 
 const cards = [
   {
+    icon: '🎧',
+    title: 'Podcast',
+    description: 'Nghe podcast tiếng Anh',
+    path: '/podcast',
+  },
+  {
     icon: '📝',
     title: 'Từ vựng & Idioms',
     description: '86 từ 14 chủ đề, 48 idioms & phrasal verbs, flashcard lật',
