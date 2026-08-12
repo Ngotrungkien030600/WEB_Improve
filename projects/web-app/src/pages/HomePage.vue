@@ -68,6 +68,7 @@ const groups = [
       { icon: '☕', title: 'Java', description: 'Java core, Spring Boot, thực chiến, phỏng vấn backend.', path: '/java/hub' },
       { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, framework, responsive.', path: '/frontend/hub' },
       { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, S3, RDS, DevOps.', path: '/cloud' },
+      { icon: '🐳', title: 'DevOps', description: 'Docker, Kubernetes, CI/CD, Terraform, Monitoring.', path: '/devops' },
       { icon: '⚙️', title: 'Backend Engineering', description: 'SQL, Kafka, Docker, K8s, CI/CD, System Design.', path: '/java/backend' },
     ],
   },
@@ -76,6 +77,7 @@ const groups = [
     title: 'Tiếng Anh',
     items: [
       { icon: '🗣️', title: 'Tiếng Anh', description: 'Từ vựng, ngữ pháp, truyện, luyện thi.', path: '/english' },
+      { icon: '🎧', title: 'Podcast', description: 'Nghe podcast tiếng Anh.', path: '/podcast' },
       { icon: '🎓', title: 'Thi thử', description: 'Exam — kiểm tra trình độ theo chủ đề.', path: '/exam' },
       { icon: '💬', title: 'Luyện nói & Viết', description: 'Sentence Practice — luyện câu mỗi ngày.', path: '/sentence-practice' },
       { icon: '🎮', title: 'Game tiếng Anh', description: 'Ghép cặp, xếp chữ, trắc nghiệm nhanh.', path: '/game-memory' },

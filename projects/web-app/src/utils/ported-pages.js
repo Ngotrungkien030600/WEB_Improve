@@ -11,6 +11,7 @@ export const PORTED_PAGES = [
   '/frontend/responsive',
   '/frontend/ui-interview',
   '/cloud',
+  '/devops',
   '/english/hub',
   '/english',
   '/learning-paths',
@@ -29,11 +30,13 @@ export const PORTED_PAGES = [
   '/java/thuc-chien',
   '/java/spring-boot',
   '/java/backend',
+  '/podcast',
 ];
 
 // Dynamic route prefixes that are always handled by the Vue router
 export const PORTED_PREFIXES = [
   '/cloud/',
+  '/devops/',
 ];
 
 export const PORTED_PAGE_LABELS = {
@@ -64,4 +67,5 @@ export const PORTED_PAGE_LABELS = {
   '/java/thuc-chien': 'Thực chiến',
   '/java/spring-boot': 'Spring Boot',
   '/java/backend': 'Backend',
+  '/podcast': 'Podcast',
 };

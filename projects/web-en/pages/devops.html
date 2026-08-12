@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillForge — DevOps Học &amp; Ôn tập</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/variables.css" />
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/subpage.css" />
+  <link rel="stylesheet" href="../css/timer.css" />
+  <link rel="stylesheet" href="../css/learn.css" />
+  <link rel="stylesheet" href="../css/devops.css" />
+</head>
+<body class="subpage">
+  <div class="learn-page-container">
+    <header class="learn-topbar">
+      <h1>🐳 DevOps Học &amp; Ôn tập</h1>
+      <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+        <div class="forge-timer-wrap">
+          <div class="forge-timer-ring">
+            <svg viewBox="0 0 68 68">
+              <circle class="forge-ring-bg" cx="34" cy="34" r="30" />
+              <circle class="forge-ring-progress" id="forge-ring-progress" cx="34" cy="34" r="30" />
+            </svg>
+            <div class="forge-time" id="forge-time">30:00</div>
+          </div>
+          <div class="forge-controls">
+            <select id="forge-select">
+              <option value="30">30p</option>
+              <option value="60">1h</option>
+            </select>
+            <div class="forge-btn-row">
+              <button class="forge-btn forge-btn-primary" id="forge-toggle">⚒️</button>
+              <button class="forge-btn forge-btn-secondary" id="forge-reset">↻</button>
+            </div>
+          </div>
+          <div class="forge-stats">
+            <div class="forge-stat-row">📋 Hôm nay <span class="val fire" id="stat-today">0m</span></div>
+            <div class="forge-stat-row">🔥 Streak <span class="val" id="stat-streak">0🔥</span></div>
+            <div class="forge-stat-row">📦 Đã rèn <span class="val" id="stat-total">0</span></div>
+          </div>
+        </div>
+        <a class="back-link" href="devops/hub.html">⬅ DevOps</a>
+        <a class="back-link" href="../index.html">⬅ Trang chủ</a>
+      </div>
+    </header>
+
+    <div class="learn-layout">
+      <aside class="learn-sidebar">
+        <h3>📚 Bài học</h3>
+        <ul class="learn-topic-list" id="devops-topic-list"></ul>
+        <div class="learn-progress">
+          <span id="devops-progress-text">Tiến độ: 0 / 0</span>
+          <div class="learn-progress-bar"><div id="devops-progress-fill"></div></div>
+        </div>
+      </aside>
+      <div class="learn-content-wrapper">
+        <div class="learn-card" id="devops-card">
+          <h2 id="devops-topic-title">Chọn một bài học</h2>
+          <div id="devops-topic-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer">
+      <p>© 2026 SkillForge — DevOps</p>
+    </footer>
+  </div>
+
+  <script src="../js/utils/timer.js"></script>
+  <script src="../js/data/data-meta.js"></script>
+  <script src="../js/data/search-index.js"></script>
+  <script src="../js/data/spaced-repetition.js"></script>
+  <script src="../js/data/progress-db.js"></script>
+  <script src="../js/data/devops-data.js"></script>
+  <script type="module" src="../js/devops-app.js"></script>
+</body>
+</html>

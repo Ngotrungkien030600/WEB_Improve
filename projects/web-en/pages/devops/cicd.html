@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CI/CD — DevOps SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#34d399; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .links { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .topbar .links a { color:var(--accent); text-decoration:none; font-size:0.85rem; }
+    .topbar .links a:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2.5rem; font-size:0.95rem; }
+
+    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem; margin-bottom:2.5rem; }
+    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.7rem 1rem; text-decoration:none; color:var(--text); font-size:0.85rem; font-weight:500; transition:border-color 0.2s,color 0.2s; }
+    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+
+    .section { margin-bottom:3rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .section-title { background:var(--surface2); padding:0.9rem 1.25rem; font-size:1.1rem; font-weight:700; border-bottom:1px solid var(--border); }
+    .section-body { padding:1.25rem; }
+    .section-body h3 { font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; color:var(--accent); }
+    .section-body h3:first-child { margin-top:0; }
+    .section-body h4 { font-size:0.9rem; font-weight:600; margin:1rem 0 0.4rem; color:var(--text); }
+    .section-body p { font-size:0.9rem; color:var(--text2); margin-bottom:0.75rem; }
+    .section-body ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .section-body li { font-size:0.85rem; color:var(--text2); margin-bottom:0.3rem; }
+    .section-body strong { color:var(--text); }
+
+    pre { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; font-size:0.82rem; overflow-x:auto; margin:0.75rem 0; line-height:1.6; }
+    code { background:var(--surface2); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    pre code { background:transparent; padding:0; }
+
+    .diagram { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--accent); font-weight:600; line-height:2; font-family:monospace; }
+
+    .tag { display:inline-block; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.7rem; font-weight:600; margin-right:0.35rem; }
+    .tag-basic { background:rgba(52,211,153,0.1); color:#34d399; border:1px solid rgba(52,211,153,0.2); }
+    .tag-adv { background:rgba(255,153,0,0.1); color:#ff9900; border:1px solid rgba(255,153,0,0.2); }
+    .tag-interview { background:rgba(239,68,68,0.1); color:#ef4444; border:1px solid rgba(239,68,68,0.2); }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .card h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.25rem; }
+    .card p, .card li { font-size:0.8rem; color:var(--text2); }
+    .card ul { padding-left:1rem; }
+    .card li { margin-bottom:0.2rem; }
+
+    @media (max-width:600px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+  </style>
+  <link rel="stylesheet" href="../../../css/subpage.css" />
+</head>
+<body class="subpage">
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>🔄 CI/CD</h1>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">Jenkins vs GitHub Actions, pipeline stages, GitOps, quality gates, blue-green &amp; canary deploy — song ngữ EN-VI</p>
+    </div>
+    <div class="links">
+      <a href="hub.html">← DevOps</a>
+      <a href="../index.html">Trang chủ</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <a href="#concept">1. CI/CD là gì?</a>
+    <a href="#pipeline">2. Pipeline &amp; Stages</a>
+    <a href="#github-actions">3. GitHub Actions</a>
+    <a href="#jenkins">4. Jenkins</a>
+    <a href="#deploy">5. Deploy Strategies</a>
+    <a href="#gitops">6. GitOps &amp; ArgoCD</a>
+    <a href="#quality">7. Quality Gates</a>
+    <a href="#interview">8. Câu hỏi phỏng vấn</a>
+  </div>
+
+  <!-- ===== 1. Concept ===== -->
+  <div class="section" id="concept">
+    <div class="section-title">1. CI/CD là gì? (What is CI/CD?)</div>
+    <div class="section-body">
+      <h3>Khái niệm (Concept)</h3>
+      <p><strong>CI — Continuous Integration:</strong> Tự động merge code thường xuyên, build và test mỗi lần có thay đổi — phát hiện lỗi sớm. <em>(Frequently merge code, build and test on every change — catch bugs early.)</em></p>
+      <p><strong>CD — Continuous Delivery/Deployment:</strong> Tự động đưa artifact đã test đạt chuẩn ra môi trường production. Delivery = chờ người duyệt; Deployment = hoàn toàn tự động. <em>(Automatically ship tested artifacts to production. Delivery = manual approval gate; Deployment = fully automated.)</em></p>
+
+      <div class="diagram">
+        Code commit → Build → Test → (Quality gate) → Build image → Deploy staging → Deploy prod<br/>
+        [CI]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[CD]
+      </div>
+
+      <h3>Lợi ích (Benefits)</h3>
+      <div class="grid-3">
+        <div class="card"><h4>⚡ Phát hiện lỗi sớm</h4><p>Build/test tự động mỗi commit — bug bị bắt ngay, không chờ đến production.</p></div>
+        <div class="card"><h4>🚀 Release nhanh &amp; đều</h4><p>Pipeline chuẩn hóa — không còn "chạy trên máy tôi vẫn OK".</p></div>
+        <div class="card"><h4>🔁 Rollback dễ dàng</h4><p>Artifact đã version hóa — quay lại version cũ chỉ là 1 thao tác.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 2. Pipeline ===== -->
+  <div class="section" id="pipeline">
+    <div class="section-title">2. Pipeline &amp; Stages</div>
+    <div class="section-body">
+      <h3>Các stage điển hình (Typical Stages)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>1. Checkout</h4><p>Lấy source code từ git.</p></div>
+        <div class="card"><h4>2. Install deps</h4><p>Cài dependencies (npm ci, mvn dependency:go-offline).</p></div>
+        <div class="card"><h4>3. Lint &amp; Format</h4><p>Kiểm tra code style (ESLint, Checkstyle).</p></div>
+        <div class="card"><h4>4. Test</h4><p>Unit test + integration test + coverage.</p></div>
+        <div class="card"><h4>5. Build &amp; Package</h4><p>Compile, đóng gói artifact (jar, dist).</p></div>
+        <div class="card"><h4>6. Build image &amp; Push</h4><p>Docker build + push lên registry (ECR, GHCR).</p></div>
+        <div class="card"><h4>7. Deploy staging</h4><p>Triển khai môi trường test, chạy smoke tests.</p></div>
+        <div class="card"><h4>8. Deploy production</h4><p>Có thể qua approval gate hoặc tự động (canary).</p></div>
+      </div>
+
+      <h3>Pipeline as Code</h3>
+      <p>Pipeline nên được khai báo trong git (YAML) — version hóa, review được, dễ tái dùng. <em>(Pipelines should be declared in git as YAML — versioned, reviewable, reusable.)</em></p>
+      <ul>
+        <li>GitHub Actions: <code>.github/workflows/*.yml</code></li>
+        <li>GitLab CI: <code>.gitlab-ci.yml</code></li>
+        <li>Jenkins: Jenkinsfile (declarative)</li>
+        <li>CircleCI: <code>.circleci/config.yml</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 3. GitHub Actions ===== -->
+  <div class="section" id="github-actions">
+    <div class="section-title">3. GitHub Actions</div>
+    <div class="section-body">
+      <h3>Cấu trúc workflow</h3>
+      <p>Workflow = file YAML trong <code>.github/workflows/</code>, gồm <strong>events</strong> (trigger), <strong>jobs</strong> (chạy song song), <strong>steps</strong> (lệnh trong job). <em>(A workflow is a YAML file with events that trigger it, jobs that run in parallel, and steps inside each job.)</em></p>
+
+      <pre><code># .github/workflows/ci.yml
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Build with Maven
+        run: mvn -B package --no-transfer-progress
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar</code></pre>
+
+      <h3>CI/CD hoàn chỉnh với Docker</h3>
+      <pre><code>  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: myorg/myapp:${{ github.sha }}
+      - name: Deploy to server
+        run: ssh deploy@server "docker pull myorg/myapp:${{ github.sha }} && docker compose up -d"</code></pre>
+
+      <h3>Lưu ý</h3>
+      <ul>
+        <li>Secrets khai báo trong Settings → Secrets → dùng qua <code>${{ secrets.NAME }}</code>.</li>
+        <li>Dùng <code>needs:</code> để tạo dependency giữa jobs.</li>
+        <li>Cache dependencies (<code>actions/cache</code>) để pipeline nhanh hơn.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 4. Jenkins ===== -->
+  <div class="section" id="jenkins">
+    <div class="section-title">4. Jenkins</div>
+    <div class="section-body">
+      <h3>Jenkins là gì?</h3>
+      <p>Một CI/CD server tự-host truyền thống — cực kỳ linh hoạt nhờ hệ thống plugin khổng lồ. <em>(A traditional self-hosted CI/CD server — extremely flexible thanks to a huge plugin ecosystem.)</em></p>
+
+      <h3>Jenkinsfile (Declarative)</h3>
+      <pre><code>pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+        stage('Build') {
+            steps { sh 'mvn -B package -DskipTests' }
+        }
+        stage('Test') {
+            steps { sh 'mvn test' }
+        }
+        stage('Deploy') {
+            steps { sh './deploy.sh' }
+        }
+    }
+    post {
+        success { echo 'Build succeeded!' }
+        failure { echo 'Build failed!' }
+    }
+}</code></pre>
+
+      <h3>Jenkins vs GitHub Actions</h3>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:0.75rem;">
+        <tr style="background:var(--surface2);"><th style="text-align:left;padding:0.5rem;">Tiêu chí</th><th style="text-align:left;padding:0.5rem;">Jenkins</th><th style="text-align:left;padding:0.5rem;">GitHub Actions</th></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Hosting</td><td style="border:1px solid var(--border);padding:0.5rem;">Tự host (cần vận hành)</td><td style="border:1px solid var(--border);padding:0.5rem;">Cloud managed (miễn phí cho public repo)</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Cấu hình</td><td style="border:1px solid var(--border);padding:0.5rem;">Groovy (Jenkinsfile)</td><td style="border:1px solid var(--border);padding:0.5rem;">YAML (workflows)</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Plugin/Marketplace</td><td style="border:1px solid var(--border);padding:0.5rem;">~1800 plugins</td><td style="border:1px solid var(--border);padding:0.5rem;">Marketplace actions khổng lồ</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Phù hợp</td><td style="border:1px solid var(--border);padding:0.5rem;">Tự quản, on-prem, tùy biến sâu</td><td style="border:1px solid var(--border);padding:0.5rem;">Repo trên GitHub, setup nhanh</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== 5. Deploy Strategies ===== -->
+  <div class="section" id="deploy">
+    <div class="section-title">5. Deploy Strategies (Chiến lược triển khai)</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>🔄 Rolling Deploy</h4><p>Thay từng instance cũ bằng mới dần dần — không downtime nhưng trong lúc đó có 2 version song song.</p></div>
+        <div class="card"><h4>🔵🔵 Blue/Green</h4><p>2 môi trường giống hệt (blue = cũ, green = mới). Deploy green, test xong chuyển traffic sang green. Rollback = chuyển ngược lại. <em>Zero downtime, nhưng tốn gấp đôi tài nguyên.</em></p></div>
+        <div class="card"><h4>🟡 Canary</h4><p>Chuyển 5–10% traffic sang version mới trước, theo dõi metrics, rồi tăng dần lên 100%. Rủi ro thấp nhất.</p></div>
+        <div class="card"><h4>🌊 A/B Testing</h4><p>2 version khác nhau về tính năng, so sánh theo business metrics — thường không phải vì lý do kỹ thuật.</p></div>
+      </div>
+
+      <h3>So sánh nhanh (Quick Comparison)</h3>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:0.75rem;">
+        <tr style="background:var(--surface2);"><th style="text-align:left;padding:0.5rem;">Strategy</th><th style="text-align:left;padding:0.5rem;">Downtime</th><th style="text-align:left;padding:0.5rem;">Rollback</th><th style="text-align:left;padding:0.5rem;">Chi phí tài nguyên</th></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Rolling</td><td style="border:1px solid var(--border);padding:0.5rem;">Không (tạm 2 version)</td><td style="border:1px solid var(--border);padding:0.5rem;">Trung bình</td><td style="border:1px solid var(--border);padding:0.5rem;">+1</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Blue/Green</td><td style="border:1px solid var(--border);padding:0.5rem;">Không</td><td style="border:1px solid var(--border);padding:0.5rem;">Nhanh (chuyển traffic)</td><td style="border:1px solid var(--border);padding:0.5rem;">x2</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Canary</td><td style="border:1px solid var(--border);padding:0.5rem;">Không</td><td style="border:1px solid var(--border);padding:0.5rem;">Nhanh (tắt canary)</td><td style="border:1px solid var(--border);padding:0.5rem;">+nhỏ (1 version mới)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== 6. GitOps ===== -->
+  <div class="section" id="gitops">
+    <div class="section-title">6. GitOps &amp; ArgoCD</div>
+    <div class="section-body">
+      <h3>GitOps là gì?</h3>
+      <p>Git là <strong>single source of truth</strong> cho cả code lẫn cấu hình hạ tầng. Mọi thay đổi = pull request → merge → một operator tự động đồng bộ lên cluster. <em>(Git is the single source of truth for both code and infrastructure config. Every change is a PR; an operator auto-syncs it to the cluster.)</em></p>
+
+      <div class="diagram">
+        Dev push code → Git repo (app + manifests) → ArgoCD detects change → Sync → Cluster state matches git
+      </div>
+
+      <h3>Lợi ích (Benefits)</h3>
+      <ul>
+        <li><strong>Auditable:</strong> mọi thay đổi đều có PR + lịch sử git.</li>
+        <li><strong>Rollback:</strong> revert commit là revert deploy.</li>
+        <li><strong>Consistent:</strong> cluster luôn khớp với git (self-healing).</li>
+      </ul>
+
+      <h3>Công cụ (Tools)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>ArgoCD</h4><p>GitOps controller cho Kubernetes — sync manifests từ git, UI web, hỗ trợ multi-cluster, rollback tự động.</p></div>
+        <div class="card"><h4>Flux CD</h4><p>Alternate GitOps tool — family gồm kustomize-controller, helm-controller, image automation.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 7. Quality Gates ===== -->
+  <div class="section" id="quality">
+    <div class="section-title">7. Quality Gates</div>
+    <div class="section-body">
+      <h3>Quality Gate là gì?</h3>
+      <p>Ngưỡng chất lượng bắt buộc — pipeline <strong>fail</strong> nếu không đạt, ngăn artifact xấu lên production. <em>(Mandatory quality thresholds — the pipeline fails if not met, blocking bad artifacts from reaching production.)</em></p>
+
+      <div class="grid-2">
+        <div class="card"><h4>✅ Test coverage</h4><p>VD: coverage ≥ 80% (Jacoco, Istanbul). Dưới ngưỡng → fail.</p></div>
+        <div class="card"><h4>🔍 Static analysis</h4><p>SonarQube — bug, code smell, security hotspot, duplications.</p></div>
+        <div class="card"><h4>🔒 Security scan</h4><p>SAST (Semgrep, Snyk), dependency check (OWASP), container scan (Trivy).</p></div>
+        <div class="card"><h4>⚡ Performance check</h4><p>Load test (k6, JMeter) — ngưỡng latency/error rate.</p></div>
+      </div>
+
+      <pre><code># Ví dụ: chặn build nếu coverage thấp (Maven + Jacoco)
+mvn verify jacoco:check \
+  -Djacoco.minimum=0.8 \
+  -Djacoco.haltOnFailure=true</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 8. Interview ===== -->
+  <div class="section" id="interview">
+    <div class="section-title">8. Câu hỏi phỏng vấn (Interview Questions)</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>❓ CI vs CD?</h4><p>CI: build + test tự động mỗi commit. CD: tự động đưa artifact đạt chuẩn lên môi trường (Delivery = chờ duyệt, Deployment = tự động).</p></div>
+        <div class="card"><h4>❓ Blue/Green vs Canary?</h4><p>Blue/Green: 2 môi trường, chuyển toàn bộ traffic. Canary: chuyển từng phần nhỏ traffic để giảm rủi ro — an toàn hơn.</p></div>
+        <div class="card"><h4>❓ GitOps hoạt động thế nào?</h4><p>Git là nguồn chân lý; ArgoCD/Flux theo dõi repo và tự đồng bộ cluster khớp với git; rollback = revert commit.</p></div>
+        <div class="card"><h4>❓ Làm sao pipeline không "green on every push"?</h4><p>Quality gates: coverage ngưỡng, SonarQube, security scan, test thật — không chỉ build thành công.</p></div>
+        <div class="card"><h4>❓ Artifact versioning?</h4><p>Tag bằng commit SHA hoặc semantic version — reproducible builds, dễ rollback và trace.</p></div>
+        <div class="card"><h4>❓ Secrets trong pipeline?</h4><p>Dùng secrets vault (GitHub Secrets, Vault) — không bao giờ commit secret thật vào pipeline file.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

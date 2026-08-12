@@ -63,6 +63,16 @@ const routes = [
     component: () => import('../pages/CloudSectionPage.vue'),
   },
   {
+    path: '/devops',
+    name: 'devops',
+    component: () => import('../pages/DevopsHubPage.vue'),
+  },
+  {
+    path: '/devops/:topicId/:sectionId',
+    name: 'devops-section',
+    component: () => import('../pages/DevopsSectionPage.vue'),
+  },
+  {
     path: '/english/hub',
     name: 'english-hub',
     component: () => import('../pages/EnglishHubPage.vue'),
@@ -136,6 +146,11 @@ const routes = [
     path: '/bmad-agents',
     name: 'bmad-agents',
     component: () => import('../pages/BmadAgentsPage.vue'),
+  },
+  {
+    path: '/podcast',
+    name: 'podcast',
+    component: () => import('../pages/PodcastPage.vue'),
   },
   {
     path: '/dashboard',

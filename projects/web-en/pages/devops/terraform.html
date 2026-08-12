@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terraform — DevOps SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#7c3aed; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .links { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .topbar .links a { color:var(--accent); text-decoration:none; font-size:0.85rem; }
+    .topbar .links a:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2.5rem; font-size:0.95rem; }
+
+    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem; margin-bottom:2.5rem; }
+    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.7rem 1rem; text-decoration:none; color:var(--text); font-size:0.85rem; font-weight:500; transition:border-color 0.2s,color 0.2s; }
+    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+
+    .section { margin-bottom:3rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .section-title { background:var(--surface2); padding:0.9rem 1.25rem; font-size:1.1rem; font-weight:700; border-bottom:1px solid var(--border); }
+    .section-body { padding:1.25rem; }
+    .section-body h3 { font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; color:var(--accent); }
+    .section-body h3:first-child { margin-top:0; }
+    .section-body h4 { font-size:0.9rem; font-weight:600; margin:1rem 0 0.4rem; color:var(--text); }
+    .section-body p { font-size:0.9rem; color:var(--text2); margin-bottom:0.75rem; }
+    .section-body ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .section-body li { font-size:0.85rem; color:var(--text2); margin-bottom:0.3rem; }
+    .section-body strong { color:var(--text); }
+
+    pre { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; font-size:0.82rem; overflow-x:auto; margin:0.75rem 0; line-height:1.6; }
+    code { background:var(--surface2); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    pre code { background:transparent; padding:0; }
+
+    .diagram { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--accent); font-weight:600; line-height:2; font-family:monospace; }
+
+    .tag { display:inline-block; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.7rem; font-weight:600; margin-right:0.35rem; }
+    .tag-basic { background:rgba(124,58,237,0.1); color:#a78bfa; border:1px solid rgba(124,58,237,0.2); }
+    .tag-adv { background:rgba(255,153,0,0.1); color:#ff9900; border:1px solid rgba(255,153,0,0.2); }
+    .tag-interview { background:rgba(239,68,68,0.1); color:#ef4444; border:1px solid rgba(239,68,68,0.2); }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .card h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.25rem; }
+    .card p, .card li { font-size:0.8rem; color:var(--text2); }
+    .card ul { padding-left:1rem; }
+    .card li { margin-bottom:0.2rem; }
+
+    @media (max-width:600px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+  </style>
+  <link rel="stylesheet" href="../../../css/subpage.css" />
+</head>
+<body class="subpage">
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>🏗️ Terraform</h1>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">HCL, provider, resource, state, plan/apply, modules, remote state, workspaces — song ngữ EN-VI</p>
+    </div>
+    <div class="links">
+      <a href="hub.html">← DevOps</a>
+      <a href="../index.html">Trang chủ</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <a href="#iaac">1. IaC &amp; Terraform là gì?</a>
+    <a href="#hcl">2. HCL &amp; Cấu trúc file</a>
+    <a href="#lifecycle">3. Workflow: init/plan/apply</a>
+    <a href="#state">4. State &amp; Remote State</a>
+    <a href="#modules">5. Modules</a>
+    <a href="#variables">6. Variables &amp; Outputs</a>
+    <a href="#best-practices">7. Best Practices</a>
+    <a href="#interview">8. Câu hỏi phỏng vấn</a>
+  </div>
+
+  <!-- ===== 1. IaC ===== -->
+  <div class="section" id="iaac">
+    <div class="section-title">1. IaC &amp; Terraform là gì?</div>
+    <div class="section-body">
+      <h3>Infrastructure as Code (IaC)</h3>
+      <p>Quản lý hạ tầng (VMs, networks, databases) bằng code thay vì bấm tay trên console. Code được version hóa, review được, tái dùng được. <em>(Managing infrastructure via code instead of clicking in consoles — versioned, reviewable, reusable.)</em></p>
+
+      <div class="grid-2">
+        <div class="card"><h4>⚙️ Imperative (thủ tục)</h4><p>Mô tả <em>cách làm</em> từng bước. VD: Ansible, shell scripts. "Tạo VM, cài nginx, mở port 80..."</p></div>
+        <div class="card"><h4>📜 Declarative (khai báo)</h4><p>Mô tả <em>kết quả mong muốn</em>. VD: Terraform, CloudFormation. "Tôi muốn 1 VM có nginx chạy port 80."</p></div>
+      </div>
+
+      <h3>Vì sao chọn Terraform?</h3>
+      <ul>
+        <li><strong>Multi-cloud:</strong> AWS, GCP, Azure, Kubernetes, Cloudflare... qua provider.</li>
+        <li><strong>Declarative:</strong> bạn khai báo desired state, Terraform tính ra thay đổi cần làm.</li>
+        <li><strong>State-aware:</strong> biết chính xác tài nguyên nào đang tồn tại, tránh tạo trùng.</li>
+        <li><strong>Plan trước khi áp dụng:</strong> xem diff trước khi thay đổi thật.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 2. HCL ===== -->
+  <div class="section" id="hcl">
+    <div class="section-title">2. HCL &amp; Cấu trúc file</div>
+    <div class="section-body">
+      <h3>Cấu trúc cơ bản (Basic Structure)</h3>
+      <p>File <code>.tf</code> dùng ngôn ngữ <strong>HCL (HashiCorp Configuration Language)</strong> — đọc như JSON nhưng thân thiện hơn.</p>
+
+      <pre><code># main.tf
+terraform {
+  required_version = ">= 1.5"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "ap-southeast-1"
+}
+
+resource "aws_instance" "web" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t3.micro"
+  tags = {
+    Name = "web-server"
+  }
+}</code></pre>
+
+      <h3>Các khối chính (Key Blocks)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>terraform {}</h4><p>Khai báo required version, providers, backend (nơi lưu state).</p></div>
+        <div class="card"><h4>provider ""</h4><p>Cấu hình cloud provider (region, credentials). Provider biết cách tạo/tài nguyên trên cloud đó.</p></div>
+        <div class="card"><h4>resource "" ""</h4><p>Một tài nguyên cụ thể (EC2, S3 bucket, RDS...). Lõi của Terraform.</p></div>
+        <div class="card"><h4>data "" ""</h4><p>Đọc thông tin tài nguyên <em>đã tồn tại</em> (không tạo mới) để dùng trong code.</p></div>
+        <div class="card"><h4>variable / output</h4><p>Input parameters và giá trị trả ra sau apply (IP, endpoint...).</p></div>
+        <div class="card"><h4>module ""</h4><p>Đóng gói nhiều resources thành đơn vị tái dùng.</p></div>
+      </div>
+
+      <h3>Ví dụ thêm (More Examples)</h3>
+      <pre><code># S3 bucket
+resource "aws_s3_bucket" "data" {
+  bucket = "my-app-data-2026"
+}
+
+# Security group cho phép HTTP
+resource "aws_security_group" "web_sg" {
+  name = "web-sg"
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 3. Workflow ===== -->
+  <div class="section" id="lifecycle">
+    <div class="section-title">3. Workflow: init → plan → apply</div>
+    <div class="section-body">
+      <h3>Vòng đời Terraform (Terraform Lifecycle)</h3>
+      <div class="diagram">
+        terraform init → terraform plan → [review diff] → terraform apply → terraform destroy<br/>
+        [tải providers] [tính diff vs state] [thực thi] [xóa hạ tầng]
+      </div>
+
+      <div class="grid-3">
+        <div class="card"><h4>1. init</h4><p>Tải providers, modules, thiết lập backend state. Chạy 1 lần mỗi project.</p></div>
+        <div class="card"><h4>2. plan</h4><p>Tính toán thay đổi (create/update/delete) từ code vs state. Không thay đổi gì thật — an toàn để review.</p></div>
+        <div class="card"><h4>3. apply</h4><p>Thực thi thay đổi đã plan. Yêu cầu xác nhận (trừ khi <code>-auto-approve</code>).</p></div>
+      </div>
+
+      <pre><code>terraform init                 # 1. Chuẩn bị
+terraform fmt                 # Format code chuẩn
+terraform validate            # Kiểm tra syntax
+terraform plan -out plan.tfplan   # 2. Xem kế hoạch
+terraform apply plan.tfplan   # 3. Áp dụng đúng plan đã review
+terraform show                # Xem trạng thái hiện tại
+terraform destroy             # Xóa toàn bộ hạ tầng đã tạo</code></pre>
+
+      <h3>Lưu ý</h3>
+      <ul>
+        <li>Luôn <strong>review plan</strong> trước apply — nhất là dòng <code>-/+</code> (destroy + recreate) vì có thể gây downtime.</li>
+        <li>Không bao giờ sửa tài nguyên bằng tay trên console — Terraform sẽ xem đó là drift và có thể ghi đè.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 4. State ===== -->
+  <div class="section" id="state">
+    <div class="section-title">4. State &amp; Remote State</div>
+    <div class="section-body">
+      <h3>State là gì?</h3>
+      <p><strong>Terraform state</strong> (file <code>terraform.tfstate</code>) ghi lại ánh xạ giữa code và tài nguyên thực tế (resource ID, attributes). Đây là "nguồn chân lý" cho việc tính diff. <em>(The state file records the mapping between your code and real resources — the source of truth for computing diffs.)</em></p>
+
+      <h3>Tại sao cần remote state?</h3>
+      <ul>
+        <li><strong>Chia sẻ team:</strong> state local (máy cá nhân) → mỗi người có state khác nhau → xung đột.</li>
+        <li><strong>Backup &amp; an toàn:</strong> state chứa secret (password DB, keys) — nên lưu nơi an toàn.</li>
+        <li><strong>Locking:</strong> backend hỗ trợ khóa — 2 người không apply cùng lúc.</li>
+      </ul>
+
+      <pre><code># Backend S3 (state lưu trên AWS S3 + khóa qua DynamoDB)
+terraform {
+  backend "s3" {
+    bucket         = "my-terraform-state"
+    key            = "prod/network/terraform.tfstate"
+    region         = "ap-southeast-1"
+    dynamodb_table = "terraform-locks"
+    encrypt        = true
+  }
+}</code></pre>
+
+      <h3>State backends phổ biến</h3>
+      <div class="grid-2">
+        <div class="card"><h4>AWS S3 + DynamoDB</h4><p>Phổ biến nhất cho team dùng AWS — S3 lưu file, DynamoDB làm lock.</p></div>
+        <div class="card"><h4>GCS / Azure Storage</h4><p>Tương tự trên GCP/Azure.</p></div>
+        <div class="card"><h4>Terraform Cloud / HCP</h4><p>Managed state + remote runs, dễ integration với VCS.</p></div>
+      </div>
+
+      <h3>Lưu ý bảo mật</h3>
+      <ul>
+        <li>State có thể chứa secrets — đừng commit state local vào git.</li>
+        <li>Dùng <code>sensitive = true</code> cho variables/outputs nhạy cảm.</li>
+        <li>Bật encryption cho backend state (S3 server-side encryption).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 5. Modules ===== -->
+  <div class="section" id="modules">
+    <div class="section-title">5. Modules</div>
+    <div class="section-body">
+      <h3>Module là gì?</h3>
+      <p>A self-contained package of Terraform config that takes inputs and returns outputs — dùng để đóng gói hạ tầng tái dùng được (VD: module VPC, module EC2 cluster). <em>(A self-contained package of Terraform config with inputs/outputs — reusable infrastructure building blocks.)</em></p>
+
+      <pre><code># modules/vpc/main.tf — module VPC tái dùng
+variable "name"   { type = string }
+variable "cidr"   { type = string }
+variable "azs"    { type = list(string) }
+
+resource "aws_vpc" "this" {
+  cidr_block = var.cidr
+  tags = { Name = var.name }
+}
+
+output "vpc_id" { value = aws_vpc.this.id }</code></pre>
+
+      <pre><code># Sử dụng module trong root config
+module "vpc" {
+  source = "./modules/vpc"
+  name   = "main-vpc"
+  cidr   = "10.0.0.0/16"
+  azs    = ["ap-southeast-1a", "ap-southeast-1b"]
+}
+
+output "vpc_id" {
+  value = module.vpc.vpc_id
+}</code></pre>
+
+      <h3>Registry modules</h3>
+      <p>Dùng module công cộng từ <strong>Terraform Registry</strong> (hashicorp/terraform-aws-modules) — tiết kiệm thời gian, đã được cộng đồng kiểm chứng. <em>(Use public modules from the Terraform Registry — battle-tested, time-saving.)</em></p>
+      <pre><code>module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "5.0.0"
+  name = "my-vpc"
+  cidr = "10.0.0.0/16"
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 6. Variables & Outputs ===== -->
+  <div class="section" id="variables">
+    <div class="section-title">6. Variables &amp; Outputs</div>
+    <div class="section-body">
+      <h3>Input Variables</h3>
+      <p>Tham số hóa config — tránh hard-code, dễ tái dùng giữa các môi trường. <em>(Parameterize config — avoid hard-coding, reuse across environments.)</em></p>
+
+      <pre><code># variables.tf
+variable "environment" {
+  description = "Environment name"
+  type        = string
+  default     = "dev"
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t3.micro"
+}
+
+variable "tags" {
+  type = map(string)
+  default = {
+    Owner = "team-devops"
+  }
+}</code></pre>
+
+      <h3>Cách truyền giá trị (How to Pass Values)</h3>
+      <pre><code># 1. File terraform.tfvars (ưu tiên)
+environment = "prod"
+instance_type = "t3.large"
+
+# 2. CLI flag
+terraform apply -var="environment=prod" -var="instance_type=t3.large"
+
+# 3. Biến môi trường
+export TF_VAR_environment=prod</code></pre>
+
+      <h3>Outputs</h3>
+      <p>Trả ra giá trị sau apply — IP, endpoint, ID để dùng trong CI/CD hoặc module khác. <em>(Return values after apply — IPs, endpoints, IDs for CI/CD or other modules.)</em></p>
+      <pre><code>output "instance_ip" {
+  value       = aws_instance.web.public_ip
+  description = "Public IP of the web instance"
+  sensitive   = false
+}
+
+# Dùng trong CI/CD
+# terraform output instance_ip</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 7. Best Practices ===== -->
+  <div class="section" id="best-practices">
+    <div class="section-title">7. Best Practices</div>
+    <div class="section-body">
+      <h3>Quy tắc vàng (Golden Rules)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>✅ Nên làm</h4><ul>
+          <li>Chia môi trường bằng <strong>workspaces</strong> hoặc thư mục riêng (dev/staging/prod)</li>
+          <li>Dùng <strong>remote state</strong> + locking cho team</li>
+          <li>Pin <strong>version provider</strong> rõ ràng</li>
+          <li>Chạy <code>terraform plan</code> trong CI và yêu cầu review</li>
+          <li>Đặt tags chuẩn cho mọi resource (Name, Environment, Owner)</li>
+          <li>Dùng <code>terraform fmt</code> + <code>validate</code> trước commit</li>
+        </ul></div>
+        <div class="card"><h4>❌ Tránh</h4><ul>
+          <li>Hard-code secrets trong file .tf</li>
+          <li>Commit state local chứa secret</li>
+          <li>Sửa tài nguyên bằng tay trên console (drift)</li>
+          <li>Apply trực tiếp lên prod mà không plan/review</li>
+          <li>Dùng <code>latest</code> cho provider version</li>
+        </ul></div>
+      </div>
+
+      <h3>Workspaces</h3>
+      <p>Nhiều state riêng biệt trên cùng 1 config — tiện cho dev/staging/prod cùng code. <em>(Separate states on the same config — handy for dev/staging/prod.)</em></p>
+      <pre><code>terraform workspace new dev
+terraform workspace new prod
+terraform workspace select dev
+terraform apply</code></pre>
+
+      <h3>Terraform trong CI/CD</h3>
+      <pre><code># Ví dụ GitHub Actions workflow
+terraform init
+terraform validate
+terraform plan -out=plan.tfplan
+# ... review thủ công qua PR comment ...
+terraform apply -auto-approve plan.tfplan</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 8. Interview ===== -->
+  <div class="section" id="interview">
+    <div class="section-title">8. Câu hỏi phỏng vấn (Interview Questions)</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>❓ Terraform vs Ansible?</h4><p>Terraform: IaC declarative, tập trung <em>provisioning</em> hạ tầng (multi-cloud). Ansible: cả provisioning lẫn <em>configuration</em> bên trong server (imperative-ish, agentless). Thường dùng kết hợp.</p></div>
+        <div class="card"><h4>❓ State file là gì, vì sao quan trọng?</h4><p>Ghi ánh xạ code→tài nguyên thực tế. Quan trọng để tính diff chính xác, tránh tạo trùng. Nên lưu remote (S3 + DynamoDB lock).</p></div>
+        <div class="card"><h4>❓ plan vs apply?</h4><p>plan chỉ tính toán và hiển thị thay đổi (an toàn); apply thực thi thay đổi thật lên cloud.</p></div>
+        <div class="card"><h4>❓ Module dùng để làm gì?</h4><p>Đóng gói hạ tầng tái dùng (VPC, cluster) với inputs/outputs — giảm trùng lặp, chuẩn hóa kiến trúc.</p></div>
+        <div class="card"><h4>❓ Remote state lợi ích?</h4><p>Chia sẻ team, backup, locking chống apply song song, tách biệt môi trường.</p></div>
+        <div class="card"><h4>❓ Drift là gì?</h4><p>Trạng thái thực tế lệch với state/code (do sửa tay trên console). Terraform plan sẽ hiện drift và có thể khôi phục về desired state.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

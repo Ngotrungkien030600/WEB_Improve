@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS Cloud — DevOps SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#ff9900; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .links { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .topbar .links a { color:var(--accent); text-decoration:none; font-size:0.85rem; }
+    .topbar .links a:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2.5rem; font-size:0.95rem; }
+
+    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem; margin-bottom:2.5rem; }
+    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.7rem 1rem; text-decoration:none; color:var(--text); font-size:0.85rem; font-weight:500; transition:border-color 0.2s,color 0.2s; }
+    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+
+    .section { margin-bottom:3rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .section-title { background:var(--surface2); padding:0.9rem 1.25rem; font-size:1.1rem; font-weight:700; border-bottom:1px solid var(--border); }
+    .section-body { padding:1.25rem; }
+    .section-body h3 { font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; color:var(--accent); }
+    .section-body h3:first-child { margin-top:0; }
+    .section-body h4 { font-size:0.9rem; font-weight:600; margin:1rem 0 0.4rem; color:var(--text); }
+    .section-body p { font-size:0.9rem; color:var(--text2); margin-bottom:0.75rem; }
+    .section-body ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .section-body li { font-size:0.85rem; color:var(--text2); margin-bottom:0.3rem; }
+    .section-body strong { color:var(--text); }
+
+    pre { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; font-size:0.82rem; overflow-x:auto; margin:0.75rem 0; line-height:1.6; }
+    code { background:var(--surface2); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    pre code { background:transparent; padding:0; }
+
+    .diagram { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--accent); font-weight:600; line-height:2; font-family:monospace; }
+
+    .tag { display:inline-block; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.7rem; font-weight:600; margin-right:0.35rem; }
+    .tag-compute { background:rgba(255,153,0,0.1); color:#ff9900; border:1px solid rgba(255,153,0,0.2); }
+    .tag-storage { background:rgba(72,202,228,0.1); color:#48cae4; border:1px solid rgba(72,202,228,0.2); }
+    .tag-db { background:rgba(52,211,153,0.1); color:#34d399; border:1px solid rgba(52,211,153,0.2); }
+    .tag-net { background:rgba(244,114,182,0.1); color:#f472b6; border:1px solid rgba(244,114,182,0.2); }
+    .tag-sec { background:rgba(251,191,36,0.1); color:#fbbf24; border:1px solid rgba(251,191,36,0.2); }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .card h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.25rem; }
+    .card p, .card li { font-size:0.8rem; color:var(--text2); }
+    .card ul { padding-left:1rem; }
+    .card li { margin-bottom:0.2rem; }
+
+    @media (max-width:600px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+  </style>
+  <link rel="stylesheet" href="../../../css/subpage.css" />
+</head>
+<body class="subpage">
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>☁️ AWS Cloud</h1>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">Tổng quan các dịch vụ AWS cốt lõi cho DevOps — bản tóm tắt + liên kết tới deep-dive đầy đủ</p>
+    </div>
+    <div class="links">
+      <a href="hub.html">← DevOps</a>
+      <a href="../cloud.html">📖 AWS Foundations &amp; Core</a>
+      <a href="../index.html">Trang chủ</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <a href="#overview">1. Tổng quan dịch vụ</a>
+    <a href="#compute">2. Compute &amp; Serverless</a>
+    <a href="#storage">3. Storage &amp; Database</a>
+    <a href="#network">4. Networking &amp; Security</a>
+    <a href="#devops">5. AWS cho DevOps</a>
+    <a href="#interview">6. Câu hỏi phỏng vấn</a>
+  </div>
+
+  <!-- ===== 1. Overview ===== -->
+  <div class="section" id="overview">
+    <div class="section-title">1. Tổng quan dịch vụ (Service Overview)</div>
+    <div class="section-body">
+      <h3>Phân loại dịch vụ AWS</h3>
+      <div class="grid-2">
+        <div class="card"><h4>⚡ Compute</h4><p><span class="tag tag-compute">EC2</span> VM truyền thống<br/><span class="tag tag-compute">ECS/EKS</span> container orchestration<br/><span class="tag tag-compute">Lambda</span> serverless functions<br/><span class="tag tag-compute">ELB</span> load balancing</p></div>
+        <div class="card"><h4>🗄️ Storage &amp; Database</h4><p><span class="tag tag-storage">S3</span> object storage<br/><span class="tag tag-db">RDS</span> relational DB<br/><span class="tag tag-db">DynamoDB</span> NoSQL<br/><span class="tag tag-db">ElastiCache</span> Redis/Memcached</p></div>
+        <div class="card"><h4>🌐 Networking</h4><p><span class="tag tag-net">VPC</span> mạng ảo riêng<br/><span class="tag tag-net">Route 53</span> DNS<br/><span class="tag tag-net">CloudFront</span> CDN<br/><span class="tag tag-net">API Gateway</span> API layer</p></div>
+        <div class="card"><h4>🔐 Security &amp; Identity</h4><p><span class="tag tag-sec">IAM</span> quản lý quyền<br/><span class="tag tag-sec">KMS</span> mã hóa<br/><span class="tag tag-sec">Cognito</span> user auth<br/><span class="tag tag-sec">WAF</span> firewall web</p></div>
+      </div>
+
+      <p>👉 <strong>Deep-dive đầy đủ:</strong> <a href="../cloud.html" style="color:var(--accent);">AWS Cloud Foundations &amp; Core</a> — IAM, VPC, EC2, Lambda, ECS, S3, RDS/DynamoDB, CodePipeline, kiến trúc, Bastion. Trang này chỉ tóm tắt phần liên quan DevOps.</p>
+    </div>
+  </div>
+
+  <!-- ===== 2. Compute ===== -->
+  <div class="section" id="compute">
+    <div class="section-title">2. Compute &amp; Serverless</div>
+    <div class="section-body">
+      <h3>EC2 — Máy ảo truyền thống</h3>
+      <p>Chọn AMI (hệ điều hành) + instance type (CPU/RAM) + key pair (SSH). Trả theo giây — phù hợp workload cần kiểm soát đầy đủ, chạy app lâu dài. <em>(Pick an AMI, instance type, and key pair. Pay per second — full control, good for long-running apps.)</em></p>
+
+      <h3>ECS &amp; EKS — Container</h3>
+      <div class="grid-2">
+        <div class="card"><h4>ECS</h4><p>Managed container service riêng của AWS — đơn giản, dùng Fargate (không quản lý server) hoặc EC2. Task definitions + services.</p></div>
+        <div class="card"><h4>EKS</h4><p>Managed Kubernetes — chuẩn K8s nhưng AWS lo control plane. Hợp khi đã chuẩn hóa với K8s.</p></div>
+      </div>
+      <pre><code># ECS Task Definition (container đơn giản)
+{
+  "family": "myapp",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [{
+    "name": "myapp",
+    "image": "myorg/myapp:1.0",
+    "portMappings": [{ "containerPort": 8080 }],
+    "memory": 512,
+    "cpu": 256
+  }],
+  "requiresCompatibilities": ["FARGATE"]
+}</code></pre>
+
+      <h3>Lambda — Serverless</h3>
+      <p>Chạy code theo event, tự scale, trả tiền theo thời gian thực thi (ms). Giới hạn: timeout 15 phút, memory tối đa 10GB. <em>(Event-driven, auto-scaling, pay per execution. Limits: 15-min timeout, 10GB max memory.)</em></p>
+      <pre><code># Lambda handler (Node.js)
+exports.handler = async (event) => {
+  const userId = event.pathParameters.id;
+  // ... business logic ...
+  return { statusCode: 200, body: JSON.stringify({ ok: true, userId }) };
+};</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 3. Storage & DB ===== -->
+  <div class="section" id="storage">
+    <div class="section-title">3. Storage &amp; Database</div>
+    <div class="section-body">
+      <h3>S3 — Object Storage</h3>
+      <p>Lưu file không giới hạn, độ bền 99.999999999% (11 nines). Bucket + object + versioning + lifecycle policy + static website hosting. <em>(Unlimited object storage, 11-nines durability. Buckets, versioning, lifecycle policies, static hosting.)</em></p>
+      <pre><code># Lưu log/artifact từ pipeline
+aws s3 cp app.jar s3://my-artifacts/releases/app-1.0.jar
+aws s3 sync dist/ s3://my-static-site/</code></pre>
+
+      <h3>RDS vs DynamoDB</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🗄️ RDS (SQL)</h4><p>PostgreSQL, MySQL, SQL Server... Quan hệ, transaction, joins. Managed: auto backup, patching, multi-AZ, read replicas.</p></div>
+        <div class="card"><h4>⚡ DynamoDB (NoSQL)</h4><p>Key-value/document. Single-digit-ms latency, scale ngang không giới hạn. Phù hợp: session, cart, high-traffic.</p></div>
+      </div>
+
+      <h3>Khi nào chọn gì?</h3>
+      <ul>
+        <li>Cần join/transaction phức tạp → <strong>RDS</strong></li>
+        <li>Read-heavy, cần scale lớn, access pattern đơn giản → <strong>DynamoDB</strong></li>
+        <li>File, media, backup → <strong>S3</strong></li>
+        <li>Cache, session → <strong>ElastiCache (Redis)</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 4. Networking ===== -->
+  <div class="section" id="network">
+    <div class="section-title">4. Networking &amp; Security</div>
+    <div class="section-body">
+      <h3>VPC — Mạng ảo riêng</h3>
+      <p>Mỗi tài khoản có VPC mặc định. Chia subnet: <strong>public</strong> (có Internet Gateway) và <strong>private</strong> (không truy cập internet trực tiếp — qua NAT Gateway). <em>(Default VPC per account. Subnets: public with IGW, private without direct internet — via NAT Gateway.)</em></p>
+      <pre><code># Cấu trúc VPC chuẩn (multi-AZ)
+VPC 10.0.0.0/16
+├── Public subnet  (10.0.1.0/24) — ALB, Bastion
+├── Private subnet (10.0.2.0/24) — EC2 app
+├── Private subnet (10.0.3.0/24) — RDS (không internet)
+└── NAT Gateway + Internet Gateway</code></pre>
+
+      <h3>Security Groups vs NACL</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🛡️ Security Group</h4><p>Stateful firewall cấp instance — chỉ allow rules. Dòng trả lời tự động được phép. Gắn vào EC2/ALB/RDS.</p></div>
+        <div class="card"><h4>📋 NACL</h4><p>Stateless firewall cấp subnet — có allow + deny. Cần khai báo cả chiều vào/ra. Lớp phòng thủ thứ 2.</p></div>
+      </div>
+
+      <h3>IAM — Quản lý quyền</h3>
+      <p>Mọi thao tác AWS đi qua IAM: <strong>Users</strong> (người), <strong>Roles</strong> (quyền tạm cho service/EC2/Lambda), <strong>Policies</strong> (JSON quy định quyền). <em>(All AWS operations go through IAM: users, roles, policies.)</em></p>
+      <pre><code># Policy tối thiểu cho EC2 đọc S3
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": ["s3:GetObject", "s3:ListBucket"],
+    "Resource": ["arn:aws:s3:::my-bucket", "arn:aws:s3:::my-bucket/*"]
+  }]
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 5. AWS DevOps ===== -->
+  <div class="section" id="devops">
+    <div class="section-title">5. AWS cho DevOps</div>
+    <div class="section-body">
+      <h3>Bộ công cụ CI/CD của AWS</h3>
+      <div class="diagram">
+        CodeCommit (repo) → CodeBuild (build) → CodePipeline (orchestrate) → CodeDeploy (deploy EC2/Lambda/ECS)
+      </div>
+      <div class="grid-3">
+        <div class="card"><h4>CodePipeline</h4><p>Orchestrate toàn bộ release — trigger từ push, chạy qua build/test/deploy.</p></div>
+        <div class="card"><h4>CodeBuild</h4><p>Managed build service — compile, test, tạo artifact. Trả theo phút build.</p></div>
+        <div class="card"><h4>CodeDeploy</h4><p>Deploy app lên EC2/ECS/Lambda — hỗ trợ rolling, blue/green.</p></div>
+      </div>
+
+      <h3>IaC trên AWS</h3>
+      <div class="grid-2">
+        <div class="card"><h4>CloudFormation</h4><p>IaC native AWS (YAML/JSON) — deploy stack gồm nhiều resources. Có CloudFormation Designer, StackSets.</p></div>
+        <div class="card"><h4>Terraform + AWS</h4><p>IaC đa nền tảng — dùng provider AWS. Ưu tiên nếu team multi-cloud hoặc muốn chuẩn chung.</p></div>
+      </div>
+
+      <h3>Monitoring AWS</h3>
+      <ul>
+        <li><strong>CloudWatch</strong> — metrics, logs, alarms, dashboards.</li>
+        <li><strong>X-Ray</strong> — distributed tracing cho Lambda/ECS/API Gateway.</li>
+        <li><strong>CloudTrail</strong> — audit log mọi API call (bảo mật/compliance).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 6. Interview ===== -->
+  <div class="section" id="interview">
+    <div class="section-title">6. Câu hỏi phỏng vấn (Interview Questions)</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>❓ EC2 vs Lambda?</h4><p>EC2: VM có kiểm soát, chạy liên tục, trả theo giây — workload dài. Lambda: serverless theo event, tự scale, trả theo ms — workload ngắn, không quản lý server.</p></div>
+        <div class="card"><h4>❓ RDS vs DynamoDB?</h4><p>RDS = SQL quan hệ, transaction, join. DynamoDB = NoSQL key-value, latency thấp, scale ngang lớn.</p></div>
+        <div class="card"><h4>❓ S3 dùng làm gì trong DevOps?</h4><p>Lưu artifact build, backup, static website, Terraform remote state, log. Độ bền 11 nines, rẻ.</p></div>
+        <div class="card"><h4>❓ IAM Role vs User?</h4><p>User gắn credentials cố định cho người. Role cấp quyền tạm thời cho service (EC2, Lambda) — an toàn hơn, tự rotate.</p></div>
+        <div class="card"><h4>❓ VPC private subnet truy cập internet?</h4><p>Qua NAT Gateway (NAT chỉ cho đi ra, không cho vào) — app trong private vẫn cập nhật package được mà không lộ port.</p></div>
+        <div class="card"><h4>❓ CloudFormation vs Terraform?</h4><p>CloudFormation: native AWS, đơn giản cho stack AWS. Terraform: multi-cloud, state management, modules — chuẩn hóa hơn cho team lớn.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

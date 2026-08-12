@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker — DevOps SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#2496ed; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .links { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .topbar .links a { color:var(--accent); text-decoration:none; font-size:0.85rem; }
+    .topbar .links a:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2.5rem; font-size:0.95rem; }
+
+    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem; margin-bottom:2.5rem; }
+    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.7rem 1rem; text-decoration:none; color:var(--text); font-size:0.85rem; font-weight:500; transition:border-color 0.2s,color 0.2s; }
+    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+
+    .section { margin-bottom:3rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .section-title { background:var(--surface2); padding:0.9rem 1.25rem; font-size:1.1rem; font-weight:700; border-bottom:1px solid var(--border); }
+    .section-body { padding:1.25rem; }
+    .section-body h3 { font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; color:var(--accent); }
+    .section-body h3:first-child { margin-top:0; }
+    .section-body h4 { font-size:0.9rem; font-weight:600; margin:1rem 0 0.4rem; color:var(--text); }
+    .section-body p { font-size:0.9rem; color:var(--text2); margin-bottom:0.75rem; }
+    .section-body ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .section-body li { font-size:0.85rem; color:var(--text2); margin-bottom:0.3rem; }
+    .section-body strong { color:var(--text); }
+
+    pre { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; font-size:0.82rem; overflow-x:auto; margin:0.75rem 0; line-height:1.6; }
+    code { background:var(--surface2); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    pre code { background:transparent; padding:0; }
+
+    .diagram { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--accent); font-weight:600; line-height:2; font-family:monospace; }
+
+    .tag { display:inline-block; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.7rem; font-weight:600; margin-right:0.35rem; }
+    .tag-basic { background:rgba(36,150,237,0.1); color:#2496ed; border:1px solid rgba(36,150,237,0.2); }
+    .tag-adv { background:rgba(255,153,0,0.1); color:#ff9900; border:1px solid rgba(255,153,0,0.2); }
+    .tag-interview { background:rgba(239,68,68,0.1); color:#ef4444; border:1px solid rgba(239,68,68,0.2); }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .card h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.25rem; }
+    .card p, .card li { font-size:0.8rem; color:var(--text2); }
+    .card ul { padding-left:1rem; }
+    .card li { margin-bottom:0.2rem; }
+
+    @media (max-width:600px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+  </style>
+  <link rel="stylesheet" href="../../../css/subpage.css" />
+</head>
+<body class="subpage">
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>🐳 Docker</h1>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">Image &amp; Container, Dockerfile, Compose, Volume, Network, multi-stage build — song ngữ EN-VI</p>
+    </div>
+    <div class="links">
+      <a href="hub.html">← DevOps</a>
+      <a href="../index.html">Trang chủ</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <a href="#image-container">1. Image vs Container</a>
+    <a href="#dockerfile">2. Dockerfile</a>
+    <a href="#compose">3. Docker Compose</a>
+    <a href="#volume">4. Volume &amp; Persistent Data</a>
+    <a href="#network">5. Network</a>
+    <a href="#multistage">6. Multi-stage Build</a>
+    <a href="#best-practices">7. Best Practices</a>
+    <a href="#interview">8. Câu hỏi phỏng vấn</a>
+  </div>
+
+  <!-- ===== 1. Image vs Container ===== -->
+  <div class="section" id="image-container">
+    <div class="section-title">1. Image vs Container</div>
+    <div class="section-body">
+      <h3>Khái niệm (Concept)</h3>
+      <p><strong>Image (Ảnh container):</strong> A read-only template that contains the application and everything it needs to run — code, runtime, libraries, environment variables, config files. <em>(Một bản mẫu chỉ-đọc chứa ứng dụng và mọi thứ cần để chạy — code, runtime, thư viện, biến môi trường, cấu hình.)</em></p>
+      <p><strong>Container (Container):</strong> A running instance of an image — an isolated process with its own filesystem, network, and resources. <em>(Một instance đang chạy của image — một tiến trình cô lập với filesystem, network và tài nguyên riêng.)</em></p>
+
+      <div class="diagram">
+        Dockerfile ──build──▶ Image ──run──▶ Container(s)<br/>
+        [template, read-only, shareable]&nbsp;&nbsp;&nbsp;&nbsp;[process, writable, isolated]
+      </div>
+
+      <h3>Bảng so sánh (Comparison)</h3>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:0.75rem;">
+        <tr style="background:var(--surface2);"><th style="text-align:left;padding:0.5rem;">Image</th><th style="text-align:left;padding:0.5rem;">Container</th></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Template read-only (bản mẫu chỉ-đọc)</td><td style="border:1px solid var(--border);padding:0.5rem;">Instance đang chạy (instance running)</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Giống class trong OOP</td><td style="border:1px solid var(--border);padding:0.5rem;">Giống object được tạo từ class</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Push/pull từ registry (Docker Hub)</td><td style="border:1px solid var(--border);padding:0.5rem;">Start, stop, restart, delete</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Có thể share giữa nhiều máy</td><td style="border:1px solid var(--border);padding:0.5rem;">Chạy trên máy có Docker engine</td></tr>
+      </table>
+
+      <h3>Container vs VM (Tại sao container nhẹ hơn?)</h3>
+      <ul>
+        <li><strong>VM:</strong> Mỗi máy ảo chứa cả OS (Guest OS) — nặng, khởi động chậm (phút).</li>
+        <li><strong>Container:</strong> Chia sẻ kernel của host OS — chỉ chứa app + dependencies — nhẹ, khởi động trong (giây).</li>
+        <li>Container dùng <strong>namespace</strong> (cô lập tiến trình/filesystem/network) và <strong>cgroups</strong> (giới hạn CPU/RAM).</li>
+      </ul>
+
+      <h3>Lệnh cơ bản (Basic Commands)</h3>
+      <pre><code>docker pull nginx:alpine        # Tải image từ registry
+docker images                   # Liệt kê images
+docker run -d -p 8080:80 --name web nginx
+docker ps                       # Liệt kê containers đang chạy
+docker ps -a                    # Tất cả containers (kể cả đã dừng)
+docker logs web                 # Xem log
+docker exec -it web sh          # Vào bên trong container
+docker stop web && docker rm web
+docker rmi nginx:alpine         # Xóa image</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 2. Dockerfile ===== -->
+  <div class="section" id="dockerfile">
+    <div class="section-title">2. Dockerfile</div>
+    <div class="section-body">
+      <h3>Dockerfile là gì?</h3>
+      <p>A text file with instructions that defines how to build an image. <em>(Một file văn bản chứa các chỉ dẫn định nghĩa cách build một image.)</em></p>
+
+      <pre><code># Ví dụ: Dockerfile cho Spring Boot app
+FROM eclipse-temurin:17-jdk-alpine   # Base image (runtime)
+WORKDIR /app                          # Thư mục làm việc
+COPY target/app.jar app.jar           # Copy file vào image
+EXPOSE 8080                           # Khai báo cổng lắng nghe
+ENTRYPOINT ["java", "-jar", "app.jar"] # Lệnh chạy khi container khởi động</code></pre>
+
+      <h3>Các chỉ dẫn quan trọng (Key Instructions)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>FROM</h4><p>Chọn base image — bắt buộc phải có đầu tiên. Nên dùng bản alpine (nhẹ).</p></div>
+        <div class="card"><h4>RUN</h4><p>Chạy lệnh lúc build (cài package, compile). Mỗi RUN tạo một layer.</p></div>
+        <div class="card"><h4>COPY / ADD</h4><p>Copy file từ host vào image. ADD còn hỗ trợ URL/auto-extract — ưu tiên COPY.</p></div>
+        <div class="card"><h4>ENV / ARG</h4><p>ENV: biến môi trường (tồn tại lúc runtime). ARG: biến chỉ dùng lúc build.</p></div>
+        <div class="card"><h4>CMD / ENTRYPOINT</h4><p>Đều khai báo lệnh chạy. CMD bị ghi đè khi chạy, ENTRYPOINT thì không. Thường kết hợp cả hai.</p></div>
+        <div class="card"><h4>EXPOSE</h4><p>Chỉ là <em>documentation</em> — cổng thực sự mở khi dùng <code>-p</code> lúc run.</p></div>
+      </div>
+
+      <h3>Layer &amp; Cache (Lớp và bộ nhớ đệm)</h3>
+      <p>Mỗi lệnh Dockerfile tạo một <strong>layer</strong>. Docker cache từng layer — nếu layer không đổi, Docker tái dùng kết quả. <strong>Thứ tự quan trọng:</strong> đặt các bước ít thay đổi (cài dependencies) lên trước để tận dụng cache.</p>
+      <pre><code># Tối ưu: copy package file trước, cài deps, rồi mới copy source
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci                     # Chỉ build lại khi package thay đổi
+COPY . .
+RUN npm run build
+CMD ["npm", "start"]</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 3. Docker Compose ===== -->
+  <div class="section" id="compose">
+    <div class="section-title">3. Docker Compose</div>
+    <div class="section-body">
+      <h3>Compose là gì?</h3>
+      <p>A tool to define and run multi-container applications with a single YAML file. <em>(Công cụ định nghĩa và chạy ứng dụng nhiều container bằng một file YAML duy nhất.)</em></p>
+
+      <pre><code># docker-compose.yml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydb
+    depends_on:
+      - db
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: mydb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:</code></pre>
+
+      <h3>Lệnh Compose (Compose Commands)</h3>
+      <pre><code>docker compose up -d        # Build + start tất cả services
+docker compose down         # Stop + xóa containers (giữ volume)
+docker compose down -v      # Xóa luôn volumes
+docker compose ps           # Xem trạng thái
+docker compose logs -f      # Xem log tất cả services
+docker compose exec app sh  # Chạy lệnh trong service app</code></pre>
+
+      <h3>Lưu ý (Notes)</h3>
+      <ul>
+        <li>Các service trong cùng compose tự động nằm chung 1 network — gọi nhau qua <strong>tên service</strong> (vd: <code>db:5432</code>).</li>
+        <li><code>depends_on</code> chỉ đảm bảo thứ tự khởi động, <strong>không đợi service sẵn sàng</strong> — cần healthcheck nếu muốn chờ.</li>
+        <li>Biến môi trường có thể ngoại suy qua file <code>.env</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 4. Volume ===== -->
+  <div class="section" id="volume">
+    <div class="section-title">4. Volume &amp; Persistent Data</div>
+    <div class="section-body">
+      <h3>Tại sao cần volume?</h3>
+      <p>Container filesystem là <strong>tạm thời</strong> — dữ liệu mất khi container bị xóa. <strong>Volumes</strong> lưu dữ liệu ở host, sống sót qua vòng đời container. <em>(Container filesystem is ephemeral — data is lost when the container is removed. Volumes store data on the host and survive the container lifecycle.)</em></p>
+
+      <div class="diagram">
+        Container (writable layer — mất khi xóa container)<br/>
+        └── Volume (lưu trên host — bền vững)  /  Bind Mount (thư mục host)
+      </div>
+
+      <h3>3 loại lưu trữ (3 Storage Types)</h3>
+      <div class="grid-3">
+        <div class="card"><h4>📦 Named Volume</h4><p>Quản lý bởi Docker (<code>/var/lib/docker/volumes</code>). Khuyến nghị cho DB, dữ liệu app.</p></div>
+        <div class="card"><h4>🔗 Bind Mount</h4><p>Trỏ trực tiếp tới thư mục host — thường dùng cho dev (hot-reload code).</p></div>
+        <div class="card"><h4>💾 tmpfs</h4><p>Lưu trong RAM — nhanh nhưng mất khi container dừng. Dùng cho cache.</p></div>
+      </div>
+
+      <pre><code># Named volume
+docker run -d -v pgdata:/var/lib/postgresql/data postgres
+
+# Bind mount (dev) — thư mục host:thư mục container
+docker run -d -v $(pwd)/src:/app/src node:20</code></pre>
+
+      <h3>Lệnh volume (Volume Commands)</h3>
+      <pre><code>docker volume ls
+docker volume create mydata
+docker volume inspect mydata
+docker volume rm mydata</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 5. Network ===== -->
+  <div class="section" id="network">
+    <div class="section-title">5. Network</div>
+    <div class="section-body">
+      <h3>Các loại network driver</h3>
+      <div class="grid-2">
+        <div class="card"><h4>bridge (mặc định)</h4><p>Mỗi container có IP riêng trong subnet nội bộ. Container cùng bridge giao tiếp được với nhau qua IP/tên.</p></div>
+        <div class="card"><h4>host</h4><p>Container dùng thẳng network của host — không có NAT. Hiệu năng cao, nhưng không cô lập port.</p></div>
+        <div class="card"><h4>none</h4><p>Không có network — cô lập hoàn toàn. Dùng cho tasks nhạy cảm.</p></div>
+        <div class="card"><h4>overlay</h4><p>Dùng cho multi-host (Docker Swarm / K8s) — container ở máy khác nhau vẫn nói chuyện được.</p></div>
+      </div>
+
+      <h3>Lệnh network (Network Commands)</h3>
+      <pre><code>docker network ls
+docker network create mynet
+docker run -d --network mynet nginx
+docker network inspect mynet</code></pre>
+
+      <h3>Port mapping (Ánh xạ cổng)</h3>
+      <pre><code># -p host_port:container_port
+docker run -d -p 8080:80 nginx   # Truy cập localhost:8080 → container:80
+docker run -d -p 3000:3000 myapp
+docker run -d -p 80:80 -p 443:443 nginx   # Nhiều cổng</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 6. Multi-stage Build ===== -->
+  <div class="section" id="multistage">
+    <div class="section-title">6. Multi-stage Build</div>
+    <div class="section-body">
+      <h3>Tại sao multi-stage?</h3>
+      <p>Build app cần đầy đủ toolchain (JDK, npm, compilers) nhưng image chạy chỉ cần runtime. <strong>Multi-stage build</strong> tách build và runtime thành 2 stage — image cuối nhỏ gọn, an toàn hơn. <em>(Why multi-stage? Building needs the full toolchain, but the runtime image only needs the runtime. Multi-stage separates build and runtime into two stages — the final image is smaller and more secure.)</em></p>
+
+      <pre><code># Stage 1: BUILD — đầy đủ toolchain
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Stage 2: RUN — chỉ runtime
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]</code></pre>
+
+      <h3>Ví dụ Java</h3>
+      <pre><code># Stage 1: compile
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
+
+# Stage 2: runtime chỉ với JRE
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 7. Best Practices ===== -->
+  <div class="section" id="best-practices">
+    <div class="section-title">7. Best Practices</div>
+    <div class="section-body">
+      <h3>Quy tắc vàng (Golden Rules)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>✅ Nên làm</h4><ul>
+          <li>Dùng base image alpine/nhỏ gọn</li>
+          <li>Multi-stage build để giảm kích thước</li>
+          <li>Sắp xếp lệnh ít thay đổi trước để tận dụng cache</li>
+          <li>Chạy container với user non-root</li>
+          <li>Khai báo HEALTHCHECK</li>
+          <li>Dùng <code>.dockerignore</code> loại bỏ file không cần thiết</li>
+        </ul></div>
+        <div class="card"><h4>❌ Tránh</h4><ul>
+          <li>Dùng tag <code>latest</code> mơ hồ — pin version cụ thể</li>
+          <li>Chạy container với root</li>
+          <li>Chứa secrets (password/keys) trong image</li>
+          <li>Một container chứa nhiều process</li>
+          <li>Dùng ADD khi chỉ cần COPY</li>
+        </ul></div>
+      </div>
+
+      <h3>HEALTHCHECK &amp; .dockerignore</h3>
+      <pre><code>HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1</code></pre>
+      <pre><code># .dockerignore
+node_modules
+.git
+target
+dist
+*.log</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 8. Interview ===== -->
+  <div class="section" id="interview">
+    <div class="section-title">8. Câu hỏi phỏng vấn (Interview Questions)</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>❓ Image vs Container khác gì?</h4><p>Image là template read-only, container là instance đang chạy. Image có thể build/share, container có lifecycle (start/stop).</p></div>
+        <div class="card"><h4>❓ Container khác VM thế nào?</h4><p>VM có Guest OS riêng (heavy), container share kernel host — nhẹ hơn, khởi động nhanh hơn, dùng namespace + cgroups để cô lập.</p></div>
+        <div class="card"><h4>❓ Dockerfile layer là gì?</h4><p>Mỗi instruction tạo 1 layer bất biến. Docker cache từng layer để build nhanh hơn khi không đổi.</p></div>
+        <div class="card"><h4>❓ CMD vs ENTRYPOINT?</h4><p>CMD có thể bị ghi đè khi run, ENTRYPOINT không. Thường ENTRYPOINT cố định lệnh, CMD cung cấp default args.</p></div>
+        <div class="card"><h4>❓ Làm sao giữ dữ liệu khi container xóa?</h4><p>Dùng volume (named volume / bind mount) — dữ liệu nằm trên host, không phụ thuộc vòng đời container.</p></div>
+        <div class="card"><h4>❓ Multi-stage build lợi ích gì?</h4><p>Image cuối chỉ chứa runtime, không chứa toolchain build — nhỏ hơn, ít bề mặt tấn công hơn.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

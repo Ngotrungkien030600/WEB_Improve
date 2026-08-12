@@ -33,6 +33,11 @@ const DEFAULT_SKILLS = [
   // DevOps
   { id: 'git', category: 'devops', name: 'Git', icon: '🔀', description: 'Version control', level: 1, xp: 0 },
   { id: 'docker', category: 'devops', name: 'Docker', icon: '🐳', description: 'Containerization', level: 0, xp: 0 },
+  { id: 'kubernetes', category: 'devops', name: 'Kubernetes', icon: '☸️', description: 'Container orchestration', level: 0, xp: 0 },
+  { id: 'cicd', category: 'devops', name: 'CI/CD', icon: '🔄', description: 'Automated pipelines', level: 0, xp: 0 },
+  { id: 'terraform', category: 'devops', name: 'Terraform', icon: '🏗️', description: 'Infrastructure as Code', level: 0, xp: 0 },
+  { id: 'monitoring', category: 'devops', name: 'Monitoring', icon: '📊', description: 'Observability & alerting', level: 0, xp: 0 },
+  { id: 'aws', category: 'devops', name: 'AWS Cloud', icon: '☁️', description: 'Cloud computing platform', level: 0, xp: 0 },
 ];
 
 const XP_PER_LEVEL = 200;

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kubernetes — DevOps SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#326ce5; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .links { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .topbar .links a { color:var(--accent); text-decoration:none; font-size:0.85rem; }
+    .topbar .links a:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2.5rem; font-size:0.95rem; }
+
+    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem; margin-bottom:2.5rem; }
+    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.7rem 1rem; text-decoration:none; color:var(--text); font-size:0.85rem; font-weight:500; transition:border-color 0.2s,color 0.2s; }
+    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+
+    .section { margin-bottom:3rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .section-title { background:var(--surface2); padding:0.9rem 1.25rem; font-size:1.1rem; font-weight:700; border-bottom:1px solid var(--border); }
+    .section-body { padding:1.25rem; }
+    .section-body h3 { font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; color:var(--accent); }
+    .section-body h3:first-child { margin-top:0; }
+    .section-body h4 { font-size:0.9rem; font-weight:600; margin:1rem 0 0.4rem; color:var(--text); }
+    .section-body p { font-size:0.9rem; color:var(--text2); margin-bottom:0.75rem; }
+    .section-body ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .section-body li { font-size:0.85rem; color:var(--text2); margin-bottom:0.3rem; }
+    .section-body strong { color:var(--text); }
+
+    pre { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; font-size:0.82rem; overflow-x:auto; margin:0.75rem 0; line-height:1.6; }
+    code { background:var(--surface2); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    pre code { background:transparent; padding:0; }
+
+    .diagram { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--accent); font-weight:600; line-height:2; font-family:monospace; }
+
+    .tag { display:inline-block; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.7rem; font-weight:600; margin-right:0.35rem; }
+    .tag-core { background:rgba(50,108,229,0.1); color:#326ce5; border:1px solid rgba(50,108,229,0.2); }
+    .tag-adv { background:rgba(255,153,0,0.1); color:#ff9900; border:1px solid rgba(255,153,0,0.2); }
+    .tag-interview { background:rgba(239,68,68,0.1); color:#ef4444; border:1px solid rgba(239,68,68,0.2); }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .card h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.25rem; }
+    .card p, .card li { font-size:0.8rem; color:var(--text2); }
+    .card ul { padding-left:1rem; }
+    .card li { margin-bottom:0.2rem; }
+
+    @media (max-width:600px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+  </style>
+  <link rel="stylesheet" href="../../../css/subpage.css" />
+</head>
+<body class="subpage">
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>☸️ Kubernetes</h1>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">Pod, Deployment, Service, ConfigMap/Secret, Ingress, HPA, Namespace — manifest mẫu, kubectl — song ngữ EN-VI</p>
+    </div>
+    <div class="links">
+      <a href="hub.html">← DevOps</a>
+      <a href="../index.html">Trang chủ</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <a href="#overview">1. Tổng quan &amp; Kiến trúc</a>
+    <a href="#pod">2. Pod</a>
+    <a href="#deployment">3. Deployment &amp; ReplicaSet</a>
+    <a href="#service">4. Service &amp; Ingress</a>
+    <a href="#config">5. ConfigMap &amp; Secret</a>
+    <a href="#hpa">6. Autoscaling &amp; Resource</a>
+    <a href="#namespace">7. Namespace &amp; kubectl</a>
+    <a href="#interview">8. Câu hỏi phỏng vấn</a>
+  </div>
+
+  <!-- ===== 1. Overview ===== -->
+  <div class="section" id="overview">
+    <div class="section-title">1. Tổng quan &amp; Kiến trúc (Overview &amp; Architecture)</div>
+    <div class="section-body">
+      <h3>Kubernetes (K8s) là gì?</h3>
+      <p>An open-source container orchestration platform that automates deployment, scaling, and management of containerized applications. <em>(Nền tảng điều phối container mã nguồn mở — tự động hóa triển khai, mở rộng và quản lý ứng dụng containerized.)</em></p>
+
+      <div class="diagram">
+        ┌──────────────── Control Plane (Master) ────────────────┐<br/>
+        │  API Server ─ etcd ─ Scheduler ─ Controller Manager    │<br/>
+        └──────────────────────────┬─────────────────────────────┘<br/>
+                                   │<br/>
+        ┌────────── Worker Node 1 ─┴──── Worker Node 2 ─┐<br/>
+        │  kubelet │ kube-proxy │ Pods (containers)     │<br/>
+        └────────────────────────────────────────────────┘
+      </div>
+
+      <h3>Control Plane vs Worker Nodes</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🧠 Control Plane (Master)</h4><ul>
+          <li><strong>API Server:</strong> cửa ngõ duy nhất — mọi thao tác (kubectl) đi qua đây</li>
+          <li><strong>etcd:</strong> kho lưu trạng thái key-value (source of truth)</li>
+          <li><strong>Scheduler:</strong> quyết định pod chạy trên node nào</li>
+          <li><strong>Controller Manager:</strong> giữ trạng thái mong muốn (desired state)</li>
+        </ul></div>
+        <div class="card"><h4>⚙️ Worker Node</h4><ul>
+          <li><strong>kubelet:</strong> agent chạy trên node, quản lý pods</li>
+          <li><strong>kube-proxy:</strong> xử lý network rules, load balancing</li>
+          <li><strong>Container Runtime:</strong> Docker/containerd — chạy containers</li>
+          <li><strong>Pods:</strong> đơn vị triển khai nhỏ nhất</li>
+        </ul></div>
+      </div>
+
+      <h3>Nguyên lý khai báo (Declarative Model)</h3>
+      <p>Bạn khai báo <strong>desired state</strong> (trạng thái mong muốn) trong manifest YAML. Kubernetes liên tục so sánh với trạng thái hiện tại và tự động điều chỉnh. <em>(You declare the desired state in YAML manifests. K8s continuously reconciles the current state to match.)</em></p>
+    </div>
+  </div>
+
+  <!-- ===== 2. Pod ===== -->
+  <div class="section" id="pod">
+    <div class="section-title">2. Pod</div>
+    <div class="section-body">
+      <h3>Pod là gì?</h3>
+      <p>The smallest deployable unit in Kubernetes — a group of one or more containers sharing the same network namespace and storage. <em>(Đơn vị triển khai nhỏ nhất — một nhóm 1 hoặc nhiều container dùng chung network namespace và storage.)</em></p>
+      <ul>
+        <li>Mỗi pod có 1 IP riêng (cluster-internal).</li>
+        <li>Các container trong cùng pod chia sẻ IP, localhost, volumes.</li>
+        <li>Pod là <strong>ephemeral</strong> — chết là thay pod mới (thường qua Deployment, không tạo pod trực tiếp).</li>
+      </ul>
+
+      <pre><code># pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:alpine
+      ports:
+        - containerPort: 80</code></pre>
+
+      <h3>Lệnh pod (Pod Commands)</h3>
+      <pre><code>kubectl apply -f pod.yaml        # Tạo pod
+kubectl get pods                 # Xem danh sách
+kubectl get pods -o wide         # Xem chi tiết IP, node
+kubectl describe pod nginx-pod   # Xem chi tiết + events
+kubectl logs nginx-pod           # Xem log
+kubectl exec -it nginx-pod -- sh # Vào pod
+kubectl delete pod nginx-pod     # Xóa</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 3. Deployment ===== -->
+  <div class="section" id="deployment">
+    <div class="section-title">3. Deployment &amp; ReplicaSet</div>
+    <div class="section-body">
+      <h3>Deployment là gì?</h3>
+      <p>A higher-level controller that manages ReplicaSets and provides declarative updates, rollback, and scaling. <em>(Controller cấp cao quản lý ReplicaSet — hỗ trợ cập nhật khai báo, rollback và scale.)</em></p>
+
+      <pre><code># deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: myapp:1.0
+          ports:
+            - containerPort: 8080
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits:   { cpu: "500m", memory: "512Mi" }
+          readinessProbe:
+            httpGet: { path: /actuator/health, port: 8080 }
+            initialDelaySeconds: 5
+            periodSeconds: 10</code></pre>
+
+      <h3>Rolling Update &amp; Rollback</h3>
+      <pre><code># Cập nhật image lên 1.1 (rolling update, không downtime)
+kubectl set image deployment/myapp myapp=myapp:1.1
+
+# Hoặc sửa manifest rồi apply lại
+kubectl apply -f deployment.yaml
+
+# Rollback nếu lỗi
+kubectl rollout undo deployment/myapp
+
+# Xem trạng thái rollout
+kubectl rollout status deployment/myapp
+kubectl rollout history deployment/myapp</code></pre>
+
+      <div class="diagram">
+        Deployment ──manage──▶ ReplicaSet ──manage──▶ Pods (3 replicas)<br/>
+        [desired state]&nbsp;&nbsp;&nbsp;[giữ số lượng replica]&nbsp;&nbsp;&nbsp;[chạy container]
+      </div>
+
+      <h3>Lưu ý</h3>
+      <ul>
+        <li>Không sửa trực tiếp pod — luôn qua Deployment để K8s giữ desired state.</li>
+        <li><code>strategy:</code> mặc định <code>RollingUpdate</code>; có thể đổi <code>maxUnavailable</code>/<code>maxSurge</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 4. Service & Ingress ===== -->
+  <div class="section" id="service">
+    <div class="section-title">4. Service &amp; Ingress</div>
+    <div class="section-body">
+      <h3>Tại sao cần Service?</h3>
+      <p>Pod có IP thay đổi khi tái tạo. <strong>Service</strong> cung cấp địa chỉ ổn định + load balancing giữa các pod. <em>(Pods get new IPs when recreated. A Service provides a stable address and load balancing across pods.)</em></p>
+
+      <div class="diagram">
+        Client → Service (myapp:80, stable IP) → Load balancer → Pod A / Pod B / Pod C
+      </div>
+
+      <h3>Các loại Service</h3>
+      <div class="grid-3">
+        <div class="card"><h4>ClusterIP (mặc định)</h4><p>IP nội bộ cluster — chỉ truy cập trong cluster. Dùng cho microservices gọi nhau.</p></div>
+        <div class="card"><h4>NodePort</h4><p>Mở port cố định trên mỗi node (30000–32767). Truy cập qua <code>nodeIP:port</code>.</p></div>
+        <div class="card"><h4>LoadBalancer</h4><p>Tích hợp cloud provider (AWS ELB/GCP LB) — phơi service ra internet.</p></div>
+      </div>
+
+      <pre><code># service.yaml — ClusterIP cho nội bộ
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+spec:
+  selector:
+    app: myapp        # Chọn pod qua label
+  ports:
+    - port: 80        # Service port
+      targetPort: 8080 # Pod port
+  type: ClusterIP</code></pre>
+
+      <h3>Ingress</h3>
+      <p>Quản lý truy cập HTTP/HTTPS từ ngoài vào cluster — routing theo host/path, TLS, rewrite. <em>(Manages external HTTP/HTTPS access — routing by host/path, TLS, rewrites.)</em></p>
+      <pre><code>apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp-ingress
+spec:
+  rules:
+    - host: api.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: myapp
+                port: { number: 80 }</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 5. ConfigMap & Secret ===== -->
+  <div class="section" id="config">
+    <div class="section-title">5. ConfigMap &amp; Secret</div>
+    <div class="section-body">
+      <h3>ConfigMap</h3>
+      <p>Lưu cấu hình không bí mật (config không nhạy cảm) — tách khỏi image để image tái dùng được. <em>(Stores non-sensitive configuration, decoupled from the image.)</em></p>
+      <pre><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"</code></pre>
+
+      <h3>Secret</h3>
+      <p>Lưu dữ liệu nhạy cảm (password, keys, tokens) — base64-encoded trong manifest. <em>(Stores sensitive data — base64-encoded in the manifest.)</em></p>
+      <pre><code>apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  DB_PASSWORD: c2VjcmV0MTIz   # base64 của "secret123"</code></pre>
+
+      <h3>Cách dùng trong Pod (Usage)</h3>
+      <pre><code>spec:
+  containers:
+    - name: myapp
+      env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef: { name: app-config, key: APP_ENV }
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef: { name: db-secret, key: DB_PASSWORD }</code></pre>
+
+      <h3>Lưu ý bảo mật</h3>
+      <ul>
+        <li>Secret mặc định chỉ là base64 (không mã hóa thực sự) — bật <strong>Encryption at Rest</strong> cho etcd.</li>
+        <li>Ưu tiên dùng <strong>External Secrets Operator / Vault</strong> trong production.</li>
+        <li>Không commit secret thật vào git — dùng <code>kubectl create secret</code> hoặc sealed-secrets.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 6. HPA ===== -->
+  <div class="section" id="hpa">
+    <div class="section-title">6. Autoscaling &amp; Resource</div>
+    <div class="section-body">
+      <h3>Horizontal Pod Autoscaler (HPA)</h3>
+      <p>Tự động tăng/giảm số replica dựa trên CPU/memory metrics hoặc custom metrics. <em>(Automatically scales replica count based on CPU/memory or custom metrics.)</em></p>
+      <pre><code>apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: myapp-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: myapp
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70</code></pre>
+
+      <h3>Requests vs Limits</h3>
+      <div class="grid-2">
+        <div class="card"><h4>requests</h4><p>Mức tài nguyên đảm bảo — Scheduler dựa vào đây để xếp pod vào node. Không đạt → bị "giảm chất lượng" (throttle).</p></div>
+        <div class="card"><h4>limits</h4><p>Mức tối đa — vượt CPU bị throttle, vượt memory bị OOMKill. Không set limits → container có thể chiếm hết node.</p></div>
+      </div>
+
+      <h3>Vertical Pod Autoscaler (VPA) &amp; Cluster Autoscaler</h3>
+      <ul>
+        <li><strong>VPA:</strong> tự chỉnh requests/limits của pod.</li>
+        <li><strong>Cluster Autoscaler:</strong> thêm/bớt node trong cloud khi thiếu tài nguyên.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 7. Namespace ===== -->
+  <div class="section" id="namespace">
+    <div class="section-title">7. Namespace &amp; kubectl</div>
+    <div class="section-body">
+      <h3>Namespace là gì?</h3>
+      <p>Phân vùng cluster thành các môi trường/logic groups — tách biệt tài nguyên, dễ quản lý RBAC và quota. <em>(Partitions a cluster into logical groups — isolates resources, simplifies RBAC and quotas.)</em></p>
+      <pre><code>kubectl get namespaces          # dev, prod, kube-system...
+kubectl create namespace dev
+kubectl get pods -n dev          # Lọc theo namespace
+kubectl config set-context --current --namespace=dev</code></pre>
+
+      <h3>kubectl thông dụng (Common kubectl)</h3>
+      <pre><code>kubectl get all                  # Xem pods/services/deployments
+kubectl get nodes
+kubectl describe pod &lt;name&gt;
+kubectl logs -f deployment/myapp
+kubectl port-forward svc/myapp 8080:80   # Truy cập local
+kubectl apply -f .               # Apply toàn bộ manifest trong thư mục
+kubectl delete -f deployment.yaml</code></pre>
+
+      <h3>Helm (trình quản lý package)</h3>
+      <p>Helm đóng gói manifest thành <strong>charts</strong> có thể tái dùng, dễ template hóa và versioning. <em>(Helm packages manifests into reusable, templateable, versioned charts.)</em></p>
+      <pre><code>helm create mychart
+helm install myrelease ./mychart
+helm upgrade myrelease ./mychart
+helm rollback myrelease 1</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 8. Interview ===== -->
+  <div class="section" id="interview">
+    <div class="section-title">8. Câu hỏi phỏng vấn (Interview Questions)</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>❓ Pod vs Container?</h4><p>Pod là đơn vị triển khai nhỏ nhất — có thể chứa 1+ container dùng chung network/storage. Container chỉ là 1 tiến trình trong pod.</p></div>
+        <div class="card"><h4>❓ Deployment vs StatefulSet?</h4><p>Deployment cho app stateless (pod thay thế thoải mái). StatefulSet cho app cần identity ổn định + storage riêng (DB, Kafka).</p></div>
+        <div class="card"><h4>❓ Service Types?</h4><p>ClusterIP (nội bộ), NodePort (port cố định trên node), LoadBalancer (cloud LB ra internet). Ingress quản lý routing HTTP.</p></div>
+        <div class="card"><h4>❓ Rolling update hoạt động thế nào?</h4><p>Deployment tạo ReplicaSet mới, tăng dần pod mới và giảm pod cũ theo maxUnavailable/maxSurge — không downtime.</p></div>
+        <div class="card"><h4>❓ Làm sao scale tự động?</h4><p>HPA scale replica theo CPU/memory/custom metrics; Cluster Autoscaler thêm node; VPA chỉnh resource requests.</p></div>
+        <div class="card"><h4>❓ Khác biệt Docker vs K8s?</h4><p>Docker chạy đơn container. K8s điều phối nhiều container trên nhiều node — tự heal, scale, rolling update, service discovery.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

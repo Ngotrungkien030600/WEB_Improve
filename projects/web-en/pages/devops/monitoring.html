@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoring &amp; Observability — DevOps SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root { --bg:#0f0e17; --surface:#1a1928; --surface2:#22213a; --border:#2d2b44; --text:#e4e2f0; --text2:#9d9bb5; --accent:#eab308; --radius:10px; --font:'Inter',system-ui,sans-serif; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.7; }
+    .page { max-width:960px; margin:0 auto; padding:2.5rem 1.5rem; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.5rem; }
+    .topbar h1 { font-size:1.5rem; font-weight:700; }
+    .topbar .links { display:flex; gap:0.75rem; flex-wrap:wrap; }
+    .topbar .links a { color:var(--accent); text-decoration:none; font-size:0.85rem; }
+    .topbar .links a:hover { text-decoration:underline; }
+    .desc { color:var(--text2); margin-bottom:2.5rem; font-size:0.95rem; }
+
+    .toc { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.5rem; margin-bottom:2.5rem; }
+    .toc a { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0.7rem 1rem; text-decoration:none; color:var(--text); font-size:0.85rem; font-weight:500; transition:border-color 0.2s,color 0.2s; }
+    .toc a:hover { border-color:var(--accent); color:var(--accent); }
+
+    .section { margin-bottom:3rem; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+    .section-title { background:var(--surface2); padding:0.9rem 1.25rem; font-size:1.1rem; font-weight:700; border-bottom:1px solid var(--border); }
+    .section-body { padding:1.25rem; }
+    .section-body h3 { font-size:1rem; font-weight:600; margin:1.25rem 0 0.5rem; color:var(--accent); }
+    .section-body h3:first-child { margin-top:0; }
+    .section-body h4 { font-size:0.9rem; font-weight:600; margin:1rem 0 0.4rem; color:var(--text); }
+    .section-body p { font-size:0.9rem; color:var(--text2); margin-bottom:0.75rem; }
+    .section-body ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .section-body li { font-size:0.85rem; color:var(--text2); margin-bottom:0.3rem; }
+    .section-body strong { color:var(--text); }
+
+    pre { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; font-size:0.82rem; overflow-x:auto; margin:0.75rem 0; line-height:1.6; }
+    code { background:var(--surface2); padding:0.15rem 0.4rem; border-radius:4px; font-size:0.85em; }
+    pre code { background:transparent; padding:0; }
+
+    .diagram { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin:0.75rem 0; text-align:center; font-size:0.85rem; color:var(--accent); font-weight:600; line-height:2; font-family:monospace; }
+
+    .tag { display:inline-block; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.7rem; font-weight:600; margin-right:0.35rem; }
+    .tag-metrics { background:rgba(234,179,8,0.1); color:#eab308; border:1px solid rgba(234,179,8,0.2); }
+    .tag-logs { background:rgba(96,165,250,0.1); color:#60a5fa; border:1px solid rgba(96,165,250,0.2); }
+    .tag-traces { background:rgba(232,121,249,0.1); color:#e879f9; border:1px solid rgba(232,121,249,0.2); }
+
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; }
+    .card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; }
+    .card h4 { font-size:0.9rem; font-weight:600; margin-bottom:0.25rem; }
+    .card p, .card li { font-size:0.8rem; color:var(--text2); }
+    .card ul { padding-left:1rem; }
+    .card li { margin-bottom:0.2rem; }
+
+    @media (max-width:600px) { .grid-2, .grid-3 { grid-template-columns:1fr; } }
+  </style>
+  <link rel="stylesheet" href="../../../css/subpage.css" />
+</head>
+<body class="subpage">
+<div class="page">
+  <div class="topbar">
+    <div>
+      <h1>📊 Monitoring &amp; Observability</h1>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">Prometheus, Grafana, CloudWatch, metrics/logs/traces, alerting, golden signals — song ngữ EN-VI</p>
+    </div>
+    <div class="links">
+      <a href="hub.html">← DevOps</a>
+      <a href="../index.html">Trang chủ</a>
+    </div>
+  </div>
+
+  <div class="toc">
+    <a href="#concept">1. Monitoring vs Observability</a>
+    <a href="#pillars">2. 3 trụ cột: Metrics/Logs/Traces</a>
+    <a href="#golden">3. Golden Signals</a>
+    <a href="#prometheus">4. Prometheus</a>
+    <a href="#grafana">5. Grafana</a>
+    <a href="#cloudwatch">6. AWS CloudWatch</a>
+    <a href="#alerting">7. Alerting &amp; Incident</a>
+    <a href="#interview">8. Câu hỏi phỏng vấn</a>
+  </div>
+
+  <!-- ===== 1. Concept ===== -->
+  <div class="section" id="concept">
+    <div class="section-title">1. Monitoring vs Observability</div>
+    <div class="section-body">
+      <h3>Monitoring là gì?</h3>
+      <p>The process of collecting and analyzing metrics/logs to detect known problems and trigger alerts. <em>(Thu thập và phân tích metrics/logs để phát hiện vấn đề đã biết và bắn cảnh báo.)</em></p>
+
+      <h3>Observability là gì?</h3>
+      <p>The ability to understand the <strong>internal state</strong> of a system from its external outputs (metrics, logs, traces) — cho phép hỏi "tại sao" và debug cả những vấn đề chưa từng gặp. <em>(Khả năng hiểu trạng thái bên trong hệ thống từ đầu ra bên ngoài — hỏi "tại sao" và debug cả vấn đề mới.)</em></p>
+
+      <div class="grid-2">
+        <div class="card"><h4>📋 Monitoring</h4><p>Trả lời "có gì sai không?" — check theo threshold đã biết trước.</p></div>
+        <div class="card"><h4>🔍 Observability</h4><p>Trả lời "tại sao sai?" — khám phá không giới hạn câu hỏi đã định.</p></div>
+      </div>
+
+      <h3>Tại sao quan trọng?</h3>
+      <ul>
+        <li>Phát hiện sự cố <strong>sớm</strong> (trước khi user báo).</li>
+        <li>Debug nhanh qua logs/traces thay vì đoán mò.</li>
+        <li>Đo lường SLO/SLA — cơ sở cho quyết định release.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 2. Pillars ===== -->
+  <div class="section" id="pillars">
+    <div class="section-title">2. Ba trụ cột (The Three Pillars)</div>
+    <div class="section-body">
+      <div class="grid-3">
+        <div class="card"><h4>📈 Metrics <span class="tag tag-metrics">Số liệu</span></h4><p>Giá trị số theo thời gian: CPU, RAM, latency, error rate, request count. Rẻ, lưu lâu, dễ vẽ biểu đồ. VD: Prometheus, CloudWatch.</p></div>
+        <div class="card"><h4>📜 Logs <span class="tag tag-logs">Nhật ký</span></h4><p>Sự kiện chi tiết dạng text: error stacktrace, request log. Giàu thông tin nhưng đắt, cần indexing. VD: ELK, Loki, CloudWatch Logs.</p></div>
+        <div class="card"><h4>🔗 Traces <span class="tag tag-traces">Vết</span></h4><p>Hành trình của 1 request xuyên qua nhiều services — span + trace ID. Quan trọng cho microservices. VD: Jaeger, Zipkin, X-Ray.</p></div>
+      </div>
+
+      <div class="diagram">
+        User → Gateway (span) → Order Service (span) → Payment Service (span) → DB (span)<br/>
+        [trace: toàn bộ hành trình — gồm nhiều spans, chia sẻ trace_id]
+      </div>
+
+      <h3>Ví dụ trace</h3>
+      <pre><code># Trace ID gắn xuyên suốt request
+GET /api/orders/123
+  ├─ span: auth-service  (12ms)
+  ├─ span: order-service (45ms)
+  │    └─ span: redis-cache (3ms)
+  └─ span: payment-service (120ms)   ← bottleneck phát hiện tại đây</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 3. Golden Signals ===== -->
+  <div class="section" id="golden">
+    <div class="section-title">3. Golden Signals (Tín hiệu vàng)</div>
+    <div class="section-body">
+      <h3>4 tín hiệu chính của Google SRE</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🕐 Latency</h4><p>Thời gian phản hồi request. Đo cả phân phối (p50, p95, p99) — không chỉ trung bình.</p></div>
+        <div class="card"><h4>📦 Traffic</h4><p>Lượng yêu cầu hệ thống phục vụ (RPS, requests/second).</p></div>
+        <div class="card"><h4>❌ Errors</h4><p>Rate lỗi — HTTP 5xx, exceptions, responses sai (kể cả 200 nhưng nội dung lỗi).</p></div>
+        <div class="card"><h4>🚦 Saturation</h4><p>Mức độ "đầy" của hệ thống — CPU, memory, queue depth. Dấu hiệu trước khi quá tải.</p></div>
+      </div>
+
+      <h3>Ví dụ (Example)</h3>
+      <pre><code># Phân phối latency — p95 quan trọng hơn average
+Latency p50 = 80ms    ← nửa số request nhanh hơn 80ms
+Latency p95 = 450ms   ← 5% request chậm hơn 450ms (cần xem)
+Latency p99 = 1.2s    ← user hiếm gặp phải 1.2s
+
+# Error rate
+Error Rate = (5xx + business errors) / total requests  →  target &lt; 1%</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 4. Prometheus ===== -->
+  <div class="section" id="prometheus">
+    <div class="section-title">4. Prometheus</div>
+    <div class="section-body">
+      <h3>Prometheus là gì?</h3>
+      <p>Open-source monitoring &amp; alerting toolkit — thu thập metrics qua HTTP <strong>pull model</strong>, lưu trong time-series DB, query bằng <strong>PromQL</strong>. <em>(Open-source monitoring toolkit — scrapes metrics via HTTP pull model, stores in a time-series DB, queries with PromQL.)</em></p>
+
+      <div class="diagram">
+        App (exposes /metrics) ◀── scrape (pull) ─── Prometheus Server ──▶ Grafana (visualize)<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── Alertmanager (alerts)
+      </div>
+
+      <h3>Metric types</h3>
+      <div class="grid-2">
+        <div class="card"><h4>Counter</h4><p>Chỉ tăng: request count, error count. Reset khi restart.</p></div>
+        <div class="card"><h4>Gauge</h4><p>Tăng/giảm được: CPU usage, memory, temperature.</p></div>
+        <div class="card"><h4>Histogram</h4><p>Đo phân phối: latency (buckets) — tính được p95/p99.</p></div>
+        <div class="card"><h4>Summary</h4><p>Tương tự histogram nhưng tính percentiles phía client.</p></div>
+      </div>
+
+      <h3>Ví dụ metrics + PromQL (Example)</h3>
+      <pre><code># App expose /metrics (Spring Boot + Micrometer)
+# http_server_requests_seconds_count{uri="/api/orders",status="200"} 1280
+
+# PromQL — request rate
+rate(http_server_requests_seconds_count[5m])
+
+# Error rate %
+sum(rate(http_server_requests_seconds_count{status=~"5.."}[5m]))
+  / sum(rate(http_server_requests_seconds_count[5m])) * 100
+
+# p95 latency
+histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket[5m])) by (le))</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 5. Grafana ===== -->
+  <div class="section" id="grafana">
+    <div class="section-title">5. Grafana</div>
+    <div class="section-body">
+      <h3>Grafana là gì?</h3>
+      <p>Open-source dashboard/visualization platform — nguồn dữ liệu từ Prometheus, Loki, CloudWatch, Elasticsearch... <em>(Open-source dashboard platform — pulls from Prometheus, Loki, CloudWatch, Elasticsearch, and more.)</em></p>
+
+      <h3>Thành phần chính</h3>
+      <ul>
+        <li><strong>Dashboards:</strong> biểu đồ (graph, gauge, heatmap) theo panels.</li>
+        <li><strong>Alerting:</strong> rule dựa trên query → gửi notification (Slack, Email, PagerDuty).</li>
+        <li><strong>Data sources:</strong> kết nối nhiều backend metrics/logs.</li>
+        <li><strong>Variables:</strong> dashboard tương tác (chọn service, môi trường).</li>
+      </ul>
+
+      <h3>Ví dụ docker-compose Prometheus + Grafana</h3>
+      <pre><code>version: '3.8'
+services:
+  prometheus:
+    image: prom/prometheus
+    ports: ["9090:9090"]
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana
+    ports: ["3000:3000"]
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin</code></pre>
+      <pre><code># prometheus.yml
+scrape_configs:
+  - job_name: 'myapp'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['myapp:8080']</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 6. CloudWatch ===== -->
+  <div class="section" id="cloudwatch">
+    <div class="section-title">6. AWS CloudWatch</div>
+    <div class="section-body">
+      <h3>CloudWatch là gì?</h3>
+      <p>Dịch vụ monitoring của AWS — thu thập metrics, logs, events từ các dịch vụ AWS (EC2, Lambda, RDS, ECS...). <em>(AWS's monitoring service — collects metrics, logs, and events from AWS services.)</em></p>
+
+      <div class="grid-2">
+        <div class="card"><h4>📈 CloudWatch Metrics</h4><p>CPU, NetworkIn/Out của EC2; Duration/Errors của Lambda; được lưu 15 tháng.</p></div>
+        <div class="card"><h4>📜 CloudWatch Logs</h4><p>Tập trung log từ EC2 (agent), Lambda, ECS — query bằng Logs Insights.</p></div>
+        <div class="card"><h4>🚨 CloudWatch Alarms</h4><p>Rule theo threshold (CPU > 80% trong 5 phút) → trigger SNS → email/Slack.</p></div>
+        <div class="card"><h4>📊 CloudWatch Dashboards</h4><p>Gom metrics nhiều service vào 1 màn hình theo dõi.</p></div>
+      </div>
+
+      <h3>Ví dụ alarm (Example)</h3>
+      <pre><code># Alarms: CPU EC2 > 80% trong 5 phút
+aws cloudwatch put-metric-alarm \
+  --alarm-name high-cpu \
+  --metric-name CPUUtilization \
+  --namespace AWS/EC2 \
+  --statistic Average \
+  --period 300 \
+  --threshold 80 \
+  --comparison-operator GreaterThanThreshold \
+  --evaluation-periods 2 \
+  --alarm-actions arn:aws:sns:...:my-topic</code></pre>
+    </div>
+  </div>
+
+  <!-- ===== 7. Alerting ===== -->
+  <div class="section" id="alerting">
+    <div class="section-title">7. Alerting &amp; Incident</div>
+    <div class="section-body">
+      <h3>Alerting tốt (Good Alerting)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>✅ Alert chuẩn</h4><ul>
+          <li>Dựa trên SLO — cảnh báo khi user bị ảnh hưởng</li>
+          <li>Hành động được — có runbook/người chịu trách nhiệm</li>
+          <li>Ít nhiễu — alert không rõ nguyên nhân = noise</li>
+          <li>Phân cấp: warning → critical → page (SMS/call)</li>
+        </ul></div>
+        <div class="card"><h4>❌ Tránh</h4><ul>
+          <li>Cảnh báo ồn ào (alert fatigue) — nhân viên bỏ qua</li>
+          <li>Threshold tùy tiện không gắn với user experience</li>
+          <li>Không có runbook — alert xong không biết làm gì</li>
+        </ul></div>
+      </div>
+
+      <h3>Ví dụ Prometheus alert rule</h3>
+      <pre><code># alerting rule: 5xx rate > 1% trong 10 phút
+groups:
+  - name: app-alerts
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(http_server_requests_seconds_count{status=~"5.."}[10m]))
+            / sum(rate(http_server_requests_seconds_count[10m])) > 0.01
+        for: 10m
+        labels: { severity: critical }
+        annotations:
+          summary: "Error rate > 1%"</code></pre>
+
+      <h3>Quy trình incident (Incident Flow)</h3>
+      <div class="diagram">
+        Alert → Detect → Triage (mức độ) → Respond (runbook) → Mitigate → Postmortem (RCA)
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 8. Interview ===== -->
+  <div class="section" id="interview">
+    <div class="section-title">8. Câu hỏi phỏng vấn (Interview Questions)</div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="card"><h4>❓ Monitoring vs Observability?</h4><p>Monitoring: detect vấn đề đã biết qua threshold. Observability: hiểu hệ thống qua metrics/logs/traces để debug vấn đề chưa biết.</p></div>
+        <div class="card"><h4>❓ 3 trụ cột observability?</h4><p>Metrics (số liệu theo thời gian), Logs (sự kiện chi tiết), Traces (hành trình request qua services).</p></div>
+        <div class="card"><h4>❓ 4 golden signals?</h4><p>Latency, Traffic, Errors, Saturation — của Google SRE để đo health hệ thống.</p></div>
+        <div class="card"><h4>❓ Tại sao p95/p99 quan trọng hơn average?</h4><p>Average che giấu các request chậm hiếm gặp; p95/p99 cho thấy trải nghiệm user ở đuôi phân phối — nơi dễ gây mất user.</p></div>
+        <div class="card"><h4>❓ Prometheus pull vs push?</h4><p>Prometheus dùng pull (scrape) — dễ discovery, tự kiểm soát tần suất. Push (Graphite/CloudWatch agent) phù hợp job ngắn hạn, firewall chặt.</p></div>
+        <div class="card"><h4>❓ Distributed tracing để làm gì?</h4><p>Gắn trace_id xuyên request qua nhiều services — tìm bottleneck, xem đúng service nào lỗi/chậm.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

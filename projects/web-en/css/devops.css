@@ -1,0 +1,64 @@
+/* ===== DevOps Learn Page ===== */
+body.devops-page,
+body.subpage {
+  background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a2a3a);
+  background-size: 400% 400%;
+  animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Topbar accent */
+.learn-topbar h1 {
+  color: #fff;
+}
+
+/* Sidebar group headers */
+#devops-topic-list .group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.8rem;
+  margin-top: 0.5rem;
+  border-radius: var(--radius-sm, 10px);
+  background: #eef2f7;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #203a43;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#devops-topic-list .group-header:hover {
+  background: #dfe8f0;
+}
+
+#devops-topic-list .group-arrow {
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+  color: #2c5364;
+}
+
+#devops-topic-list .group-items {
+  list-style: none;
+  padding-left: 0.75rem;
+  margin: 0;
+}
+
+#devops-topic-list .group-items.hidden {
+  display: none;
+}
+
+/* Topic items inside groups */
+#devops-topic-list .group-items li {
+  font-size: 1.05rem;
+  padding: 0.55rem 0.8rem;
+}
+
+/* Intro item */
+#devops-topic-list .intro-item {
+  font-weight: 600;
+}

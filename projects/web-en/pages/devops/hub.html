@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevOps — SkillForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/variables.css" />
+  <link rel="stylesheet" href="../../css/base.css" />
+  <link rel="stylesheet" href="../../css/hub.css" />
+  <style>
+    .hub-page { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .hub-topbar h1 { color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+    .hub-desc { color: rgba(255,255,255,0.9); }
+    .hub-card { background: rgba(255,255,255,0.92); }
+    body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); min-height: 100vh; }
+  </style>
+  <link rel="stylesheet" href="../../../css/subpage.css" />
+</head>
+<body class="subpage">
+  <div class="hub-page">
+    <div class="hub-topbar">
+      <h1>🐳 DevOps</h1>
+      <a class="back-home" href="../../index.html">← Trang chủ</a>
+    </div>
+    <p class="hub-desc">Lộ trình DevOps đầy đủ — từ Docker, Kubernetes, CI/CD, Terraform đến AWS và Monitoring. Song ngữ EN-VI, có code mẫu, best practices và câu hỏi phỏng vấn.</p>
+    <div class="hub-grid">
+      <a class="hub-card" href="../devops.html">
+        <div class="hub-icon">🎯</div>
+        <div class="hub-body">
+          <h3>DevOps Foundations &amp; Core</h3>
+          <p>Học tương tác: Git, Docker, K8s, CI/CD, Terraform, Monitoring — sidebar + checklist + tiến độ</p>
+        </div>
+      </a>
+      <a class="hub-card" href="docker.html">
+        <div class="hub-icon">🐳</div>
+        <div class="hub-body">
+          <h3>Docker</h3>
+          <p>Image &amp; Container, Dockerfile, Compose, Volume, Network, multi-stage build, best practices</p>
+        </div>
+      </a>
+      <a class="hub-card" href="kubernetes.html">
+        <div class="hub-icon">☸️</div>
+        <div class="hub-body">
+          <h3>Kubernetes</h3>
+          <p>Pod, Deployment, Service, ConfigMap/Secret, Ingress, HPA, Namespace — manifest mẫu, kubectl</p>
+        </div>
+      </a>
+      <a class="hub-card" href="cicd.html">
+        <div class="hub-icon">🔄</div>
+        <div class="hub-body">
+          <h3>CI/CD</h3>
+          <p>Jenkins vs GitHub Actions, pipeline stages, GitOps, quality gates, blue-green &amp; canary deploy</p>
+        </div>
+      </a>
+      <a class="hub-card" href="terraform.html">
+        <div class="hub-icon">🏗️</div>
+        <div class="hub-body">
+          <h3>Terraform</h3>
+          <p>HCL, provider, resource, state, plan/apply, modules, remote state, workspaces</p>
+        </div>
+      </a>
+      <a class="hub-card" href="monitoring.html">
+        <div class="hub-icon">📊</div>
+        <div class="hub-body">
+          <h3>Monitoring &amp; Observability</h3>
+          <p>Prometheus, Grafana, CloudWatch, metrics/logs/traces, alerting, golden signals</p>
+        </div>
+      </a>
+      <a class="hub-card" href="../cloud.html">
+        <div class="hub-icon">☁️</div>
+        <div class="hub-body">
+          <h3>AWS Cloud</h3>
+          <p>IAM, VPC, EC2, Lambda, ECS, S3, RDS, DynamoDB, CodePipeline — kiến trúc &amp; best practices</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

@@ -136,6 +136,24 @@ window.searchIndex = {
       });
     }
 
+    // Index DevOps topics
+    if (window.devopsTopics) {
+      window.devopsTopics.forEach((item, i) => {
+        this.index.push({
+          id: `devops-${i}`,
+          type: 'devops',
+          title: item.title,
+          vi: item.title,
+          category: 'devops',
+          text: `${item.title} ${item.content ? item.content.substring(0, 500) : ''} ${(item.checklist || []).join(' ')}`.toLowerCase(),
+          difficulty: item.difficulty || 2,
+          tags: ['devops', 'docker', 'kubernetes', 'ci-cd'],
+          icon: '🐳',
+          url: `#devops-${item.file}`,
+        });
+      });
+    }
+
     this.built = true;
     return this.index.length;
   },
