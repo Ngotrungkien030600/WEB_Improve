@@ -1,0 +1,808 @@
+var e=[{id:`docker`,title:`🐳 Docker`,description:`Image & Container, Dockerfile, Compose, Volume, Network, multi-stage build — song ngữ EN-VI`,sections:[{id:`docker-image-container`,title:`1. Image vs Container`,html:`<h3>Khái niệm (Concept)</h3>
+      <p><strong>Image (Ảnh container):</strong> A read-only template that contains the application and everything it needs to run — code, runtime, libraries, environment variables, config files. <em>(Một bản mẫu chỉ-đọc chứa ứng dụng và mọi thứ cần để chạy — code, runtime, thư viện, biến môi trường, cấu hình.)</em></p>
+      <p><strong>Container (Container):</strong> A running instance of an image — an isolated process with its own filesystem, network, and resources. <em>(Một instance đang chạy của image — một tiến trình cô lập với filesystem, network và tài nguyên riêng.)</em></p>
+
+      <div class="diagram">
+        Dockerfile ──build──▶ Image ──run──▶ Container(s)<br/>
+        [template, read-only, shareable]&nbsp;&nbsp;&nbsp;&nbsp;[process, writable, isolated]
+      </div>
+
+      <h3>Bảng so sánh (Comparison)</h3>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:0.75rem;">
+        <tr style="background:var(--surface2);"><th style="text-align:left;padding:0.5rem;">Image</th><th style="text-align:left;padding:0.5rem;">Container</th></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Template read-only (bản mẫu chỉ-đọc)</td><td style="border:1px solid var(--border);padding:0.5rem;">Instance đang chạy (instance running)</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Giống class trong OOP</td><td style="border:1px solid var(--border);padding:0.5rem;">Giống object được tạo từ class</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Push/pull từ registry (Docker Hub)</td><td style="border:1px solid var(--border);padding:0.5rem;">Start, stop, restart, delete</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Có thể share giữa nhiều máy</td><td style="border:1px solid var(--border);padding:0.5rem;">Chạy trên máy có Docker engine</td></tr>
+      </table>
+
+      <h3>Container vs VM (Tại sao container nhẹ hơn?)</h3>
+      <ul>
+        <li><strong>VM:</strong> Mỗi máy ảo chứa cả OS (Guest OS) — nặng, khởi động chậm (phút).</li>
+        <li><strong>Container:</strong> Chia sẻ kernel của host OS — chỉ chứa app + dependencies — nhẹ, khởi động trong (giây).</li>
+        <li>Container dùng <strong>namespace</strong> (cô lập tiến trình/filesystem/network) và <strong>cgroups</strong> (giới hạn CPU/RAM).</li>
+      </ul>
+
+      <h3>Lệnh cơ bản (Basic Commands)</h3>
+      <pre><code>docker pull nginx:alpine        # Tải image từ registry
+docker images                   # Liệt kê images
+docker run -d -p 8080:80 --name web nginx
+docker ps                       # Liệt kê containers đang chạy
+docker ps -a                    # Tất cả containers (kể cả đã dừng)
+docker logs web                 # Xem log
+docker exec -it web sh          # Vào bên trong container
+docker stop web && docker rm web
+docker rmi nginx:alpine         # Xóa image</code></pre>`},{id:`docker-dockerfile`,title:`2. Dockerfile`,html:`<h3>Dockerfile là gì?</h3>
+      <p>A text file with instructions that defines how to build an image. <em>(Một file văn bản chứa các chỉ dẫn định nghĩa cách build một image.)</em></p>
+
+      <pre><code># Ví dụ: Dockerfile cho Spring Boot app
+FROM eclipse-temurin:17-jdk-alpine   # Base image (runtime)
+WORKDIR /app                          # Thư mục làm việc
+COPY target/app.jar app.jar           # Copy file vào image
+EXPOSE 8080                           # Khai báo cổng lắng nghe
+ENTRYPOINT ["java", "-jar", "app.jar"] # Lệnh chạy khi container khởi động</code></pre>
+
+      <h3>Các chỉ dẫn quan trọng (Key Instructions)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>FROM</h4><p>Chọn base image — bắt buộc phải có đầu tiên. Nên dùng bản alpine (nhẹ).</p></div>
+        <div class="card"><h4>RUN</h4><p>Chạy lệnh lúc build (cài package, compile). Mỗi RUN tạo một layer.</p></div>
+        <div class="card"><h4>COPY / ADD</h4><p>Copy file từ host vào image. ADD còn hỗ trợ URL/auto-extract — ưu tiên COPY.</p></div>
+        <div class="card"><h4>ENV / ARG</h4><p>ENV: biến môi trường (tồn tại lúc runtime). ARG: biến chỉ dùng lúc build.</p></div>
+        <div class="card"><h4>CMD / ENTRYPOINT</h4><p>Đều khai báo lệnh chạy. CMD bị ghi đè khi chạy, ENTRYPOINT thì không. Thường kết hợp cả hai.</p></div>
+        <div class="card"><h4>EXPOSE</h4><p>Chỉ là <em>documentation</em> — cổng thực sự mở khi dùng <code>-p</code> lúc run.</p>`},{id:`docker-compose`,title:`3. Docker Compose`,html:`<h3>Compose là gì?</h3>
+      <p>A tool to define and run multi-container applications with a single YAML file. <em>(Công cụ định nghĩa và chạy ứng dụng nhiều container bằng một file YAML duy nhất.)</em></p>
+
+      <pre><code># docker-compose.yml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydb
+    depends_on:
+      - db
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: mydb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:</code></pre>
+
+      <h3>Lệnh Compose (Compose Commands)</h3>
+      <pre><code>docker compose up -d        # Build + start tất cả services
+docker compose down         # Stop + xóa containers (giữ volume)
+docker compose down -v      # Xóa luôn volumes
+docker compose ps           # Xem trạng thái
+docker compose logs -f      # Xem log tất cả services
+docker compose exec app sh  # Chạy lệnh trong service app</code></pre>
+
+      <h3>Lưu ý (Notes)</h3>
+      <ul>
+        <li>Các service trong cùng compose tự động nằm chung 1 network — gọi nhau qua <strong>tên service</strong> (vd: <code>db:5432</code>).</li>
+        <li><code>depends_on</code> chỉ đảm bảo thứ tự khởi động, <strong>không đợi service sẵn sàng</strong> — cần healthcheck nếu muốn chờ.</li>
+        <li>Biến môi trường có thể ngoại suy qua file <code>.env</code>.</li>
+      </ul>`},{id:`docker-volume`,title:`4. Volume & Persistent Data`,html:`<h3>Tại sao cần volume?</h3>
+      <p>Container filesystem là <strong>tạm thời</strong> — dữ liệu mất khi container bị xóa. <strong>Volumes</strong> lưu dữ liệu ở host, sống sót qua vòng đời container. <em>(Container filesystem is ephemeral — data is lost when the container is removed. Volumes store data on the host and survive the container lifecycle.)</em></p>
+
+      <div class="diagram">
+        Container (writable layer — mất khi xóa container)<br/>
+        └── Volume (lưu trên host — bền vững)  /  Bind Mount (thư mục host)
+      </div>
+
+      <h3>3 loại lưu trữ (3 Storage Types)</h3>
+      <div class="grid-3">
+        <div class="card"><h4>📦 Named Volume</h4><p>Quản lý bởi Docker (<code>/var/lib/docker/volumes</code>). Khuyến nghị cho DB, dữ liệu app.</p></div>
+        <div class="card"><h4>🔗 Bind Mount</h4><p>Trỏ trực tiếp tới thư mục host — thường dùng cho dev (hot-reload code).</p></div>
+        <div class="card"><h4>💾 tmpfs</h4><p>Lưu trong RAM — nhanh nhưng mất khi container dừng. Dùng cho cache.</p>`},{id:`docker-network`,title:`5. Network`,html:`<h3>Các loại network driver</h3>
+      <div class="grid-2">
+        <div class="card"><h4>bridge (mặc định)</h4><p>Mỗi container có IP riêng trong subnet nội bộ. Container cùng bridge giao tiếp được với nhau qua IP/tên.</p></div>
+        <div class="card"><h4>host</h4><p>Container dùng thẳng network của host — không có NAT. Hiệu năng cao, nhưng không cô lập port.</p></div>
+        <div class="card"><h4>none</h4><p>Không có network — cô lập hoàn toàn. Dùng cho tasks nhạy cảm.</p></div>
+        <div class="card"><h4>overlay</h4><p>Dùng cho multi-host (Docker Swarm / K8s) — container ở máy khác nhau vẫn nói chuyện được.</p>`},{id:`docker-multistage`,title:`6. Multi-stage Build`,html:`<h3>Tại sao multi-stage?</h3>
+      <p>Build app cần đầy đủ toolchain (JDK, npm, compilers) nhưng image chạy chỉ cần runtime. <strong>Multi-stage build</strong> tách build và runtime thành 2 stage — image cuối nhỏ gọn, an toàn hơn. <em>(Why multi-stage? Building needs the full toolchain, but the runtime image only needs the runtime. Multi-stage separates build and runtime into two stages — the final image is smaller and more secure.)</em></p>
+
+      <pre><code># Stage 1: BUILD — đầy đủ toolchain
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Stage 2: RUN — chỉ runtime
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]</code></pre>
+
+      <h3>Ví dụ Java</h3>
+      <pre><code># Stage 1: compile
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
+
+# Stage 2: runtime chỉ với JRE
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]</code></pre>`},{id:`docker-best-practices`,title:`7. Best Practices`,html:`<h3>Quy tắc vàng (Golden Rules)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>✅ Nên làm</h4><ul>
+          <li>Dùng base image alpine/nhỏ gọn</li>
+          <li>Multi-stage build để giảm kích thước</li>
+          <li>Sắp xếp lệnh ít thay đổi trước để tận dụng cache</li>
+          <li>Chạy container với user non-root</li>
+          <li>Khai báo HEALTHCHECK</li>
+          <li>Dùng <code>.dockerignore</code> loại bỏ file không cần thiết</li>
+        </ul></div>
+        <div class="card"><h4>❌ Tránh</h4><ul>
+          <li>Dùng tag <code>latest</code> mơ hồ — pin version cụ thể</li>
+          <li>Chạy container với root</li>
+          <li>Chứa secrets (password/keys) trong image</li>
+          <li>Một container chứa nhiều process</li>
+          <li>Dùng ADD khi chỉ cần COPY</li>
+        </ul>`},{id:`docker-interview`,title:`8. Câu hỏi phỏng vấn (Interview Questions)`,html:`<div class="grid-2">
+        <div class="card"><h4>❓ Image vs Container khác gì?</h4><p>Image là template read-only, container là instance đang chạy. Image có thể build/share, container có lifecycle (start/stop).</p></div>
+        <div class="card"><h4>❓ Container khác VM thế nào?</h4><p>VM có Guest OS riêng (heavy), container share kernel host — nhẹ hơn, khởi động nhanh hơn, dùng namespace + cgroups để cô lập.</p></div>
+        <div class="card"><h4>❓ Dockerfile layer là gì?</h4><p>Mỗi instruction tạo 1 layer bất biến. Docker cache từng layer để build nhanh hơn khi không đổi.</p></div>
+        <div class="card"><h4>❓ CMD vs ENTRYPOINT?</h4><p>CMD có thể bị ghi đè khi run, ENTRYPOINT không. Thường ENTRYPOINT cố định lệnh, CMD cung cấp default args.</p></div>
+        <div class="card"><h4>❓ Làm sao giữ dữ liệu khi container xóa?</h4><p>Dùng volume (named volume / bind mount) — dữ liệu nằm trên host, không phụ thuộc vòng đời container.</p></div>
+        <div class="card"><h4>❓ Multi-stage build lợi ích gì?</h4><p>Image cuối chỉ chứa runtime, không chứa toolchain build — nhỏ hơn, ít bề mặt tấn công hơn.</p>`}]},{id:`kubernetes`,title:`☸️ Kubernetes`,description:`Pod, Deployment, Service, ConfigMap/Secret, Ingress, HPA, Namespace — manifest mẫu, kubectl — song ngữ EN-VI`,sections:[{id:`kubernetes-overview`,title:`1. Tổng quan & Kiến trúc (Overview & Architecture)`,html:`<h3>Kubernetes (K8s) là gì?</h3>
+      <p>An open-source container orchestration platform that automates deployment, scaling, and management of containerized applications. <em>(Nền tảng điều phối container mã nguồn mở — tự động hóa triển khai, mở rộng và quản lý ứng dụng containerized.)</em></p>
+
+      <div class="diagram">
+        ┌──────────────── Control Plane (Master) ────────────────┐<br/>
+        │  API Server ─ etcd ─ Scheduler ─ Controller Manager    │<br/>
+        └──────────────────────────┬─────────────────────────────┘<br/>
+                                   │<br/>
+        ┌────────── Worker Node 1 ─┴──── Worker Node 2 ─┐<br/>
+        │  kubelet │ kube-proxy │ Pods (containers)     │<br/>
+        └────────────────────────────────────────────────┘
+      </div>
+
+      <h3>Control Plane vs Worker Nodes</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🧠 Control Plane (Master)</h4><ul>
+          <li><strong>API Server:</strong> cửa ngõ duy nhất — mọi thao tác (kubectl) đi qua đây</li>
+          <li><strong>etcd:</strong> kho lưu trạng thái key-value (source of truth)</li>
+          <li><strong>Scheduler:</strong> quyết định pod chạy trên node nào</li>
+          <li><strong>Controller Manager:</strong> giữ trạng thái mong muốn (desired state)</li>
+        </ul></div>
+        <div class="card"><h4>⚙️ Worker Node</h4><ul>
+          <li><strong>kubelet:</strong> agent chạy trên node, quản lý pods</li>
+          <li><strong>kube-proxy:</strong> xử lý network rules, load balancing</li>
+          <li><strong>Container Runtime:</strong> Docker/containerd — chạy containers</li>
+          <li><strong>Pods:</strong> đơn vị triển khai nhỏ nhất</li>
+        </ul>`},{id:`kubernetes-pod`,title:`2. Pod`,html:`<h3>Pod là gì?</h3>
+      <p>The smallest deployable unit in Kubernetes — a group of one or more containers sharing the same network namespace and storage. <em>(Đơn vị triển khai nhỏ nhất — một nhóm 1 hoặc nhiều container dùng chung network namespace và storage.)</em></p>
+      <ul>
+        <li>Mỗi pod có 1 IP riêng (cluster-internal).</li>
+        <li>Các container trong cùng pod chia sẻ IP, localhost, volumes.</li>
+        <li>Pod là <strong>ephemeral</strong> — chết là thay pod mới (thường qua Deployment, không tạo pod trực tiếp).</li>
+      </ul>
+
+      <pre><code># pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:alpine
+      ports:
+        - containerPort: 80</code></pre>
+
+      <h3>Lệnh pod (Pod Commands)</h3>
+      <pre><code>kubectl apply -f pod.yaml        # Tạo pod
+kubectl get pods                 # Xem danh sách
+kubectl get pods -o wide         # Xem chi tiết IP, node
+kubectl describe pod nginx-pod   # Xem chi tiết + events
+kubectl logs nginx-pod           # Xem log
+kubectl exec -it nginx-pod -- sh # Vào pod
+kubectl delete pod nginx-pod     # Xóa</code></pre>`},{id:`kubernetes-deployment`,title:`3. Deployment & ReplicaSet`,html:`<h3>Deployment là gì?</h3>
+      <p>A higher-level controller that manages ReplicaSets and provides declarative updates, rollback, and scaling. <em>(Controller cấp cao quản lý ReplicaSet — hỗ trợ cập nhật khai báo, rollback và scale.)</em></p>
+
+      <pre><code># deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: myapp:1.0
+          ports:
+            - containerPort: 8080
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits:   { cpu: "500m", memory: "512Mi" }
+          readinessProbe:
+            httpGet: { path: /actuator/health, port: 8080 }
+            initialDelaySeconds: 5
+            periodSeconds: 10</code></pre>
+
+      <h3>Rolling Update &amp; Rollback</h3>
+      <pre><code># Cập nhật image lên 1.1 (rolling update, không downtime)
+kubectl set image deployment/myapp myapp=myapp:1.1
+
+# Hoặc sửa manifest rồi apply lại
+kubectl apply -f deployment.yaml
+
+# Rollback nếu lỗi
+kubectl rollout undo deployment/myapp
+
+# Xem trạng thái rollout
+kubectl rollout status deployment/myapp
+kubectl rollout history deployment/myapp</code></pre>
+
+      <div class="diagram">
+        Deployment ──manage──▶ ReplicaSet ──manage──▶ Pods (3 replicas)<br/>
+        [desired state]&nbsp;&nbsp;&nbsp;[giữ số lượng replica]&nbsp;&nbsp;&nbsp;[chạy container]
+      </div>
+
+      <h3>Lưu ý</h3>
+      <ul>
+        <li>Không sửa trực tiếp pod — luôn qua Deployment để K8s giữ desired state.</li>
+        <li><code>strategy:</code> mặc định <code>RollingUpdate</code>; có thể đổi <code>maxUnavailable</code>/<code>maxSurge</code>.</li>
+      </ul>`},{id:`kubernetes-service`,title:`4. Service & Ingress`,html:`<h3>Tại sao cần Service?</h3>
+      <p>Pod có IP thay đổi khi tái tạo. <strong>Service</strong> cung cấp địa chỉ ổn định + load balancing giữa các pod. <em>(Pods get new IPs when recreated. A Service provides a stable address and load balancing across pods.)</em></p>
+
+      <div class="diagram">
+        Client → Service (myapp:80, stable IP) → Load balancer → Pod A / Pod B / Pod C
+      </div>
+
+      <h3>Các loại Service</h3>
+      <div class="grid-3">
+        <div class="card"><h4>ClusterIP (mặc định)</h4><p>IP nội bộ cluster — chỉ truy cập trong cluster. Dùng cho microservices gọi nhau.</p></div>
+        <div class="card"><h4>NodePort</h4><p>Mở port cố định trên mỗi node (30000–32767). Truy cập qua <code>nodeIP:port</code>.</p></div>
+        <div class="card"><h4>LoadBalancer</h4><p>Tích hợp cloud provider (AWS ELB/GCP LB) — phơi service ra internet.</p>`},{id:`kubernetes-config`,title:`5. ConfigMap & Secret`,html:`<h3>ConfigMap</h3>
+      <p>Lưu cấu hình không bí mật (config không nhạy cảm) — tách khỏi image để image tái dùng được. <em>(Stores non-sensitive configuration, decoupled from the image.)</em></p>
+      <pre><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "production"
+  LOG_LEVEL: "info"</code></pre>
+
+      <h3>Secret</h3>
+      <p>Lưu dữ liệu nhạy cảm (password, keys, tokens) — base64-encoded trong manifest. <em>(Stores sensitive data — base64-encoded in the manifest.)</em></p>
+      <pre><code>apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  DB_PASSWORD: c2VjcmV0MTIz   # base64 của "secret123"</code></pre>
+
+      <h3>Cách dùng trong Pod (Usage)</h3>
+      <pre><code>spec:
+  containers:
+    - name: myapp
+      env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef: { name: app-config, key: APP_ENV }
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef: { name: db-secret, key: DB_PASSWORD }</code></pre>
+
+      <h3>Lưu ý bảo mật</h3>
+      <ul>
+        <li>Secret mặc định chỉ là base64 (không mã hóa thực sự) — bật <strong>Encryption at Rest</strong> cho etcd.</li>
+        <li>Ưu tiên dùng <strong>External Secrets Operator / Vault</strong> trong production.</li>
+        <li>Không commit secret thật vào git — dùng <code>kubectl create secret</code> hoặc sealed-secrets.</li>
+      </ul>`},{id:`kubernetes-hpa`,title:`6. Autoscaling & Resource`,html:`<h3>Horizontal Pod Autoscaler (HPA)</h3>
+      <p>Tự động tăng/giảm số replica dựa trên CPU/memory metrics hoặc custom metrics. <em>(Automatically scales replica count based on CPU/memory or custom metrics.)</em></p>
+      <pre><code>apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: myapp-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: myapp
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70</code></pre>
+
+      <h3>Requests vs Limits</h3>
+      <div class="grid-2">
+        <div class="card"><h4>requests</h4><p>Mức tài nguyên đảm bảo — Scheduler dựa vào đây để xếp pod vào node. Không đạt → bị "giảm chất lượng" (throttle).</p></div>
+        <div class="card"><h4>limits</h4><p>Mức tối đa — vượt CPU bị throttle, vượt memory bị OOMKill. Không set limits → container có thể chiếm hết node.</p>`},{id:`kubernetes-namespace`,title:`7. Namespace & kubectl`,html:`<h3>Namespace là gì?</h3>
+      <p>Phân vùng cluster thành các môi trường/logic groups — tách biệt tài nguyên, dễ quản lý RBAC và quota. <em>(Partitions a cluster into logical groups — isolates resources, simplifies RBAC and quotas.)</em></p>
+      <pre><code>kubectl get namespaces          # dev, prod, kube-system...
+kubectl create namespace dev
+kubectl get pods -n dev          # Lọc theo namespace
+kubectl config set-context --current --namespace=dev</code></pre>
+
+      <h3>kubectl thông dụng (Common kubectl)</h3>
+      <pre><code>kubectl get all                  # Xem pods/services/deployments
+kubectl get nodes
+kubectl describe pod &lt;name&gt;
+kubectl logs -f deployment/myapp
+kubectl port-forward svc/myapp 8080:80   # Truy cập local
+kubectl apply -f .               # Apply toàn bộ manifest trong thư mục
+kubectl delete -f deployment.yaml</code></pre>
+
+      <h3>Helm (trình quản lý package)</h3>
+      <p>Helm đóng gói manifest thành <strong>charts</strong> có thể tái dùng, dễ template hóa và versioning. <em>(Helm packages manifests into reusable, templateable, versioned charts.)</em></p>
+      <pre><code>helm create mychart
+helm install myrelease ./mychart
+helm upgrade myrelease ./mychart
+helm rollback myrelease 1</code></pre>`},{id:`kubernetes-interview`,title:`8. Câu hỏi phỏng vấn (Interview Questions)`,html:`<div class="grid-2">
+        <div class="card"><h4>❓ Pod vs Container?</h4><p>Pod là đơn vị triển khai nhỏ nhất — có thể chứa 1+ container dùng chung network/storage. Container chỉ là 1 tiến trình trong pod.</p></div>
+        <div class="card"><h4>❓ Deployment vs StatefulSet?</h4><p>Deployment cho app stateless (pod thay thế thoải mái). StatefulSet cho app cần identity ổn định + storage riêng (DB, Kafka).</p></div>
+        <div class="card"><h4>❓ Service Types?</h4><p>ClusterIP (nội bộ), NodePort (port cố định trên node), LoadBalancer (cloud LB ra internet). Ingress quản lý routing HTTP.</p></div>
+        <div class="card"><h4>❓ Rolling update hoạt động thế nào?</h4><p>Deployment tạo ReplicaSet mới, tăng dần pod mới và giảm pod cũ theo maxUnavailable/maxSurge — không downtime.</p></div>
+        <div class="card"><h4>❓ Làm sao scale tự động?</h4><p>HPA scale replica theo CPU/memory/custom metrics; Cluster Autoscaler thêm node; VPA chỉnh resource requests.</p></div>
+        <div class="card"><h4>❓ Khác biệt Docker vs K8s?</h4><p>Docker chạy đơn container. K8s điều phối nhiều container trên nhiều node — tự heal, scale, rolling update, service discovery.</p>`}]},{id:`cicd`,title:`🔄 CI/CD`,description:`Jenkins vs GitHub Actions, pipeline stages, GitOps, quality gates, blue-green & canary deploy — song ngữ EN-VI`,sections:[{id:`cicd-concept`,title:`1. CI/CD là gì? (What is CI/CD?)`,html:`<h3>Khái niệm (Concept)</h3>
+      <p><strong>CI — Continuous Integration:</strong> Tự động merge code thường xuyên, build và test mỗi lần có thay đổi — phát hiện lỗi sớm. <em>(Frequently merge code, build and test on every change — catch bugs early.)</em></p>
+      <p><strong>CD — Continuous Delivery/Deployment:</strong> Tự động đưa artifact đã test đạt chuẩn ra môi trường production. Delivery = chờ người duyệt; Deployment = hoàn toàn tự động. <em>(Automatically ship tested artifacts to production. Delivery = manual approval gate; Deployment = fully automated.)</em></p>
+
+      <div class="diagram">
+        Code commit → Build → Test → (Quality gate) → Build image → Deploy staging → Deploy prod<br/>
+        [CI]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[CD]
+      </div>
+
+      <h3>Lợi ích (Benefits)</h3>
+      <div class="grid-3">
+        <div class="card"><h4>⚡ Phát hiện lỗi sớm</h4><p>Build/test tự động mỗi commit — bug bị bắt ngay, không chờ đến production.</p></div>
+        <div class="card"><h4>🚀 Release nhanh &amp; đều</h4><p>Pipeline chuẩn hóa — không còn "chạy trên máy tôi vẫn OK".</p></div>
+        <div class="card"><h4>🔁 Rollback dễ dàng</h4><p>Artifact đã version hóa — quay lại version cũ chỉ là 1 thao tác.</p>`},{id:`cicd-pipeline`,title:`2. Pipeline & Stages`,html:`<h3>Các stage điển hình (Typical Stages)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>1. Checkout</h4><p>Lấy source code từ git.</p></div>
+        <div class="card"><h4>2. Install deps</h4><p>Cài dependencies (npm ci, mvn dependency:go-offline).</p></div>
+        <div class="card"><h4>3. Lint &amp; Format</h4><p>Kiểm tra code style (ESLint, Checkstyle).</p></div>
+        <div class="card"><h4>4. Test</h4><p>Unit test + integration test + coverage.</p></div>
+        <div class="card"><h4>5. Build &amp; Package</h4><p>Compile, đóng gói artifact (jar, dist).</p></div>
+        <div class="card"><h4>6. Build image &amp; Push</h4><p>Docker build + push lên registry (ECR, GHCR).</p></div>
+        <div class="card"><h4>7. Deploy staging</h4><p>Triển khai môi trường test, chạy smoke tests.</p></div>
+        <div class="card"><h4>8. Deploy production</h4><p>Có thể qua approval gate hoặc tự động (canary).</p>`},{id:`cicd-github-actions`,title:`3. GitHub Actions`,html:`<h3>Cấu trúc workflow</h3>
+      <p>Workflow = file YAML trong <code>.github/workflows/</code>, gồm <strong>events</strong> (trigger), <strong>jobs</strong> (chạy song song), <strong>steps</strong> (lệnh trong job). <em>(A workflow is a YAML file with events that trigger it, jobs that run in parallel, and steps inside each job.)</em></p>
+
+      <pre><code># .github/workflows/ci.yml
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Build with Maven
+        run: mvn -B package --no-transfer-progress
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar</code></pre>
+
+      <h3>CI/CD hoàn chỉnh với Docker</h3>
+      <pre><code>  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: \${{ secrets.DOCKER_USERNAME }}
+          password: \${{ secrets.DOCKER_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: myorg/myapp:\${{ github.sha }}
+      - name: Deploy to server
+        run: ssh deploy@server "docker pull myorg/myapp:\${{ github.sha }} && docker compose up -d"</code></pre>
+
+      <h3>Lưu ý</h3>
+      <ul>
+        <li>Secrets khai báo trong Settings → Secrets → dùng qua <code>\${{ secrets.NAME }}</code>.</li>
+        <li>Dùng <code>needs:</code> để tạo dependency giữa jobs.</li>
+        <li>Cache dependencies (<code>actions/cache</code>) để pipeline nhanh hơn.</li>
+      </ul>`},{id:`cicd-jenkins`,title:`4. Jenkins`,html:`<h3>Jenkins là gì?</h3>
+      <p>Một CI/CD server tự-host truyền thống — cực kỳ linh hoạt nhờ hệ thống plugin khổng lồ. <em>(A traditional self-hosted CI/CD server — extremely flexible thanks to a huge plugin ecosystem.)</em></p>
+
+      <h3>Jenkinsfile (Declarative)</h3>
+      <pre><code>pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+        stage('Build') {
+            steps { sh 'mvn -B package -DskipTests' }
+        }
+        stage('Test') {
+            steps { sh 'mvn test' }
+        }
+        stage('Deploy') {
+            steps { sh './deploy.sh' }
+        }
+    }
+    post {
+        success { echo 'Build succeeded!' }
+        failure { echo 'Build failed!' }
+    }
+}</code></pre>
+
+      <h3>Jenkins vs GitHub Actions</h3>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:0.75rem;">
+        <tr style="background:var(--surface2);"><th style="text-align:left;padding:0.5rem;">Tiêu chí</th><th style="text-align:left;padding:0.5rem;">Jenkins</th><th style="text-align:left;padding:0.5rem;">GitHub Actions</th></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Hosting</td><td style="border:1px solid var(--border);padding:0.5rem;">Tự host (cần vận hành)</td><td style="border:1px solid var(--border);padding:0.5rem;">Cloud managed (miễn phí cho public repo)</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Cấu hình</td><td style="border:1px solid var(--border);padding:0.5rem;">Groovy (Jenkinsfile)</td><td style="border:1px solid var(--border);padding:0.5rem;">YAML (workflows)</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Plugin/Marketplace</td><td style="border:1px solid var(--border);padding:0.5rem;">~1800 plugins</td><td style="border:1px solid var(--border);padding:0.5rem;">Marketplace actions khổng lồ</td></tr>
+        <tr><td style="border:1px solid var(--border);padding:0.5rem;">Phù hợp</td><td style="border:1px solid var(--border);padding:0.5rem;">Tự quản, on-prem, tùy biến sâu</td><td style="border:1px solid var(--border);padding:0.5rem;">Repo trên GitHub, setup nhanh</td></tr>
+      </table>`},{id:`cicd-deploy`,title:`5. Deploy Strategies (Chiến lược triển khai)`,html:`<div class="grid-2">
+        <div class="card"><h4>🔄 Rolling Deploy</h4><p>Thay từng instance cũ bằng mới dần dần — không downtime nhưng trong lúc đó có 2 version song song.</p></div>
+        <div class="card"><h4>🔵🔵 Blue/Green</h4><p>2 môi trường giống hệt (blue = cũ, green = mới). Deploy green, test xong chuyển traffic sang green. Rollback = chuyển ngược lại. <em>Zero downtime, nhưng tốn gấp đôi tài nguyên.</em></p></div>
+        <div class="card"><h4>🟡 Canary</h4><p>Chuyển 5–10% traffic sang version mới trước, theo dõi metrics, rồi tăng dần lên 100%. Rủi ro thấp nhất.</p></div>
+        <div class="card"><h4>🌊 A/B Testing</h4><p>2 version khác nhau về tính năng, so sánh theo business metrics — thường không phải vì lý do kỹ thuật.</p>`},{id:`cicd-gitops`,title:`6. GitOps & ArgoCD`,html:`<h3>GitOps là gì?</h3>
+      <p>Git là <strong>single source of truth</strong> cho cả code lẫn cấu hình hạ tầng. Mọi thay đổi = pull request → merge → một operator tự động đồng bộ lên cluster. <em>(Git is the single source of truth for both code and infrastructure config. Every change is a PR; an operator auto-syncs it to the cluster.)</em></p>
+
+      <div class="diagram">
+        Dev push code → Git repo (app + manifests) → ArgoCD detects change → Sync → Cluster state matches git
+      </div>
+
+      <h3>Lợi ích (Benefits)</h3>
+      <ul>
+        <li><strong>Auditable:</strong> mọi thay đổi đều có PR + lịch sử git.</li>
+        <li><strong>Rollback:</strong> revert commit là revert deploy.</li>
+        <li><strong>Consistent:</strong> cluster luôn khớp với git (self-healing).</li>
+      </ul>
+
+      <h3>Công cụ (Tools)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>ArgoCD</h4><p>GitOps controller cho Kubernetes — sync manifests từ git, UI web, hỗ trợ multi-cluster, rollback tự động.</p></div>
+        <div class="card"><h4>Flux CD</h4><p>Alternate GitOps tool — family gồm kustomize-controller, helm-controller, image automation.</p>`},{id:`cicd-quality`,title:`7. Quality Gates`,html:`<h3>Quality Gate là gì?</h3>
+      <p>Ngưỡng chất lượng bắt buộc — pipeline <strong>fail</strong> nếu không đạt, ngăn artifact xấu lên production. <em>(Mandatory quality thresholds — the pipeline fails if not met, blocking bad artifacts from reaching production.)</em></p>
+
+      <div class="grid-2">
+        <div class="card"><h4>✅ Test coverage</h4><p>VD: coverage ≥ 80% (Jacoco, Istanbul). Dưới ngưỡng → fail.</p></div>
+        <div class="card"><h4>🔍 Static analysis</h4><p>SonarQube — bug, code smell, security hotspot, duplications.</p></div>
+        <div class="card"><h4>🔒 Security scan</h4><p>SAST (Semgrep, Snyk), dependency check (OWASP), container scan (Trivy).</p></div>
+        <div class="card"><h4>⚡ Performance check</h4><p>Load test (k6, JMeter) — ngưỡng latency/error rate.</p>`},{id:`cicd-interview`,title:`8. Câu hỏi phỏng vấn (Interview Questions)`,html:`<div class="grid-2">
+        <div class="card"><h4>❓ CI vs CD?</h4><p>CI: build + test tự động mỗi commit. CD: tự động đưa artifact đạt chuẩn lên môi trường (Delivery = chờ duyệt, Deployment = tự động).</p></div>
+        <div class="card"><h4>❓ Blue/Green vs Canary?</h4><p>Blue/Green: 2 môi trường, chuyển toàn bộ traffic. Canary: chuyển từng phần nhỏ traffic để giảm rủi ro — an toàn hơn.</p></div>
+        <div class="card"><h4>❓ GitOps hoạt động thế nào?</h4><p>Git là nguồn chân lý; ArgoCD/Flux theo dõi repo và tự đồng bộ cluster khớp với git; rollback = revert commit.</p></div>
+        <div class="card"><h4>❓ Làm sao pipeline không "green on every push"?</h4><p>Quality gates: coverage ngưỡng, SonarQube, security scan, test thật — không chỉ build thành công.</p></div>
+        <div class="card"><h4>❓ Artifact versioning?</h4><p>Tag bằng commit SHA hoặc semantic version — reproducible builds, dễ rollback và trace.</p></div>
+        <div class="card"><h4>❓ Secrets trong pipeline?</h4><p>Dùng secrets vault (GitHub Secrets, Vault) — không bao giờ commit secret thật vào pipeline file.</p>`}]},{id:`terraform`,title:`🏗️ Terraform`,description:`HCL, provider, resource, state, plan/apply, modules, remote state, workspaces — song ngữ EN-VI`,sections:[{id:`terraform-iaac`,title:`1. IaC & Terraform là gì?`,html:`<h3>Infrastructure as Code (IaC)</h3>
+      <p>Quản lý hạ tầng (VMs, networks, databases) bằng code thay vì bấm tay trên console. Code được version hóa, review được, tái dùng được. <em>(Managing infrastructure via code instead of clicking in consoles — versioned, reviewable, reusable.)</em></p>
+
+      <div class="grid-2">
+        <div class="card"><h4>⚙️ Imperative (thủ tục)</h4><p>Mô tả <em>cách làm</em> từng bước. VD: Ansible, shell scripts. "Tạo VM, cài nginx, mở port 80..."</p></div>
+        <div class="card"><h4>📜 Declarative (khai báo)</h4><p>Mô tả <em>kết quả mong muốn</em>. VD: Terraform, CloudFormation. "Tôi muốn 1 VM có nginx chạy port 80."</p>`},{id:`terraform-hcl`,title:`2. HCL & Cấu trúc file`,html:`<h3>Cấu trúc cơ bản (Basic Structure)</h3>
+      <p>File <code>.tf</code> dùng ngôn ngữ <strong>HCL (HashiCorp Configuration Language)</strong> — đọc như JSON nhưng thân thiện hơn.</p>
+
+      <pre><code># main.tf
+terraform {
+  required_version = ">= 1.5"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "ap-southeast-1"
+}
+
+resource "aws_instance" "web" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t3.micro"
+  tags = {
+    Name = "web-server"
+  }
+}</code></pre>
+
+      <h3>Các khối chính (Key Blocks)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>terraform {}</h4><p>Khai báo required version, providers, backend (nơi lưu state).</p></div>
+        <div class="card"><h4>provider ""</h4><p>Cấu hình cloud provider (region, credentials). Provider biết cách tạo/tài nguyên trên cloud đó.</p></div>
+        <div class="card"><h4>resource "" ""</h4><p>Một tài nguyên cụ thể (EC2, S3 bucket, RDS...). Lõi của Terraform.</p></div>
+        <div class="card"><h4>data "" ""</h4><p>Đọc thông tin tài nguyên <em>đã tồn tại</em> (không tạo mới) để dùng trong code.</p></div>
+        <div class="card"><h4>variable / output</h4><p>Input parameters và giá trị trả ra sau apply (IP, endpoint...).</p></div>
+        <div class="card"><h4>module ""</h4><p>Đóng gói nhiều resources thành đơn vị tái dùng.</p>`},{id:`terraform-lifecycle`,title:`3. Workflow: init → plan → apply`,html:`<h3>Vòng đời Terraform (Terraform Lifecycle)</h3>
+      <div class="diagram">
+        terraform init → terraform plan → [review diff] → terraform apply → terraform destroy<br/>
+        [tải providers] [tính diff vs state] [thực thi] [xóa hạ tầng]
+      </div>
+
+      <div class="grid-3">
+        <div class="card"><h4>1. init</h4><p>Tải providers, modules, thiết lập backend state. Chạy 1 lần mỗi project.</p></div>
+        <div class="card"><h4>2. plan</h4><p>Tính toán thay đổi (create/update/delete) từ code vs state. Không thay đổi gì thật — an toàn để review.</p></div>
+        <div class="card"><h4>3. apply</h4><p>Thực thi thay đổi đã plan. Yêu cầu xác nhận (trừ khi <code>-auto-approve</code>).</p>`},{id:`terraform-state`,title:`4. State & Remote State`,html:`<h3>State là gì?</h3>
+      <p><strong>Terraform state</strong> (file <code>terraform.tfstate</code>) ghi lại ánh xạ giữa code và tài nguyên thực tế (resource ID, attributes). Đây là "nguồn chân lý" cho việc tính diff. <em>(The state file records the mapping between your code and real resources — the source of truth for computing diffs.)</em></p>
+
+      <h3>Tại sao cần remote state?</h3>
+      <ul>
+        <li><strong>Chia sẻ team:</strong> state local (máy cá nhân) → mỗi người có state khác nhau → xung đột.</li>
+        <li><strong>Backup &amp; an toàn:</strong> state chứa secret (password DB, keys) — nên lưu nơi an toàn.</li>
+        <li><strong>Locking:</strong> backend hỗ trợ khóa — 2 người không apply cùng lúc.</li>
+      </ul>
+
+      <pre><code># Backend S3 (state lưu trên AWS S3 + khóa qua DynamoDB)
+terraform {
+  backend "s3" {
+    bucket         = "my-terraform-state"
+    key            = "prod/network/terraform.tfstate"
+    region         = "ap-southeast-1"
+    dynamodb_table = "terraform-locks"
+    encrypt        = true
+  }
+}</code></pre>
+
+      <h3>State backends phổ biến</h3>
+      <div class="grid-2">
+        <div class="card"><h4>AWS S3 + DynamoDB</h4><p>Phổ biến nhất cho team dùng AWS — S3 lưu file, DynamoDB làm lock.</p></div>
+        <div class="card"><h4>GCS / Azure Storage</h4><p>Tương tự trên GCP/Azure.</p></div>
+        <div class="card"><h4>Terraform Cloud / HCP</h4><p>Managed state + remote runs, dễ integration với VCS.</p>`},{id:`terraform-modules`,title:`5. Modules`,html:`<h3>Module là gì?</h3>
+      <p>A self-contained package of Terraform config that takes inputs and returns outputs — dùng để đóng gói hạ tầng tái dùng được (VD: module VPC, module EC2 cluster). <em>(A self-contained package of Terraform config with inputs/outputs — reusable infrastructure building blocks.)</em></p>
+
+      <pre><code># modules/vpc/main.tf — module VPC tái dùng
+variable "name"   { type = string }
+variable "cidr"   { type = string }
+variable "azs"    { type = list(string) }
+
+resource "aws_vpc" "this" {
+  cidr_block = var.cidr
+  tags = { Name = var.name }
+}
+
+output "vpc_id" { value = aws_vpc.this.id }</code></pre>
+
+      <pre><code># Sử dụng module trong root config
+module "vpc" {
+  source = "./modules/vpc"
+  name   = "main-vpc"
+  cidr   = "10.0.0.0/16"
+  azs    = ["ap-southeast-1a", "ap-southeast-1b"]
+}
+
+output "vpc_id" {
+  value = module.vpc.vpc_id
+}</code></pre>
+
+      <h3>Registry modules</h3>
+      <p>Dùng module công cộng từ <strong>Terraform Registry</strong> (hashicorp/terraform-aws-modules) — tiết kiệm thời gian, đã được cộng đồng kiểm chứng. <em>(Use public modules from the Terraform Registry — battle-tested, time-saving.)</em></p>
+      <pre><code>module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "5.0.0"
+  name = "my-vpc"
+  cidr = "10.0.0.0/16"
+}</code></pre>`},{id:`terraform-variables`,title:`6. Variables & Outputs`,html:`<h3>Input Variables</h3>
+      <p>Tham số hóa config — tránh hard-code, dễ tái dùng giữa các môi trường. <em>(Parameterize config — avoid hard-coding, reuse across environments.)</em></p>
+
+      <pre><code># variables.tf
+variable "environment" {
+  description = "Environment name"
+  type        = string
+  default     = "dev"
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t3.micro"
+}
+
+variable "tags" {
+  type = map(string)
+  default = {
+    Owner = "team-devops"
+  }
+}</code></pre>
+
+      <h3>Cách truyền giá trị (How to Pass Values)</h3>
+      <pre><code># 1. File terraform.tfvars (ưu tiên)
+environment = "prod"
+instance_type = "t3.large"
+
+# 2. CLI flag
+terraform apply -var="environment=prod" -var="instance_type=t3.large"
+
+# 3. Biến môi trường
+export TF_VAR_environment=prod</code></pre>
+
+      <h3>Outputs</h3>
+      <p>Trả ra giá trị sau apply — IP, endpoint, ID để dùng trong CI/CD hoặc module khác. <em>(Return values after apply — IPs, endpoints, IDs for CI/CD or other modules.)</em></p>
+      <pre><code>output "instance_ip" {
+  value       = aws_instance.web.public_ip
+  description = "Public IP of the web instance"
+  sensitive   = false
+}
+
+# Dùng trong CI/CD
+# terraform output instance_ip</code></pre>`},{id:`terraform-best-practices`,title:`7. Best Practices`,html:`<h3>Quy tắc vàng (Golden Rules)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>✅ Nên làm</h4><ul>
+          <li>Chia môi trường bằng <strong>workspaces</strong> hoặc thư mục riêng (dev/staging/prod)</li>
+          <li>Dùng <strong>remote state</strong> + locking cho team</li>
+          <li>Pin <strong>version provider</strong> rõ ràng</li>
+          <li>Chạy <code>terraform plan</code> trong CI và yêu cầu review</li>
+          <li>Đặt tags chuẩn cho mọi resource (Name, Environment, Owner)</li>
+          <li>Dùng <code>terraform fmt</code> + <code>validate</code> trước commit</li>
+        </ul></div>
+        <div class="card"><h4>❌ Tránh</h4><ul>
+          <li>Hard-code secrets trong file .tf</li>
+          <li>Commit state local chứa secret</li>
+          <li>Sửa tài nguyên bằng tay trên console (drift)</li>
+          <li>Apply trực tiếp lên prod mà không plan/review</li>
+          <li>Dùng <code>latest</code> cho provider version</li>
+        </ul>`},{id:`terraform-interview`,title:`8. Câu hỏi phỏng vấn (Interview Questions)`,html:`<div class="grid-2">
+        <div class="card"><h4>❓ Terraform vs Ansible?</h4><p>Terraform: IaC declarative, tập trung <em>provisioning</em> hạ tầng (multi-cloud). Ansible: cả provisioning lẫn <em>configuration</em> bên trong server (imperative-ish, agentless). Thường dùng kết hợp.</p></div>
+        <div class="card"><h4>❓ State file là gì, vì sao quan trọng?</h4><p>Ghi ánh xạ code→tài nguyên thực tế. Quan trọng để tính diff chính xác, tránh tạo trùng. Nên lưu remote (S3 + DynamoDB lock).</p></div>
+        <div class="card"><h4>❓ plan vs apply?</h4><p>plan chỉ tính toán và hiển thị thay đổi (an toàn); apply thực thi thay đổi thật lên cloud.</p></div>
+        <div class="card"><h4>❓ Module dùng để làm gì?</h4><p>Đóng gói hạ tầng tái dùng (VPC, cluster) với inputs/outputs — giảm trùng lặp, chuẩn hóa kiến trúc.</p></div>
+        <div class="card"><h4>❓ Remote state lợi ích?</h4><p>Chia sẻ team, backup, locking chống apply song song, tách biệt môi trường.</p></div>
+        <div class="card"><h4>❓ Drift là gì?</h4><p>Trạng thái thực tế lệch với state/code (do sửa tay trên console). Terraform plan sẽ hiện drift và có thể khôi phục về desired state.</p>`}]},{id:`monitoring`,title:`📊 Monitoring &amp; Observability`,description:`Prometheus, Grafana, CloudWatch, metrics/logs/traces, alerting, golden signals — song ngữ EN-VI`,sections:[{id:`monitoring-concept`,title:`1. Monitoring vs Observability`,html:`<h3>Monitoring là gì?</h3>
+      <p>The process of collecting and analyzing metrics/logs to detect known problems and trigger alerts. <em>(Thu thập và phân tích metrics/logs để phát hiện vấn đề đã biết và bắn cảnh báo.)</em></p>
+
+      <h3>Observability là gì?</h3>
+      <p>The ability to understand the <strong>internal state</strong> of a system from its external outputs (metrics, logs, traces) — cho phép hỏi "tại sao" và debug cả những vấn đề chưa từng gặp. <em>(Khả năng hiểu trạng thái bên trong hệ thống từ đầu ra bên ngoài — hỏi "tại sao" và debug cả vấn đề mới.)</em></p>
+
+      <div class="grid-2">
+        <div class="card"><h4>📋 Monitoring</h4><p>Trả lời "có gì sai không?" — check theo threshold đã biết trước.</p></div>
+        <div class="card"><h4>🔍 Observability</h4><p>Trả lời "tại sao sai?" — khám phá không giới hạn câu hỏi đã định.</p>`},{id:`monitoring-pillars`,title:`2. Ba trụ cột (The Three Pillars)`,html:`<div class="grid-3">
+        <div class="card"><h4>📈 Metrics <span class="tag tag-metrics">Số liệu</span></h4><p>Giá trị số theo thời gian: CPU, RAM, latency, error rate, request count. Rẻ, lưu lâu, dễ vẽ biểu đồ. VD: Prometheus, CloudWatch.</p></div>
+        <div class="card"><h4>📜 Logs <span class="tag tag-logs">Nhật ký</span></h4><p>Sự kiện chi tiết dạng text: error stacktrace, request log. Giàu thông tin nhưng đắt, cần indexing. VD: ELK, Loki, CloudWatch Logs.</p></div>
+        <div class="card"><h4>🔗 Traces <span class="tag tag-traces">Vết</span></h4><p>Hành trình của 1 request xuyên qua nhiều services — span + trace ID. Quan trọng cho microservices. VD: Jaeger, Zipkin, X-Ray.</p>`},{id:`monitoring-golden`,title:`3. Golden Signals (Tín hiệu vàng)`,html:`<h3>4 tín hiệu chính của Google SRE</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🕐 Latency</h4><p>Thời gian phản hồi request. Đo cả phân phối (p50, p95, p99) — không chỉ trung bình.</p></div>
+        <div class="card"><h4>📦 Traffic</h4><p>Lượng yêu cầu hệ thống phục vụ (RPS, requests/second).</p></div>
+        <div class="card"><h4>❌ Errors</h4><p>Rate lỗi — HTTP 5xx, exceptions, responses sai (kể cả 200 nhưng nội dung lỗi).</p></div>
+        <div class="card"><h4>🚦 Saturation</h4><p>Mức độ "đầy" của hệ thống — CPU, memory, queue depth. Dấu hiệu trước khi quá tải.</p>`},{id:`monitoring-prometheus`,title:`4. Prometheus`,html:`<h3>Prometheus là gì?</h3>
+      <p>Open-source monitoring &amp; alerting toolkit — thu thập metrics qua HTTP <strong>pull model</strong>, lưu trong time-series DB, query bằng <strong>PromQL</strong>. <em>(Open-source monitoring toolkit — scrapes metrics via HTTP pull model, stores in a time-series DB, queries with PromQL.)</em></p>
+
+      <div class="diagram">
+        App (exposes /metrics) ◀── scrape (pull) ─── Prometheus Server ──▶ Grafana (visualize)<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── Alertmanager (alerts)
+      </div>
+
+      <h3>Metric types</h3>
+      <div class="grid-2">
+        <div class="card"><h4>Counter</h4><p>Chỉ tăng: request count, error count. Reset khi restart.</p></div>
+        <div class="card"><h4>Gauge</h4><p>Tăng/giảm được: CPU usage, memory, temperature.</p></div>
+        <div class="card"><h4>Histogram</h4><p>Đo phân phối: latency (buckets) — tính được p95/p99.</p></div>
+        <div class="card"><h4>Summary</h4><p>Tương tự histogram nhưng tính percentiles phía client.</p>`},{id:`monitoring-grafana`,title:`5. Grafana`,html:`<h3>Grafana là gì?</h3>
+      <p>Open-source dashboard/visualization platform — nguồn dữ liệu từ Prometheus, Loki, CloudWatch, Elasticsearch... <em>(Open-source dashboard platform — pulls from Prometheus, Loki, CloudWatch, Elasticsearch, and more.)</em></p>
+
+      <h3>Thành phần chính</h3>
+      <ul>
+        <li><strong>Dashboards:</strong> biểu đồ (graph, gauge, heatmap) theo panels.</li>
+        <li><strong>Alerting:</strong> rule dựa trên query → gửi notification (Slack, Email, PagerDuty).</li>
+        <li><strong>Data sources:</strong> kết nối nhiều backend metrics/logs.</li>
+        <li><strong>Variables:</strong> dashboard tương tác (chọn service, môi trường).</li>
+      </ul>
+
+      <h3>Ví dụ docker-compose Prometheus + Grafana</h3>
+      <pre><code>version: '3.8'
+services:
+  prometheus:
+    image: prom/prometheus
+    ports: ["9090:9090"]
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana
+    ports: ["3000:3000"]
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin</code></pre>
+      <pre><code># prometheus.yml
+scrape_configs:
+  - job_name: 'myapp'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['myapp:8080']</code></pre>`},{id:`monitoring-cloudwatch`,title:`6. AWS CloudWatch`,html:`<h3>CloudWatch là gì?</h3>
+      <p>Dịch vụ monitoring của AWS — thu thập metrics, logs, events từ các dịch vụ AWS (EC2, Lambda, RDS, ECS...). <em>(AWS's monitoring service — collects metrics, logs, and events from AWS services.)</em></p>
+
+      <div class="grid-2">
+        <div class="card"><h4>📈 CloudWatch Metrics</h4><p>CPU, NetworkIn/Out của EC2; Duration/Errors của Lambda; được lưu 15 tháng.</p></div>
+        <div class="card"><h4>📜 CloudWatch Logs</h4><p>Tập trung log từ EC2 (agent), Lambda, ECS — query bằng Logs Insights.</p></div>
+        <div class="card"><h4>🚨 CloudWatch Alarms</h4><p>Rule theo threshold (CPU > 80% trong 5 phút) → trigger SNS → email/Slack.</p></div>
+        <div class="card"><h4>📊 CloudWatch Dashboards</h4><p>Gom metrics nhiều service vào 1 màn hình theo dõi.</p>`},{id:`monitoring-alerting`,title:`7. Alerting & Incident`,html:`<h3>Alerting tốt (Good Alerting)</h3>
+      <div class="grid-2">
+        <div class="card"><h4>✅ Alert chuẩn</h4><ul>
+          <li>Dựa trên SLO — cảnh báo khi user bị ảnh hưởng</li>
+          <li>Hành động được — có runbook/người chịu trách nhiệm</li>
+          <li>Ít nhiễu — alert không rõ nguyên nhân = noise</li>
+          <li>Phân cấp: warning → critical → page (SMS/call)</li>
+        </ul></div>
+        <div class="card"><h4>❌ Tránh</h4><ul>
+          <li>Cảnh báo ồn ào (alert fatigue) — nhân viên bỏ qua</li>
+          <li>Threshold tùy tiện không gắn với user experience</li>
+          <li>Không có runbook — alert xong không biết làm gì</li>
+        </ul>`},{id:`monitoring-interview`,title:`8. Câu hỏi phỏng vấn (Interview Questions)`,html:`<div class="grid-2">
+        <div class="card"><h4>❓ Monitoring vs Observability?</h4><p>Monitoring: detect vấn đề đã biết qua threshold. Observability: hiểu hệ thống qua metrics/logs/traces để debug vấn đề chưa biết.</p></div>
+        <div class="card"><h4>❓ 3 trụ cột observability?</h4><p>Metrics (số liệu theo thời gian), Logs (sự kiện chi tiết), Traces (hành trình request qua services).</p></div>
+        <div class="card"><h4>❓ 4 golden signals?</h4><p>Latency, Traffic, Errors, Saturation — của Google SRE để đo health hệ thống.</p></div>
+        <div class="card"><h4>❓ Tại sao p95/p99 quan trọng hơn average?</h4><p>Average che giấu các request chậm hiếm gặp; p95/p99 cho thấy trải nghiệm user ở đuôi phân phối — nơi dễ gây mất user.</p></div>
+        <div class="card"><h4>❓ Prometheus pull vs push?</h4><p>Prometheus dùng pull (scrape) — dễ discovery, tự kiểm soát tần suất. Push (Graphite/CloudWatch agent) phù hợp job ngắn hạn, firewall chặt.</p></div>
+        <div class="card"><h4>❓ Distributed tracing để làm gì?</h4><p>Gắn trace_id xuyên request qua nhiều services — tìm bottleneck, xem đúng service nào lỗi/chậm.</p>`}]},{id:`aws`,title:`☁️ AWS Cloud`,description:`Tổng quan các dịch vụ AWS cốt lõi cho DevOps — bản tóm tắt + liên kết tới deep-dive đầy đủ`,sections:[{id:`aws-overview`,title:`1. Tổng quan dịch vụ (Service Overview)`,html:`<h3>Phân loại dịch vụ AWS</h3>
+      <div class="grid-2">
+        <div class="card"><h4>⚡ Compute</h4><p><span class="tag tag-compute">EC2</span> VM truyền thống<br/><span class="tag tag-compute">ECS/EKS</span> container orchestration<br/><span class="tag tag-compute">Lambda</span> serverless functions<br/><span class="tag tag-compute">ELB</span> load balancing</p></div>
+        <div class="card"><h4>🗄️ Storage &amp; Database</h4><p><span class="tag tag-storage">S3</span> object storage<br/><span class="tag tag-db">RDS</span> relational DB<br/><span class="tag tag-db">DynamoDB</span> NoSQL<br/><span class="tag tag-db">ElastiCache</span> Redis/Memcached</p></div>
+        <div class="card"><h4>🌐 Networking</h4><p><span class="tag tag-net">VPC</span> mạng ảo riêng<br/><span class="tag tag-net">Route 53</span> DNS<br/><span class="tag tag-net">CloudFront</span> CDN<br/><span class="tag tag-net">API Gateway</span> API layer</p></div>
+        <div class="card"><h4>🔐 Security &amp; Identity</h4><p><span class="tag tag-sec">IAM</span> quản lý quyền<br/><span class="tag tag-sec">KMS</span> mã hóa<br/><span class="tag tag-sec">Cognito</span> user auth<br/><span class="tag tag-sec">WAF</span> firewall web</p>`},{id:`aws-compute`,title:`2. Compute & Serverless`,html:`<h3>EC2 — Máy ảo truyền thống</h3>
+      <p>Chọn AMI (hệ điều hành) + instance type (CPU/RAM) + key pair (SSH). Trả theo giây — phù hợp workload cần kiểm soát đầy đủ, chạy app lâu dài. <em>(Pick an AMI, instance type, and key pair. Pay per second — full control, good for long-running apps.)</em></p>
+
+      <h3>ECS &amp; EKS — Container</h3>
+      <div class="grid-2">
+        <div class="card"><h4>ECS</h4><p>Managed container service riêng của AWS — đơn giản, dùng Fargate (không quản lý server) hoặc EC2. Task definitions + services.</p></div>
+        <div class="card"><h4>EKS</h4><p>Managed Kubernetes — chuẩn K8s nhưng AWS lo control plane. Hợp khi đã chuẩn hóa với K8s.</p>`},{id:`aws-storage`,title:`3. Storage & Database`,html:`<h3>S3 — Object Storage</h3>
+      <p>Lưu file không giới hạn, độ bền 99.999999999% (11 nines). Bucket + object + versioning + lifecycle policy + static website hosting. <em>(Unlimited object storage, 11-nines durability. Buckets, versioning, lifecycle policies, static hosting.)</em></p>
+      <pre><code># Lưu log/artifact từ pipeline
+aws s3 cp app.jar s3://my-artifacts/releases/app-1.0.jar
+aws s3 sync dist/ s3://my-static-site/</code></pre>
+
+      <h3>RDS vs DynamoDB</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🗄️ RDS (SQL)</h4><p>PostgreSQL, MySQL, SQL Server... Quan hệ, transaction, joins. Managed: auto backup, patching, multi-AZ, read replicas.</p></div>
+        <div class="card"><h4>⚡ DynamoDB (NoSQL)</h4><p>Key-value/document. Single-digit-ms latency, scale ngang không giới hạn. Phù hợp: session, cart, high-traffic.</p>`},{id:`aws-network`,title:`4. Networking & Security`,html:`<h3>VPC — Mạng ảo riêng</h3>
+      <p>Mỗi tài khoản có VPC mặc định. Chia subnet: <strong>public</strong> (có Internet Gateway) và <strong>private</strong> (không truy cập internet trực tiếp — qua NAT Gateway). <em>(Default VPC per account. Subnets: public with IGW, private without direct internet — via NAT Gateway.)</em></p>
+      <pre><code># Cấu trúc VPC chuẩn (multi-AZ)
+VPC 10.0.0.0/16
+├── Public subnet  (10.0.1.0/24) — ALB, Bastion
+├── Private subnet (10.0.2.0/24) — EC2 app
+├── Private subnet (10.0.3.0/24) — RDS (không internet)
+└── NAT Gateway + Internet Gateway</code></pre>
+
+      <h3>Security Groups vs NACL</h3>
+      <div class="grid-2">
+        <div class="card"><h4>🛡️ Security Group</h4><p>Stateful firewall cấp instance — chỉ allow rules. Dòng trả lời tự động được phép. Gắn vào EC2/ALB/RDS.</p></div>
+        <div class="card"><h4>📋 NACL</h4><p>Stateless firewall cấp subnet — có allow + deny. Cần khai báo cả chiều vào/ra. Lớp phòng thủ thứ 2.</p>`},{id:`aws-devops`,title:`5. AWS cho DevOps`,html:`<h3>Bộ công cụ CI/CD của AWS</h3>
+      <div class="diagram">
+        CodeCommit (repo) → CodeBuild (build) → CodePipeline (orchestrate) → CodeDeploy (deploy EC2/Lambda/ECS)
+      </div>
+      <div class="grid-3">
+        <div class="card"><h4>CodePipeline</h4><p>Orchestrate toàn bộ release — trigger từ push, chạy qua build/test/deploy.</p></div>
+        <div class="card"><h4>CodeBuild</h4><p>Managed build service — compile, test, tạo artifact. Trả theo phút build.</p></div>
+        <div class="card"><h4>CodeDeploy</h4><p>Deploy app lên EC2/ECS/Lambda — hỗ trợ rolling, blue/green.</p>`},{id:`aws-interview`,title:`6. Câu hỏi phỏng vấn (Interview Questions)`,html:`<div class="grid-2">
+        <div class="card"><h4>❓ EC2 vs Lambda?</h4><p>EC2: VM có kiểm soát, chạy liên tục, trả theo giây — workload dài. Lambda: serverless theo event, tự scale, trả theo ms — workload ngắn, không quản lý server.</p></div>
+        <div class="card"><h4>❓ RDS vs DynamoDB?</h4><p>RDS = SQL quan hệ, transaction, join. DynamoDB = NoSQL key-value, latency thấp, scale ngang lớn.</p></div>
+        <div class="card"><h4>❓ S3 dùng làm gì trong DevOps?</h4><p>Lưu artifact build, backup, static website, Terraform remote state, log. Độ bền 11 nines, rẻ.</p></div>
+        <div class="card"><h4>❓ IAM Role vs User?</h4><p>User gắn credentials cố định cho người. Role cấp quyền tạm thời cho service (EC2, Lambda) — an toàn hơn, tự rotate.</p></div>
+        <div class="card"><h4>❓ VPC private subnet truy cập internet?</h4><p>Qua NAT Gateway (NAT chỉ cho đi ra, không cho vào) — app trong private vẫn cập nhật package được mà không lộ port.</p></div>
+        <div class="card"><h4>❓ CloudFormation vs Terraform?</h4><p>CloudFormation: native AWS, đơn giản cho stack AWS. Terraform: multi-cloud, state management, modules — chuẩn hóa hơn cho team lớn.</p>`}]}];export{e as t};
