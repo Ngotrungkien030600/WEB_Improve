@@ -169,8 +169,12 @@ const routes = [
   },
   {
     path: '/java/spring-boot',
+    redirect: '/java/spring-boot/core',
+  },
+  {
+    path: '/java/spring-boot/:sectionId',
     name: 'java-spring-boot',
-    component: () => import('../pages/JavaSpringBootPage.vue'),
+    component: () => import('../pages/SpringSectionPage.vue'),
   },
   {
     path: '/java/backend',
