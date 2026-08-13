@@ -13,6 +13,11 @@ const routes = [
     component: () => import('../pages/AiHubPage.vue'),
   },
   {
+    path: '/ai/hub',
+    name: 'ai-hub-sub',
+    component: () => import('../pages/AiHubSubPage.vue'),
+  },
+  {
     path: '/ai/agent',
     name: 'ai-agent',
     component: () => import('../pages/AiAgentPage.vue'),
@@ -56,6 +61,11 @@ const routes = [
     path: '/cloud',
     name: 'cloud',
     component: () => import('../pages/CloudHubPage.vue'),
+  },
+  {
+    path: '/cloud/hub',
+    name: 'cloud-hub-sub',
+    component: () => import('../pages/CloudHubSubPage.vue'),
   },
   {
     path: '/cloud/:sectionId',
