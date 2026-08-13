@@ -178,8 +178,12 @@ const routes = [
   },
   {
     path: '/java/backend',
+    redirect: '/java/backend/sql',
+  },
+  {
+    path: '/java/backend/:sectionId',
     name: 'java-backend',
-    component: () => import('../pages/JavaBackendPage.vue'),
+    component: () => import('../pages/BackendSectionPage.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
