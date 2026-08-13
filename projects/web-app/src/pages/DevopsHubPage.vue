@@ -19,7 +19,7 @@
           :title="cleanTitle(topic.title)"
           :description="topic.description"
           :tags="[topic.sections.length + ' bài']"
-          :path="`/devops/${topic.id}/${topic.sections[0].id}`"
+          :path="`/devops/${topic.id}`"
           @navigate="handleNavigate"
         />
       </CGrid>

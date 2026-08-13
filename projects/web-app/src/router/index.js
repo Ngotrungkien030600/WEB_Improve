@@ -68,6 +68,36 @@ const routes = [
     component: () => import('../pages/DevopsHubPage.vue'),
   },
   {
+    path: '/devops/aws',
+    name: 'devops-aws',
+    component: () => import('../pages/DevopsAwsPage.vue'),
+  },
+  {
+    path: '/devops/docker',
+    name: 'devops-docker',
+    component: () => import('../pages/DevopsDockerPage.vue'),
+  },
+  {
+    path: '/devops/kubernetes',
+    name: 'devops-kubernetes',
+    component: () => import('../pages/DevopsKubernetesPage.vue'),
+  },
+  {
+    path: '/devops/terraform',
+    name: 'devops-terraform',
+    component: () => import('../pages/DevopsTerraformPage.vue'),
+  },
+  {
+    path: '/devops/cicd',
+    name: 'devops-cicd',
+    component: () => import('../pages/DevopsCicdPage.vue'),
+  },
+  {
+    path: '/devops/monitoring',
+    name: 'devops-monitoring',
+    component: () => import('../pages/DevopsMonitoringPage.vue'),
+  },
+  {
     path: '/devops/:topicId/:sectionId',
     name: 'devops-section',
     component: () => import('../pages/DevopsSectionPage.vue'),
