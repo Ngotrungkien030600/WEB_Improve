@@ -16,7 +16,7 @@ export default {
 html, body {
   margin: 0;
   padding: 0;
-  background: #08080e;
+  background: #0c0a1d;
 }
 
 .page-enter-active,

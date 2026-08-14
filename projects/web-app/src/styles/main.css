@@ -20,7 +20,7 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #08080e;
+  background: #0c0a1d;
   min-height: 100vh;
   line-height: 1.6;
   color-scheme: dark;
@@ -101,76 +101,76 @@ a:focus-visible {
   overflow: hidden;
 }
 
-/* Forge theme tokens — shared across home page components */
+/* Glass Frost Theme — Premium, thoáng mát */
 :root {
   /* Core colors */
-  --forge-bg: #08080e;
-  --forge-bg2: #0d0d1a;
-  --forge-surface: rgba(255, 255, 255, 0.04);
-  --forge-surface-hover: rgba(255, 255, 255, 0.08);
-  --forge-glass: rgba(255, 255, 255, 0.06);
-  --forge-glass-border: rgba(255, 255, 255, 0.08);
-  --forge-glass-hover: rgba(255, 255, 255, 0.12);
-  --forge-glass-hover-border: rgba(255, 255, 255, 0.18);
+  --forge-bg: #0c0a1d;
+  --forge-bg2: #0f0c24;
+  --forge-surface: rgba(139, 92, 246, 0.08);
+  --forge-surface-hover: rgba(139, 92, 246, 0.15);
+  --forge-glass: rgba(139, 92, 246, 0.1);
+  --forge-glass-border: rgba(139, 92, 246, 0.2);
+  --forge-glass-hover: rgba(139, 92, 246, 0.2);
+  --forge-glass-hover-border: rgba(139, 92, 246, 0.35);
 
   /* Accent colors */
-  --forge-fire: #f97316;
-  --forge-fire-glow: #ea580c;
-  --forge-ember: #fbbf24;
-  --forge-glow: rgba(249, 115, 22, 0.25);
-  --forge-glow-strong: rgba(249, 115, 22, 0.4);
+  --forge-fire: #8b5cf6;
+  --forge-fire-glow: #7c3aed;
+  --forge-ember: #06b6d4;
+  --forge-glow: rgba(139, 92, 246, 0.25);
+  --forge-glow-strong: rgba(139, 92, 246, 0.4);
 
   /* Text colors */
-  --forge-text: #f1f5f9;
-  --forge-text2: #94a3b8;
-  --forge-text3: #64748b;
+  --forge-text: #f8fafc;
+  --forge-text2: #cbd5e1;
+  --forge-text3: #94a3b8;
 
   /* Semantic colors */
   --forge-success: #22c55e;
-  --forge-error: #ef4444;
+  --forge-error: #f43f5e;
   --forge-warning: #f59e0b;
-  --forge-info: #3b82f6;
+  --forge-info: #38bdf8;
 
   /* Card */
   --forge-card-radius: 16px;
 
   /* Brand gradient */
-  --forge-brand-start: #fbbf24;
-  --forge-brand-mid: #f97316;
-  --forge-brand-end: #ea580c;
+  --forge-brand-start: #8b5cf6;
+  --forge-brand-mid: #7c3aed;
+  --forge-brand-end: #06b6d4;
 
   /* Timer */
-  --forge-ring-bg: rgba(255, 255, 255, 0.08);
-  --forge-ring-progress: #f97316;
-  --forge-ring-warning: #ef4444;
-  --forge-ring-danger: #dc2626;
+  --forge-ring-bg: rgba(139, 92, 246, 0.15);
+  --forge-ring-progress: #8b5cf6;
+  --forge-ring-warning: #f59e0b;
+  --forge-ring-danger: #f43f5e;
   --forge-time-warning: #fca5a5;
   --forge-time-danger: #f87171;
 
   /* Button */
-  --forge-btn-primary-start: #f97316;
-  --forge-btn-primary-end: #ea580c;
+  --forge-btn-primary-start: #8b5cf6;
+  --forge-btn-primary-end: #7c3aed;
   --forge-btn-primary-color: white;
 
-  /* Per-hub accent colors (AD-17) */
-  --accent-ai: #f472b6;
+  /* Per-hub accent colors — Glass Frost palette */
+  --accent-ai: #c084fc;
   --accent-english: #34d399;
-  --accent-java: #f59e0b;
-  --accent-cloud: #7c5cfc;
-  --accent-frontend: #60a5fa;
+  --accent-java: #fbbf24;
+  --accent-cloud: #60a5fa;
+  --accent-frontend: #f472b6;
 
   /* Animation transitions */
   --transition-fast: 0.15s ease;
   --transition-base: 0.25s ease;
   --transition-spring: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Legacy page variables — mapped to dark theme */
-  --color-bg: #08080e;
-  --color-surface: rgba(255, 255, 255, 0.05);
-  --color-surface2: rgba(255, 255, 255, 0.08);
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-text: #f1f5f9;
-  --color-text2: #94a3b8;
+  /* Legacy page variables — Glass Frost theme */
+  --color-bg: #0c0a1d;
+  --color-surface: rgba(139, 92, 246, 0.06);
+  --color-surface2: rgba(139, 92, 246, 0.12);
+  --color-border: rgba(139, 92, 246, 0.15);
+  --color-text: #f8fafc;
+  --color-text2: #cbd5e1;
   --color-accent: var(--forge-fire);
   --color-radius: 10px;
 

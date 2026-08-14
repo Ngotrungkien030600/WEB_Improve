@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillForge - Design Style Preview</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #f1f5f9; min-height: 100vh; padding: 32px; }
+    h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+    .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 32px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; max-width: 1400px; margin: 0 auto; }
+    .card { border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .palette { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .palette-label { font-size: 11px; color: #94a3b8; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .colors { display: flex; gap: 8px; }
+    .color-item { text-align: center; }
+    .color-swatch { width: 40px; height: 40px; border-radius: 8px; margin-bottom: 4px; }
+    .color-name { font-size: 10px; color: #94a3b8; }
+    .preview { padding: 20px; }
+    .hub-card { background: var(--bg); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+    .hub-card-inner { display: flex; align-items: center; gap: 12px; }
+    .icon-box { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .card-subtitle { font-size: 12px; color: #94a3b8; }
+    .btn-primary { padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 500; border: none; cursor: pointer; }
+    .progress-box { background: var(--bg); border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+    .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; }
+    .progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; }
+    .btn-row { display: flex; gap: 8px; }
+    .btn { flex: 1; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; }
+    .btn-solid { border: none; }
+    .btn-outline { background: transparent; }
+    .info { padding: 16px 20px; }
+    .style-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .style-tagline { font-size: 13px; margin-bottom: 12px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; }
+    .mood { font-size: 11px; font-style: italic; color: #94a3b8; }
+    .recommendation { margin-top: 32px; padding: 20px; background: #1a1a1a; border-radius: 12px; max-width: 1400px; margin-left: auto; margin-right: auto; }
+    .rec-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+    .rec-grid { display: flex; gap: 24px; flex-wrap: wrap; }
+    .rec-item { flex: 1; min-width: 200px; }
+    .rec-label { font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
+    .rec-value { font-size: 13px; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <h1>Design Style Preview — SkillForge</h1>
+  <p class="subtitle">5 phong cách để bạn chọn. Mỗi style gồm: palette, component preview.</p>
+
+  <div class="grid">
+    <!-- Style 1: Minimal Dark -->
+    <div class="card" style="--bg: #0f0f0f; --surface: #1a1a1a; --primary: #6366f1; --accent: #22d3ee; --text: #f1f5f9; --text-muted: #94a3b8; --primary-rgb: 99, 102, 241;">
+      <div class="palette">
+        <div class="palette-label">Color Palette</div>
+        <div class="colors">
+          <div class="color-item"><div class="color-swatch" style="background: #0f0f0f; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">bg</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #1a1a1a;"></div><span class="color-name">surface</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #6366f1;"></div><span class="color-name">primary</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #22d3ee;"></div><span class="color-name">accent</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #f1f5f9; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">text</span></div>
+        </div>
+      </div>
+      <div class="preview" style="background: #1a1a1a;">
+        <div class="palette-label">Component Preview</div>
+        <div class="hub-card">
+          <div class="hub-card-inner">
+            <div class="icon-box" style="background: linear-gradient(135deg, rgba(99,102,241,0.4), rgba(34,211,238,0.4));">
+              <div style="width: 20px; height: 20px; background: #6366f1; border-radius: 4px;"></div>
+            </div>
+            <div style="flex: 1;">
+              <div class="card-title" style="color: #f1f5f9;">Java Backend</div>
+              <div class="card-subtitle">24 bài học · 65% hoàn thành</div>
+            </div>
+            <button class="btn-primary" style="background: #6366f1; color: #fff;">Tiếp tục</button>
+          </div>
+        </div>
+        <div class="progress-box">
+          <div class="progress-header">
+            <span style="color: #f1f5f9;">Tiến độ học tập</span>
+            <span style="color: #6366f1; font-weight: 600;">65%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 65%; background: linear-gradient(90deg, #6366f1, #22d3ee);"></div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-solid" style="background: #6366f1; color: #fff;">Primary</button>
+          <button class="btn btn-outline" style="border: 1px solid rgba(148,163,184,0.4); color: #94a3b8;">Secondary</button>
+        </div>
+      </div>
+      <div class="info">
+        <div class="style-name" style="color: #f1f5f9;">Minimal Dark</div>
+        <div class="style-tagline" style="color: #6366f1;">Tập trung, tối giản</div>
+        <div class="tags">
+          <span class="tag" style="background: rgba(99,102,241,0.2); color: #94a3b8;">Whitespace rộng</span>
+          <span class="tag" style="background: rgba(99,102,241,0.2); color: #94a3b8;">Icon line art</span>
+          <span class="tag" style="background: rgba(99,102,241,0.2); color: #94a3b8;">Typography rõ</span>
+        </div>
+        <div class="mood">Vibe: Focus mode — Notion, Linear</div>
+      </div>
+    </div>
+
+    <!-- Style 2: Vibrant Neon -->
+    <div class="card" style="--bg: #0a0a0f; --surface: #12121a; --primary: #f472b6; --accent: #a855f7; --text: #ffffff; --text-muted: #a1a1aa;">
+      <div class="palette">
+        <div class="palette-label">Color Palette</div>
+        <div class="colors">
+          <div class="color-item"><div class="color-swatch" style="background: #0a0a0f; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">bg</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #12121a;"></div><span class="color-name">surface</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #f472b6;"></div><span class="color-name">primary</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #a855f7;"></div><span class="color-name">accent</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #ffffff; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">text</span></div>
+        </div>
+      </div>
+      <div class="preview" style="background: #12121a;">
+        <div class="palette-label">Component Preview</div>
+        <div class="hub-card">
+          <div class="hub-card-inner">
+            <div class="icon-box" style="background: linear-gradient(135deg, rgba(244,114,182,0.4), rgba(168,85,247,0.4));">
+              <div style="width: 20px; height: 20px; background: #f472b6; border-radius: 4px;"></div>
+            </div>
+            <div style="flex: 1;">
+              <div class="card-title" style="color: #ffffff;">Java Backend</div>
+              <div class="card-subtitle">24 bài học · 65% hoàn thành</div>
+            </div>
+            <button class="btn-primary" style="background: #f472b6; color: #fff;">Tiếp tục</button>
+          </div>
+        </div>
+        <div class="progress-box">
+          <div class="progress-header">
+            <span style="color: #ffffff;">Tiến độ học tập</span>
+            <span style="color: #f472b6; font-weight: 600;">65%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 65%; background: linear-gradient(90deg, #f472b6, #a855f7);"></div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-solid" style="background: #f472b6; color: #fff;">Primary</button>
+          <button class="btn btn-outline" style="border: 1px solid rgba(161,161,170,0.4); color: #a1a1aa;">Secondary</button>
+        </div>
+      </div>
+      <div class="info">
+        <div class="style-name" style="color: #ffffff;">Vibrant Neon</div>
+        <div class="style-tagline" style="color: #f472b6;">Năng động, hiện đại</div>
+        <div class="tags">
+          <span class="tag" style="background: rgba(244,114,182,0.2); color: #a1a1aa;">Gradient accents</span>
+          <span class="tag" style="background: rgba(244,114,182,0.2); color: #a1a1aa;">Glow effects</span>
+          <span class="tag" style="background: rgba(244,114,182,0.2); color: #a1a1aa;">Bold type</span>
+        </div>
+        <div class="mood">Vibe: Gaming-inspired — Vercel dashboard</div>
+      </div>
+    </div>
+
+    <!-- Style 3: Warm Academic -->
+    <div class="card" style="--bg: #1c1917; --surface: #292524; --primary: #f59e0b; --accent: #10b981; --text: #fafaf9; --text-muted: #a8a29e;">
+      <div class="palette">
+        <div class="palette-label">Color Palette</div>
+        <div class="colors">
+          <div class="color-item"><div class="color-swatch" style="background: #1c1917; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">bg</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #292524;"></div><span class="color-name">surface</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #f59e0b;"></div><span class="color-name">primary</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #10b981;"></div><span class="color-name">accent</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #fafaf9; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">text</span></div>
+        </div>
+      </div>
+      <div class="preview" style="background: #292524;">
+        <div class="palette-label">Component Preview</div>
+        <div class="hub-card">
+          <div class="hub-card-inner">
+            <div class="icon-box" style="background: linear-gradient(135deg, rgba(245,158,11,0.4), rgba(16,185,129,0.4));">
+              <div style="width: 20px; height: 20px; background: #f59e0b; border-radius: 4px;"></div>
+            </div>
+            <div style="flex: 1;">
+              <div class="card-title" style="color: #fafaf9;">Java Backend</div>
+              <div class="card-subtitle">24 bài học · 65% hoàn thành</div>
+            </div>
+            <button class="btn-primary" style="background: #f59e0b; color: #1c1917;">Tiếp tục</button>
+          </div>
+        </div>
+        <div class="progress-box">
+          <div class="progress-header">
+            <span style="color: #fafaf9;">Tiến độ học tập</span>
+            <span style="color: #f59e0b; font-weight: 600;">65%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 65%; background: linear-gradient(90deg, #f59e0b, #10b981);"></div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-solid" style="background: #f59e0b; color: #1c1917;">Primary</button>
+          <button class="btn btn-outline" style="border: 1px solid rgba(168,162,158,0.4); color: #a8a29e;">Secondary</button>
+        </div>
+      </div>
+      <div class="info">
+        <div class="style-name" style="color: #fafaf9;">Warm Academic</div>
+        <div class="style-tagline" style="color: #f59e0b;">Thân thiện, gần gũi</div>
+        <div class="tags">
+          <span class="tag" style="background: rgba(245,158,11,0.2); color: #a8a29e;">Warm tones</span>
+          <span class="tag" style="background: rgba(245,158,11,0.2); color: #a8a29e;">Rounded</span>
+          <span class="tag" style="background: rgba(245,158,11,0.2); color: #a8a29e;">Soft feel</span>
+        </div>
+        <div class="mood">Vibe: Study buddy — Duolingo, Coursera</div>
+      </div>
+    </div>
+
+    <!-- Style 4: Glass Frost -->
+    <div class="card" style="--bg: #0c0a1d; --surface: rgba(139,92,246,0.1); --primary: #8b5cf6; --accent: #06b6d4; --text: #f8fafc; --text-muted: #cbd5e1;">
+      <div class="palette">
+        <div class="palette-label">Color Palette</div>
+        <div class="colors">
+          <div class="color-item"><div class="color-swatch" style="background: #0c0a1d; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">bg</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: rgba(139,92,246,0.3);"></div><span class="color-name">surface</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #8b5cf6;"></div><span class="color-name">primary</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #06b6d4;"></div><span class="color-name">accent</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #f8fafc; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">text</span></div>
+        </div>
+      </div>
+      <div class="preview" style="background: rgba(139,92,246,0.1);">
+        <div class="palette-label">Component Preview</div>
+        <div class="hub-card">
+          <div class="hub-card-inner">
+            <div class="icon-box" style="background: linear-gradient(135deg, rgba(139,92,246,0.4), rgba(6,182,212,0.4));">
+              <div style="width: 20px; height: 20px; background: #8b5cf6; border-radius: 4px;"></div>
+            </div>
+            <div style="flex: 1;">
+              <div class="card-title" style="color: #f8fafc;">Java Backend</div>
+              <div class="card-subtitle">24 bài học · 65% hoàn thành</div>
+            </div>
+            <button class="btn-primary" style="background: #8b5cf6; color: #fff;">Tiếp tục</button>
+          </div>
+        </div>
+        <div class="progress-box">
+          <div class="progress-header">
+            <span style="color: #f8fafc;">Tiến độ học tập</span>
+            <span style="color: #8b5cf6; font-weight: 600;">65%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 65%; background: linear-gradient(90deg, #8b5cf6, #06b6d4);"></div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-solid" style="background: #8b5cf6; color: #fff;">Primary</button>
+          <button class="btn btn-outline" style="border: 1px solid rgba(203,213,225,0.4); color: #cbd5e1;">Secondary</button>
+        </div>
+      </div>
+      <div class="info">
+        <div class="style-name" style="color: #f8fafc;">Glass Frost</div>
+        <div class="style-tagline" style="color: #8b5cf6;">Premium, thoáng mát</div>
+        <div class="tags">
+          <span class="tag" style="background: rgba(139,92,246,0.2); color: #cbd5e1;">Frosted glass</span>
+          <span class="tag" style="background: rgba(139,92,246,0.2); color: #cbd5e1;">Blur effect</span>
+          <span class="tag" style="background: rgba(139,92,246,0.2); color: #cbd5e1;">Modern depth</span>
+        </div>
+        <div class="mood">Vibe: Premium tech — Apple Vision Pro UI</div>
+      </div>
+    </div>
+
+    <!-- Style 5: Brutalist Bold -->
+    <div class="card" style="--bg: #000000; --surface: #171717; --primary: #ef4444; --accent: #fbbf24; --text: #fafafa; --text-muted: #737373;">
+      <div class="palette">
+        <div class="palette-label">Color Palette</div>
+        <div class="colors">
+          <div class="color-item"><div class="color-swatch" style="background: #000000; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">bg</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #171717;"></div><span class="color-name">surface</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #ef4444;"></div><span class="color-name">primary</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #fbbf24;"></div><span class="color-name">accent</span></div>
+          <div class="color-item"><div class="color-swatch" style="background: #fafafa; border: 1px solid rgba(255,255,255,0.2);"></div><span class="color-name">text</span></div>
+        </div>
+      </div>
+      <div class="preview" style="background: #171717;">
+        <div class="palette-label">Component Preview</div>
+        <div class="hub-card">
+          <div class="hub-card-inner">
+            <div class="icon-box" style="background: linear-gradient(135deg, rgba(239,68,68,0.4), rgba(251,191,36,0.4));">
+              <div style="width: 20px; height: 20px; background: #ef4444; border-radius: 4px;"></div>
+            </div>
+            <div style="flex: 1;">
+              <div class="card-title" style="color: #fafafa;">Java Backend</div>
+              <div class="card-subtitle">24 bài học · 65% hoàn thành</div>
+            </div>
+            <button class="btn-primary" style="background: #ef4444; color: #fff;">Tiếp tục</button>
+          </div>
+        </div>
+        <div class="progress-box">
+          <div class="progress-header">
+            <span style="color: #fafafa;">Tiến độ học tập</span>
+            <span style="color: #ef4444; font-weight: 600;">65%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 65%; background: linear-gradient(90deg, #ef4444, #fbbf24);"></div>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-solid" style="background: #ef4444; color: #fff;">Primary</button>
+          <button class="btn btn-outline" style="border: 1px solid rgba(115,115,115,0.4); color: #737373;">Secondary</button>
+        </div>
+      </div>
+      <div class="info">
+        <div class="style-name" style="color: #fafafa;">Brutalist Bold</div>
+        <div class="style-tagline" style="color: #ef4444;">Mạnh mẽ, khác biệt</div>
+        <div class="tags">
+          <span class="tag" style="background: rgba(239,68,68,0.2); color: #737373;">Large type</span>
+          <span class="tag" style="background: rgba(239,68,68,0.2); color: #737373;">High contrast</span>
+          <span class="tag" style="background: rgba(239,68,68,0.2); color: #737373;">Raw edges</span>
+        </div>
+        <div class="mood">Vibe: Bold statement — Stripe, Basecamp</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recommendation">
+    <div class="rec-title">Khuyến nghị cho SkillForge</div>
+    <div class="rec-grid">
+      <div class="rec-item">
+        <div class="rec-label">Nếu target là developer chính thức:</div>
+        <div class="rec-value">Minimal Dark hoặc Glass Frost</div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-label">Nếu target là sinh viên/nhập môn:</div>
+        <div class="rec-value">Warm Academic hoặc Vibrant Neon</div>
+      </div>
+      <div class="rec-item">
+        <div class="rec-label">Nếu muốn khác biệt hoàn toàn:</div>
+        <div class="rec-value">Brutalist Bold</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
