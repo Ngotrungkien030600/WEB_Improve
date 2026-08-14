@@ -171,6 +171,7 @@ export default {
 }
 
 .game-header h2 {
+  color: var(--forge-text);
   margin-bottom: var(--space-3);
 }
 
@@ -179,16 +180,19 @@ export default {
   justify-content: center;
   gap: var(--space-4);
   font-size: var(--font-sm);
+  color: var(--forge-text2);
 }
 
 .game-stats strong {
-  color: var(--forge-accent);
+  color: var(--forge-fire);
 }
 
 .game-feedback {
   text-align: center;
   margin: var(--space-4) 0;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: var(--font-base);
+  color: var(--forge-text);
   min-height: 1.5em;
 }
 
@@ -214,6 +218,7 @@ export default {
   justify-content: center;
   font-size: var(--font-xl);
   font-weight: 700;
+  color: var(--forge-text);
   background: var(--forge-glass);
   border: 2px solid var(--forge-glass-border);
   border-radius: var(--forge-card-radius);

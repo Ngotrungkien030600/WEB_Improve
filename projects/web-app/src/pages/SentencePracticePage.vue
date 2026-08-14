@@ -1,12 +1,12 @@
 <template>
   <div class="practice-page" style="--color-accent: #34d399">
-    <CTopbar
-      title="🗣️ Luyện nói & Viết lại"
-      back-label="Tiếng Anh"
-      @go-home="handleBack"
-    />
-
     <div class="page">
+      <CTopbar
+        title="🗣️ Luyện nói & Viết lại"
+        back-label="Tiếng Anh"
+        @go-home="handleBack"
+      />
+
       <p class="desc">Xem tiếng Việt → tự viết tiếng Anh → kiểm tra. Mỗi câu đúng giúp bạn nhớ lâu hơn. 500+ câu từ 13 chủ đề.</p>
 
       <!-- Category tabs -->
@@ -232,6 +232,7 @@ export default {
 .practice-page {
   min-height: 100vh;
   background: var(--color-bg);
+  padding: 2.5rem 1.5rem;
 }
 
 .page {

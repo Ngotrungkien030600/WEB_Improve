@@ -1,12 +1,12 @@
 <template>
   <div class="learning-paths-page" style="--color-accent: #7c5cfc">
-    <CTopbar
-      title="🗺️ Lộ trình học"
-      back-label="Trang chủ"
-      @go-home="handleNavigate('/')"
-    />
-
     <div class="page">
+      <CTopbar
+        title="🗺️ Lộ trình học"
+        back-label="Trang chủ"
+        @go-home="handleNavigate('/')"
+      />
+
       <p class="desc">Lộ trình học có mục tiêu rõ ràng từ cơ bản đến nâng cao.</p>
 
       <div
@@ -121,6 +121,7 @@ export default {
 .learning-paths-page {
   background: var(--color-bg);
   min-height: 100vh;
+  padding: 2.5rem 1.5rem;
 }
 
 .page {

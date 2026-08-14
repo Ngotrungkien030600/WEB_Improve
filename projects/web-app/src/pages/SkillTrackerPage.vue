@@ -251,6 +251,7 @@ export default {
 .skill-page {
   min-height: 100vh;
   background: var(--color-bg);
+  padding: 2.5rem 1.5rem;
 }
 
 .skill-stats {
