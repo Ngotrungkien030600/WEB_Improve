@@ -2,7 +2,7 @@
   <div class="game-page">
     <CTopbar
       title="🔀 Xếp chữ"
-      back-label="⬅ Tiếng Anh"
+      back-label="Tiếng Anh"
       @go-home="handleBack"
     />
 

@@ -2,7 +2,7 @@
   <div class="game-page">
     <CTopbar
       title="🃏 Ghép cặp từ vựng"
-      back-label="⬅ Tiếng Anh"
+      back-label="Tiếng Anh"
       @go-home="handleBack"
     />
 

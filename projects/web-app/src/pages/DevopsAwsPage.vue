@@ -1,7 +1,7 @@
 <template>
   <div class="devops-page" style="--dp-accent: #ff9900;">
     <div class="dp-wrap">
-      <CTopbar title="☁️ AWS Cloud" back-label="← DevOps" @go-home="handleBack" />
+      <CTopbar title="☁️ AWS Cloud" back-label="DevOps" @go-home="handleBack" />
 
       <p class="dp-desc">
         Tổng quan các dịch vụ AWS cốt lõi cho DevOps — bản tóm tắt + liên kết tới deep-dive đầy đủ

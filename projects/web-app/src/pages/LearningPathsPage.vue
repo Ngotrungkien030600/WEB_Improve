@@ -2,7 +2,7 @@
   <div class="learning-paths-page" style="--color-accent: #7c5cfc">
     <CTopbar
       title="🗺️ Lộ trình học"
-      back-label="← Trang chủ"
+      back-label="Trang chủ"
       @go-home="handleNavigate('/')"
     />
 

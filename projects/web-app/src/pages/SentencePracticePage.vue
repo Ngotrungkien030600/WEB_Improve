@@ -2,7 +2,7 @@
   <div class="practice-page" style="--color-accent: #34d399">
     <CTopbar
       title="🗣️ Luyện nói & Viết lại"
-      back-label="⬅ Tiếng Anh"
+      back-label="Tiếng Anh"
       @go-home="handleBack"
     />
 

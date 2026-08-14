@@ -198,7 +198,7 @@ export default {
   stroke-dasharray: 188.5;
   stroke-dashoffset: 0;
   transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
-  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.3));
+  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.4));
 }
 
 .forge-ring-progress.warning {
@@ -288,14 +288,14 @@ export default {
 }
 
 .forge-btn-primary {
-  background: linear-gradient(135deg, var(--forge-btn-primary-start, #f97316), var(--forge-btn-primary-end, #ea580c));
+  background: linear-gradient(135deg, var(--forge-btn-primary-start, #8b5cf6), var(--forge-btn-primary-end, #7c3aed));
   color: var(--forge-btn-primary-color, white);
-  box-shadow: 0 2px 10px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
 }
 
 .forge-btn-primary:hover {
   transform: scale(1.12);
-  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.45);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.5);
 }
 
 .forge-btn-primary:active {

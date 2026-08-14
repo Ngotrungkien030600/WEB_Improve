@@ -1,7 +1,7 @@
 <template>
   <div class="devops-page" style="--dp-accent: #326ce5;">
     <div class="dp-wrap">
-      <CTopbar title="☸️ Kubernetes" back-label="← DevOps" @go-home="handleBack" />
+      <CTopbar title="☸️ Kubernetes" back-label="DevOps" @go-home="handleBack" />
 
       <p class="dp-desc">
         Pod, Deployment, Service, ConfigMap/Secret, Ingress, HPA, Namespace — manifest mẫu, kubectl — song ngữ EN-VI

@@ -1,7 +1,7 @@
 <template>
   <div class="devops-page" style="--dp-accent: #7c3aed;">
     <div class="dp-wrap">
-      <CTopbar title="🏗️ Terraform" back-label="← DevOps" @go-home="handleBack" />
+      <CTopbar title="🏗️ Terraform" back-label="DevOps" @go-home="handleBack" />
 
       <p class="dp-desc">
         HCL, provider, resource, state, plan/apply, modules, remote state, workspaces — song ngữ EN-VI

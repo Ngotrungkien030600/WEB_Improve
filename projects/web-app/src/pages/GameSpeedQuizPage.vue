@@ -2,7 +2,7 @@
   <div class="game-page">
     <CTopbar
       title="⚡ Trắc nghiệm nhanh"
-      back-label="⬅ Tiếng Anh"
+      back-label="Tiếng Anh"
       @go-home="handleBack"
     />
 

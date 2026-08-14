@@ -46,7 +46,7 @@ export default {
   position: absolute;
   inset: -1px;
   border-radius: var(--forge-card-radius);
-  background: linear-gradient(135deg, transparent 30%, rgba(249, 115, 22, 0.15) 50%, transparent 70%);
+  background: linear-gradient(135deg, transparent 30%, rgba(139, 92, 246, 0.2) 50%, transparent 70%);
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
@@ -57,7 +57,7 @@ export default {
   background: var(--forge-glass-hover);
   border-color: var(--forge-glass-hover-border);
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(249, 115, 22, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), 0 0 30px rgba(139, 92, 246, 0.15);
 }
 
 .home-card:hover::before {

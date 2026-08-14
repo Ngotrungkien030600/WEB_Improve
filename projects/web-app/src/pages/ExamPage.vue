@@ -2,7 +2,7 @@
   <div class="exam-page">
     <CTopbar
       title="📝 Thi Tiếng Anh"
-      back-label="⬅ Tiếng Anh"
+      back-label="Tiếng Anh"
       @go-home="handleBack"
     />
 

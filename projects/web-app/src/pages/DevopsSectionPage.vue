@@ -3,7 +3,7 @@
     <div class="ds-wrap">
       <CTopbar
         title="🐳 DevOps"
-        back-label="← DevOps"
+        back-label="DevOps"
         @go-home="handleBack"
       />
 

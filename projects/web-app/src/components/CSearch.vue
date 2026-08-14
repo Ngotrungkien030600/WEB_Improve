@@ -85,7 +85,7 @@ defineExpose({ focus });
 
 .search-box.focused {
   border-color: var(--forge-accent, var(--forge-fire));
-  box-shadow: 0 0 0 3px var(--forge-glow, rgba(249, 115, 22, 0.15));
+  box-shadow: 0 0 0 3px var(--forge-glow, rgba(139, 92, 246, 0.2));
 }
 
 .search-icon {

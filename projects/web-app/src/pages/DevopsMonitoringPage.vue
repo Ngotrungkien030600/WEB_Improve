@@ -1,7 +1,7 @@
 <template>
   <div class="devops-page" style="--dp-accent: #eab308;">
     <div class="dp-wrap">
-      <CTopbar title="📊 Monitoring &amp; Observability" back-label="← DevOps" @go-home="handleBack" />
+      <CTopbar title="📊 Monitoring &amp; Observability" back-label="DevOps" @go-home="handleBack" />
 
       <p class="dp-desc">
         Prometheus, Grafana, CloudWatch, metrics/logs/traces, alerting, golden signals — song ngữ EN-VI

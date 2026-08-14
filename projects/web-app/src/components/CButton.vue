@@ -78,17 +78,17 @@ export default {
 .forge-btn-primary {
   background: linear-gradient(135deg, var(--forge-fire), var(--forge-fire-glow));
   color: white;
-  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 }
 
 .forge-btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.35);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
 }
 
 .forge-btn-primary:active:not(:disabled) {
   transform: translateY(0);
-  box-shadow: 0 1px 4px rgba(249, 115, 22, 0.2);
+  box-shadow: 0 1px 4px rgba(139, 92, 246, 0.25);
 }
 
 /* Secondary variant */

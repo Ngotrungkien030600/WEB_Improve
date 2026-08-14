@@ -2,7 +2,7 @@
   <div class="podcast-page">
     <CTopbar
       title="🎧 Podcast"
-      back-label="← English"
+      back-label="English"
       @go-home="handleBack"
     />
 

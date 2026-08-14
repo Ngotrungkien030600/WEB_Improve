@@ -70,23 +70,41 @@
 .subpage-back {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.45rem 1rem;
+  gap: 0.45rem;
+  padding: 0.5rem 1.05rem;
   background: var(--forge-glass, rgba(255,255,255,0.06));
-  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.08));
-  border-radius: 20px;
+  border: 1px solid var(--forge-glass-border, rgba(255,255,255,0.1));
+  border-radius: 999px;
   color: var(--forge-text2, #94a3b8);
   text-decoration: none;
   font-size: 0.82rem;
   font-weight: 600;
   transition: all 0.2s ease;
   white-space: nowrap;
+  user-select: none;
+}
+
+.subpage-back .back-arrow {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
 .subpage-back:hover {
   background: var(--forge-glass-hover, rgba(255,255,255,0.12));
-  border-color: var(--forge-glass-hover-border, rgba(255,255,255,0.18));
+  border-color: var(--forge-accent, var(--forge-fire));
   color: var(--forge-text);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--forge-glow, rgba(139, 92, 246, 0.2));
+}
+
+.subpage-back:hover .back-arrow {
+  transform: translateX(-2px);
+}
+
+.subpage-back:active {
+  transform: translateY(0) scale(0.97);
 }
 
 /* ───── Content Area ───── */

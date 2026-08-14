@@ -1,7 +1,7 @@
 <template>
   <div class="devops-page" style="--dp-accent: #2496ed;">
     <div class="dp-wrap">
-      <CTopbar title="🐳 Docker" back-label="← DevOps" @go-home="handleBack" />
+      <CTopbar title="🐳 Docker" back-label="DevOps" @go-home="handleBack" />
 
       <p class="dp-desc">
         Image & Container, Dockerfile, Compose, Volume, Network, multi-stage build — song ngữ EN-VI

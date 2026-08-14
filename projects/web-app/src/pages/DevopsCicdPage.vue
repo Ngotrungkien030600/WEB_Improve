@@ -1,7 +1,7 @@
 <template>
   <div class="devops-page" style="--dp-accent: #34d399;">
     <div class="dp-wrap">
-      <CTopbar title="🔄 CI/CD" back-label="← DevOps" @go-home="handleBack" />
+      <CTopbar title="🔄 CI/CD" back-label="DevOps" @go-home="handleBack" />
 
       <p class="dp-desc">
         Jenkins vs GitHub Actions, pipeline stages, GitOps, quality gates, blue-green & canary deploy — song ngữ EN-VI

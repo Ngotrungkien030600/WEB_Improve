@@ -2,7 +2,7 @@
   <div class="skill-page" style="--color-accent: #667eea">
     <CTopbar
       title="📊 Skill Tracker"
-      back-label="⬅ Tiếng Anh"
+      back-label="Tiếng Anh"
       @go-home="handleBack"
     />
 

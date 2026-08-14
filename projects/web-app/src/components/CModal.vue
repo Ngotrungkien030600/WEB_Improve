@@ -69,8 +69,9 @@ onUnmounted(() => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+  background: rgba(12, 10, 29, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,14 +80,14 @@ onUnmounted(() => {
 }
 
 .modal-container {
-  background: var(--forge-bg2, #0d0d1a);
+  background: var(--forge-bg2, #0f0c24);
   border: 1px solid var(--forge-glass-border);
   border-radius: var(--forge-card-radius, 16px);
   max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 40px rgba(139, 92, 246, 0.15);
 }
 
 /* Sizes */

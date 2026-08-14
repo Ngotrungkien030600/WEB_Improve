@@ -3,7 +3,7 @@
     <div class="hub-container">
       <CTopbar
         title="☁️ AWS Cloud"
-        back-label="← Trang chủ"
+        back-label="Trang chủ"
         @go-home="handleNavigate('/')"
       />
 

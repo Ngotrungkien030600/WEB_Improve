@@ -3,7 +3,7 @@
     <div class="cs-wrap">
       <CTopbar
         title="☁️ AWS Cloud"
-        back-label="← AWS Cloud"
+        back-label="AWS Cloud"
         @go-home="handleBack"
       />
 

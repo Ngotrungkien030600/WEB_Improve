@@ -111,22 +111,22 @@ export default {
 
 <style scoped>
 :root {
-  --forge-bg: var(--color-bg-page, #08080e);
-  --forge-bg2: var(--color-bg-page-alt, #0d0d1a);
-  --forge-surface: rgba(255, 255, 255, 0.04);
-  --forge-surface-hover: rgba(255, 255, 255, 0.08);
-  --forge-glass: rgba(255, 255, 255, 0.06);
-  --forge-glass-border: rgba(255, 255, 255, 0.08);
-  --forge-glass-hover: rgba(255, 255, 255, 0.12);
-  --forge-glass-hover-border: rgba(255, 255, 255, 0.18);
-  --forge-fire: var(--color-warning-alt, #f97316);
-  --forge-fire-glow: var(--color-warning-alt, #ea580c);
-  --forge-ember: var(--color-warning, #fbbf24);
-  --forge-glow: rgba(249, 115, 22, 0.25);
-  --forge-glow-strong: rgba(249, 115, 22, 0.4);
-  --forge-text: var(--text-primary-dark, #f1f5f9);
-  --forge-text2: var(--text-muted-dark, #94a3b8);
-  --forge-text3: var(--text-tertiary, #64748b);
+  --forge-bg: var(--color-bg-page, #0c0a1d);
+  --forge-bg2: var(--color-bg-page-alt, #0f0c24);
+  --forge-surface: rgba(139, 92, 246, 0.08);
+  --forge-surface-hover: rgba(139, 92, 246, 0.15);
+  --forge-glass: rgba(139, 92, 246, 0.1);
+  --forge-glass-border: rgba(139, 92, 246, 0.2);
+  --forge-glass-hover: rgba(139, 92, 246, 0.2);
+  --forge-glass-hover-border: rgba(139, 92, 246, 0.35);
+  --forge-fire: #8b5cf6;
+  --forge-fire-glow: #7c3aed;
+  --forge-ember: #06b6d4;
+  --forge-glow: rgba(139, 92, 246, 0.25);
+  --forge-glow-strong: rgba(139, 92, 246, 0.4);
+  --forge-text: var(--text-primary-dark, #f8fafc);
+  --forge-text2: var(--text-muted-dark, #cbd5e1);
+  --forge-text3: var(--text-tertiary, #94a3b8);
   --forge-card-radius: 16px;
 }
 

@@ -3,7 +3,7 @@
     <div class="page">
       <CTopbar
         title="📊 Dashboard"
-        back-label="← Trang chủ"
+        back-label="Trang chủ"
         @go-home="handleNavigate('/')"
       />
 
