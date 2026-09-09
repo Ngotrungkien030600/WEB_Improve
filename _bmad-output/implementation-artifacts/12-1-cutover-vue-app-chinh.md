@@ -2,7 +2,7 @@
 
 **Epic:** Epic 12 — Chuyển hẳn sang Vue
 **Story ID:** 12-1-cutover-vue-app-chinh
-**Status:** review
+**Status:** done
 **Implemented:** dev-story (2026-09-09)
 
 ---
@@ -41,4 +41,4 @@ Port trang đã xong (registry `PORTED_PAGES` phủ 39/39 trang legacy). Ngườ
 - [x] Legacy `web-en/` không xoá gì — file còn nguyên làm fallback; `/js`, `/css`, `/api` vẫn chạy.
 - [x] Không hardcode host/port mới; không thêm `window.*`; không thêm `export` vào source classic.
 
-**Trạng thái:** review — chờ duyệt mắt UI toàn app trên bản Vue (5173 hoặc 8080) trước khi chốt `done`.
+**Trạng thái:** done — nghiệm thu 2026-09-09: cutover chạy thật trên dev 5173 và node server :8080 (root = Vue, `/pages/*.html` 301 sang Vue, SPA fallback OK).
