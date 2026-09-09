@@ -158,5 +158,9 @@ development_status:
   epic-11: in-progress
   11-1-fix-legacy-bugs-con-lai: review   # ✅ DEV 2026-09-09 — S2: bind 127.0.0.1 + bỏ CORS * + rate-limit (verified 60×400→429); S3: body 1MB→413 (verified); S4: bỏ qMatch chết + id fallback duy nhất; C1: agents-config/agent-constants classic-safe + vite-plugin inject export cho js/agents; C4: bmad-chat.js thành module dùng markdownToHTML chung; C3: xoá home-ai.js; S5: xoá systemPrompt client. Vue build pass. Story file: 11-1-fix-legacy-bugs-con-lai.md
 
+  # ---- Epic 12: Cutover — Vue là app chính, legacy fallback ----
+  epic-12: in-progress
+  12-1-cutover-vue-app-chinh: review   # ✅ DEV 2026-09-09 — registry phủ 39/39 trang; legacy-redirect.js nguồn ánh xạ chung; dev middleware + server 301 cho /pages/*.html → route Vue (verified 301); node server serve dist root + SPA fallback (verified); docs cập nhật. Story file: 12-1-cutover-vue-app-chinh.md
+
 last_updated: 2026-09-09
 

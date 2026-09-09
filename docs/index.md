@@ -6,20 +6,23 @@
 
 ## Tổng quan
 
-- **Loại repo:** multi-part — `client` (web tĩnh) + `server` (Node built-in), chạy chung một tiến trình
+- **Loại repo:** multi-part — `client` (web) + `server` (Node built-in), chạy chung một tiến trình
 - **Sản phẩm:** SkillForge — web tự học tiếng Anh + luyện phỏng vấn Java backend
 - **Ngôn ngữ chính:** JavaScript (không TypeScript)
-- **Kiến trúc:** Multi-page application tĩnh, không framework, không bundler
-- **Quy mô:** ~17.700 dòng / 95 file code
+- **Kiến trúc:** Vue 3 + Vite là **app chính** (cutover 2026-09-09, story 12-1); `web-en/` giữ làm fallback, không còn phục vụ trực tiếp
+- **Quy mô:** ~17.700 dòng / 95 file code (2 app)
 
 ## Tham chiếu nhanh
 
 | Part | Loại | Stack | Gốc | Điểm vào |
 |---|---|---|---|---|
-| `client` | web | Vanilla JS + CSS thuần, IndexedDB | `projects/web-en/` | `index.html`, 7 file `*-app.js` |
-| `server` | backend | Node.js `http`/`fs` — **zero dependency** | `projects/web-en/server/` | `server/index.js` |
+| `web-app` | **app chính** | Vue 3 + Vite SPA, history mode | `projects/web-app/` | `src/main.js`, `src/router/index.js` |
+| `server` | backend + serve build | Node.js `http`/`fs` — **zero dependency** | `projects/web-en/server/` | `server/index.js` |
+| `web-en` | fallback (MPA cũ) | Vanilla JS + CSS thuần, IndexedDB | `projects/web-en/` | giữ nguyên, URL `/pages/*.html` đã 301 sang Vue |
 
-**Chạy:** `start.bat` (Windows) hoặc `cd "projects/web-en" && node server/index.js` → http://localhost:8080
+**Chạy bản Vue (cách 1 — dev):** `cd projects/web-app && npm run dev` → http://localhost:5173 (`/api` proxy sang :8080)
+
+**Chạy bản Vue (cách 2 — 1 server cùng origin):** `start.bat` hoặc `cd "projects/web-en" && node server/index.js` → http://localhost:8080 — root trả bản build Vue (`web-app/dist`), SPA fallback cho route deep-link, URL legacy `/pages/*.html` đã 301 sang route Vue. Server bind `127.0.0.1`, không mở LAN.
 
 ## Tài liệu đã sinh
 
@@ -55,6 +58,13 @@ Bảng dưới xác minh lại trên code hiện tại, không tin bản cũ. Ch
 | **S5** | Thấp | `config.js` + `agents-config.js` | System prompt hai bản lệch nhau | ✅ Story 11.1 — xoá bản chết `systemPrompt` ở client; server là nguồn duy nhất |
 | **C3** | Thấp | `js/home-ai.js` | Code chết, không trang nào load | ✅ Story 11.1 — đã xoá file |
 | **C4** | Thấp | `js/utils/markdown.js` | Hai bản parser markdown song song | ✅ Story 11.1 — `bmad-chat.js` thành module, dùng chung `markdownToHTML` |
+
+## Trạng thái chuyển sang Vue (cutover 2026-09-09 — story 12-1)
+
+- 39/39 trang legacy (`projects/web-en/pages/**`) đều có bản Vue trong registry `src/utils/ported-pages.js` và bảng ánh xạ `src/utils/legacy-redirect.js`.
+- Root (`/`), `/index.html` và route deep-link → bản Vue (node server serve `web-app/dist` + SPA fallback; dev Vite 5173 dùng middleware redirect).
+- URL cũ `/pages/<trang>.html` → **301** sang route Vue: ở dev (Vite middleware) và ở node server (handler 301, 3 hub lệch quy ước: `ai/hub`, `cloud/hub`, `devops/hub`).
+- `web-en/` giữ nguyên trên đĩa làm fallback; chỉ còn `/js`, `/css`, `/api` được serve từ đó.
 
 ## Bắt đầu từ đâu
 

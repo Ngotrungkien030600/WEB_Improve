@@ -8,6 +8,13 @@ const { callAI, callAIStream, buildSystemForBundle } = require('./ai-service');
 
 // App cá nhân chạy loopback — không auth, chỉ giới hạn tần suất và kích thước body
 const MAX_BODY_BYTES = 1024 * 1024;
+
+// Hub legacy lệch quy ước "file → route" khi chuyển sang Vue (xem handler 301 /pages/)
+const VUE_LEGACY_HUB_ROUTES = Object.freeze({
+  'ai/hub': '/ai',
+  'cloud/hub': '/cloud',
+  'devops/hub': '/devops',
+});
 const RATE_LIMIT = { windowMs: 60_000, maxPerIp: 60 };
 const requestLog = new Map(); // ip -> { count, windowStart }
 
@@ -343,6 +350,18 @@ const server = http.createServer((req, res) => {
   if (req.method === 'POST' && urlPath === API_PATHS.BMAD_CHAT) return handleBmadChat(req, res);
   if (req.method === 'POST' && urlPath === API_PATHS.SALARY_INTERVIEW) return handleSalaryInterview(req, res);
   if (req.method === 'POST' && urlPath === API_PATHS.ACCELERATOR_STREAM) return handleAcceleratorStream(req, res);
+
+  // Cutover: URL legacy /pages/<trang>.html → 301 sang route Vue (không phục vụ MPA cũ nữa).
+  // Chỉ 3 trang hub lệch quy ước "X.html ↔ /X"; giữ đồng bộ với web-app/src/utils/legacy-redirect.js
+  if (req.method === 'GET' && urlPath.startsWith('/pages/') && urlPath.endsWith('.html')) {
+    const rel = urlPath.slice('/pages/'.length, -'.html'.length);
+    const queryIndex = req.url.indexOf('?');
+    const query = queryIndex >= 0 ? req.url.slice(queryIndex) : '';
+    const target = (VUE_LEGACY_HUB_ROUTES[rel] || '/' + rel) + query;
+    res.writeHead(301, { 'Location': target });
+    res.end();
+    return;
+  }
 
   // Vue là app chính: root + asset build phục vụ từ dist (cùng origin, story 2-4 Option A)
   const isVueRoot = urlPath === '/' || urlPath === '/index.html';
