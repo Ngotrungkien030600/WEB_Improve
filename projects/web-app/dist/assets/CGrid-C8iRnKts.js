@@ -1,0 +1,1 @@
+import{E as e,i as t,v as n,w as r}from"./index-CX3t5JlV.js";var i={},a={class:`home-cards`};function o(t,i){return r(),n(`div`,a,[e(t.$slots,`default`,{},void 0,!0)])}var s=t(i,[[`render`,o],[`__scopeId`,`data-v-b10b980f`]]);export{s as t};
