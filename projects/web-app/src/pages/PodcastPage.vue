@@ -88,26 +88,6 @@
               @ended="onEnded"
             ></audio>
             <p class="audio-hint">Audio phát trực tiếp từ máy chủ VOA. Nếu không nghe được, dùng nút "Trang nghe VOA".</p>
-            <div class="sync-tools">
-              <span class="sync-label">Chỉnh đồng bộ câu</span>
-              <div class="sync-row">
-                <span class="sync-sub">Highlight trễ/sớm hơn giọng đọc:</span>
-                <button type="button" @click="adjustOffset(-100)">−100 ms</button>
-                <span class="sync-value">{{ syncOffsetMs }} ms</span>
-                <button type="button" @click="adjustOffset(100)">+100 ms</button>
-              </div>
-              <div class="sync-row">
-                <span class="sync-sub">Đầu khớp nhưng càng cuối càng lệch:</span>
-                <button type="button" @click="adjustPerLine(-20)">−20 ms/câu</button>
-                <span class="sync-value">{{ syncPerMs }} ms/câu</span>
-                <button type="button" @click="adjustPerLine(20)">+20 ms/câu</button>
-                <button type="button" class="sync-reset" @click="resetSync()">Đặt lại</button>
-              </div>
-              <p class="sync-note">
-                +ms: tô trễ hơn · −ms: tô sớm hơn. "ms/câu": mỗi câu về sau trễ/sớm thêm bấy nhiêu
-                (dùng khi đầu bài khớp mà cuối bài lệch dồn lại). Chỉnh xong tự lưu theo từng bài.
-              </p>
-            </div>
           </div>
 
           <!-- Transcript -->
@@ -154,11 +134,11 @@
                   {{ line.vi }}
                 </p>
               </div>
-              <p v-if="!durationSec && !cues.length" class="empty-state">
-                Đang nạp audio để đồng bộ câu…
+              <p v-if="!selected.lines.length" class="empty-state">
+                Bài chưa có transcript.
               </p>
               <p class="credit-note">
-                Transcript tiếng Anh: VOA Learning English (public domain) · Bản dịch tiếng Việt: SkillForge biên soạn · Thời điểm câu được ước lượng theo độ dài audio.
+                Transcript tiếng Anh: VOA Learning English (public domain) · Bản dịch tiếng Việt: SkillForge biên soạn · Thời điểm câu theo mốc đo của bài (hoặc ước lượng nếu chưa có mốc).
               </p>
             </div>
           </div>
@@ -177,8 +157,8 @@ import { navigate } from '../utils/navigate.js';
 import CTopbar from '../components/CTopbar.vue';
 import { YOUTUBE_CHANNELS, PODCAST_LESSONS } from '../utils/podcast-content.js';
 
-// Khoảng lặng (giây) ở đầu/cuối audio — có thể chỉnh theo từng bài nếu cần tinh chỉnh.
-const LEAD_SECONDS = 1.0;
+// Dùng cho bài CHƯA có mốc đo: ước lượng theo số từ (kém chính xác hơn mốc đo).
+const LEAD_SECONDS = 1.2;
 const TAIL_SECONDS = 0.6;
 
 function parseDuration(text) {
@@ -189,64 +169,86 @@ function parseDuration(text) {
   return 0;
 }
 
-// Tỉ lệ số từ của từng câu — dùng để chia tổng thời gian nói thành các mốc câu.
-function computeFractions(lines) {
-  const weights = lines.map((line) => {
-    const words = (line.en.match(/\S+/g) || []).length;
-    const endsPause = /[.!?…]"\s*$|[.!?…]\s*$/.test(line.en) ? 0.8 : 0.3;
-    return words + endsPause;
-  });
-  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-  const fractions = [];
-  let cursor = 0;
-  lines.forEach((line, index) => {
-    fractions.push(cursor / totalWeight);
-    cursor += weights[index];
-  });
-  return fractions;
+function lineWeight(line) {
+  const words = (line.en.match(/\S+/g) || []).length;
+  const endsPause = /[.!?…]"\s*$|[.!?…]\s*$/.test(line.en) ? 0.8 : 0.3;
+  return words + endsPause;
 }
 
-// Thời điểm bắt đầu từng câu. `perLineSec` (giây/câu) bù độ lệch dồn về cuối:
-// mỗi câu về sau trễ thêm/sớm bớt bấy nhiêu so với ước lượng ban đầu.
-function buildCues(lines, totalSeconds, perLineSec) {
+function weightBetween(lines, from, to) {
+  let sum = 0;
+  for (let i = from; i < to; i += 1) {
+    sum += lineWeight(lines[i]);
+  }
+  return sum;
+}
+
+// Bài chưa có mốc đo — ước lượng đều theo tỉ lệ số từ.
+function estimateCues(lines, totalSeconds) {
   const speechSeconds = Math.max(totalSeconds - LEAD_SECONDS - TAIL_SECONDS, 1);
-  const fractions = computeFractions(lines);
+  const totalWeight = weightBetween(lines, 0, lines.length);
   const starts = [];
-  let previous = -Infinity;
-  lines.forEach((line, index) => {
-    const raw = LEAD_SECONDS + fractions[index] * speechSeconds + index * perLineSec;
-    let start = raw;
-    if (start < previous + 0.05) start = previous + 0.05;
-    const lastAllowed = totalSeconds - 0.15;
-    if (start > lastAllowed) start = lastAllowed;
-    starts.push({ start });
-    previous = start;
+  let cursor = 0;
+  lines.forEach((line) => {
+    starts.push(LEAD_SECONDS + (cursor / totalWeight) * speechSeconds);
+    cursor += lineWeight(line);
   });
   return starts;
 }
 
-const SYNC_KEY_PREFIX = 'podcast.sync.';
-
-function readSync(lessonId) {
-  try {
-    const raw = localStorage.getItem(SYNC_KEY_PREFIX + lessonId);
-    if (!raw) return { offsetMs: 0, perMs: 0 };
-    const parsed = JSON.parse(raw);
-    return {
-      offsetMs: Number.isFinite(parsed.offsetMs) ? parsed.offsetMs : 0,
-      perMs: Number.isFinite(parsed.perMs) ? parsed.perMs : 0,
-    };
-  } catch (err) {
-    return { offsetMs: 0, perMs: 0 };
+// Bài CÓ mốc đo (lesson.anchors = [{ i, t }]): giữa hai mốc liên tiếp, thời điểm mỗi câu
+// chia theo trọng số số từ → chính xác cao hơn nhiều so với ước lượng thuần tuý.
+function anchoredCues(lines, anchors) {
+  const points = anchors.slice().sort((a, b) => a.i - b.i);
+  const m = points.length;
+  const starts = new Array(lines.length).fill(null);
+  for (let k = 0; k < lines.length; k += 1) {
+    if (k < points[0].i) {
+      // Trước mốc đầu tiên — ngoại suy ngược theo mật độ của đoạn mốc đầu.
+      const perWord =
+        m >= 2 && points[1].i > points[0].i
+          ? (points[1].t - points[0].t) / Math.max(weightBetween(lines, points[0].i, points[1].i), 1)
+          : 0.45;
+      starts[k] = Math.max(points[0].t - weightBetween(lines, k, points[0].i) * perWord, 0);
+      continue;
+    }
+    if (k >= points[m - 1].i) {
+      // Từ mốc cuối trở đi.
+      starts[k] =
+        k === points[m - 1].i
+          ? points[m - 1].t
+          : points[m - 1].t + weightBetween(lines, points[m - 1].i, k) * 0.45;
+      continue;
+    }
+    // Giữa hai mốc: chia theo trọng số từ.
+    let found = false;
+    for (let a = 0; a < m - 1; a += 1) {
+      if (k >= points[a].i && k < points[a + 1].i) {
+        const seg = Math.max(weightBetween(lines, points[a].i, points[a + 1].i), 1);
+        const portion = weightBetween(lines, points[a].i, k) / seg;
+        starts[k] = points[a].t + portion * (points[a + 1].t - points[a].t);
+        found = true;
+        break;
+      }
+    }
+    if (!found) starts[k] = 0;
   }
+  return starts;
 }
 
-function writeSync(lessonId, value) {
-  try {
-    localStorage.setItem(SYNC_KEY_PREFIX + lessonId, JSON.stringify(value));
-  } catch (err) {
-    // localStorage có thể bị chặn (private mode) — bỏ qua.
-  }
+function clampStarts(starts, totalSeconds) {
+  const lastAllowed = totalSeconds - 0.15;
+  const out = [];
+  let previous = -Infinity;
+  starts.forEach((raw, index) => {
+    if (raw === null || !Number.isFinite(raw)) raw = previous + 0.4;
+    let start = raw;
+    if (start < previous + 0.05) start = previous + 0.05;
+    if (start > lastAllowed) start = lastAllowed;
+    out.push({ start });
+    previous = start;
+  });
+  return out;
 }
 
 export default {
@@ -262,8 +264,6 @@ export default {
       durationSec: 0,
       currentTime: 0,
       playing: false,
-      syncOffsetMs: 0,
-      syncPerMs: 0,
     };
   },
   computed: {
@@ -272,15 +272,19 @@ export default {
       if (!lesson) return [];
       const total = this.durationSec > 0 ? this.durationSec : parseDuration(lesson.duration);
       if (total <= 0) return [];
-      return buildCues(lesson.lines, total, this.syncPerMs / 1000);
+      const anchors = lesson.anchors && lesson.anchors.length >= 2 ? lesson.anchors : null;
+      const starts = anchors
+        ? anchoredCues(lesson.lines, anchors)
+        : estimateCues(lesson.lines, total);
+      return clampStarts(starts, total);
     },
     activeIndex() {
-      const time = this.currentTime - this.syncOffsetMs / 1000 + 0.05;
+      const time = this.currentTime + 0.05;
       let index = -1;
       this.cues.forEach((cue, i) => {
         if (cue.start <= time) index = i;
       });
-      // Nhạc mở đầu (chưa tới câu đầu) — tô luôn câu đầu để highlight không biến mất.
+      // Nhạc mở đầu / chưa tới câu đầu — tô luôn câu đầu để highlight không biến mất.
       if (index === -1 && this.cues.length && this.currentTime >= 0 && this.currentTime < this.cues[0].start) {
         return 0;
       }
@@ -292,13 +296,6 @@ export default {
       this.currentTime = 0;
       this.durationSec = 0;
       this.playing = false;
-      this.loadSync();
-    },
-    syncOffsetMs() {
-      this.persistSync();
-    },
-    syncPerMs() {
-      this.persistSync();
     },
     activeIndex(next, prev) {
       if (next !== prev && next >= 0 && this.playing && this.autoScroll) {
@@ -312,7 +309,6 @@ export default {
     },
   },
   mounted() {
-    this.loadSync();
     this._ticker = window.setInterval(() => {
       const el = this.$refs.audioEl;
       if (el && !el.paused && Number.isFinite(el.currentTime)) {
@@ -355,29 +351,8 @@ export default {
     },
     onEnded() {
       this.playing = false;
-      // Giữ highlight ở câu cuối thay vì quay về 0 khiến highlight "biến mất".
+      // Giữ highlight ở câu cuối thay vì quay về 0.
       this.currentTime = this.durationSec > 0 ? this.durationSec : 0;
-    },
-    loadSync() {
-      if (!this.selected) return;
-      const saved = readSync(this.selected.id);
-      this.syncOffsetMs = saved.offsetMs;
-      this.syncPerMs = saved.perMs;
-    },
-    persistSync() {
-      if (!this.selected) return;
-      writeSync(this.selected.id, { offsetMs: this.syncOffsetMs, perMs: this.syncPerMs });
-    },
-    adjustOffset(deltaMs) {
-      this.syncOffsetMs = Math.max(-3000, Math.min(3000, this.syncOffsetMs + deltaMs));
-    },
-    adjustPerLine(deltaMs) {
-      const next = Math.round((this.syncPerMs + deltaMs) / 20) * 20;
-      this.syncPerMs = Math.max(-200, Math.min(600, next));
-    },
-    resetSync() {
-      this.syncOffsetMs = 0;
-      this.syncPerMs = 0;
     },
     seekTo(index) {
       const cue = this.cues[index];
@@ -603,69 +578,6 @@ export default {
 .audio-hint {
   margin: 0 0 0.9rem;
   font-size: 0.78rem;
-  color: var(--forge-text3);
-}
-
-.sync-tools {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin: 0 0 0.9rem;
-  padding: 0.6rem 0.75rem;
-  border: 1px dashed var(--forge-border);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--forge-accent) 5%, transparent);
-}
-
-.sync-label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--forge-text);
-}
-
-.sync-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.8rem;
-}
-
-.sync-sub {
-  color: var(--forge-text2);
-  margin-right: 0.15rem;
-}
-
-.sync-row button {
-  border: 1px solid var(--forge-border);
-  background: var(--forge-surface);
-  color: var(--forge-text2);
-  font-size: 0.78rem;
-  padding: 0.22rem 0.55rem;
-  border-radius: 999px;
-  cursor: pointer;
-}
-
-.sync-row button:hover {
-  border-color: var(--forge-accent);
-  color: var(--forge-accent);
-}
-
-.sync-row .sync-reset {
-  margin-left: 0.4rem;
-}
-
-.sync-value {
-  min-width: 5.2rem;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-  color: var(--forge-accent);
-  font-weight: 600;
-}
-
-.sync-note {
-  margin: 0.1rem 0 0;
-  font-size: 0.74rem;
   color: var(--forge-text3);
 }
 
