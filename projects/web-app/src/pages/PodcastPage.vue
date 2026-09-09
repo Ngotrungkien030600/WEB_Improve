@@ -2,7 +2,7 @@
   <div class="podcast-page">
     <CTopbar
       title="🎧 Podcast"
-      back-label="Tiếng Anh"
+      back-label="Quay lại"
       @go-home="handleBack"
     />
 
@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { navigate } from '../utils/navigate.js';
+import { navigate, backTo } from '../utils/navigate.js';
 import CTopbar from '../components/CTopbar.vue';
 import { YOUTUBE_CHANNELS, PODCAST_LESSONS } from '../utils/podcast-content.js';
 
@@ -333,7 +333,7 @@ export default {
   },
   methods: {
     handleBack() {
-      navigate('/english/hub');
+      backTo('/english/hub');
     },
     selectLesson(lesson) {
       this.selected = lesson;

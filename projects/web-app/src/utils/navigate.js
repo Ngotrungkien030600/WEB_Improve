@@ -23,6 +23,7 @@ export function navigate(path, options = {}) {
 
   const target = options.target;
   if (target === 'router') {
+    rememberLastRoute(pathOnly);
     router.push(p).catch(() => {});
     return;
   }
@@ -40,8 +41,35 @@ export function navigate(path, options = {}) {
   // Mặc định: quyết định theo registry
   const isPorted = PORTED_PAGES.includes(pathOnly) || PORTED_PREFIXES.some(prefix => pathOnly.startsWith(prefix));
   if (isPorted) {
+    rememberLastRoute(pathOnly);
     router.push(p).catch(() => {});
   } else {
     window.location.href = '/pages/' + pathOnly.slice(1) + '.html' + hash;
   }
+}
+
+// Nhớ trang đang đứng TRƯỚC khi rời đi, để các nút "quay lại" về đúng trang nguồn.
+function rememberLastRoute(pathOnly) {
+  try {
+    const current = window.location.pathname;
+    if (current && current !== pathOnly) {
+      sessionStorage.setItem('dsh.lastRoute', current);
+    }
+  } catch (err) {
+    // sessionStorage có thể bị chặn — bỏ qua, nút back vẫn có đường mặc định.
+  }
+}
+
+// Đường về trang trước đó (nếu có trong phiên này), nếu không thì dùng đường mặc định.
+export function backTo(defaultPath) {
+  let previous = defaultPath;
+  try {
+    const saved = sessionStorage.getItem('dsh.lastRoute');
+    if (saved && saved !== window.location.pathname) {
+      previous = saved;
+    }
+  } catch (err) {
+    // Bỏ qua — dùng đường mặc định.
+  }
+  navigate(previous);
 }
