@@ -1,8 +1,8 @@
 /**
- * Vite plugin: Inject ESM re-exports for legacy /data/ JS files.
+ * Vite plugin: Inject ESM re-exports for legacy /data/ and /agents/ JS files.
  *
  * Problem:
- * Legacy files (web-en/js/data/*.js) use window.X = ... for data sharing.
+ * Legacy files (web-en/js/data/*.js, web-en/js/agents/*.js) use window.X = ... for data sharing.
  * They are loaded via <script src> (non-module) in Legacy HTML.
  * Vue components import these files via @legacy alias — needs ESM exports.
  *
@@ -17,7 +17,8 @@ export default function legacyInjectExports() {
     enforce: 'pre',
 
     transform(code, id) {
-      if (!id.includes('/web-en/js/data/')) return null;
+      const isLegacyDir = id.includes('/web-en/js/data/') || id.includes('/web-en/js/agents/');
+      if (!isLegacyDir) return null;
 
       // Check if file already has ESM exports
       if (code.includes('export const') || code.includes('export function')) {

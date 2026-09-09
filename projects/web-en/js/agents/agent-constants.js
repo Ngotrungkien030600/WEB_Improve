@@ -12,5 +12,3 @@ window.BMAD_CONSTANTS = {
     INFO: 'console-info',
   },
 };
-
-export const BMAD_CONSTANTS = window.BMAD_CONSTANTS;

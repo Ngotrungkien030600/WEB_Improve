@@ -40,21 +40,21 @@
 - [README.md](../README.md) — mô tả sản phẩm của tác giả
 - `projects/web-en/interview_java/*.md` — 30 cheatsheet Java (232KB), là **nội dung sản phẩm**, không phải tài liệu kỹ thuật
 
-## Chín lỗi đã xác nhận
+## Chín lỗi — trạng thái sau story 11.1 (2026-09-09)
 
-Xếp theo mức nghiêm trọng. Chi tiết và cách sửa nằm trong tài liệu kiến trúc tương ứng.
+Bảng dưới xác minh lại trên code hiện tại, không tin bản cũ. Chi tiết cách sửa: `_bmad-output/implementation-artifacts/11-1-fix-legacy-bugs-con-lai.md`.
 
-| ID | Mức | Vị trí | Vấn đề |
-|---|---|---|---|
-| **S1** | Cao | `server/index.js` | Path traversal + MIME fallback → `GET /.env` trả file secret qua HTTP |
-| **C1** | Cao | `js/agents/bmad-chat.js:7` | Destructure sai tên khoá → `fetch(undefined)` → trang BMAD chat hỏng hoàn toàn |
-| **S2** | Vừa | `server/index.js` | 4 endpoint AI không auth, không rate limit, CORS `*` |
-| **C2** | Vừa | `css/agents/bmad-chat.css` | 342 dòng CSS mồ côi, không trang nào link |
-| **S3** | Thấp | `server/index.js` | Thân request không giới hạn kích thước |
-| **S4** | Thấp | `handleSalaryInterview` | Biến `qMatch` chết; fallback gán trùng `id` |
-| **S5** | Thấp | `config.js` + `agents-config.js` | 6 system prompt hai bản đã lệch nhau |
-| **C3** | Thấp | `js/home-ai.js` | Code chết, không trang nào load |
-| **C4** | Thấp | `js/utils/markdown.js` | Hai bản parser markdown song song |
+| ID | Mức | Vị trí | Vấn đề gốc | Trạng thái |
+|---|---|---|---|---|
+| **S1** | Cao | `server/index.js` | Path traversal + MIME fallback → rò file secret | ✅ Đã vá (story 1.1) — probe lại: `/.env`, `/../README.md`, ext lạ đều 404 |
+| **C1** | Cao | `js/agents/bmad-chat.js` | Destructure sai key → `fetch(undefined)`; về sau tái phát dạng regression `export` trong script classic | ✅ Đã vá (1.1/1.2) + story 11.1 sửa regression: 2 file agents classic-safe, plugin Vite inject export cho `js/agents/` |
+| **C2** | Vừa | `css/agents/bmad-chat.css` | CSS mồ côi, không trang link | ✅ Đã vá — `pages/bmad-agents.html` đã `<link>` |
+| **S2** | Vừa | `server/index.js` | 4 endpoint AI không auth, không rate limit, CORS `*`, bind mọi interface | ✅ Story 11.1 — bind `127.0.0.1`, bỏ CORS `*`, rate-limit 60 POST/phút/IP (đã verify: 60×400 → 429) |
+| **S3** | Thấp | `server/index.js` | Thân request không giới hạn kích thước | ✅ Story 11.1 — giới hạn 1 MB → 413 (đã verify) |
+| **S4** | Thấp | `handleSalaryInterview` | Biến `qMatch` chết; fallback gán trùng `id` | ✅ Story 11.1 — bỏ biến chết, id `q-fallback-<n>` duy nhất |
+| **S5** | Thấp | `config.js` + `agents-config.js` | System prompt hai bản lệch nhau | ✅ Story 11.1 — xoá bản chết `systemPrompt` ở client; server là nguồn duy nhất |
+| **C3** | Thấp | `js/home-ai.js` | Code chết, không trang nào load | ✅ Story 11.1 — đã xoá file |
+| **C4** | Thấp | `js/utils/markdown.js` | Hai bản parser markdown song song | ✅ Story 11.1 — `bmad-chat.js` thành module, dùng chung `markdownToHTML` |
 
 ## Bắt đầu từ đâu
 

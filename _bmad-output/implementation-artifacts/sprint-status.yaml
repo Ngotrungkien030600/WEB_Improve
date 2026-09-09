@@ -154,5 +154,9 @@ development_status:
   10-7-verify-devops-routing: done   # ✅ DEV 2026-08-13 — build pass, routes + PORTED_PAGES updated
   epic-10-retrospective: optional
 
-last_updated: 2026-08-13
+  # ---- Epic 11: Fix các lỗi Legacy còn hiệu lực (S2-S5, C1 regression, C3, C4) ----
+  epic-11: in-progress
+  11-1-fix-legacy-bugs-con-lai: review   # ✅ DEV 2026-09-09 — S2: bind 127.0.0.1 + bỏ CORS * + rate-limit (verified 60×400→429); S3: body 1MB→413 (verified); S4: bỏ qMatch chết + id fallback duy nhất; C1: agents-config/agent-constants classic-safe + vite-plugin inject export cho js/agents; C4: bmad-chat.js thành module dùng markdownToHTML chung; C3: xoá home-ai.js; S5: xoá systemPrompt client. Vue build pass. Story file: 11-1-fix-legacy-bugs-con-lai.md
+
+last_updated: 2026-09-09
 

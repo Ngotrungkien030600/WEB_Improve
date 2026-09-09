@@ -34,19 +34,19 @@ Import `web-en/css/variables.css`. Không hex, không `px` cứng trong `compone
 
 ---
 
-## Known Bugs (chưa fix)
+## Known Bugs — trạng thái (cập nhật 2026-09-09, story 11.1)
 
 | ID | Severity | Location | Issue | Story |
 |----|----------|----------|-------|-------|
-| S1 | HIGH | server/index.js | Path traversal | ✅ 1.1 (done) |
-| S2 | MEDIUM | server/index.js | 4 AI endpoints không auth | — |
-| S3 | LOW | server/index.js | Request body unlimited | — |
-| S4 | LOW | handleSalaryInterview | Dead variable | — |
-| S5 | LOW | config.js + agents-config.js | System prompt lặp | — |
-| C1 | HIGH | js/agents/bmad-chat.js:7 | `fetch(undefined)` | 1.2 |
-| C2 | MEDIUM | css/agents/bmad-chat.css | Orphan CSS | 1.2 |
-| C3 | LOW | js/home-ai.js | Dead code | — |
-| C4 | LOW | js/utils/markdown.js | 2 parser version | — |
+| S1 | HIGH | server/index.js | Path traversal | ✅ 1.1 (done) — re-verified 404 |
+| C1 | HIGH | js/agents/bmad-chat.js | `fetch(undefined)` + regression `export` classic | ✅ 1.1/1.2 + 11.1 (done) |
+| C2 | MEDIUM | css/agents/bmad-chat.css | Orphan CSS | ✅ 1.2 (done) |
+| S2 | MEDIUM | server/index.js | 4 AI endpoints không auth | ✅ 11.1 (done) |
+| S3 | LOW | server/index.js | Request body unlimited | ✅ 11.1 (done) |
+| S4 | LOW | handleSalaryInterview | Dead variable | ✅ 11.1 (done) |
+| S5 | LOW | config.js + agents-config.js | System prompt lặp | ✅ 11.1 (done) |
+| C3 | LOW | js/home-ai.js | Dead code | ✅ 11.1 (done) — file deleted |
+| C4 | LOW | js/utils/markdown.js | 2 parser version | ✅ 11.1 (done) |
 
 ---
 

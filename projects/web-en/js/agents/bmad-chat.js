@@ -1,3 +1,6 @@
+import { escapeHtml } from '../utils/helpers.js';
+import { markdownToHTML } from '../utils/markdown.js';
+
 /**
  * BMAD Agent Chat — replaces home-ai.js
  * Grid luôn hiện, chat bên dưới — solo + party mode
@@ -25,22 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearBtn = document.getElementById('bmad-clear-btn');
   const partyStartBtn = document.getElementById('bmad-party-start-btn');
 
-  function escHtml(text) {
-    const d = document.createElement('div');
-    d.appendChild(document.createTextNode(text));
-    return d.innerHTML;
-  }
+  const escHtml = escapeHtml;
 
   function renderMd(text) {
-    let html = escHtml(text);
-    html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (m, lang, code) => {
-      return `<pre><code>${escHtml(code.trim())}</code></pre>`;
-    });
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-    html = html.replace(/\n/g, '<br>');
-    return html;
+    return markdownToHTML(escapeHtml(text));
   }
 
   // ---- Render Agent Grid ----

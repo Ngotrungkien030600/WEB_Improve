@@ -1,6 +1,8 @@
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
+// Bản build Vue serve cùng origin (story 2-4 Option A) — Vue là app chính
+const VUE_DIST_DIR = path.resolve(__dirname, '..', '..', 'web-app', 'dist');
 
 const PORT = process.env.PORT || 8080;
 
@@ -123,6 +125,7 @@ const AGENT_INFO = {
 
 module.exports = {
   ROOT,
+  VUE_DIST_DIR,
   PORT,
   API_PATHS,
   AI_CONFIG,
