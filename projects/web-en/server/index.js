@@ -428,7 +428,10 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, '127.0.0.1', () => {
-  console.log(`✓ SkillForge server running at http://127.0.0.1:${PORT}`);
+// HOST mặc định chỉ loopback (an toàn local); production đặt HOST=0.0.0.0 (VD: Render)
+const HOST = process.env.HOST || '127.0.0.1';
+
+server.listen(PORT, HOST, () => {
+  console.log(`✓ SkillForge server running at http://${HOST}:${PORT}`);
   console.log(`  Root: ${ROOT}`);
 });

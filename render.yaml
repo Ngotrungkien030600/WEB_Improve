@@ -1,0 +1,19 @@
+# Render Blueprint — SkillForge (Vue SPA + zero-dep Node server, 1 service cùng origin)
+# Cách dùng: New → Blueprint → chọn repo này, hoặc `render.yaml` được nhận tự động từ GitHub.
+# Sau khi service chạy: vào dashboard → Environment → đặt OPENAI_API_KEY / GEMINI_API_KEY.
+services:
+  - type: web
+    name: skillforge
+    runtime: node
+    plan: free
+    rootDir: projects/web-en
+    buildCommand: npm install
+    startCommand: node server/index.js
+    healthCheckPath: /
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

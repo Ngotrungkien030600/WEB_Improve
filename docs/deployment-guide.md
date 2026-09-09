@@ -1,60 +1,62 @@
-# Hướng dẫn triển khai
+# Hướng dẫn triển khai production (Render — free tier)
 
-## Hiện trạng: chưa có triển khai nào
+> Cập nhật 2026-09-09. Các rào chặn bảo mật cũ (S1–S4) đã vá và verify: dotfile/traversal → 404, body >1 MB → 413, rate-limit 60 POST/phút/IP, không CORS `*`, bind loopback mặc định. Tài liệu này thay cho bản cũ ghi "chưa deploy được".
 
-| Hạng mục | Trạng thái |
+## Kiến trúc production
+
+1 service duy nhất (cùng origin, giữ localStorage chia sẻ):
+
+| Thành phần | Nguồn |
 |---|---|
-| Dockerfile / docker-compose | không có |
-| CI/CD (`.github/workflows`, GitLab CI, Jenkins) | không có |
-| Infrastructure as Code | không có |
-| Cấu hình môi trường (staging/prod) | không có |
-| Process manager (pm2, systemd) | không có |
-| Reverse proxy / TLS | không có |
+| Vue SPA (build) | `projects/web-app/dist/` — commit sẵn vào repo, serve ở root |
+| `/api/*` (5 endpoint AI) | `projects/web-en/server/index.js` — zero-dependency Node |
+| Legacy fallback | `web-en/` giữ nguyên; `/pages/*.html` đã 301 sang Vue |
+| Dữ liệu người dùng | localStorage/IndexedDB **trong browser** — mỗi máy mỗi bản, không có DB dùng chung |
+| Dữ liệu tĩnh server | `web-en/data/bmad/bmad-bundles.json` (trong repo) |
 
-Cách chạy duy nhất tồn tại là `start.bat` trên máy Windows cá nhân.
+## Các file đã chuẩn bị sẵn trong repo
 
-## `start.bat` làm gì
+- `render.yaml` — Render Blueprint: web service `skillforge`, `rootDir: projects/web-en`, `startCommand: node server/index.js`, env `HOST=0.0.0.0`, `OPENAI_API_KEY`/`GEMINI_API_KEY` (sync: false → đặt tay trên dashboard).
+- `projects/web-en/package.json` — khai báo `engines.node >= 18` + script `start`.
+- Server đọc `process.env.HOST` (mặc định `127.0.0.1` cho local; Render set `0.0.0.0`), `process.env.PORT` (Render tự inject).
+- Khoá AI đọc từ `process.env.OPENAI_API_KEY` / `GEMINI_API_KEY`; file `.env` local chỉ nạp khi biến env chưa tồn tại → env của nền tảng luôn thắng.
 
-```bat
-cd /d "%~dp0projects\web-en"
-start /b "" "%LOCALAPPDATA%\Programs\Ollama\ollama.exe" serve   # bật Ollama nền
-timeout /t 3                                                    # chờ 3 giây
-start "" "http://localhost:8080"                                # mở browser
-node server/index.js                                            # chạy server (foreground)
-```
+## Quy trình deploy (làm 1 lần)
 
-Phụ thuộc cứng vào đường dẫn cài Ollama mặc định của Windows. Không có bản `.sh` cho Linux/macOS — trên các hệ đó phải chạy tay `node server/index.js`.
+1. **Push** repo này lên GitHub (đã sẵn `main`).
+2. Mở https://dashboard.render.com → **New → Blueprint** → chọn repo `WEB_Improve`.
+3. Render nhận `render.yaml`, tạo service `skillforge` (plan free). Build ~1–2 phút.
+4. Service chạy → truy cập `https://skillforge.onrender.com` (subdomain mặc định; HTTPS tự động).
 
-## Chặn đường lên internet
+> Nếu không dùng Blueprint: **New → Web Service** → chọn repo → *Root Directory* = `projects/web-en` → *Build Command* = `npm install` → *Start Command* = `node server/index.js` → *Instance Type* = Free.
 
-Server **không được deploy công khai ở trạng thái hiện tại**. Ba lý do, theo thứ tự nghiêm trọng:
+## Đặt khoá AI (bắt buộc cho tính năng chat)
 
-1. **`GET /.env` trả về file secret.** Static handler không chặn dotfile và fallback MIME `application/octet-stream` cho mọi phần mở rộng lạ. Ai biết URL là lấy được khoá API.
-2. **Path traversal.** `path.join(ROOT, urlPath)` không kiểm tra kết quả có còn trong `ROOT` — `..` đi qua được.
-3. **API AI mở toang.** 4 endpoint POST không xác thực, không rate limit, `Access-Control-Allow-Origin: *`. Mỗi request tiêu tiền khoá API của chủ máy.
+Dashboard → service `skillforge` → **Environment** → thêm 2 biến (khoá thật của bạn, không commit lên git):
 
-Chi tiết ở [architecture-server.md](./architecture-server.md) mục S1 và S2.
+| Key | Ghi chú |
+|---|---|
+| `OPENAI_API_KEY` | bắt buộc nếu dùng OpenAI làm provider |
+| `GEMINI_API_KEY` | bắt buộc nếu dùng Gemini (app thử Gemini trước) |
 
-## Điều kiện tối thiểu nếu muốn deploy
+Sau khi lưu, Render tự redeploy. Nếu thiếu cả 2, các endpoint chat trả lỗi cấu hình (web vẫn chạy).
 
-Phải làm đủ, không bỏ mục nào:
+## Nâng cấp & redeploy
 
-1. Vá S1 — chuẩn hoá đường dẫn (`path.resolve(...).startsWith(ROOT)`), allowlist phần mở rộng, chặn tường minh dotfile.
-2. Vá S2 — thêm xác thực cho 4 endpoint POST và rate limit theo IP.
-3. Vá S3 — giới hạn kích thước thân request.
-4. Đưa secret ra biến môi trường của nền tảng, bỏ hẳn đường đọc file `.env` ở production.
-5. Đặt TLS (reverse proxy) — hiện chỉ có HTTP thuần.
-6. Khai báo phiên bản Node (`package.json` `engines` hoặc `.nvmrc`) để môi trường chạy xác định.
+- Mỗi lần **push lên `main`** → Render tự build lại (nếu đã deploy kiểu Blueprint/GitHub hook).
+- Nhớ chạy `npm run build` (trong `projects/web-app`) khi đổi source Vue rồi commit `dist/` — server serve đúng bản build đã commit.
 
-## Ghi chú về hosting
+## Hành vi free tier cần biết
 
-Phần client là **static thuần** — 28 HTML + CSS + JS, không cần server để phục vụ. Có thể tách:
+- Service **ngủ** sau ~15 phút không có request; lần truy cập đầu tiên mất **~30–60 giây** để wake.
+- Giới hạn 750 giờ/tháng (đủ nếu không bật 24/7); nếu cần luôn bật → upgrade instance (trả phí) hoặc chuyển VPS.
+- Không có Ollama trên cloud (mặc định trỏ `127.0.0.1:11434`) — chỉ dùng provider OpenAI/Gemini ở production.
 
-- **Client** → bất kỳ static host nào (GitHub Pages, Netlify, Vercel, Cloudflare Pages).
-- **Server** → chỉ còn 4 endpoint AI, đóng gói thành serverless function hoặc container nhỏ.
+## Chạy local (không đổi)
 
-Tách như vậy sẽ loại bỏ hoàn toàn lỗ S1 (static host không có custom file handler để mà traversal) và thu hẹp bề mặt tấn công về đúng 4 endpoint cần bảo vệ. Đây là hướng đáng cân nhắc nếu dự án có ý định lên internet.
+`start.bat` (Windows, kèm Ollama) hoặc `cd projects/web-en && node server/index.js` → http://localhost:8080. Mặc định bind `127.0.0.1`; muốn mở ra mạng cục bộ thì đặt `HOST=0.0.0.0` (tự chịu trách nhiệm, có firewall).
 
 ## Nợ cần ghi nhận
 
-`projects/web-en/.env` **đã từng được commit** lên GitHub và secret vẫn nằm trong lịch sử git, kể cả sau khi đã `git rm --cached`. Người dùng xác nhận đây là khoá giả nên không cần revoke. Nếu về sau thay bằng khoá thật, phải đảm bảo `.gitignore` (đã thêm) chặn được trước khi tạo file.
+- `web-en/.env` từng bị commit (khoá giả, đã gỡ khỏi index, có `.gitignore`). **Đừng** tạo `.env` chứa khoá thật trong thư mục đã clone; khoá production chỉ nằm trong dashboard Render.
+- Không có tài khoản/đồng bộ dữ liệu giữa các máy — nếu cần, phải thêm backend + database (ngoài phạm vi hiện tại).
