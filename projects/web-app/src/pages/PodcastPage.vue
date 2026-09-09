@@ -88,6 +88,26 @@
               @ended="onEnded"
             ></audio>
             <p class="audio-hint">Audio phát trực tiếp từ máy chủ VOA. Nếu không nghe được, dùng nút "Trang nghe VOA".</p>
+            <div class="sync-tools">
+              <span class="sync-label">Chỉnh đồng bộ câu</span>
+              <div class="sync-row">
+                <span class="sync-sub">Highlight trễ/sớm hơn giọng đọc:</span>
+                <button type="button" @click="adjustOffset(-100)">−100 ms</button>
+                <span class="sync-value">{{ syncOffsetMs }} ms</span>
+                <button type="button" @click="adjustOffset(100)">+100 ms</button>
+              </div>
+              <div class="sync-row">
+                <span class="sync-sub">Lệch dồn về cuối bài:</span>
+                <button type="button" @click="adjustScale(-0.1)">Thu hẹp</button>
+                <span class="sync-value">×{{ syncScale.toFixed(2) }}</span>
+                <button type="button" @click="adjustScale(0.1)">Giãn</button>
+                <button type="button" class="sync-reset" @click="resetSync()">Đặt lại</button>
+              </div>
+              <p class="sync-note">
+                +ms: tô trễ hơn · −ms: tô sớm hơn. "Giãn" dãn khoảng cách giữa các câu về cuối bài.
+                Chỉnh xong tự lưu theo từng bài.
+              </p>
+            </div>
           </div>
 
           <!-- Transcript -->
@@ -169,22 +189,54 @@ function parseDuration(text) {
   return 0;
 }
 
-// Ước lượng thời điểm bắt đầu của mỗi câu theo tỉ lệ số từ so với tổng độ dài audio.
-function buildCues(lines, totalSeconds) {
-  const speechSeconds = Math.max(totalSeconds - LEAD_SECONDS - TAIL_SECONDS, 1);
+// Tỉ lệ số từ của từng câu — dùng để chia tổng thời gian nói thành các mốc câu.
+function computeFractions(lines) {
   const weights = lines.map((line) => {
     const words = (line.en.match(/\S+/g) || []).length;
     const endsPause = /[.!?…]"\s*$|[.!?…]\s*$/.test(line.en) ? 0.8 : 0.3;
     return words + endsPause;
   });
   const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-  const cues = [];
+  const fractions = [];
   let cursor = 0;
   lines.forEach((line, index) => {
-    cues.push({ start: LEAD_SECONDS + (cursor / totalWeight) * speechSeconds });
+    fractions.push(cursor / totalWeight);
     cursor += weights[index];
   });
-  return cues;
+  return fractions;
+}
+
+// Thời điểm bắt đầu từng câu; `scale` > 1 giãn khoảng cách giữa các câu (bù lệch dồn về cuối).
+function scaledCues(lines, totalSeconds, scale) {
+  let speechSeconds = Math.max(totalSeconds - LEAD_SECONDS - TAIL_SECONDS, 1) * scale;
+  const maxSpeech = Math.max(totalSeconds - LEAD_SECONDS - 0.25, 0.25);
+  if (speechSeconds > maxSpeech) speechSeconds = maxSpeech;
+  const fractions = computeFractions(lines);
+  return fractions.map((fraction) => ({ start: LEAD_SECONDS + fraction * speechSeconds }));
+}
+
+const SYNC_KEY_PREFIX = 'podcast.sync.';
+
+function readSync(lessonId) {
+  try {
+    const raw = localStorage.getItem(SYNC_KEY_PREFIX + lessonId);
+    if (!raw) return { offsetMs: 0, scale: 1 };
+    const parsed = JSON.parse(raw);
+    return {
+      offsetMs: Number.isFinite(parsed.offsetMs) ? parsed.offsetMs : 0,
+      scale: Number.isFinite(parsed.scale) ? parsed.scale : 1,
+    };
+  } catch (err) {
+    return { offsetMs: 0, scale: 1 };
+  }
+}
+
+function writeSync(lessonId, value) {
+  try {
+    localStorage.setItem(SYNC_KEY_PREFIX + lessonId, JSON.stringify(value));
+  } catch (err) {
+    // localStorage có thể bị chặn (private mode) — bỏ qua.
+  }
 }
 
 export default {
@@ -200,12 +252,20 @@ export default {
       durationSec: 0,
       currentTime: 0,
       playing: false,
-      cues: [],
+      syncOffsetMs: 0,
+      syncScale: 1,
     };
   },
   computed: {
+    cues() {
+      const lesson = this.selected;
+      if (!lesson) return [];
+      const total = this.durationSec > 0 ? this.durationSec : parseDuration(lesson.duration);
+      if (total <= 0) return [];
+      return scaledCues(lesson.lines, total, this.syncScale);
+    },
     activeIndex() {
-      const time = this.currentTime + 0.05;
+      const time = this.currentTime - this.syncOffsetMs / 1000 + 0.05;
       let index = -1;
       this.cues.forEach((cue, i) => {
         if (cue.start <= time) index = i;
@@ -218,7 +278,13 @@ export default {
       this.currentTime = 0;
       this.durationSec = 0;
       this.playing = false;
-      this.cues = buildCues(this.selected.lines, parseDuration(this.selected.duration));
+      this.loadSync();
+    },
+    syncOffsetMs() {
+      this.persistSync();
+    },
+    syncScale() {
+      this.persistSync();
     },
     activeIndex(next, prev) {
       if (next !== prev && next >= 0 && this.playing && this.autoScroll) {
@@ -232,10 +298,7 @@ export default {
     },
   },
   mounted() {
-    // Cues tạm theo thời lượng hiển thị; khi audio nạp xong sẽ tính lại theo thời lượng thật.
-    if (this.selected) {
-      this.cues = buildCues(this.selected.lines, parseDuration(this.selected.duration));
-    }
+    this.loadSync();
   },
   methods: {
     handleBack() {
@@ -253,7 +316,6 @@ export default {
       const audio = event.target;
       if (Number.isFinite(audio.duration) && audio.duration > 0) {
         this.durationSec = audio.duration;
-        this.cues = buildCues(this.selected.lines, audio.duration);
       }
     },
     onTime(event) {
@@ -268,6 +330,27 @@ export default {
     onEnded() {
       this.playing = false;
       this.currentTime = 0;
+    },
+    loadSync() {
+      if (!this.selected) return;
+      const saved = readSync(this.selected.id);
+      this.syncOffsetMs = saved.offsetMs;
+      this.syncScale = saved.scale;
+    },
+    persistSync() {
+      if (!this.selected) return;
+      writeSync(this.selected.id, { offsetMs: this.syncOffsetMs, scale: this.syncScale });
+    },
+    adjustOffset(deltaMs) {
+      this.syncOffsetMs = Math.max(-3000, Math.min(3000, this.syncOffsetMs + deltaMs));
+    },
+    adjustScale(delta) {
+      const next = Math.round((this.syncScale + delta) * 100) / 100;
+      this.syncScale = Math.max(0.7, Math.min(1.8, next));
+    },
+    resetSync() {
+      this.syncOffsetMs = 0;
+      this.syncScale = 1;
     },
     seekTo(index) {
       const cue = this.cues[index];
@@ -493,6 +576,69 @@ export default {
 .audio-hint {
   margin: 0 0 0.9rem;
   font-size: 0.78rem;
+  color: var(--forge-text3);
+}
+
+.sync-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 0 0.9rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px dashed var(--forge-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--forge-accent) 5%, transparent);
+}
+
+.sync-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--forge-text);
+}
+
+.sync-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.sync-sub {
+  color: var(--forge-text2);
+  margin-right: 0.15rem;
+}
+
+.sync-row button {
+  border: 1px solid var(--forge-border);
+  background: var(--forge-surface);
+  color: var(--forge-text2);
+  font-size: 0.78rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.sync-row button:hover {
+  border-color: var(--forge-accent);
+  color: var(--forge-accent);
+}
+
+.sync-row .sync-reset {
+  margin-left: 0.4rem;
+}
+
+.sync-value {
+  min-width: 5.2rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--forge-accent);
+  font-weight: 600;
+}
+
+.sync-note {
+  margin: 0.1rem 0 0;
+  font-size: 0.74rem;
   color: var(--forge-text3);
 }
 
