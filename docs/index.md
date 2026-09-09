@@ -36,6 +36,7 @@
 - [Hướng dẫn phát triển](./development-guide.md) — chạy, cấu hình, quy ước, bẫy đã biết
 - [Hướng dẫn triển khai](./deployment-guide.md) — hiện chưa deploy được, điều kiện tối thiểu
 - [Kiến trúc tích hợp](./integration-architecture.md) — 11 điểm tích hợp
+- [PRD — Nền tảng đa người dùng M1](./prd-multi-user-m1.md) — **kế hoạch mở cho mọi người dùng** (auth + đồng bộ dữ liệu + quota AI) — chờ duyệt
 - [project-parts.json](./project-parts.json) — metadata máy đọc + danh sách 9 lỗi đã xác nhận
 
 ## Tài liệu sẵn có trong repo
