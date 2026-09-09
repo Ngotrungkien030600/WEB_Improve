@@ -102,6 +102,15 @@ const activeCategory = ref('all');
 
 const allCards = [
   {
+    icon: '🌱',
+    title: 'Java Từ 0 — mất gốc → đi làm',
+    description: '6 chương nền tảng dễ hiểu + quiz, 12 bài tập coding có lời giải từng bước, 10 bài đọc-code đoán kết quả',
+    badge: 'Mới bắt đầu',
+    tags: ['Java Core', 'Cơ bản', 'Coding', 'Tư duy'],
+    category: 'learn',
+    path: '/java/tu-zero',
+  },
+  {
     icon: '💻',
     title: 'Học Code',
     description: '10 bài học từ biến, OOP, collection đến SQL, JDBC, Git',

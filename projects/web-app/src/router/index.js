@@ -203,6 +203,11 @@ const routes = [
     component: () => import('../pages/JavaThucChienPage.vue'),
   },
   {
+    path: '/java/tu-zero',
+    name: 'java-tu-zero',
+    component: () => import('../pages/JavaTuZeroPage.vue'),
+  },
+  {
     path: '/java/spring-boot',
     redirect: '/java/spring-boot/core',
   },
