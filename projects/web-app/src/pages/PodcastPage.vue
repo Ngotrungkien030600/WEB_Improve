@@ -97,15 +97,15 @@
                 <button type="button" @click="adjustOffset(100)">+100 ms</button>
               </div>
               <div class="sync-row">
-                <span class="sync-sub">Lệch dồn về cuối bài:</span>
-                <button type="button" @click="adjustScale(-0.1)">Thu hẹp</button>
-                <span class="sync-value">×{{ syncScale.toFixed(2) }}</span>
-                <button type="button" @click="adjustScale(0.1)">Giãn</button>
+                <span class="sync-sub">Đầu khớp nhưng càng cuối càng lệch:</span>
+                <button type="button" @click="adjustPerLine(-20)">−20 ms/câu</button>
+                <span class="sync-value">{{ syncPerMs }} ms/câu</span>
+                <button type="button" @click="adjustPerLine(20)">+20 ms/câu</button>
                 <button type="button" class="sync-reset" @click="resetSync()">Đặt lại</button>
               </div>
               <p class="sync-note">
-                +ms: tô trễ hơn · −ms: tô sớm hơn. "Giãn" dãn khoảng cách giữa các câu về cuối bài.
-                Chỉnh xong tự lưu theo từng bài.
+                +ms: tô trễ hơn · −ms: tô sớm hơn. "ms/câu": mỗi câu về sau trễ/sớm thêm bấy nhiêu
+                (dùng khi đầu bài khớp mà cuối bài lệch dồn lại). Chỉnh xong tự lưu theo từng bài.
               </p>
             </div>
           </div>
@@ -206,13 +206,23 @@ function computeFractions(lines) {
   return fractions;
 }
 
-// Thời điểm bắt đầu từng câu; `scale` > 1 giãn khoảng cách giữa các câu (bù lệch dồn về cuối).
-function scaledCues(lines, totalSeconds, scale) {
-  let speechSeconds = Math.max(totalSeconds - LEAD_SECONDS - TAIL_SECONDS, 1) * scale;
-  const maxSpeech = Math.max(totalSeconds - LEAD_SECONDS - 0.25, 0.25);
-  if (speechSeconds > maxSpeech) speechSeconds = maxSpeech;
+// Thời điểm bắt đầu từng câu. `perLineSec` (giây/câu) bù độ lệch dồn về cuối:
+// mỗi câu về sau trễ thêm/sớm bớt bấy nhiêu so với ước lượng ban đầu.
+function buildCues(lines, totalSeconds, perLineSec) {
+  const speechSeconds = Math.max(totalSeconds - LEAD_SECONDS - TAIL_SECONDS, 1);
   const fractions = computeFractions(lines);
-  return fractions.map((fraction) => ({ start: LEAD_SECONDS + fraction * speechSeconds }));
+  const starts = [];
+  let previous = -Infinity;
+  lines.forEach((line, index) => {
+    const raw = LEAD_SECONDS + fractions[index] * speechSeconds + index * perLineSec;
+    let start = raw;
+    if (start < previous + 0.05) start = previous + 0.05;
+    const lastAllowed = totalSeconds - 0.15;
+    if (start > lastAllowed) start = lastAllowed;
+    starts.push({ start });
+    previous = start;
+  });
+  return starts;
 }
 
 const SYNC_KEY_PREFIX = 'podcast.sync.';
@@ -220,14 +230,14 @@ const SYNC_KEY_PREFIX = 'podcast.sync.';
 function readSync(lessonId) {
   try {
     const raw = localStorage.getItem(SYNC_KEY_PREFIX + lessonId);
-    if (!raw) return { offsetMs: 0, scale: 1 };
+    if (!raw) return { offsetMs: 0, perMs: 0 };
     const parsed = JSON.parse(raw);
     return {
       offsetMs: Number.isFinite(parsed.offsetMs) ? parsed.offsetMs : 0,
-      scale: Number.isFinite(parsed.scale) ? parsed.scale : 1,
+      perMs: Number.isFinite(parsed.perMs) ? parsed.perMs : 0,
     };
   } catch (err) {
-    return { offsetMs: 0, scale: 1 };
+    return { offsetMs: 0, perMs: 0 };
   }
 }
 
@@ -253,7 +263,7 @@ export default {
       currentTime: 0,
       playing: false,
       syncOffsetMs: 0,
-      syncScale: 1,
+      syncPerMs: 0,
     };
   },
   computed: {
@@ -262,7 +272,7 @@ export default {
       if (!lesson) return [];
       const total = this.durationSec > 0 ? this.durationSec : parseDuration(lesson.duration);
       if (total <= 0) return [];
-      return scaledCues(lesson.lines, total, this.syncScale);
+      return buildCues(lesson.lines, total, this.syncPerMs / 1000);
     },
     activeIndex() {
       const time = this.currentTime - this.syncOffsetMs / 1000 + 0.05;
@@ -270,6 +280,10 @@ export default {
       this.cues.forEach((cue, i) => {
         if (cue.start <= time) index = i;
       });
+      // Nhạc mở đầu (chưa tới câu đầu) — tô luôn câu đầu để highlight không biến mất.
+      if (index === -1 && this.cues.length && this.currentTime >= 0 && this.currentTime < this.cues[0].start) {
+        return 0;
+      }
       return index;
     },
   },
@@ -283,7 +297,7 @@ export default {
     syncOffsetMs() {
       this.persistSync();
     },
-    syncScale() {
+    syncPerMs() {
       this.persistSync();
     },
     activeIndex(next, prev) {
@@ -299,6 +313,18 @@ export default {
   },
   mounted() {
     this.loadSync();
+    this._ticker = window.setInterval(() => {
+      const el = this.$refs.audioEl;
+      if (el && !el.paused && Number.isFinite(el.currentTime)) {
+        this.currentTime = el.currentTime;
+      }
+    }, 250);
+  },
+  beforeDestroy() {
+    if (this._ticker) {
+      window.clearInterval(this._ticker);
+      this._ticker = null;
+    }
   },
   methods: {
     handleBack() {
@@ -329,28 +355,29 @@ export default {
     },
     onEnded() {
       this.playing = false;
-      this.currentTime = 0;
+      // Giữ highlight ở câu cuối thay vì quay về 0 khiến highlight "biến mất".
+      this.currentTime = this.durationSec > 0 ? this.durationSec : 0;
     },
     loadSync() {
       if (!this.selected) return;
       const saved = readSync(this.selected.id);
       this.syncOffsetMs = saved.offsetMs;
-      this.syncScale = saved.scale;
+      this.syncPerMs = saved.perMs;
     },
     persistSync() {
       if (!this.selected) return;
-      writeSync(this.selected.id, { offsetMs: this.syncOffsetMs, scale: this.syncScale });
+      writeSync(this.selected.id, { offsetMs: this.syncOffsetMs, perMs: this.syncPerMs });
     },
     adjustOffset(deltaMs) {
       this.syncOffsetMs = Math.max(-3000, Math.min(3000, this.syncOffsetMs + deltaMs));
     },
-    adjustScale(delta) {
-      const next = Math.round((this.syncScale + delta) * 100) / 100;
-      this.syncScale = Math.max(0.7, Math.min(1.8, next));
+    adjustPerLine(deltaMs) {
+      const next = Math.round((this.syncPerMs + deltaMs) / 20) * 20;
+      this.syncPerMs = Math.max(-200, Math.min(600, next));
     },
     resetSync() {
       this.syncOffsetMs = 0;
-      this.syncScale = 1;
+      this.syncPerMs = 0;
     },
     seekTo(index) {
       const cue = this.cues[index];
