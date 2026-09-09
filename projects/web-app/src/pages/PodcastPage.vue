@@ -272,10 +272,19 @@ export default {
       if (!lesson) return [];
       const total = this.durationSec > 0 ? this.durationSec : parseDuration(lesson.duration);
       if (total <= 0) return [];
-      const anchors = lesson.anchors && lesson.anchors.length >= 2 ? lesson.anchors : null;
-      const starts = anchors
-        ? anchoredCues(lesson.lines, anchors)
-        : estimateCues(lesson.lines, total);
+      const anchors = lesson.anchors && lesson.anchors.length ? lesson.anchors : null;
+      let starts;
+      if (!anchors) {
+        starts = estimateCues(lesson.lines, total);
+      } else if (anchors.length === 1) {
+        // Chỉ có 1 mốc đo: dịch toàn bộ ước lượng để mốc đó khớp đúng (vd. nhạc mở đầu dài).
+        starts = estimateCues(lesson.lines, total);
+        const point = anchors[0];
+        const delta = point.t - starts[point.i];
+        starts = starts.map((start) => start + delta);
+      } else {
+        starts = anchoredCues(lesson.lines, anchors);
+      }
       return clampStarts(starts, total);
     },
     activeIndex() {

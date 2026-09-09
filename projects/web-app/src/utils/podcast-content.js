@@ -57,6 +57,7 @@ export const PODCAST_LESSONS = [
     audioUrl: "https://voa-audio.voanews.eu/vle/2025/03/11/08bbcb88-2304-42bd-0531-08dd5c8b1668_hq.mp3",
     audioPageUrl: "https://learningenglish.voanews.com/a/watching-the-grass-grow-is-not-fun/8006750.html",
     articleUrl: "https://learningenglish.voanews.com/a/watching-the-grass-grow-is-not-fun/8003108.html",
+    anchors: [{ i: 0, t: 8 }],
     lines: [
       { en: "And now Words and Their Stories from VOA Learning English.", vi: "Và bây giờ là Words and Their Stories từ VOA Learning English." },
       { en: "Springtime is a time of renewal and growth.", vi: "Mùa xuân là thời điểm đổi mới và sinh trưởng." },
