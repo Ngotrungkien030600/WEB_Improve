@@ -193,11 +193,6 @@ const routes = [
     component: () => import('../pages/BmadAgentsPage.vue'),
   },
   {
-    path: '/podcast',
-    name: 'podcast',
-    component: () => import('../pages/PodcastPage.vue'),
-  },
-  {
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('../pages/DashboardPage.vue'),

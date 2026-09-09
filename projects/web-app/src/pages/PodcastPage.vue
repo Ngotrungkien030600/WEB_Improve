@@ -44,19 +44,26 @@
             </div>
             <h3>{{ currentYt.title }}</h3>
             <p class="yt-channel-name">{{ currentYt.channel }}</p>
-            
-            <!-- Audio Visualizer (decorative) -->
-            <div class="audio-viz">
-              <span v-for="i in 20" :key="i" class="viz-bar" :style="{ animationDelay: (i * 0.05) + 's' }"></span>
+
+            <!-- YouTube Player nhúng — bấm ▶ trong khung để nghe -->
+            <div class="yt-embed">
+              <iframe
+                :key="currentYt.videoId"
+                :src="`https://www.youtube-nocookie.com/embed/${currentYt.videoId}?rel=0`"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
             </div>
 
             <!-- Open YouTube -->
             <div class="yt-controls">
               <a :href="`https://youtu.be/${currentYt.videoId}`" target="_blank" class="yt-open-btn">
-                ▶ Mở YouTube để nghe
+                ▶ Mở trên YouTube (tab mới)
               </a>
             </div>
-            <p class="yt-tip">Video sẽ mở trong tab mới. Tắt hình ảnh hoặc thu nhỏ cửa sổ để chỉ nghe.</p>
+            <p class="yt-tip">Bấm ▶ trong khung video để nghe ngay tại đây. Nếu khung không hiện, dùng nút "Mở trên YouTube".</p>
           </div>
         </div>
 
@@ -297,7 +304,7 @@ export default {
   },
   methods: {
     handleBack() {
-      navigate('/english-hub');
+      navigate('/english/hub');
     },
 
     // YouTube
@@ -344,6 +351,7 @@ export default {
       
       this.audio = new Audio(this.currentAudio.url);
       this.audio.playbackRate = this.playbackRate;
+      this.isPlaying = false;
       
       this.audio.addEventListener('timeupdate', () => {
         this.currentTime = this.audio.currentTime;
@@ -356,9 +364,23 @@ export default {
       this.audio.addEventListener('ended', () => {
         this.isPlaying = false;
       });
+
+      this.audio.addEventListener('error', () => {
+        this.isPlaying = false;
+        alert('Không tải được audio. Kiểm tra URL nguồn hoặc thử file khác.');
+      });
       
-      this.audio.play();
-      this.isPlaying = true;
+      const playPromise = this.audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => { this.isPlaying = true; })
+          .catch(() => {
+            this.isPlaying = false;
+            alert('Không phát được audio (trình duyệt chặn hoặc nguồn lỗi). Thử lại sau.');
+          });
+      } else {
+        this.isPlaying = true;
+      }
     },
     pauseAudio() {
       if (this.audio) {
@@ -370,10 +392,17 @@ export default {
       if (!this.audio) return;
       if (this.isPlaying) {
         this.audio.pause();
+        this.isPlaying = false;
       } else {
-        this.audio.play();
+        const playPromise = this.audio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => { this.isPlaying = true; })
+            .catch(() => { this.isPlaying = false; });
+        } else {
+          this.isPlaying = true;
+        }
       }
-      this.isPlaying = !this.isPlaying;
     },
     seek(event) {
       if (!this.audio || !this.duration) return;
@@ -644,27 +673,6 @@ export default {
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
-}
-
-.audio-viz {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 4px;
-  height: 60px;
-  margin: 1.5rem 0;
-}
-
-.viz-bar {
-  width: 6px;
-  background: linear-gradient(to top, var(--forge-accent), var(--forge-accent2));
-  border-radius: 3px;
-  animation: equalizer 0.8s ease-in-out infinite alternate;
-}
-
-@keyframes equalizer {
-  0% { height: 10px; }
-  100% { height: 50px; }
 }
 
 .yt-empty {
