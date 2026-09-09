@@ -1,6 +1,8 @@
 # Hướng dẫn triển khai production (Render — free tier)
 
 > Cập nhật 2026-09-09. Các rào chặn bảo mật cũ (S1–S4) đã vá và verify: dotfile/traversal → 404, body >1 MB → 413, rate-limit 60 POST/phút/IP, không CORS `*`, bind loopback mặc định. Tài liệu này thay cho bản cũ ghi "chưa deploy được".
+>
+> ✅ **Đã deploy live:** https://skillforge-cuw1.onrender.com (Render free, Blueprint, 2026-09-09 — verified root Vue 200, `/english` SPA 200, `/pages/*.html` 301, `/.env` 404).
 
 ## Kiến trúc production
 

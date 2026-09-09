@@ -163,8 +163,8 @@ development_status:
   12-1-cutover-vue-app-chinh: done   # ✅ DEV + nghiệm thu 2026-09-09 — registry phủ 39/39 trang; legacy-redirect.js nguồn ánh xạ chung; dev middleware + server 301 cho /pages/*.html → route Vue (verified 301); node server serve dist root + SPA fallback (verified); docs cập nhật. Story file: 12-1-cutover-vue-app-chinh.md
 
   # ---- Epic 13: Production (Render free tier) ----
-  epic-13: in-progress
-  13-1-chuan-bi-deploy-render: in-progress   # ✅ DEV 2026-09-09 — HOST env, web-en/package.json, render.yaml, deployment-guide runbook. Chờ user deploy trên Render dashboard + đặt AI key. Story file: 13-1-chuan-bi-deploy-render.md
+  epic-13: done   # ✅ EPIC COMPLETE 2026-09-09 — live https://skillforge-cuw1.onrender.com
+  13-1-chuan-bi-deploy-render: done   # ✅ DEV + DEPLOY 2026-09-09 — HOST env, web-en/package.json, render.yaml, deployment-guide runbook; live URL verified (root Vue 200, SPA 200, /pages 301, /.env 404). Story file: 13-1-chuan-bi-deploy-render.md
 
 last_updated: 2026-09-09
 

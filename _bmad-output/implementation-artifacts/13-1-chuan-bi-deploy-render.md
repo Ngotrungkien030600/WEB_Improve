@@ -2,8 +2,8 @@
 
 **Epic:** Epic 13 — Production
 **Story ID:** 13-1-chuan-bi-deploy-render
-**Status:** in-progress (code xong; chờ thao tác deploy trên Render dashboard)
-**Implemented:** dev-story (2026-09-09)
+**Status:** done
+**Implemented:** dev-story (2026-09-09) — deployed live: https://skillforge-cuw1.onrender.com (verified root=200 Vue, /english SPA 200, /pages/english.html 301→/english, /.env 404)
 
 ---
 
@@ -29,3 +29,9 @@ Người dùng muốn đưa web lên production. Chốt: **Render free tier**, s
 2. Render dashboard → New → Blueprint → chọn repo.
 3. Đặt `OPENAI_API_KEY` / `GEMINI_API_KEY` trong Environment.
 4. Mở `https://skillforge.onrender.com` nghiệm thu.
+
+## Kết quả (2026-09-09)
+
+- URL live: https://skillforge-cuw1.onrender.com
+- Verified: root 200 (Vue), `/english` SPA fallback 200, `/pages/english.html` 301 → `/english`, `/.env` 404.
+- Còn lại của người dùng: dán `OPENAI_API_KEY`/`GEMINI_API_KEY` vào Environment trên Render rồi duyệt UI trong trình duyệt (phần chat/AI cần key thật).
