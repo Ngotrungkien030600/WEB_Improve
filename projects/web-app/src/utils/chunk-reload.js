@@ -26,6 +26,12 @@ window.addEventListener('vite:preloadError', (event) => {
   reloadOnce();
 });
 
+// Dev server giữ module graph cũ (file đã xoá/đổi tên) làm component không tải được;
+// lỗi này không đi qua router.onError nên phải bắt ở promise bị từ chối.
+window.addEventListener('unhandledrejection', (event) => {
+  if (isChunkLoadError(event.reason)) reloadOnce();
+});
+
 router.onError((error) => {
   if (isChunkLoadError(error)) reloadOnce();
 });
