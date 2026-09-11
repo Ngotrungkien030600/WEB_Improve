@@ -1,12 +1,12 @@
 <template>
   <div class="exam-page">
-    <CTopbar
-      title="📝 Thi Tiếng Anh"
-      back-label="Tiếng Anh"
-      @go-home="handleBack"
-    />
-
     <div class="exam-wrap">
+      <CTopbar
+        title="📝 Thi Tiếng Anh"
+        back-label="Tiếng Anh"
+        @go-home="handleBack"
+      />
+
       <!-- Config section -->
       <section v-if="!started" class="exam-panel exam-config">
         <div class="exam-config-head">

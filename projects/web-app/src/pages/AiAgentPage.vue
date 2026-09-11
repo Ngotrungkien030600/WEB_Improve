@@ -519,7 +519,6 @@ export default {
   transform: rotateY(180deg);
 }
 
-/* Hai mặt xếp chồng và ẩn mặt sau — thiếu 3 rule này thì thẻ không lật được */
 .ai-card-front,
 .ai-card-back {
   position: absolute;

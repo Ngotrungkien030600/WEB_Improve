@@ -1,12 +1,12 @@
 <template>
   <div class="podcast-page">
-    <CTopbar
-      title="🎧 Podcast"
-      back-label="Quay lại"
-      @go-home="handleBack"
-    />
-
     <div class="podcast-container">
+      <CTopbar
+        title="🎧 Podcast"
+        back-label="Quay lại"
+        @go-home="handleBack"
+      />
+
       <!-- ===== Mục 1: Kênh YouTube ===== -->
       <section class="section">
         <div class="section-header">
