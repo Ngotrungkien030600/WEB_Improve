@@ -4,9 +4,7 @@
       <CHomeHeader>
         <div class="header-tools">
           <CHomeTimer />
-          <button type="button" class="account-link" @click="navigate('/dashboard')">
-            👤 Tài khoản
-          </button>
+          <CAccountMenu />
         </div>
       </CHomeHeader>
 
@@ -53,6 +51,7 @@ import CHubCard from '../components/CHubCard.vue';
 import CGrid from '../components/CGrid.vue';
 import CHomeHeader from '../components/CHomeHeader.vue';
 import CHomeTimer from '../components/CHomeTimer.vue';
+import CAccountMenu from '../components/CAccountMenu.vue';
 import MotivationPopup from '../components/MotivationPopup.vue';
 import { navigate } from '../utils/navigate.js';
 
@@ -102,7 +101,7 @@ const groups = [
 
 export default {
   name: 'HomePage',
-  components: { CHubCard, CGrid, CHomeHeader, CHomeTimer, MotivationPopup },
+  components: { CHubCard, CGrid, CHomeHeader, CHomeTimer, CAccountMenu, MotivationPopup },
   data() {
     return { groups };
   },
@@ -120,23 +119,6 @@ export default {
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
-}
-
-.account-link {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
-  padding: 0.45rem 0.9rem;
-  color: var(--forge-text2, #94a3b8);
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.account-link:hover {
-  color: var(--forge-text, #f8fafc);
-  border-color: rgba(139, 92, 246, 0.5);
 }
 
 :root {
