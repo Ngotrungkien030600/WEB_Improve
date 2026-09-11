@@ -200,12 +200,11 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('../pages/LoginPage.vue'),
+    component: () => import('../pages/AuthPage.vue'),
   },
   {
     path: '/register',
-    name: 'register',
-    component: () => import('../pages/RegisterPage.vue'),
+    redirect: { path: '/login', query: { tab: 'register' } },
   },
   {
     path: '/java/thuc-chien',

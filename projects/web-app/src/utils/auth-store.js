@@ -111,8 +111,7 @@ export async function registerUser({ email, password, displayName, profile }) {
     profile: profile || { goal: '', level: '', minutesPerDay: 0 },
   };
   writeAccounts([...accounts, account]);
-  saveSession(publicUser(account), true);
-  return { ok: true, user: authState.user };
+  return { ok: true, user: publicUser(account) };
 }
 
 export async function loginUser({ email, password, remember }) {
