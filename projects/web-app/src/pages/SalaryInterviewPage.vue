@@ -150,6 +150,7 @@
 
 <script>
 import { navigate } from '../utils/navigate.js';
+import { requireLogin } from '../utils/auth-guard.js';
 import { salaryInterviewData } from '@legacy/js/data/salary-interview-data.js';
 
 export default {
@@ -246,6 +247,11 @@ export default {
       const salary = this.activeSalary;
       const tier = this.activeTier;
       const custom = this.customRequest.trim();
+
+      if (!requireLogin('/salary-interview', 'ai')) {
+        this.isGenerating = false;
+        return;
+      }
 
       let all = [...(tier?.questions || [])];
 

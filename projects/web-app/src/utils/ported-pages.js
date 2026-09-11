@@ -40,6 +40,8 @@ export const PORTED_PAGES = [
   '/java/spring-boot',
   '/java/backend',
   '/podcast',
+  '/login',
+  '/register',
 ];
 
 // Dynamic route prefixes that are always handled by the Vue router
@@ -87,4 +89,6 @@ export const PORTED_PAGE_LABELS = {
   '/java/spring-boot': 'Spring Boot',
   '/java/backend': 'Backend',
   '/podcast': 'Podcast',
+  '/login': 'Đăng nhập',
+  '/register': 'Đăng ký',
 };

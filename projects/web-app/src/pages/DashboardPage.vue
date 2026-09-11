@@ -28,6 +28,36 @@
         />
       </div>
 
+      <div class="section account-section">
+        <h2 class="section-title">👤 Tài khoản</h2>
+        <div v-if="user" class="account-box">
+          <p class="account-line">
+            Đang đăng nhập: <strong>{{ user.email }}</strong>
+            <span class="account-plan">gói {{ user.plan }}</span>
+          </p>
+          <p v-if="profileLine" class="account-sub">{{ profileLine }}</p>
+          <p class="account-sub">
+            Tiến độ trên máy này: {{ importedProgress ? 'đã nhập vào tài khoản' : 'chưa nhập' }}
+          </p>
+          <p v-if="syncMessage" class="account-ok">{{ syncMessage }}</p>
+          <div class="account-actions">
+            <button class="account-btn" @click="syncProgress">Đồng bộ tiến độ</button>
+            <button v-if="!importedProgress" class="account-btn" @click="syncProgress">
+              Nhập tiến độ máy này
+            </button>
+            <button class="account-btn account-btn-ghost" @click="doLogout">Đăng xuất</button>
+          </div>
+        </div>
+        <div v-else class="account-box">
+          <p class="account-line">Bạn chưa đăng nhập.</p>
+          <p class="account-sub">Đăng nhập để đồng bộ tiến độ giữa các thiết bị — nội dung học vẫn xem tự do.</p>
+          <div class="account-actions">
+            <button class="account-btn" @click="goLogin">Đăng nhập</button>
+            <button class="account-btn account-btn-ghost" @click="goRegister">Đăng ký miễn phí</button>
+          </div>
+        </div>
+      </div>
+
       <div class="section">
         <h2 class="section-title">🎯 Kỹ năng</h2>
         <div v-if="skills.length === 0" class="empty-state">
@@ -81,6 +111,25 @@ import { navigate } from '../utils/navigate.js';
 import CTopbar from '../components/CTopbar.vue';
 import CStatCard from '../components/CStatCard.vue';
 import CTable from '../components/CTable.vue';
+import {
+  authState,
+  isLoggedIn,
+  logoutUser,
+  markProgressImported,
+  needsProgressImport,
+} from '../utils/auth-store.js';
+import { requireLogin } from '../utils/auth-guard.js';
+
+const GOAL_LABELS = {
+  java: 'phỏng vấn Java',
+  english: 'tiếng Anh giao tiếp',
+  both: 'Java + tiếng Anh',
+};
+const LEVEL_LABELS = {
+  new: 'mới bắt đầu',
+  basic: 'đã có nền tảng',
+  working: 'đang đi làm',
+};
 
 export default {
   name: 'DashboardPage',
@@ -88,6 +137,7 @@ export default {
 
   data() {
     return {
+      syncMessage: '',
       skills: [],
       examHistory: [],
       streak: 0,
@@ -109,6 +159,21 @@ export default {
   },
 
   computed: {
+    user() {
+      return authState.user;
+    },
+    importedProgress() {
+      return !needsProgressImport();
+    },
+    profileLine() {
+      const profile = authState.user?.profile;
+      if (!profile) return '';
+      const parts = [];
+      if (GOAL_LABELS[profile.goal]) parts.push(`Mục tiêu: ${GOAL_LABELS[profile.goal]}`);
+      if (LEVEL_LABELS[profile.level]) parts.push(`Trình độ: ${LEVEL_LABELS[profile.level]}`);
+      if (profile.minutesPerDay) parts.push(`Mỗi ngày: ${profile.minutesPerDay} phút`);
+      return parts.join(' · ');
+    },
     totalXp() {
       return this.skills.reduce((sum, s) => sum + (s.xp || 0), 0);
     },
@@ -127,6 +192,28 @@ export default {
   methods: {
     handleNavigate(path) {
       navigate(path);
+    },
+
+    goLogin() {
+      navigate('/login');
+    },
+
+    goRegister() {
+      navigate('/register');
+    },
+
+    doLogout() {
+      logoutUser();
+      this.syncMessage = '';
+    },
+
+    syncProgress() {
+      if (!isLoggedIn()) {
+        requireLogin('/dashboard', 'sync');
+        return;
+      }
+      markProgressImported();
+      this.syncMessage = 'Đã gắn tiến độ trên máy vào tài khoản này. Đồng bộ lên máy chủ sẽ bật khi nối backend.';
     },
 
     loadSkills() {
@@ -266,6 +353,75 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-bottom: 2.5rem;
+}
+
+.account-box {
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: var(--forge-card-radius, 16px);
+  padding: 1.1rem 1.25rem;
+}
+
+.account-line {
+  margin: 0 0 0.4rem;
+  color: var(--forge-text);
+  font-size: 0.95rem;
+}
+
+.account-plan {
+  margin-left: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.18);
+  color: var(--forge-accent, #a78bfa);
+}
+
+.account-sub {
+  margin: 0 0 0.4rem;
+  color: var(--forge-text2);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.account-ok {
+  margin: 0 0 0.5rem;
+  color: #34d399;
+  font-size: 0.85rem;
+}
+
+.account-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.account-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--forge-fire, #8b5cf6);
+  color: #fff;
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base, 0.2s ease);
+}
+
+.account-btn:hover {
+  transform: translateY(-1px);
+}
+
+.account-btn-ghost {
+  background: transparent;
+  border-color: var(--forge-glass-border);
+  color: var(--forge-text2);
+}
+
+.account-btn-ghost:hover {
+  color: var(--forge-text);
 }
 
 .section {

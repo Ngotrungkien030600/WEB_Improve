@@ -198,6 +198,16 @@ const routes = [
     component: () => import('../pages/DashboardPage.vue'),
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../pages/LoginPage.vue'),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../pages/RegisterPage.vue'),
+  },
+  {
     path: '/java/thuc-chien',
     name: 'java-thuc-chien',
     component: () => import('../pages/JavaThucChienPage.vue'),

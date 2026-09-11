@@ -5,6 +5,10 @@
         <CHomeTimer />
       </CHomeHeader>
 
+      <div class="account-row">
+        <CAccountChip />
+      </div>
+
       <section class="hero-section">
         <h2 class="hero-title">Rèn kỹ năng,<br />tự tin chinh phục</h2>
         <p class="hero-subtitle">
@@ -48,6 +52,7 @@ import CHubCard from '../components/CHubCard.vue';
 import CGrid from '../components/CGrid.vue';
 import CHomeHeader from '../components/CHomeHeader.vue';
 import CHomeTimer from '../components/CHomeTimer.vue';
+import CAccountChip from '../components/CAccountChip.vue';
 import MotivationPopup from '../components/MotivationPopup.vue';
 import { navigate } from '../utils/navigate.js';
 
@@ -97,7 +102,7 @@ const groups = [
 
 export default {
   name: 'HomePage',
-  components: { CHubCard, CGrid, CHomeHeader, CHomeTimer, MotivationPopup },
+  components: { CHubCard, CGrid, CHomeHeader, CHomeTimer, CAccountChip, MotivationPopup },
   data() {
     return { groups };
   },
@@ -128,6 +133,12 @@ export default {
   --forge-text2: var(--text-muted-dark, #cbd5e1);
   --forge-text3: var(--text-tertiary, #94a3b8);
   --forge-card-radius: 16px;
+}
+
+.account-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
 }
 
 .home-page {
