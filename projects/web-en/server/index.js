@@ -437,7 +437,12 @@ const server = http.createServer((req, res) => {
               res.end('<h1>404 - Không tìm thấy</h1>');
               return;
             }
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.writeHead(200, {
+              'Content-Type': 'text/html; charset=utf-8',
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
+              'Expires': '0'
+            });
             res.end(indexData);
           });
           return;
