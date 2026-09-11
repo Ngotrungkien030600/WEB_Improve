@@ -507,8 +507,33 @@ export default {
 }
 
 .ai-card-inner {
+  position: relative;
   width: 100%;
+  min-height: 200px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
   text-align: center;
+}
+
+.ai-card.flipped .ai-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Hai mặt xếp chồng và ẩn mặt sau — thiếu 3 rule này thì thẻ không lật được */
+.ai-card-front,
+.ai-card-back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.ai-card-back {
+  transform: rotateY(180deg);
 }
 
 .ai-card-category {
