@@ -87,6 +87,15 @@ export function currentUser() {
   return authState.user;
 }
 
+// Máy này đã từng tạo tài khoản chưa — dùng để trang đăng nhập tự chọn form phù hợp.
+export function hasLocalAccount() {
+  return readAccounts().length > 0;
+}
+
+export function knownEmails() {
+  return readAccounts().map((account) => account.email);
+}
+
 export async function registerUser({ email, password, displayName, profile }) {
   const cleanEmail = normalizeEmail(email);
   const emailError = validateEmail(cleanEmail);

@@ -1,0 +1,1 @@
+import{h as e,i as t}from"./index-BRAaQ-Qz.js";var n={ai:`tính năng AI`,sync:`đồng bộ tiến độ`};function r(e,t){let n={next:e||`/`};return t&&(n.need=t),{path:`/login`,query:n}}function i(n,i){return t()?!0:(e.push(r(n,i)).catch(()=>{}),!1)}function a(e){return n[e]||`tính năng này`}export{i as n,a as t};

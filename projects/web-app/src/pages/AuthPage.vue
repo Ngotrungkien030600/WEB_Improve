@@ -21,6 +21,14 @@
         >Đăng ký</button>
       </div>
 
+      <p v-if="loggedInUser" class="auth-success auth-logged">
+        <span>Bạn đang đăng nhập là <strong>{{ loggedInUser.email }}</strong>.</span>
+        <span class="auth-logged-actions">
+          <button type="button" class="auth-link" @click="continueToWeb">Vào web</button>
+          <button type="button" class="auth-link" @click="switchAccount">Đăng xuất</button>
+        </span>
+      </p>
+      <p v-if="intro" class="auth-notice">{{ intro }}</p>
       <p v-if="nextLabel" class="auth-context">Sau khi đăng nhập, quay lại: <strong>{{ nextLabel }}</strong></p>
       <p v-if="needNotice" class="auth-notice">{{ needNotice }}</p>
       <p v-if="success" class="auth-success">{{ success }}</p>
@@ -219,7 +227,9 @@ import { featureNotice } from '../utils/auth-guard.js';
 import {
   authState,
   getLocalProgressSummary,
+  hasLocalAccount,
   loginUser,
+  logoutUser,
   markProgressImported,
   needsProgressImport,
   registerUser,
@@ -255,6 +265,7 @@ const busy = ref(false);
 const showPassword = ref(false);
 const remember = ref(true);
 const info = ref('');
+const intro = ref('');
 const success = ref('');
 const formError = ref('');
 const showImport = ref(false);
@@ -276,6 +287,7 @@ const level = ref('');
 const minutesPerDay = ref(0);
 
 const isLogin = computed(() => mode.value === 'login');
+const loggedInUser = computed(() => authState.user);
 const strength = computed(() => passwordStrength(regPassword.value));
 const nextPath = computed(() => {
   const raw = route.query.next;
@@ -289,7 +301,20 @@ const needNotice = computed(() => {
 });
 
 onMounted(() => {
-  if (route.query.tab === 'register') mode.value = 'register';
+  // Máy đã có tài khoản → mở sẵn form đăng nhập; máy mới → mở form đăng ký.
+  // Query ?tab=... luôn được ưu tiên (link cũ /register, nút Đăng ký ở Dashboard).
+  if (route.query.tab === 'register') {
+    mode.value = 'register';
+    return;
+  }
+  if (route.query.tab === 'login') {
+    mode.value = 'login';
+    return;
+  }
+  mode.value = hasLocalAccount() ? 'login' : 'register';
+  if (mode.value === 'register') {
+    intro.value = 'Lần đầu bạn vào SkillForge? Tạo tài khoản để lưu tiến độ học trên mọi thiết bị.';
+  }
 });
 
 function goHome() {
@@ -314,6 +339,16 @@ function queryTab(next) {
 
 function finish() {
   navigate(nextPath.value || '/');
+}
+
+function continueToWeb() {
+  finish();
+}
+
+function switchAccount() {
+  logoutUser();
+  success.value = '';
+  intro.value = 'Đã đăng xuất. Đăng nhập bằng tài khoản khác, hoặc tạo tài khoản mới ở tab Đăng ký.';
 }
 
 function forgot() {
@@ -498,6 +533,19 @@ function skipImport() {
   color: #a7f3d0;
   font-size: 0.85rem;
   line-height: 1.5;
+}
+
+.auth-logged {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.auth-logged-actions {
+  display: inline-flex;
+  gap: 0.75rem;
 }
 
 .auth-form {
