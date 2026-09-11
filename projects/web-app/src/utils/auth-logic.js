@@ -7,6 +7,10 @@ const PROGRESS_KEY_LABELS = {
   sf_timer_history: 'Lịch sử Pomodoro',
   sf_exam_history: 'Lịch sử thi thử',
   sf_quiz_history: 'Lịch sử quiz',
+  sf_accelerator_state: 'Tiến độ Accelerator',
+  sf_forge_stats: 'Thống kê XP và streak',
+  sf_forge_daily: 'Nhịp học theo ngày',
+  sk_forge_notes: 'Ghi chú cá nhân',
   skillforge_motivation_state: 'Động lực học',
   skillforge_skills: 'Danh sách kỹ năng',
   skillforge_skill_state: 'Tiến độ kỹ năng',
@@ -14,6 +18,7 @@ const PROGRESS_KEY_LABELS = {
   skillforge_timer_history: 'Lịch sử Pomodoro (bản cũ)',
   skillforge_exam_history: 'Lịch sử thi (bản cũ)',
   skillforge_log: 'Nhật ký học',
+  skillforge_ai_interview: 'Lịch sử phỏng vấn với AI',
   quizHistory: 'Lịch sử quiz (bản cũ)',
   aiChecklist: 'Checklist AI',
   learnChecklist: 'Checklist lộ trình',
@@ -98,7 +103,7 @@ export function isProgressKey(key) {
 }
 
 export function progressKeyLabel(key) {
-  return PROGRESS_KEY_LABELS[key] || key;
+  return PROGRESS_KEY_LABELS[key] || `Dữ liệu học chưa rõ (${key})`;
 }
 
 export function summarizeProgress(entries) {
