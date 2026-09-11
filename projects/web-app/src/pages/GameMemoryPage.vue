@@ -43,7 +43,7 @@
 
 <script>
 import CTopbar from '../components/CTopbar.vue';
-import { navigate } from '../utils/navigate.js';
+import { navigate, backTo } from '../utils/navigate.js';
 import {
   initGame,
   getCards,
@@ -152,7 +152,7 @@ export default {
     },
 
     handleBack() {
-      navigate('/english');
+      backTo('/english');
     },
   },
 };

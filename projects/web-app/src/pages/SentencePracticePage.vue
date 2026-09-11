@@ -104,7 +104,7 @@
 
 <script>
 import CTopbar from '../components/CTopbar.vue';
-import { navigate } from '../utils/navigate.js';
+import { navigate, backTo } from '../utils/navigate.js';
 import { sentencePractice } from '@legacy/js/data/sentence-practice.js';
 
 function shuffle(arr) {
@@ -166,7 +166,7 @@ export default {
 
   methods: {
     handleBack() {
-      navigate('/english');
+      backTo('/english');
     },
 
     switchCategory(catId) {

@@ -1,5 +1,4 @@
 import router from '../router/index.js';
-import { PORTED_PAGES, PORTED_PREFIXES } from './ported-pages.js';
 
 function normalize(path) {
   if (!path) return '';
@@ -38,9 +37,11 @@ export function navigate(path, options = {}) {
     return;
   }
 
-  // Mặc định: quyết định theo registry
-  const isPorted = PORTED_PAGES.includes(pathOnly) || PORTED_PREFIXES.some(prefix => pathOnly.startsWith(prefix));
-  if (isPorted) {
+  // Mặc định: hỏi thẳng router — có route khớp thì đi SPA, ngược lại rơi về trang legacy.
+  // (Dùng router thay vì danh sách registry để không bỏ sót khi thêm trang mới.)
+  const resolved = router.resolve({ path: pathOnly });
+  const isSpaRoute = resolved.matched.length > 0 && resolved.name !== 'nav-redirect';
+  if (isSpaRoute) {
     rememberLastRoute(pathOnly);
     router.push(p).catch(() => {});
   } else {

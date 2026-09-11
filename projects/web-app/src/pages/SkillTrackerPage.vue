@@ -127,7 +127,7 @@
 
 <script>
 import CTopbar from '../components/CTopbar.vue';
-import { navigate } from '../utils/navigate.js';
+import { navigate, backTo } from '../utils/navigate.js';
 import {
   SKILL_CATEGORIES,
   loadSkills,
@@ -173,7 +173,7 @@ export default {
 
   methods: {
     handleBack() {
-      navigate('/english');
+      backTo('/english');
     },
 
     loadData() {

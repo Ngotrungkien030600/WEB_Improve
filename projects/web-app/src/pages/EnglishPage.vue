@@ -51,7 +51,7 @@
           <span class="tab-icon">{{ tab.icon }}</span>
           <span class="tab-label">{{ tab.label }}</span>
         </button>
-        <a class="tab-item tab-link" href="/exam">
+        <a class="tab-item tab-link" href="/exam" @click.prevent="handleNavigate('/exam')">
           <span class="tab-icon">📝</span>
           <span class="tab-label">Thi</span>
         </a>
