@@ -205,6 +205,7 @@ export default {
     doLogout() {
       logoutUser();
       this.syncMessage = '';
+      navigate('/login');
     },
 
     syncProgress() {

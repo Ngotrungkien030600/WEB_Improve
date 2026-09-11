@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import CNavRedirect from '../components/CNavRedirect.vue';
+import { isLoggedIn } from '../utils/auth-store.js';
 
 const routes = [
   {
@@ -244,6 +245,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+// Chặn toàn bộ nội dung khi chưa đăng nhập: trang đăng nhập là trang đầu tiên của web.
+const PUBLIC_PATHS = ['/login', '/register'];
+
+router.beforeEach((to) => {
+  if (isLoggedIn()) return true;
+  if (PUBLIC_PATHS.includes(to.path)) return true;
+  return { path: '/login', query: { next: to.fullPath } };
 });
 
 export default router;

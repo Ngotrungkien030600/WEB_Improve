@@ -1,7 +1,60 @@
 <template>
   <div class="auth-page">
-    <div class="auth-card">
-      <button class="auth-back" @click="goHome">← Trang chủ</button>
+    <section class="auth-hero">
+      <div class="hero-inner">
+        <p class="hero-logo">⚒️ SkillForge</p>
+        <h1 class="hero-title">Lò rèn kỹ năng<br />Tiếng Anh &amp; Lập trình mỗi ngày</h1>
+        <p class="hero-lead">
+          Luyện phỏng vấn Java, nghe chép chính tả tiếng Anh, chấm câu với AI và theo dõi chuỗi ngày học —
+          tất cả trong một chỗ, miễn phí.
+        </p>
+
+        <ul class="hero-points">
+          <li class="hero-point">
+            <span class="hero-icon">☕</span>
+            <div>
+              <strong>Phỏng vấn Java</strong>
+              <span>30 cheatsheet, câu hỏi theo mức lương, phân tích code từng dòng</span>
+            </div>
+          </li>
+          <li class="hero-point">
+            <span class="hero-icon">🎧</span>
+            <div>
+              <strong>Tiếng Anh nghe chép</strong>
+              <span>Podcast VOA có phụ đề song ngữ, chép chính tả và chấm điểm từng câu</span>
+            </div>
+          </li>
+          <li class="hero-point">
+            <span class="hero-icon">🤖</span>
+            <div>
+              <strong>AI chấm và gợi ý</strong>
+              <span>Chữa câu sai, giải thích ngữ pháp, tạo đề ôn theo điểm yếu của bạn</span>
+            </div>
+          </li>
+          <li class="hero-point">
+            <span class="hero-icon">🔥</span>
+            <div>
+              <strong>Giữ nhịp mỗi ngày</strong>
+              <span>Pomodoro, XP, streak và dashboard tiến độ học của riêng bạn</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="hero-stats">
+          <span><strong>39</strong> trang học</span>
+          <span><strong>30</strong> cheatsheet Java</span>
+          <span><strong>9</strong> kỹ năng luyện tập</span>
+        </div>
+
+        <a class="hero-cta" href="#auth-form" @click.prevent="scrollToForm">
+          Đăng nhập / Đăng ký ngay ↓
+        </a>
+      </div>
+    </section>
+
+    <section id="auth-form" class="auth-section">
+      <div class="auth-card">
+      <button v-if="loggedInUser" class="auth-back" @click="goHome">← Trang chủ</button>
 
       <h1 class="auth-title">{{ isLogin ? 'Đăng nhập để vào web' : 'Tạo tài khoản SkillForge' }}</h1>
       <p class="auth-sub">Lưu tiến độ học tiếng Anh &amp; Java trên mọi thiết bị. Miễn phí, không cần thẻ.</p>
@@ -207,7 +260,8 @@
         </template>
       </p>
       <p class="auth-demo">Bản xem trước giao diện: tài khoản lưu ngay trên máy bạn, chưa gửi lên máy chủ.</p>
-    </div>
+      </div>
+    </section>
 
     <CImportProgress
       :visible="showImport"
@@ -321,6 +375,11 @@ function goHome() {
   navigate('/');
 }
 
+function scrollToForm() {
+  const target = document.getElementById('auth-form');
+  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function switchMode(next) {
   mode.value = next;
   onboarding.value = false;
@@ -432,11 +491,123 @@ function skipImport() {
 <style scoped>
 .auth-page {
   min-height: 100vh;
+  display: block;
+  background: #0c0a1d;
+}
+
+.auth-hero {
+  position: relative;
+  padding: 3.5rem 1.25rem 2.5rem;
+  background: radial-gradient(circle at 15% 0%, rgba(139, 92, 246, 0.28), transparent 55%),
+    radial-gradient(circle at 85% 20%, rgba(56, 189, 248, 0.16), transparent 50%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero-logo {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #c4b5fd;
+}
+
+.hero-title {
+  margin: 0 0 1rem;
+  font-size: clamp(1.7rem, 4.4vw, 2.7rem);
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--forge-text, #f8fafc);
+}
+
+.hero-lead {
+  max-width: 640px;
+  margin: 0 auto 2rem;
+  color: var(--forge-text2, #a9b4c9);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.hero-points {
+  list-style: none;
+  margin: 0 auto 2rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  text-align: left;
+}
+
+.hero-point {
   display: flex;
-  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-point strong {
+  display: block;
+  color: var(--forge-text, #f8fafc);
+  font-size: 0.92rem;
+  margin-bottom: 0.15rem;
+}
+
+.hero-point span {
+  color: var(--forge-text3, #8b98ad);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.hero-icon {
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.hero-stats {
+  display: flex;
   justify-content: center;
-  padding: 2rem 1rem;
-  background: radial-gradient(circle at 20% 0%, rgba(139, 92, 246, 0.18), transparent 55%), #0c0a1d;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+  color: var(--forge-text3, #8b98ad);
+  font-size: 0.85rem;
+}
+
+.hero-stats strong {
+  color: #c4b5fd;
+  font-size: 1.05rem;
+  margin-right: 0.25rem;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  background: var(--forge-accent, #8b5cf6);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all var(--transition-base, 0.2s ease);
+}
+
+.hero-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.4);
+}
+
+.auth-section {
+  padding: 2.5rem 1rem 3.5rem;
+  display: flex;
+  justify-content: center;
 }
 
 .auth-card {
@@ -789,5 +960,19 @@ function skipImport() {
   border-color: var(--forge-accent, #8b5cf6);
   color: var(--forge-text, #f8fafc);
   font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .hero-points {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .auth-hero {
+    padding: 2.5rem 1rem 2rem;
+  }
+
+  .hero-stats {
+    gap: 1rem;
+  }
 }
 </style>

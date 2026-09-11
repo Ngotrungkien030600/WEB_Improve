@@ -187,7 +187,8 @@ export function needsProgressImport() {
   } catch {
     return false;
   }
-  return importedFor !== authState.user.id;
+  if (importedFor === authState.user.id) return false;
+  return getLocalProgressSummary().total > 0;
 }
 
 export function markProgressImported() {
