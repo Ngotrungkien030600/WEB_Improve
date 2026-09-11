@@ -10,32 +10,40 @@
     >
       <span class="acct-avatar" aria-hidden="true">{{ initials }}</span>
       <span class="acct-text">
-        <span class="acct-name">{{ displayName }}</span>
-        <span class="acct-plan">{{ planLabel }}</span>
+        <span class="acct-name">{{ signedIn ? displayName : 'Chưa đăng nhập' }}</span>
+        <span class="acct-plan">{{ signedIn ? planLabel : 'Bấm để đăng nhập' }}</span>
       </span>
       <span class="acct-chevron" aria-hidden="true">▾</span>
     </button>
 
     <transition name="acct-fade">
       <div v-if="open" class="acct-menu" role="menu">
-        <div class="acct-menu-head">
-          <span class="acct-avatar acct-avatar-sm" aria-hidden="true">{{ initials }}</span>
-          <span class="acct-menu-id">
-            <strong>{{ displayName }}</strong>
-            <span>{{ email }}</span>
-          </span>
-        </div>
+        <template v-if="signedIn">
+          <div class="acct-menu-head">
+            <span class="acct-avatar acct-avatar-sm" aria-hidden="true">{{ initials }}</span>
+            <span class="acct-menu-id">
+              <strong>{{ displayName }}</strong>
+              <span>{{ email }}</span>
+            </span>
+          </div>
 
-        <button type="button" class="acct-item" role="menuitem" @click="go('/dashboard')">
-          <span class="acct-icon" aria-hidden="true">📊</span> Dashboard
-        </button>
-        <button type="button" class="acct-item" role="menuitem" @click="go('/login')">
-          <span class="acct-icon" aria-hidden="true">⚙️</span> Trang tài khoản
-        </button>
-        <div class="acct-sep"></div>
-        <button type="button" class="acct-item acct-item-danger" role="menuitem" @click="doLogout">
-          <span class="acct-icon" aria-hidden="true">🚪</span> Đăng xuất
-        </button>
+          <button type="button" class="acct-item" role="menuitem" @click="go('/dashboard')">
+            <span class="acct-icon" aria-hidden="true">📊</span> Dashboard
+          </button>
+          <button type="button" class="acct-item" role="menuitem" @click="go('/login')">
+            <span class="acct-icon" aria-hidden="true">⚙️</span> Trang tài khoản
+          </button>
+          <div class="acct-sep"></div>
+          <button type="button" class="acct-item acct-item-danger" role="menuitem" @click="doLogout">
+            <span class="acct-icon" aria-hidden="true">🚪</span> Đăng xuất
+          </button>
+        </template>
+
+        <template v-else>
+          <button type="button" class="acct-item" role="menuitem" @click="go('/login')">
+            <span class="acct-icon" aria-hidden="true">🔑</span> Đăng nhập / Đăng ký
+          </button>
+        </template>
       </div>
     </transition>
   </div>
@@ -50,12 +58,14 @@ const open = ref(false);
 const root = ref(null);
 
 const email = computed(() => authState.user?.email || '');
+const signedIn = computed(() => Boolean(authState.user));
 const displayName = computed(() => {
   const name = authState.user?.displayName || email.value.split('@')[0] || 'Bạn';
   return name.charAt(0).toUpperCase() + name.slice(1);
 });
 const planLabel = computed(() => (authState.user?.plan === 'pro' ? 'Gói Pro' : 'Gói miễn phí'));
 const initials = computed(() => {
+  if (!signedIn.value) return '👤';
   const source = authState.user?.displayName || email.value || '?';
   const parts = source.split(/[.\-_@\s]+/).filter(Boolean);
   if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
