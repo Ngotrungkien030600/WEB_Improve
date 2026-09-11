@@ -56,6 +56,17 @@
       <div class="auth-card">
       <button v-if="loggedInUser" class="auth-back" @click="goHome">← Trang chủ</button>
 
+      <div v-if="loggedInUser" class="auth-done">
+        <p class="auth-done-icon" aria-hidden="true">✅</p>
+        <h1 class="auth-title">Bạn đã đăng nhập</h1>
+        <p class="auth-done-mail">Tài khoản: <strong>{{ loggedInUser.email }}</strong></p>
+        <button type="button" class="auth-submit" @click="continueToWeb">Vào web ngay</button>
+        <button type="button" class="auth-link auth-done-switch" @click="switchAccount">
+          Đăng xuất để dùng tài khoản khác
+        </button>
+      </div>
+
+      <template v-else>
       <h1 class="auth-title">{{ isLogin ? 'Đăng nhập để vào web' : 'Tạo tài khoản SkillForge' }}</h1>
       <p class="auth-sub">Lưu tiến độ học tiếng Anh &amp; Java trên mọi thiết bị. Miễn phí, không cần thẻ.</p>
 
@@ -74,13 +85,6 @@
         >Đăng ký</button>
       </div>
 
-      <p v-if="loggedInUser" class="auth-success auth-logged">
-        <span>Bạn đang đăng nhập là <strong>{{ loggedInUser.email }}</strong>.</span>
-        <span class="auth-logged-actions">
-          <button type="button" class="auth-link" @click="continueToWeb">Vào web</button>
-          <button type="button" class="auth-link" @click="switchAccount">Đăng xuất</button>
-        </span>
-      </p>
       <p v-if="intro" class="auth-notice">{{ intro }}</p>
       <p v-if="nextLabel" class="auth-context">Sau khi đăng nhập, quay lại: <strong>{{ nextLabel }}</strong></p>
       <p v-if="needNotice" class="auth-notice">{{ needNotice }}</p>
@@ -260,6 +264,7 @@
         </template>
       </p>
       <p class="auth-demo">Bản xem trước giao diện: tài khoản lưu ngay trên máy bạn, chưa gửi lên máy chủ.</p>
+      </template>
       </div>
     </section>
 
@@ -712,6 +717,31 @@ function skipImport() {
   justify-content: space-between;
   gap: 0.6rem;
   flex-wrap: wrap;
+}
+
+.auth-done {
+  text-align: center;
+}
+
+.auth-done-icon {
+  margin: 0 0 0.35rem;
+  font-size: 1.9rem;
+}
+
+.auth-done-mail {
+  margin: 0 0 1.25rem;
+  color: var(--forge-text2, #a9b4c9);
+  font-size: 0.86rem;
+  word-break: break-all;
+}
+
+.auth-done-mail strong {
+  color: #c4b5fd;
+}
+
+.auth-done-switch {
+  display: inline-block;
+  margin-top: 0.9rem;
 }
 
 .auth-logged-actions {

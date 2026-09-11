@@ -43,7 +43,12 @@ export function navigate(path, options = {}) {
   const isSpaRoute = resolved.matched.length > 0 && resolved.name !== 'nav-redirect';
   if (isSpaRoute) {
     rememberLastRoute(pathOnly);
-    router.push(p).catch(() => {});
+    // Lỗi điều hướng kiểu "trùng route" (có mã type) là bình thường, bỏ qua.
+    // Lỗi khác (chunk cũ 404, router kẹt) mà đứng im thì người dùng tưởng hỏng → tải thẳng trang.
+    router.push(p).catch((error) => {
+      if (error && typeof error.type === 'number') return;
+      window.location.href = p;
+    });
   } else {
     window.location.href = '/pages/' + pathOnly.slice(1) + '.html' + hash;
   }
