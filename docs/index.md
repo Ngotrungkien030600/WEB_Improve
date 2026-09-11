@@ -44,9 +44,9 @@
 - [README.md](../README.md) — mô tả sản phẩm của tác giả
 - `projects/web-en/interview_java/*.md` — 30 cheatsheet Java (232KB), là **nội dung sản phẩm**, không phải tài liệu kỹ thuật
 
-## Chín lỗi — trạng thái sau story 11.1 (2026-09-09)
+## Mười lỗi — trạng thái sau story 11.1 (2026-09-09)
 
-Bảng dưới xác minh lại trên code hiện tại, không tin bản cũ. Chi tiết cách sửa: `_bmad-output/implementation-artifacts/11-1-fix-legacy-bugs-con-lai.md`.
+Bảng dưới xác minh lại trên code hiện tại, không tin bản cũ. Chi tiết cách sửa: `_bmad-output/implementation-artifacts/11-1-fix-legacy-bugs-con-lai.md`. S6 phát hiện 2026-09-11 khi test E2E luồng đăng nhập.
 
 | ID | Mức | Vị trí | Vấn đề gốc | Trạng thái |
 |---|---|---|---|---|
@@ -59,6 +59,7 @@ Bảng dưới xác minh lại trên code hiện tại, không tin bản cũ. Ch
 | **S5** | Thấp | `config.js` + `agents-config.js` | System prompt hai bản lệch nhau | ✅ Story 11.1 — xoá bản chết `systemPrompt` ở client; server là nguồn duy nhất |
 | **C3** | Thấp | `js/home-ai.js` | Code chết, không trang nào load | ✅ Story 11.1 — đã xoá file |
 | **C4** | Thấp | `js/utils/markdown.js` | Hai bản parser markdown song song | ✅ Story 11.1 — `bmad-chat.js` thành module, dùng chung `markdownToHTML` |
+| **S6** | **Cao** | `server/index.js` — 4 handler AI | AI trả text không phải JSON → `JSON.parse` ném lỗi **sau** `writeHead(200)`, rồi `.catch` ghi header lần hai → `ERR_HTTP_HEADERS_SENT` **hạ toàn bộ server** (mọi trang chết, không chỉ endpoint AI) | ✅ Đã vá (2026-09-11) — parse JSON an toàn (`parseJsonArraySafe`/`parseJsonObjectSafe`) **trước** khi ghi header, mọi phản hồi đi qua `sendJson` (bỏ qua nếu header đã gửi), SSE dùng `sseWrite`/`sseEnd` có guard, thêm log `unhandledRejection`/`uncaughtException` không thoát tiến trình. Verify: POST `/api/salary-interview` (Ollama thật) → 200, server vẫn sống |
 
 ## Trạng thái chuyển sang Vue (cutover 2026-09-09 — story 12-1)
 

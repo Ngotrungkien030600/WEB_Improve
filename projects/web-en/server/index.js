@@ -61,6 +61,46 @@ function readJsonBody(req, res, onOk) {
   });
 }
 
+// Ghi JSON một lần duy nhất: nếu response đã gửi (client ngắt, hoặc lỗi sau khi gửi) thì bỏ qua
+// thay vì ném ERR_HTTP_HEADERS_SENT làm sập cả tiến trình.
+function sendJson(res, status, payload) {
+  if (res.headersSent || res.writableEnded) return;
+  res.writeHead(status, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(payload));
+}
+
+function sseWrite(res, payload) {
+  if (res.writableEnded || res.destroyed) return false;
+  res.write(payload);
+  return true;
+}
+
+function sseEnd(res) {
+  if (res.writableEnded) return;
+  res.end();
+}
+
+// AI trả về JSON hỏng là chuyện thường — parse hỏng phải trả null, không được ném lỗi.
+function parseJsonArraySafe(text) {
+  const match = String(text).match(/\[[\s\S]*\]/);
+  if (!match) return null;
+  try {
+    return JSON.parse(match[0]);
+  } catch (e) {
+    return null;
+  }
+}
+
+function parseJsonObjectSafe(text) {
+  const match = String(text).match(/\{[\s\S]*\}/);
+  if (!match) return null;
+  try {
+    return JSON.parse(match[0]);
+  } catch (e) {
+    return null;
+  }
+}
+
 // Read .env file at startup
 const envPath = path.join(ROOT, '.env');
 if (fs.existsSync(envPath)) {
@@ -106,26 +146,23 @@ Tạo 5-8 câu hỏi, focus vào mức lương ${salary}tr.`;
     ];
 
     callAI(messages, apiKey, 1500).then(reply => {
-      const jsonMatch = reply.match(/\[[\s\S]*\]/);
-      if (jsonMatch) {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ questions: JSON.parse(jsonMatch[0]), fromAI: true }));
-      } else {
-        // Fallback: parse từng dòng câu hỏi, id duy nhất theo số dòng
-        const parsed = [];
-        const lines = reply.split('\n');
-        lines.forEach((line, idx) => {
-          const trimmed = line.trim();
-          if (trimmed.toLowerCase().includes('câu hỏi') && trimmed.length > 20) {
-            parsed.push({ id: `q-fallback-${idx + 1}`, topic: 'General', question: trimmed.replace(/^\d+[\.\)]\s*/, ''), sampleAnswer: '—' });
-          }
-        });
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ questions: parsed, fromAI: true, note: 'fallback parse' }));
+      const questions = parseJsonArraySafe(reply);
+      if (questions) {
+        sendJson(res, 200, { questions, fromAI: true });
+        return;
       }
+      // Fallback: parse từng dòng câu hỏi, id duy nhất theo số dòng
+      const parsed = [];
+      const lines = reply.split('\n');
+      lines.forEach((line, idx) => {
+        const trimmed = line.trim();
+        if (trimmed.toLowerCase().includes('câu hỏi') && trimmed.length > 20) {
+          parsed.push({ id: `q-fallback-${idx + 1}`, topic: 'General', question: trimmed.replace(/^\d+[\.\)]\s*/, ''), sampleAnswer: '—' });
+        }
+      });
+      sendJson(res, 200, { questions: parsed, fromAI: true, note: 'fallback parse' });
     }).catch(err => {
-      res.writeHead(502, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: err.message }));
+      sendJson(res, 502, { error: err.message });
     });
   });
 }
@@ -156,13 +193,13 @@ Trả lời ngắn gọn, focus vào 1-2 points quan trọng nhất. Dùng markd
       // Use OpenAI streaming
       callAIStream(messages, apiKey, (chunk) => {
         const escaped = chunk.replace(/\n/g, '\\n').replace(/\r/g, '\\r');
-        res.write(`data: ${escaped}\n\n`);
+        sseWrite(res, `data: ${escaped}\n\n`);
       }).then(() => {
-        res.write('data: [DONE]\n\n');
-        res.end();
+        sseWrite(res, 'data: [DONE]\n\n');
+        sseEnd(res);
       }).catch(err => {
-        res.write(`data: [ERROR] ${err.message}\n\n`);
-        res.end();
+        sseWrite(res, `data: [ERROR] ${err.message}\n\n`);
+        sseEnd(res);
       });
     } else {
       // Fallback: use Ollama non-streaming + simulate chunks
@@ -173,16 +210,19 @@ Trả lời ngắn gọn, focus vào 1-2 points quan trọng nhất. Dùng markd
         const interval = setInterval(() => {
           if (i >= words.length) {
             clearInterval(interval);
-            res.write('data: [DONE]\n\n');
-            res.end();
+            sseWrite(res, 'data: [DONE]\n\n');
+            sseEnd(res);
             return;
           }
-          res.write(`data: ${words[i]} \n\n`);
+          if (!sseWrite(res, `data: ${words[i]} \n\n`)) {
+            clearInterval(interval);
+            return;
+          }
           i++;
         }, 40);
       }).catch(err => {
-        res.write(`data: [ERROR] ${err.message}\n\n`);
-        res.end();
+        sseWrite(res, `data: [ERROR] ${err.message}\n\n`);
+        sseEnd(res);
       });
     }
   });
@@ -222,17 +262,14 @@ Trả về kết quả dạng JSON với format:
     ];
 
     callAI(messages, apiKey, 800).then(reply => {
-      const jsonMatch = reply.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(jsonMatch[0]);
-      } else {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ score: 5, feedback: reply, suggestions: [] }));
+      const parsed = parseJsonObjectSafe(reply);
+      if (parsed) {
+        sendJson(res, 200, parsed);
+        return;
       }
+      sendJson(res, 200, { score: 5, feedback: reply, suggestions: [] });
     }).catch(err => {
-      res.writeHead(502, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: err.message }));
+      sendJson(res, 502, { error: err.message });
     });
   });
 }
@@ -252,11 +289,9 @@ function handleAiChat(req, res) {
     const messages = [systemMsg, ...conversation];
 
     callAI(messages, apiKey).then(reply => {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ reply }));
+      sendJson(res, 200, { reply });
     }).catch(err => {
-      res.writeHead(502, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: err.message }));
+      sendJson(res, 502, { error: err.message });
     });
   });
 }
@@ -279,11 +314,9 @@ function handleBmadChat(req, res) {
       const msgs = [systemMsg, ...convo];
 
       return callAI(msgs, apiKey).then(reply => {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ replies: [{ agentId: bundleSlug, name: 'BMad', icon: '🤖', text: reply }] }));
+        sendJson(res, 200, { replies: [{ agentId: bundleSlug, name: 'BMad', icon: '🤖', text: reply }] });
       }).catch(err => {
-        res.writeHead(502, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: err.message }));
+        sendJson(res, 502, { error: err.message });
       });
     }
 
@@ -339,8 +372,7 @@ const server = http.createServer((req, res) => {
   if (req.method === 'POST' && urlPath.startsWith('/api/')) {
     const ip = req.socket.remoteAddress || 'unknown';
     if (isRateLimited(ip)) {
-      res.writeHead(429, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'Too many requests' }));
+      sendJson(res, 429, { error: 'Too many requests' });
       return;
     }
   }
@@ -430,6 +462,15 @@ const server = http.createServer((req, res) => {
 
 // HOST mặc định chỉ loopback (an toàn local); production đặt HOST=0.0.0.0 (VD: Render)
 const HOST = process.env.HOST || '127.0.0.1';
+
+// Một request lỗi (AI trả JSON hỏng, client ngắt giữa chừng) không được phép hạ cả web.
+process.on('unhandledRejection', (err) => {
+  console.error('[unhandledRejection]', err && err.message ? err.message : err);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('[uncaughtException]', err && err.message ? err.message : err);
+});
 
 server.listen(PORT, HOST, () => {
   console.log(`✓ SkillForge server running at http://${HOST}:${PORT}`);
