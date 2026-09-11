@@ -2,7 +2,12 @@
   <div class="home-page">
     <div class="container">
       <CHomeHeader>
-        <CHomeTimer />
+        <div class="header-tools">
+          <CHomeTimer />
+          <button type="button" class="account-link" @click="navigate('/dashboard')">
+            👤 Tài khoản
+          </button>
+        </div>
       </CHomeHeader>
 
       <section class="hero-section">
@@ -110,6 +115,30 @@ export default {
 </script>
 
 <style scoped>
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.account-link {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  color: var(--forge-text2, #94a3b8);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.account-link:hover {
+  color: var(--forge-text, #f8fafc);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
 :root {
   --forge-bg: var(--color-bg-page, #0c0a1d);
   --forge-bg2: var(--color-bg-page-alt, #0f0c24);
