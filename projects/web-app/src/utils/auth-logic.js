@@ -10,6 +10,7 @@ const PROGRESS_KEY_LABELS = {
   sf_accelerator_state: 'Tiến độ Accelerator',
   sf_forge_stats: 'Thống kê XP và streak',
   sf_forge_daily: 'Nhịp học theo ngày',
+  sf_ui_interview_seen: 'Câu hỏi phỏng vấn đã xem',
   sk_forge_notes: 'Ghi chú cá nhân',
   skillforge_motivation_state: 'Động lực học',
   skillforge_skills: 'Danh sách kỹ năng',
