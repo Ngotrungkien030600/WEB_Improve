@@ -1,162 +1,369 @@
 <template>
-  <div class="forge-timer-wrap">
-    <div class="forge-timer-ring">
-      <svg viewBox="0 0 68 68">
-        <circle class="forge-ring-bg" cx="34" cy="34" r="30" />
-        <circle
-          class="forge-ring-progress"
-          :class="ringClass"
-          cx="34" cy="34" r="30"
-          :style="{ strokeDashoffset: ringOffset }"
-        />
-      </svg>
-      <div class="forge-time" :class="timeClass">{{ displayTime }}</div>
+  <div ref="root" class="forge-timer-wrap" :style="{ '--timer-color': mode.color }">
+    <div class="timer-pill" :class="{ running: isRunning, done: isDone }">
+      <button
+        type="button"
+        class="pill-main"
+        :aria-expanded="open ? 'true' : 'false'"
+        aria-haspopup="dialog"
+        :aria-label="`Đồng hồ ${mode.label} ${displayTime} — mở bảng điều khiển`"
+        @click="togglePanel"
+      >
+        <span class="pill-ring" aria-hidden="true">
+          <svg viewBox="0 0 44 44">
+            <circle class="ring-bg" cx="22" cy="22" r="19" />
+            <circle
+              class="ring-progress"
+              :class="toneClass"
+              cx="22" cy="22" r="19"
+              :style="{ strokeDashoffset: ringOffset(19) }"
+            />
+          </svg>
+          <span class="pill-clock">{{ displayTime }}</span>
+        </span>
+        <span class="pill-text">
+          <span class="pill-mode">{{ mode.emoji }} {{ mode.label }}</span>
+          <span class="pill-sub">{{ statusText }}</span>
+        </span>
+        <span class="pill-chevron" aria-hidden="true">▾</span>
+      </button>
+
+      <button
+        type="button"
+        class="pill-action"
+        :aria-label="isRunning ? 'Tạm dừng đồng hồ' : 'Bắt đầu đồng hồ'"
+        @click="onToggle"
+      >{{ isRunning ? '⏸' : '▶' }}</button>
     </div>
 
-    <div class="forge-controls">
-      <select v-model="selectedDuration" @change="onDurationChange">
-        <option value="30">30p</option>
-        <option value="60">1h</option>
-      </select>
-      <div class="forge-btn-row">
-        <button class="forge-btn forge-btn-primary" @click="onToggle">
-          {{ isRunning ? '⏸' : '⚒️' }}
-        </button>
-        <button class="forge-btn forge-btn-secondary" @click="onReset">↻</button>
+    <transition name="panel-fade">
+      <div v-if="open" class="timer-panel" role="dialog" aria-label="Đồng hồ tập trung">
+        <div class="panel-head">
+          <span class="panel-mode">{{ mode.emoji }} {{ mode.label }}</span>
+          <button type="button" class="panel-close" aria-label="Đóng bảng điều khiển" @click="closePanel">✕</button>
+        </div>
+
+        <div class="panel-ring" :class="toneClass">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="ring-bg" cx="60" cy="60" r="52" />
+            <circle
+              class="ring-progress"
+              cx="60" cy="60" r="52"
+              :style="{ strokeDashoffset: ringOffset(52) }"
+            />
+          </svg>
+          <div class="ring-center">
+            <span class="ring-clock">{{ displayTime }}</span>
+            <span class="ring-status">{{ statusText }}</span>
+          </div>
+        </div>
+
+        <p v-if="sessionNote" class="panel-note">{{ sessionNote }}</p>
+
+        <div class="panel-actions">
+          <button type="button" class="act act-primary" @click="onToggle">
+            {{ isRunning ? '⏸ Tạm dừng' : (isDone ? '▶ Phiên mới' : '▶ Bắt đầu') }}
+          </button>
+          <button type="button" class="act" @click="onReset">↻ Đặt lại</button>
+          <button type="button" class="act" @click="switchMode(otherModeId)">
+            {{ mode.id === 'focus' ? '☕ Nghỉ 5p' : '⚒️ Tập trung' }}
+          </button>
+        </div>
+
+        <div v-if="mode.id === 'focus'" class="panel-presets">
+          <span class="presets-label">Thời lượng</span>
+          <div class="preset-row">
+            <button
+              v-for="value in presets"
+              :key="value"
+              type="button"
+              class="preset"
+              :class="{ active: minutes === value }"
+              @click="setMinutes(value)"
+            >{{ value }}p</button>
+          </div>
+        </div>
+
+        <div class="panel-stats">
+          <div class="panel-stat">
+            <span class="stat-val">{{ today.minutes }}<small>p</small></span>
+            <span class="stat-key">Hôm nay</span>
+          </div>
+          <div class="panel-stat">
+            <span class="stat-val">{{ today.sessions }}</span>
+            <span class="stat-key">Phiên hôm nay</span>
+          </div>
+          <div class="panel-stat">
+            <span class="stat-val">{{ history.streak }}<small>🔥</small></span>
+            <span class="stat-key">Chuỗi ngày</span>
+          </div>
+          <div class="panel-stat">
+            <span class="stat-val">{{ history.sessions }}</span>
+            <span class="stat-key">Tổng phiên</span>
+          </div>
+        </div>
+
+        <label class="panel-sound">
+          <input type="checkbox" :checked="soundOn" @change="onToggleSound" />
+          <span>Tiếng báo khi hết giờ</span>
+        </label>
       </div>
-    </div>
-
-    <div class="forge-stats">
-      <div class="forge-stat-row">📋 Hôm nay <span class="val fire">{{ todayMinutes }}m</span></div>
-      <div class="forge-stat-row">🔥 Streak <span class="val">{{ history.streak }}🔥</span></div>
-      <div class="forge-stat-row">📦 Đã rèn <span class="val">{{ history.sessions }}</span></div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import {
-  getState, setState,
+  FOCUS_PRESETS,
+  TIMER_MODES,
+  buildTimerState,
+  findMode,
+  finishState,
   getHistory,
-  formatTime, calcRatio,
-  buildInitialState, tickState, finishState,
-  startState, pauseState, resetState
+  getState,
+  pauseState,
+  resetState,
+  ringOffsetOf,
+  setMinutesState,
+  setState,
+  startState,
+  stateAfterRestore,
+  switchModeState,
+  tickState,
+  todayStats,
+  toneOf,
+  formatTime,
 } from '../logic/forge-timer-logic.js';
-
-const CIRCUMFERENCE = 188.5;
 
 export default {
   name: 'CHomeTimer',
   data() {
     return {
-      duration: 30,
+      open: false,
+      mode: TIMER_MODES[0],
       remaining: 0,
+      total: 1800,
       isRunning: false,
-      history: { todayMinutes: 0, streak: 0, sessions: 0 },
+      isDone: false,
+      soundOn: true,
+      sessionNote: '',
+      history: { sessions: 0, streak: 0 },
+      today: { minutes: 0, sessions: 0 },
       intervalId: null,
+      baseTitle: '',
     };
   },
   computed: {
-    total() { return this.duration * 60; },
-    displayTime() { return formatTime(this.remaining); },
-    ratio() { return calcRatio(this.remaining, this.total); },
-    ringOffset() { return CIRCUMFERENCE * (1 - this.ratio); },
-    timeClass() {
-      if (this.remaining <= 60 && this.remaining > 0) return 'danger';
-      if (this.remaining <= 300 && this.remaining > 0) return 'warning';
-      return '';
+    presets() {
+      return FOCUS_PRESETS;
     },
-    ringClass() {
-      if (this.remaining <= 60 && this.remaining > 0) return 'danger';
-      if (this.remaining <= 300 && this.remaining > 0) return 'warning';
-      return '';
+    minutes() {
+      return Math.round(this.total / 60);
     },
-    todayMinutes() { return this.history.dates?.[this.todayKey] || 0; },
-    todayKey() { return new Date().toISOString().slice(0, 10); },
-    selectedDuration: {
-      get() { return String(this.duration); },
-      set(val) { this.duration = parseInt(val, 10); }
+    displayTime() {
+      return formatTime(this.remaining);
+    },
+    toneClass() {
+      return toneOf(this.remaining, this.isRunning);
+    },
+    statusText() {
+      if (this.isRunning) return 'đang chạy';
+      if (this.isDone) return 'đã xong phiên';
+      if (this.remaining === this.total) return `${this.minutes} phút`;
+      return 'tạm dừng';
+    },
+    otherModeId() {
+      return this.mode.id === 'focus' ? 'short' : 'focus';
     },
   },
-  created() { this.restore(); },
-  beforeUnmount() { this.clearInterval(); },
+  created() {
+    this.restore();
+  },
+  mounted() {
+    this.baseTitle = document.title;
+    document.addEventListener('click', this.onDocumentClick);
+    window.addEventListener('keydown', this.onKeydown);
+  },
+  beforeUnmount() {
+    this.clearTick();
+    document.removeEventListener('click', this.onDocumentClick);
+    window.removeEventListener('keydown', this.onKeydown);
+    if (this.baseTitle) document.title = this.baseTitle;
+  },
   methods: {
     restore() {
-      const s = getState();
-      if (!s) {
-        const init = buildInitialState(this.duration);
-        this.remaining = init.remaining;
-        setState(init);
-      } else {
-        this.duration = Math.round(s.total / 60);
-        if (s.running) {
-          const now = Date.now();
-          const elapsed = Math.floor((now - s.lastUpdated) / 1000);
-          this.remaining = Math.max(0, s.remaining - elapsed);
-          this.isRunning = true;
-          if (this.remaining > 0) this.startInterval();
-        } else {
-          this.remaining = s.remaining;
-          this.isRunning = false;
-        }
+      const saved = getState();
+      if (!saved) {
+        this.applyState(buildTimerState({ mode: 'focus' }));
+        return;
       }
-      this.refreshHistory();
+      this.mode = findMode(saved.mode);
+      this.total = saved.total || this.mode.defaultMinutes * 60;
+      this.soundOn = saved.sound !== false;
+      const restored = stateAfterRestore(saved);
+      this.remaining = restored.remaining;
+      this.isRunning = restored.running;
+      if (restored.finished) {
+        this.completeSession();
+        return;
+      }
+      if (this.isRunning) this.startTick();
+      this.refreshStats();
     },
-    refreshHistory() {
-      const h = getHistory();
-      const today = this.todayKey;
-      this.history = { ...h, todayMinutes: h.dates?.[today] || 0 };
+    applyState(state, options = {}) {
+      this.remaining = state.remaining;
+      this.total = state.total;
+      this.isRunning = Boolean(state.running);
+      this.isDone = Boolean(options.done);
+      if (state.mode) this.mode = findMode(state.mode);
+      if (typeof state.sound === 'boolean') this.soundOn = state.sound;
+      setState(state);
+      this.refreshStats();
     },
-    startInterval() {
-      this.clearInterval();
-      this.intervalId = setInterval(() => this.tick(), 1000);
+    refreshStats() {
+      const history = getHistory();
+      this.history = history;
+      this.today = todayStats(history);
     },
-    clearInterval() {
+    startTick() {
+      this.clearTick();
+      this.intervalId = setInterval(this.tick, 1000);
+    },
+    clearTick() {
       if (this.intervalId) {
         clearInterval(this.intervalId);
         this.intervalId = null;
       }
     },
     tick() {
-      const s = tickState(getState());
-      setState(s);
-      this.remaining = s.remaining;
-      if (s.remaining === 0) {
-        this.clearInterval();
-        this.onFinish();
+      const next = tickState(getState());
+      if (!next) return;
+      setState(next);
+      this.remaining = next.remaining;
+      if (next.remaining === 0) {
+        this.clearTick();
+        this.completeSession();
+        return;
       }
+      this.syncTitle();
     },
-    onFinish() {
+    completeSession() {
       this.isRunning = false;
-      const { history } = finishState(getState());
-      this.history = { ...history, todayMinutes: history.dates?.[this.todayKey] || 0 };
+      this.isDone = true;
+      document.title = this.baseTitle || document.title;
+      const { history, minutes } = finishState(getState());
+      this.history = history;
+      this.today = todayStats(history);
+      this.sessionNote = this.mode.id === 'focus'
+        ? `Xong ${minutes} phút tập trung — nghỉ 5 phút rồi làm tiếp nhé.`
+        : 'Hết giờ nghỉ — quay lại bàn học thôi.';
+      this.playChime();
+      if (this.mode.id === 'focus') {
+        const next = switchModeState(getState(), 'short');
+        setState(next);
+        this.mode = findMode(next.mode);
+        this.total = next.total;
+        this.remaining = next.remaining;
+      }
     },
     onToggle() {
       if (this.isRunning) {
-        const s = pauseState(getState());
-        setState(s);
-        this.remaining = s.remaining;
+        const next = pauseState(getState());
+        setState(next);
+        this.remaining = next.remaining;
         this.isRunning = false;
-        this.clearInterval();
-      } else {
-        const s = startState(getState(), this.duration);
-        setState(s);
-        this.remaining = s.remaining;
-        this.isRunning = true;
-        this.startInterval();
+        this.clearTick();
+        document.title = this.baseTitle || document.title;
+        return;
       }
+      const next = startState(getState(), this.minutes);
+      setState(next);
+      this.remaining = next.remaining;
+      this.total = next.total;
+      this.isRunning = true;
+      this.isDone = false;
+      this.sessionNote = '';
+      this.startTick();
+      this.syncTitle();
     },
     onReset() {
-      this.clearInterval();
-      const s = resetState(this.duration);
-      setState(s);
-      this.remaining = s.remaining;
+      this.clearTick();
+      const next = resetState(this.minutes, { mode: this.mode.id, sound: this.soundOn });
+      this.applyState(next);
       this.isRunning = false;
+      this.isDone = false;
+      this.sessionNote = '';
+      document.title = this.baseTitle || document.title;
     },
-    onDurationChange() {
-      const s = getState();
-      if (!s || !s.running) {
-        this.onReset();
+    setMinutes(value) {
+      this.clearTick();
+      const next = setMinutesState(getState(), value);
+      this.applyState(next);
+      this.isRunning = false;
+      this.isDone = false;
+      this.sessionNote = '';
+    },
+    switchMode(modeId) {
+      this.clearTick();
+      const next = switchModeState(getState(), modeId);
+      this.applyState(next);
+      this.isRunning = false;
+      this.isDone = false;
+      this.sessionNote = '';
+      document.title = this.baseTitle || document.title;
+    },
+    onToggleSound(event) {
+      this.soundOn = Boolean(event.target.checked);
+      const base = getState() || buildTimerState({ mode: this.mode.id, minutes: this.minutes, sound: this.soundOn });
+      setState({ ...base, sound: this.soundOn });
+    },
+    togglePanel() {
+      this.open = !this.open;
+    },
+    closePanel() {
+      this.open = false;
+    },
+    onDocumentClick(event) {
+      if (!this.open) return;
+      if (this.$refs.root && !this.$refs.root.contains(event.target)) this.open = false;
+    },
+    onKeydown(event) {
+      if (event.key === 'Escape') this.open = false;
+    },
+    ringOffset(radius) {
+      const circumference = 2 * Math.PI * radius;
+      return ringOffsetOf(this.remaining, this.total, circumference);
+    },
+    syncTitle() {
+      document.title = `${this.displayTime} · ${this.mode.label} — ${this.baseTitle || 'SkillForge'}`;
+    },
+    playChime() {
+      if (!this.soundOn) return;
+      try {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        const ctx = new Ctx();
+        const start = ctx.currentTime;
+        const notes = [660, 880, 990];
+        notes.forEach((freq, index) => {
+          const at = start + index * 0.18;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.0001, at);
+          gain.gain.exponentialRampToValueAtTime(0.16, at + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.16);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(at);
+          osc.stop(at + 0.2);
+        });
+        setTimeout(() => {
+          if (typeof ctx.close === 'function') ctx.close();
+        }, 1000);
+      } catch (err) {
+        // trình duyệt chặn phát âm thanh → bỏ qua, không làm hỏng đồng hồ
       }
     },
   },
@@ -165,194 +372,412 @@ export default {
 
 <style scoped>
 .forge-timer-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.timer-pill {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-shrink: 0;
+  gap: 0.5rem;
+  padding: 0.3rem 0.45rem 0.3rem 0.35rem;
+  border-radius: 999px;
+  border: 1px solid var(--forge-glass-border, rgba(255, 255, 255, 0.12));
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  transition: border-color var(--transition-fast, 0.15s ease), background var(--transition-fast, 0.15s ease);
 }
 
-.forge-timer-ring {
+.timer-pill.running {
+  border-color: color-mix(in srgb, var(--timer-color) 60%, transparent);
+  background: color-mix(in srgb, var(--timer-color) 16%, transparent);
+}
+
+.timer-pill.done {
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.pill-main {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.1rem 0.2rem;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.pill-main:focus-visible,
+.pill-action:focus-visible,
+.act:focus-visible,
+.preset:focus-visible,
+.panel-close:focus-visible {
+  outline: 2px solid var(--timer-color);
+  outline-offset: 2px;
+}
+
+.pill-ring {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 42px;
+  height: 42px;
   flex-shrink: 0;
 }
 
-.forge-timer-ring svg {
-  transform: rotate(-90deg);
+.pill-ring svg {
   width: 100%;
   height: 100%;
+  transform: rotate(-90deg);
 }
 
-.forge-ring-bg {
+.ring-bg {
   fill: none;
-  stroke: var(--forge-ring-bg);
+  stroke: rgba(255, 255, 255, 0.12);
   stroke-width: 4;
 }
 
-.forge-ring-progress {
+.ring-progress {
   fill: none;
-  stroke: var(--forge-ring-progress);
+  stroke: var(--timer-color);
   stroke-width: 4;
   stroke-linecap: round;
-  stroke-dasharray: 188.5;
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
-  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.4));
+  transition: stroke-dashoffset 0.6s linear, stroke 0.4s ease;
 }
 
-.forge-ring-progress.warning {
-  stroke: var(--forge-ring-warning);
-  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
+.ring-progress.warning {
+  stroke: var(--forge-ring-warning, #f59e0b);
 }
 
-.forge-ring-progress.danger {
-  stroke: var(--forge-ring-danger);
-  filter: drop-shadow(0 0 12px rgba(220, 38, 38, 0.5));
-  animation: ringPulse 1s ease-in-out infinite;
+.ring-progress.danger {
+  stroke: var(--forge-ring-danger, #f43f5e);
 }
 
-@keyframes ringPulse {
-  0%, 100% { filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.4)); }
-  50% { filter: drop-shadow(0 0 18px rgba(220, 38, 38, 0.7)); }
-}
-
-.forge-time {
+.pill-clock {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 0.68rem;
   font-weight: 800;
-  color: var(--forge-time-color, #ffffff);
+  color: var(--forge-text, #f8fafc);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
-  transition: color 0.4s ease;
 }
 
-.forge-time.warning { color: var(--forge-time-warning, #fca5a5); }
-.forge-time.danger { color: var(--forge-time-danger, #f87171); }
-
-.forge-controls {
+.pill-text {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  align-items: center;
+  align-items: flex-start;
+  line-height: 1.15;
 }
 
-.forge-controls select {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 0.15rem 0.4rem;
-  font-size: 0.7rem;
-  cursor: pointer;
+.pill-mode {
+  font-size: 0.78rem;
   font-weight: 700;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.8);
-  width: 42px;
-  text-align: center;
-  transition: background 0.2s;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.forge-controls select:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.forge-controls select option {
-  color: var(--text-primary, #1e293b);
-  background: var(--text-white, #fff);
-}
-
-.forge-btn-row {
-  display: flex;
-  gap: 0.2rem;
-}
-
-.forge-btn {
-  border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  font-size: 0.75rem;
-  cursor: pointer;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-}
-
-.forge-btn-primary {
-  background: linear-gradient(135deg, var(--forge-btn-primary-start, #8b5cf6), var(--forge-btn-primary-end, #7c3aed));
-  color: var(--forge-btn-primary-color, white);
-  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.4);
-}
-
-.forge-btn-primary:hover {
-  transform: scale(1.12);
-  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.5);
-}
-
-.forge-btn-primary:active {
-  transform: scale(0.92);
-}
-
-.forge-btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.forge-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: white;
-  transform: scale(1.08);
-}
-
-.forge-btn-secondary:active {
-  transform: scale(0.92);
-}
-
-.forge-stats {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  padding-left: 0.75rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  flex-shrink: 0;
-}
-
-.forge-stat-row {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--forge-text, #f8fafc);
   white-space: nowrap;
 }
 
-.forge-stat-row .val {
-  color: rgba(255, 255, 255, 0.85);
+.pill-sub {
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--forge-text3, #94a3b8);
+  white-space: nowrap;
+}
+
+.pill-chevron {
+  font-size: 0.62rem;
+  color: var(--forge-text3, #94a3b8);
+}
+
+.pill-action {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: var(--timer-color);
+  color: #10101c;
+  font-size: 0.72rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.pill-action:hover {
+  filter: brightness(1.12);
+}
+
+.timer-panel {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  width: min(340px, calc(100vw - 2rem));
+  padding: 1rem;
+  border-radius: 18px;
+  background: #171530;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  z-index: 90;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.panel-mode {
+  font-size: 0.85rem;
   font-weight: 700;
+  color: var(--forge-text, #f8fafc);
+}
+
+.panel-close {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--forge-text2, #cbd5e1);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.panel-close:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: var(--forge-text, #f8fafc);
+}
+
+.panel-ring {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 0.75rem;
+}
+
+.panel-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.panel-ring .ring-bg {
+  stroke-width: 7;
+}
+
+.panel-ring .ring-progress {
+  stroke-width: 7;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--timer-color) 55%, transparent));
+}
+
+.ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+}
+
+.ring-clock {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--forge-text, #f8fafc);
   font-variant-numeric: tabular-nums;
-  min-width: 2.2rem;
+  letter-spacing: -0.02em;
 }
 
-.forge-stat-row .val.fire {
-  color: var(--forge-ember);
+.ring-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--forge-text3, #94a3b8);
 }
 
-@media (max-width: 768px) {
-  .forge-timer-ring { width: 60px; height: 60px; }
-  .forge-time { font-size: 0.95rem; }
-  .forge-btn { width: 26px; height: 26px; font-size: 0.65rem; }
-  .forge-controls select { width: 36px; font-size: 0.65rem; }
-  .forge-stats { display: none; }
+.panel-note {
+  margin: 0 0 0.7rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 10px;
+  background: rgba(34, 197, 94, 0.14);
+  color: #bbf7d0;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.panel-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.act {
+  flex: 1;
+  min-width: 88px;
+  padding: 0.55rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--forge-text2, #cbd5e1);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.act:hover {
+  border-color: var(--timer-color);
+  color: var(--forge-text, #f8fafc);
+}
+
+.act-primary {
+  background: linear-gradient(135deg, var(--timer-color), color-mix(in srgb, var(--timer-color) 60%, #0c0a1d));
+  border-color: transparent;
+  color: #10101c;
+}
+
+.panel-presets {
+  margin-top: 0.85rem;
+}
+
+.presets-label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--forge-text3, #94a3b8);
+}
+
+.preset-row {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.preset {
+  flex: 1;
+  min-width: 46px;
+  padding: 0.4rem 0.2rem;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: var(--forge-text2, #cbd5e1);
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.preset:hover {
+  border-color: var(--timer-color);
+  color: var(--forge-text, #f8fafc);
+}
+
+.preset.active {
+  background: var(--timer-color);
+  border-color: var(--timer-color);
+  color: #10101c;
+}
+
+.panel-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.stat-val {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--forge-text, #f8fafc);
+}
+
+.stat-val small {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--forge-text3, #94a3b8);
+  margin-left: 0.1rem;
+}
+
+.stat-key {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--forge-text3, #94a3b8);
+  text-align: center;
+}
+
+.panel-sound {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--forge-text3, #94a3b8);
+  cursor: pointer;
+}
+
+.panel-sound input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--timer-color);
+  cursor: pointer;
+}
+
+.panel-fade-enter-active,
+.panel-fade-leave-active {
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.panel-fade-enter-from,
+.panel-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+@media (max-width: 720px) {
+  .pill-text {
+    display: none;
+  }
+
+  .timer-panel {
+    right: auto;
+    left: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Trên điện thoại, bảng neo theo màn hình chứ không theo pill (pill hẹp nên left:50% bị lệch) */
+  .timer-panel {
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    top: auto;
+    width: auto;
+    max-height: calc(100vh - 1.5rem);
+    overflow-y: auto;
+  }
+
+  .panel-fade-enter-from,
+  .panel-fade-leave-to {
+    transform: translateY(10px);
+  }
+
+  .panel-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>
