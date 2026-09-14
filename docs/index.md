@@ -30,13 +30,14 @@
 - [Phân tích cây nguồn](./source-tree-analysis.md) — bản đồ thư mục có chú giải
 - [Kiến trúc — client](./architecture-client.md) — hai chuẩn module cùng tồn tại, lỗi C1–C4
 - [Kiến trúc — server](./architecture-server.md) — 4 route + static, lỗi S1–S5
-- [Hợp đồng API](./api-contracts-server.md) — 4 endpoint POST, request/response đầy đủ
+- [Hợp đồng API](./api-contracts-server.md) — 6 route (5 POST + 1 GET), request/response đầy đủ
 - [Mô hình dữ liệu](./data-models-client.md) — 2 IndexedDB, 8 khoá localStorage
 - [Kiểm kê component](./component-inventory-client.md) — **nền cho refactor chuẩn hoá component**
 - [Hướng dẫn phát triển](./development-guide.md) — chạy, cấu hình, quy ước, bẫy đã biết
 - [Hướng dẫn triển khai](./deployment-guide.md) — hiện chưa deploy được, điều kiện tối thiểu
 - [Kiến trúc tích hợp](./integration-architecture.md) — 11 điểm tích hợp
 - [Phòng luyện code](./code-lab.md) — **chấm code thật 4 ngôn ngữ** (JavaScript trong trình duyệt; Java/Node/Python qua máy chủ localhost), cách chấm điểm, chốt an toàn, cách thêm đề
+- [Lộ trình học](./lo-trinh-hoc.md) — **5 trục, mỗi chặng 6 phần** (mục tiêu đo được, bài học, luyện tập có chấm, đạt chuẩn, sản phẩm, ôn lại); tiến độ lấy thật từ Code Lab / quiz Java / Thực chiến / Pomodoro
 - [PRD — Nền tảng đa người dùng M1](./prd-multi-user-m1.md) — **kế hoạch mở cho mọi người dùng** (auth + đồng bộ dữ liệu + quota AI) — chờ duyệt
 - [project-parts.json](./project-parts.json) — metadata máy đọc + danh sách 9 lỗi đã xác nhận
 

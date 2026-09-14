@@ -19,7 +19,7 @@
 | 🇬🇧 **English Interview** | 30-day lộ trình tiếng Anh cho Java Backend interview |
 | 📊 **Skill Tracker** | Theo dõi XP, streak, kỹ năng |
 | 📈 **Dashboard** | Thống kê học tập, lịch sử thi, tổng quan tiến độ |
-| 🗺️ **Lộ trình học** | Beginner → Intermediate → Advanced cho English, Java, AI |
+| 🗺️ **Lộ trình học** | 5 trục (Java Backend, English, Frontend, DevOps & Cloud, AI) — mỗi chặng có mục tiêu đo được, luyện tập có chấm, điều kiện đạt chuẩn và tiến độ lấy thật từ Code Lab / quiz / Thực chiến / Pomodoro |
 | ⏱️ **Focus Timer** | SVG ring timer với streak tracking, session history, forge theme |
 
 ---

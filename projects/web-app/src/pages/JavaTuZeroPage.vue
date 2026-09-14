@@ -168,10 +168,33 @@ import { JAVA_TU_ZERO } from '../utils/java-tu-zero-content.js';
 
 const chapters = computed(() => JAVA_TU_ZERO.chapters);
 
+const QUIZ_STORAGE_KEY = 'sf_java_tuzero_quiz';
+
+function loadQuizState() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(QUIZ_STORAGE_KEY) || '{}');
+    return {
+      chapter: parsed && typeof parsed.chapter === 'object' && parsed.chapter ? parsed.chapter : {},
+      read: parsed && typeof parsed.read === 'object' && parsed.read ? parsed.read : {},
+    };
+  } catch (err) {
+    return { chapter: {}, read: {} };
+  }
+}
+
+const storedQuiz = loadQuizState();
 const activeTab = ref('ch1');
-const chapterAnswers = reactive({});
-const readAnswers = reactive({});
+const chapterAnswers = reactive({ ...storedQuiz.chapter });
+const readAnswers = reactive({ ...storedQuiz.read });
 const openState = reactive({});
+
+function saveQuizState() {
+  try {
+    localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify({ chapter: chapterAnswers, read: readAnswers }));
+  } catch (err) {
+    // hết dung lượng thì bỏ qua, không làm hỏng trang
+  }
+}
 
 function quizKey(chId, qi) {
   return chId + '-' + qi;
@@ -202,6 +225,7 @@ function pickChapterAnswer(chId, qi, oi) {
   const key = quizKey(chId, qi);
   if (chapterAnswers[key] === undefined) {
     chapterAnswers[key] = oi;
+    saveQuizState();
   }
 }
 
@@ -209,6 +233,7 @@ function pickReadAnswer(index, oi) {
   const key = 'rc-' + index;
   if (readAnswers[key] === undefined) {
     readAnswers[key] = oi;
+    saveQuizState();
   }
 }
 

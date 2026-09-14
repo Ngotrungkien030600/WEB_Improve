@@ -93,7 +93,7 @@ const groups = [
     title: 'Lộ trình & Công cụ',
     items: [
       { icon: '🚀', title: 'Accelerator 30-Day', description: 'Lộ trình cấp tốc — 1h/ngày — 30 ngày.', path: '/accelerator' },
-      { icon: '🗺️', title: 'Lộ trình học', description: 'Học có mục tiêu rõ ràng từ cơ bản đến nâng cao.', path: '/learning-paths' },
+      { icon: '🗺️', title: 'Lộ trình học', description: '5 trục theo mục tiêu đi làm, có điều kiện đạt chuẩn và tiến độ thật.', path: '/learning-paths' },
       { icon: '📊', title: 'Skill Tracker', description: 'Theo dõi kỹ năng, XP, streak.', path: '/skill-tracker' },
       { icon: '📈', title: 'Dashboard', description: 'Thống kê học tập, tổng quan tiến độ.', path: '/dashboard' },
     ],

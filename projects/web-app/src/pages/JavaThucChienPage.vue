@@ -28,6 +28,10 @@
           <div class="num">{{ countByLevel[3] }}</div>
           <div class="label">Senior</div>
         </div>
+        <div class="stat stat-done">
+          <div class="num">{{ doneTasks.length }}</div>
+          <div class="label">Đã làm xong</div>
+        </div>
       </div>
 
       <!-- Filters -->
@@ -85,6 +89,14 @@
               </div>
               <div class="foot">
                 <span class="detail-link">Xem chi tiết →</span>
+                <button
+                  type="button"
+                  class="done-btn"
+                  :class="{ active: isDone(task.id) }"
+                  :aria-pressed="isDone(task.id) ? 'true' : 'false'"
+                  :aria-label="`Đánh dấu ${task.title} đã làm xong`"
+                  @click.stop="toggleDone(task)"
+                >{{ isDone(task.id) ? '✅ Đã làm' : '⬜ Đánh dấu xong' }}</button>
               </div>
             </div>
           </div>
@@ -120,6 +132,13 @@
           <div class="keywords">
             <span v-for="k in selectedTask.keywords" :key="k">#{{ k }}</span>
           </div>
+          <button
+            type="button"
+            class="done-btn modal-done"
+            :class="{ active: isDone(selectedTask.id) }"
+            :aria-pressed="isDone(selectedTask.id) ? 'true' : 'false'"
+            @click="toggleDone(selectedTask)"
+          >{{ isDone(selectedTask.id) ? '✅ Đã làm xong task này' : '⬜ Đánh dấu đã làm xong' }}</button>
         </template>
       </div>
     </div>
@@ -145,6 +164,7 @@ const STORAGE_KEYS = {
   search: 'thucChien_search',
   level: 'thucChien_level',
   category: 'thucChien_cat',
+  done: 'thucChien_done',
 };
 
 function loadFilter(key, fallback) {
@@ -165,6 +185,24 @@ function saveFilter(key, val) {
   }
 }
 
+function loadDone() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.done) || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    console.warn('loadDone failed:', e);
+    return [];
+  }
+}
+
+function saveDone(ids) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.done, JSON.stringify(ids));
+  } catch (e) {
+    console.warn('saveDone failed:', e);
+  }
+}
+
 const LEVELS = [
   { id: 1, label: '🌱 Junior' },
   { id: 2, label: '📗 Middle' },
@@ -179,6 +217,7 @@ export default {
       searchKeyword: loadFilter(STORAGE_KEYS.search, ''),
       selectedLevel: loadFilter(STORAGE_KEYS.level, 'all'),
       selectedCategory: loadFilter(STORAGE_KEYS.category, 'all'),
+      doneTasks: loadDone(),
       showModal: false,
       selectedTask: null,
       levelFilters: [{ id: 'all', label: '📊 Tất cả' }, ...LEVELS],
@@ -288,6 +327,16 @@ export default {
     levelLabel(lv) {
       const l = LEVELS.find(x => x.id === lv);
       return l ? l.label.split(' ')[1] : 'lv' + lv;
+    },
+    isDone(id) {
+      return this.doneTasks.includes(id);
+    },
+    toggleDone(task) {
+      const next = this.isDone(task.id)
+        ? this.doneTasks.filter((item) => item !== task.id)
+        : [...this.doneTasks, task.id];
+      this.doneTasks = next;
+      saveDone(next);
     },
     categoryLabel(id) {
       const c = CATEGORIES.find(x => x.id === id);
@@ -739,6 +788,47 @@ export default {
   background: rgba(249, 115, 22, 0.08);
   border-radius: 4px;
   padding: 0.15rem 0.5rem;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.done-btn {
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text2);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.done-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.done-btn.active {
+  border-color: rgba(52, 211, 153, 0.6);
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+}
+
+.stat-done .num {
+  color: #34d399;
+}
+
+.modal .done-btn {
+  margin-top: 1.25rem;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.78rem;
 }
 
 @media (max-width: 600px) {
