@@ -130,6 +130,37 @@ Mọi `GET` không khớp 4 route trên đều rơi vào static handler: `/` →
 
 ⚠ Handler này **không chặn path traversal và không allowlist phần mở rộng** — `GET /.env` trả về file secret. Xem lỗi S1 trong [architecture-server.md](./architecture-server.md). Không mở server này ra ngoài localhost.
 
+## `POST /api/code/run` — chấm code Java / Node.js / Python
+
+Bộ chấm của Phòng luyện code (chi tiết: [code-lab.md](./code-lab.md)). Máy chủ tự sinh harness
+theo ngôn ngữ rồi chạy thật, nên **chỉ mở cho localhost** (`isCodeRunAllowed`, trừ khi đặt
+`SKILLFORGE_ALLOW_CODE_RUN=1`).
+
+Request: `{ language, code, functionName, tests: [{ args, expected }], compare, params, returns }`
+(không có `functionName` thì không chấm được; `compare` ∈ `exact` | `unordered` | `set-of-sets` | `sorted-rows`).
+
+Response 200:
+
+```json
+{
+  "verdict": "AC",
+  "compileError": "",
+  "results": [{ "index": 0, "passed": true, "ms": 12, "actual": [0, 1], "error": "" }],
+  "logs": [],
+  "totalMs": 210,
+  "passed": 6,
+  "total": 6
+}
+```
+
+`verdict` ∈ `AC` (đạt hết) | `WA` | `RE` | `CE` | `TLE`. Lỗi: `403` khi request không phải localhost,
+`429` khi đang chấm bài khác, `400` khi thiếu code/test.
+
+## `GET /api/code/languages` — dò ngôn ngữ chấm được
+
+Trả `{ allowed: false, reason, languages: {} }` khi máy chủ không cho chạy code (ví dụ bản deploy),
+hoặc `{ allowed: true, languages: { nodejs: { available, runtime, version }, java: {...}, python: {...} } }`.
+
 ## Tổng hợp
 
 | Method | Path | Handler | Auth | max_tokens |
@@ -138,4 +169,6 @@ Mọi `GET` không khớp 4 route trên đều rơi vào static handler: `/` →
 | POST | `/api/ai-chat` | `handleAiChat` | không | 1000 |
 | POST | `/api/bmad/chat` | `handleBmadChat` | không | 1000 |
 | POST | `/api/salary-interview` | `handleSalaryInterview` | không | 1500 |
+| POST | `/api/code/run` | `handleCodeRun` | localhost | — |
+| GET | `/api/code/languages` | `handleCodeLanguages` | localhost | — |
 | GET | `/*` | static | không | — |

@@ -4,7 +4,7 @@
       <header class="page-topbar">
         <div class="topbar-left">
           <h1>🧪 Phòng luyện code</h1>
-          <p>Viết code, chạy thật, chấm điểm bằng test ẩn — như LeetCode nhưng tiếng Việt</p>
+          <p>Viết code Java, JavaScript, Node.js, Python — chạy thật, chấm điểm bằng test ẩn</p>
         </div>
         <div class="topbar-right">
           <button class="home-btn" type="button" aria-label="Về trang chủ" title="Về trang chủ" @click="handleNavigate('/')">🏠</button>
@@ -173,13 +173,45 @@
                 >💡 Mở gợi ý {{ revealedHints + 1 }}/{{ current.hints.length }}</button>
               </div>
 
+              <div v-else-if="activeTab === 'docs'" class="panel-body">
+                <p class="hint-note">Đọc phần này trước khi viết code — hiểu ý tưởng rồi hãy gõ.</p>
+
+                <h3 class="block-title">Lý thuyết cần biết</h3>
+                <p v-for="(line, index) in current.docs.theory" :key="`theory-${index}`" class="desc-line" v-html="formatText(line)"></p>
+
+                <h3 class="block-title">Các bước làm</h3>
+                <ol class="step-list">
+                  <li v-for="(step, index) in current.docs.steps" :key="`step-${index}`" v-html="formatText(step)"></li>
+                </ol>
+
+                <h3 class="block-title">Độ phức tạp</h3>
+                <div class="complexity-grid">
+                  <div class="complexity-card">
+                    <span class="complexity-key">⏱ Thời gian</span>
+                    <span class="complexity-value">{{ current.docs.complexity.time }}</span>
+                  </div>
+                  <div class="complexity-card">
+                    <span class="complexity-key">💾 Bộ nhớ</span>
+                    <span class="complexity-value">{{ current.docs.complexity.space }}</span>
+                  </div>
+                </div>
+
+                <h3 class="block-title">Lỗi hay mắc</h3>
+                <ul class="plain-list">
+                  <li v-for="(item, index) in current.docs.pitfalls" :key="`pit-${index}`" v-html="formatText(item)"></li>
+                </ul>
+
+                <h3 class="block-title">Khung code cho {{ languageLabel }}</h3>
+                <pre class="code-view"><code v-html="starterHtml"></code></pre>
+              </div>
+
               <div v-else-if="activeTab === 'solution'" class="panel-body">
                 <div v-if="!solutionUnlocked" class="locked-box">
                   <p>Hãy tự giải trước khi xem lời giải — xem sớm rất dễ quên.</p>
                   <button type="button" class="ghost-btn" @click="solutionUnlocked = true">Tôi vẫn muốn xem lời giải</button>
                 </div>
                 <div v-else>
-                  <p class="hint-note">Lời giải tham khảo — so sánh với cách của bạn để học thêm.</p>
+                  <p class="hint-note">Lời giải tham khảo bằng {{ languageLabel }} — so sánh với cách của bạn để học thêm.</p>
                   <pre class="code-view"><code v-html="solutionHtml"></code></pre>
                 </div>
               </div>
@@ -202,9 +234,24 @@
             </article>
 
             <article class="panel editor-panel">
+              <div class="lang-picker" role="group" aria-label="Chọn ngôn ngữ lập trình">
+                <button
+                  v-for="item in languageOptions"
+                  :key="item.id"
+                  type="button"
+                  class="lang-btn"
+                  :class="{ active: language === item.id, off: !item.available }"
+                  :disabled="!item.available"
+                  :title="item.note"
+                  @click="chooseLanguage(item.id)"
+                >{{ item.label }}</button>
+                <span class="lang-note">{{ languageNote }}</span>
+              </div>
+
               <CCodeEditor
                 v-model="code"
-                :aria-label="`Soạn code cho bài ${current.title}`"
+                :language="language"
+                :aria-label="`Soạn code ${languageLabel} cho bài ${current.title}`"
                 @run="runVisible"
                 @submit="submit"
                 @change="queueDraft"
@@ -265,17 +312,20 @@
 <script>
 import CCodeEditor from '../components/CCodeEditor.vue';
 import { navigate } from '../utils/navigate.js';
-import { CODE_PROBLEMS } from '../data/code-problems.js';
+import { CODE_PROBLEMS_FULL } from '../data/code-problems-multilang.js';
 import { runCode } from '../utils/code-runner.js';
 import {
+  CODE_LANGUAGES,
   DIFFICULTIES,
   escapeHtml,
   filterProblems,
   categoriesOf,
+  findCodeLanguage,
   findDifficulty,
   findVerdict,
   formatDuration,
-  highlightJs,
+  functionNameFor,
+  highlightCode,
   maxScoreOf,
   previewArgs,
   previewValue,
@@ -286,6 +336,8 @@ import {
   saveDraft,
   saveSolution,
   scoreOf,
+  solutionFor,
+  starterFor,
 } from '../logic/code-lab-logic.js';
 
 const RUN_TIMEOUT = 6000;
@@ -295,8 +347,13 @@ export default {
   components: { CCodeEditor },
   data() {
     return {
-      problems: CODE_PROBLEMS,
+      problems: CODE_PROBLEMS_FULL,
       difficulties: DIFFICULTIES,
+      languages: CODE_LANGUAGES,
+      serverLanguages: null,
+      serverAllowed: false,
+      serverReason: '',
+      language: 'javascript',
       statusOptions: [
         { id: 'all', label: 'Tất cả' },
         { id: 'unsolved', label: 'Chưa giải' },
@@ -345,9 +402,41 @@ export default {
     tabs() {
       return [
         { id: 'desc', label: '📄 Đề bài' },
+        { id: 'docs', label: '📚 Tài liệu' },
         { id: 'solution', label: '💡 Lời giải' },
         { id: 'submissions', label: `📜 Bài nộp${this.submissions.length ? ` (${this.submissions.length})` : ''}` },
       ];
+    },
+    currentLanguage() {
+      return findCodeLanguage(this.language);
+    },
+    languageLabel() {
+      return this.currentLanguage.label;
+    },
+    languageOptions() {
+      return this.languages.map((item) => {
+        if (item.runtime === 'browser') {
+          return { ...item, available: true, note: `${item.label} chạy ngay trong trình duyệt` };
+        }
+        if (!this.serverAllowed) {
+          return { ...item, available: false, note: this.serverReason || 'Máy chủ này không chấm code' };
+        }
+        const info = this.serverLanguages?.[item.id];
+        if (!info?.available) {
+          return { ...item, available: false, note: `${item.label} chưa được cài trên máy chủ` };
+        }
+        return { ...item, available: true, note: `${item.hint} — ${info.version}` };
+      });
+    },
+    languageNote() {
+      if (this.language === 'javascript') return 'JavaScript chạy trong trình duyệt, không cần máy chủ.';
+      if (!this.serverAllowed) return this.serverReason || 'Máy chủ này không chấm code.';
+      const info = this.serverLanguages?.[this.language];
+      if (!info?.available) return `${this.languageLabel} chưa được cài trên máy chủ.`;
+      return `Máy chủ sẽ biên dịch và chạy code ${this.languageLabel} của bạn (${info.version}).`;
+    },
+    starterHtml() {
+      return highlightCode(starterFor(this.current, this.language), this.language);
     },
     submissions() {
       if (!this.current) return [];
@@ -361,7 +450,7 @@ export default {
       return (this.current?.tests || []).length - this.visibleTests.length;
     },
     solutionHtml() {
-      return highlightJs(this.current?.solution || '');
+      return highlightCode(solutionFor(this.current, this.language), this.language);
     },
     failedDetails() {
       return (this.result?.results || []).filter((item) => !item.passed && item.visible && !item.error);
@@ -380,10 +469,12 @@ export default {
   created() {
     this.solutions = readSolutions();
     this.drafts = readDrafts();
+    this.language = this.languageFromRoute();
     this.openFromRoute();
   },
   mounted() {
     window.addEventListener('beforeunload', this.flushDraft);
+    this.probeServerLanguages();
   },
   beforeUnmount() {
     this.flushDraft();
@@ -393,6 +484,10 @@ export default {
   watch: {
     '$route.query.bai': function onQueryChange() {
       this.openFromRoute();
+    },
+    '$route.query.lang': function onLangChange() {
+      const next = this.languageFromRoute();
+      if (next !== this.language) this.applyLanguage(next, false);
     },
   },
   methods: {
@@ -436,10 +531,45 @@ export default {
       this.currentId = found ? id : (this.problems[0]?.id || '');
       this.loadProblem();
     },
+    languageFromRoute() {
+      const id = this.$route?.query?.lang;
+      return this.languages.some((item) => item.id === id) ? id : 'javascript';
+    },
+    async probeServerLanguages() {
+      try {
+        const response = await fetch('/api/code/languages');
+        const payload = await response.json();
+        this.serverAllowed = Boolean(payload?.allowed);
+        this.serverLanguages = payload?.languages || null;
+        this.serverReason = payload?.reason || '';
+      } catch (err) {
+        this.serverAllowed = false;
+        this.serverLanguages = null;
+        this.serverReason = 'Không kết nối được máy chủ chấm bài — chỉ chạy được JavaScript trong trình duyệt.';
+      }
+      const chosen = this.languageOptions.find((item) => item.id === this.language);
+      if (chosen && !chosen.available) this.applyLanguage('javascript', true);
+    },
+    applyLanguage(id, syncRoute) {
+      if (id === this.language) return;
+      this.flushDraft();
+      this.drafts = readDrafts();
+      this.language = id;
+      this.loadProblem();
+      if (syncRoute && this.$route?.query?.lang !== id) {
+        this.$router.replace({ query: { ...this.$route.query, lang: id } }).catch(() => {});
+      }
+    },
+    chooseLanguage(id) {
+      this.applyLanguage(id, true);
+    },
+    draftKey(problemId) {
+      return `${problemId}@${this.language}`;
+    },
     loadProblem() {
       const problem = this.current;
       if (!problem) return;
-      this.code = this.drafts[problem.id] ?? problem.starter;
+      this.code = this.drafts[this.draftKey(problem.id)] ?? starterFor(problem, this.language);
       this.result = null;
       this.lastScore = 0;
       this.revealedHints = 0;
@@ -465,7 +595,7 @@ export default {
       this.code = value;
       if (this.draftTimer) clearTimeout(this.draftTimer);
       this.draftTimer = setTimeout(() => {
-        if (this.current) saveDraft(this.current.id, this.code);
+        if (this.current) saveDraft(this.draftKey(this.current.id), this.code);
       }, 500);
     },
     flushDraft() {
@@ -473,12 +603,12 @@ export default {
         clearTimeout(this.draftTimer);
         this.draftTimer = null;
       }
-      if (this.current) saveDraft(this.current.id, this.code);
+      if (this.current) saveDraft(this.draftKey(this.current.id), this.code);
     },
     resetCode() {
       if (!this.current) return;
       resetProblem(this.current.id);
-      this.code = this.current.starter;
+      this.code = starterFor(this.current, this.language);
       this.result = null;
       this.lastScore = 0;
       this.solutions = readSolutions();
@@ -486,13 +616,46 @@ export default {
     },
     loadSolutionCode() {
       if (!this.current) return;
-      this.code = this.current.solution;
+      this.code = solutionFor(this.current, this.language);
       this.queueDraft(this.code);
     },
     testsFor(mode) {
       const tests = this.current?.tests || [];
       if (mode === 'run') return tests.filter((test) => test.visible);
       return tests;
+    },
+    /**
+     * Nhờ máy chủ chấm Java/Node/Python. Kết quả trả về được gắn thêm args/visible/expected
+     * để phần hiển thị dùng chung với đường chạy trong trình duyệt.
+     */
+    async runOnServer({ problem, tests }) {
+      const response = await fetch('/api/code/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          language: this.language,
+          code: this.code,
+          functionName: functionNameFor(problem, this.language),
+          tests: tests.map((test) => ({ args: test.args, expected: test.expected })),
+          compare: problem.compare || 'exact',
+          params: problem.params || [],
+          returns: problem.returns || 'int',
+        }),
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(payload?.error || `Máy chủ chấm bài trả về lỗi HTTP ${response.status}.`);
+      }
+      if (!payload) throw new Error('Máy chủ chấm bài trả về dữ liệu không đọc được.');
+      return {
+        ...payload,
+        results: (payload.results || []).map((item) => ({
+          ...item,
+          visible: Boolean(tests[item.index]?.visible),
+          args: tests[item.index]?.args || [],
+          expected: tests[item.index]?.expected,
+        })),
+      };
     },
     async execute(mode) {
       const problem = this.current;
@@ -505,13 +668,17 @@ export default {
       this.startElapsed();
       let outcome = null;
       try {
-        outcome = await runCode({
-          code: this.code,
-          functionName: problem.functionName,
-          tests,
-          compare: problem.compare || 'exact',
-          timeoutMs: RUN_TIMEOUT,
-        });
+        if (this.currentLanguage.runtime === 'browser') {
+          outcome = await runCode({
+            code: this.code,
+            functionName: functionNameFor(problem, this.language),
+            tests,
+            compare: problem.compare || 'exact',
+            timeoutMs: RUN_TIMEOUT,
+          });
+        } else {
+          outcome = await this.runOnServer({ problem, tests });
+        }
         if (mode === 'submit') {
           const gradedScore = scoreOf({
             difficulty: problem.difficulty,
@@ -815,6 +982,102 @@ export default {
 
 .panel-body {
   padding: 0.9rem 1.1rem 1.1rem;
+}
+
+.step-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: #cbd5e1;
+}
+
+.step-list li {
+  margin-bottom: 0.35rem;
+}
+
+.complexity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.55rem;
+}
+
+.complexity-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.complexity-key {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #a78bfa;
+}
+
+.complexity-value {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #e2e8f0;
+}
+
+.lang-picker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lang-btn {
+  padding: 0.32rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent;
+  color: #cbd5e1;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lang-btn:hover:not(:disabled) {
+  border-color: rgba(139, 92, 246, 0.6);
+  color: #f8fafc;
+}
+
+.lang-btn.active {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+  color: #0f0d1f;
+}
+
+.lang-btn.off {
+  opacity: 0.42;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.lang-note {
+  flex: 1 1 200px;
+  min-width: 0;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: #94a3b8;
+}
+
+@media (max-width: 720px) {
+  .lang-note {
+    flex-basis: 100%;
+  }
 }
 
 .desc-line {

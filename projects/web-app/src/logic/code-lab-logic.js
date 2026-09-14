@@ -465,13 +465,88 @@ export function previewValue(value) {
   return text.length > 90 ? `${text.slice(0, 87)}...` : text;
 }
 
-// ── Tô màu cú pháp JavaScript ───────────────────────────────────────────────
+// ── Ngôn ngữ ────────────────────────────────────────────────────────────────
+
+export const CODE_LANGUAGES = [
+  { id: 'javascript', label: 'JavaScript', runtime: 'browser', hint: 'Chạy ngay trong trình duyệt' },
+  { id: 'nodejs', label: 'Node.js', runtime: 'server', hint: 'Chạy trên máy chủ bằng Node' },
+  { id: 'java', label: 'Java 17', runtime: 'server', hint: 'Biên dịch bằng javac rồi chạy' },
+  { id: 'python', label: 'Python 3', runtime: 'server', hint: 'Chạy bằng trình thông dịch Python' },
+];
+
+export function findCodeLanguage(id) {
+  return CODE_LANGUAGES.find((item) => item.id === id) || CODE_LANGUAGES[0];
+}
+
+export function snakeCase(name) {
+  return String(name)
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    .replace(/[-\s]+/g, '_')
+    .toLowerCase();
+}
+
+export function functionNameFor(problem, language) {
+  if (language === 'python') return snakeCase(problem.functionName);
+  return problem.functionName;
+}
+
+export function starterFor(problem, language) {
+  if (!problem) return '';
+  if (language === 'java') return problem.javaStarter || '';
+  if (language === 'python') return problem.pythonStarter || '';
+  return problem.starter || '';
+}
+
+export function solutionFor(problem, language) {
+  if (!problem) return '';
+  if (language === 'java') return problem.javaSolution || '';
+  if (language === 'python') return problem.pythonSolution || '';
+  return problem.solution || '';
+}
+
+// ── Tô màu cú pháp ─────────────────────────────────────────────────────────
 
 const JS_KEYWORDS = 'const|let|var|function|return|if|else|for|while|do|break|continue|new|class|extends|super|this|typeof|instanceof|in|of|try|catch|finally|throw|switch|case|default|null|undefined|true|false|async|await|yield|delete|void|static|get|set|import|export|from';
-const JS_TOKEN = new RegExp(
-  `(\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)|('(?:\\\\.|[^'\\\\])*'|"(?:\\\\.|[^"\\\\])*"|\`(?:\\\\.|[^\`\\\\])*\`)|\\b(${JS_KEYWORDS})\\b|\\b(\\d+(?:\\.\\d+)?(?:e[+-]?\\d+)?|0x[0-9a-fA-F]+)\\b|\\b([A-Za-z_$][\\w$]*)\\b(?=\\s*\\()|\\b([A-Z][\\w$]*)\\b`,
-  'g',
+const JAVA_KEYWORDS = 'public|private|protected|static|final|abstract|class|interface|enum|record|extends|implements|new|return|if|else|for|while|do|switch|case|default|break|continue|try|catch|finally|throw|throws|void|int|long|double|float|boolean|char|byte|short|String|null|true|false|this|super|import|package|instanceof|synchronized|var|yield';
+const PYTHON_KEYWORDS = 'def|return|if|elif|else|for|while|in|not|and|or|import|from|as|class|try|except|finally|raise|with|lambda|None|True|False|pass|break|continue|global|yield|is|assert|del|nonlocal|async|await';
+const PYTHON_BUILTINS = 'print|len|range|int|str|float|bool|list|dict|set|tuple|max|min|sum|sorted|enumerate|zip|map|filter|abs|round|input|isinstance';
+
+// Mọi ngôn ngữ dùng chung 7 nhóm bắt buộc theo đúng thứ tự này, nhóm không dùng thì để
+// (?! ) — không bao giờ khớp — để hàm thay thế không phải phân nhánh theo ngôn ngữ.
+function buildTokenRegex(keywords, comment, string, typeLookahead = true, builtins = '') {
+  const never = '((?!))';
+  const builtinGroup = builtins ? `(${builtins})` : never;
+  const typeGroup = typeLookahead ? '([A-Z][\\w$]*)' : never;
+  return new RegExp(
+    `(${comment})|(${string})|\\b(${keywords})\\b|${builtinGroup}|\\b(\\d+(?:\\.\\d+)?(?:e[+-]?\\d+)?|0x[0-9a-fA-F]+)\\b|\\b([A-Za-z_$][\\w$]*)\\b(?=\\s*\\()|\\b${typeGroup}\\b`,
+    'g',
+  );
+}
+
+const JS_TOKEN = buildTokenRegex(JS_KEYWORDS, '\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/', "'(?:\\\\.|[^'\\\\])*'|\"(?:\\\\.|[^\"\\\\])*\"|`(?:\\\\.|[^`\\\\])*`");
+const JAVA_TOKEN = buildTokenRegex(JAVA_KEYWORDS, '\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/', '"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'');
+const PYTHON_TOKEN = buildTokenRegex(
+  PYTHON_KEYWORDS,
+  '#[^\\n]*',
+  '"""[\\s\\S]*?"""|\'\'\'[\\s\\S]*?\'\'\'|"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'',
+  false,
+  PYTHON_BUILTINS,
 );
+
+function applyTokens(escaped, regex) {
+  return escaped
+    .replace(regex, (match, comment, str, keyword, builtin, num, fn, type) => {
+      if (comment) return `<span class="tk-com">${comment}</span>`;
+      if (str) return `<span class="tk-str">${str}</span>`;
+      if (keyword) return `<span class="tk-kw">${keyword}</span>`;
+      if (builtin) return `<span class="tk-fn">${builtin}</span>`;
+      if (num) return `<span class="tk-num">${num}</span>`;
+      if (fn) return `<span class="tk-fn">${fn}</span>`;
+      if (type) return `<span class="tk-type">${type}</span>`;
+      return match;
+    })
+    .replace(/\n$/, '\n ');
+}
 
 export function escapeHtml(value) {
   return String(value)
@@ -481,16 +556,11 @@ export function escapeHtml(value) {
 }
 
 export function highlightJs(code) {
-  const escaped = escapeHtml(code);
-  return escaped
-    .replace(JS_TOKEN, (match, comment, str, keyword, num, fn, type) => {
-      if (comment) return `<span class="tk-com">${comment}</span>`;
-      if (str) return `<span class="tk-str">${str}</span>`;
-      if (keyword) return `<span class="tk-kw">${keyword}</span>`;
-      if (num) return `<span class="tk-num">${num}</span>`;
-      if (fn) return `<span class="tk-fn">${fn}</span>`;
-      if (type) return `<span class="tk-type">${type}</span>`;
-      return match;
-    })
-    .replace(/\n$/, '\n ');
+  return applyTokens(escapeHtml(code), JS_TOKEN);
+}
+
+export function highlightCode(code, language) {
+  if (language === 'java') return applyTokens(escapeHtml(code), JAVA_TOKEN);
+  if (language === 'python') return applyTokens(escapeHtml(code), PYTHON_TOKEN);
+  return highlightJs(code);
 }

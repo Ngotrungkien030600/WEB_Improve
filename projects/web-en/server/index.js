@@ -365,6 +365,74 @@ function handleBmadChat(req, res) {
 
 // ---- Static File Server ----
 
+// Phòng luyện code: nạp bộ chấm đa ngôn ngữ theo nhu cầu (server này là CommonJS, bộ chấm là ESM)
+let codeJudgeModule = null;
+function loadCodeJudge() {
+  if (!codeJudgeModule) codeJudgeModule = import('./code-judge.js');
+  return codeJudgeModule;
+}
+
+function codeRunAllowed(req, judge) {
+  return judge.isCodeRunAllowed({
+    remoteAddress: req.socket.remoteAddress,
+    allowFlag: process.env[judge.CODE_RUN_FLAG] === '1',
+  });
+}
+
+/** GET /api/code/languages — máy chủ này chấm được ngôn ngữ nào */
+async function handleCodeLanguages(req, res) {
+  const judge = await loadCodeJudge();
+  if (!codeRunAllowed(req, judge)) {
+    sendJson(res, 200, {
+      allowed: false,
+      reason: 'Máy chủ này không chấm code (chỉ mở khi bạn chạy web ở máy mình). JavaScript vẫn chạy được ngay trong trình duyệt.',
+      languages: {},
+    });
+    return;
+  }
+  sendJson(res, 200, { allowed: true, languages: await judge.probeLanguages() });
+}
+
+/** POST /api/code/run — chấm code Java / Node.js / Python */
+async function handleCodeRun(req, res) {
+  const judge = await loadCodeJudge();
+  if (!codeRunAllowed(req, judge)) {
+    sendJson(res, 403, { error: 'Máy chủ này không chấm code. Hãy dùng JavaScript hoặc chạy web ở máy bạn.' });
+    return;
+  }
+  if (judge.isBusy()) {
+    sendJson(res, 429, { error: 'Máy chủ đang chấm một bài khác, thử lại sau 1 giây.' });
+    return;
+  }
+  readJsonBody(req, res, async (data) => {
+    const language = String(data?.language || '');
+    const code = String(data?.code || '');
+    const tests = Array.isArray(data?.tests) ? data.tests.slice(0, 40) : [];
+    if (!code.trim()) {
+      sendJson(res, 400, { error: 'Chưa có code để chấm.' });
+      return;
+    }
+    if (!tests.length) {
+      sendJson(res, 400, { error: 'Thiếu danh sách test.' });
+      return;
+    }
+    try {
+      const outcome = await judge.judgeOnServer({
+        language,
+        code,
+        functionName: String(data?.functionName || ''),
+        tests,
+        compare: String(data?.compare || 'exact'),
+        params: Array.isArray(data?.params) ? data.params : [],
+        returns: String(data?.returns || 'int'),
+      });
+      sendJson(res, 200, outcome);
+    } catch (err) {
+      sendJson(res, 500, { error: `Bộ chấm lỗi: ${(err && err.message) || err}` });
+    }
+  });
+}
+
 const server = http.createServer((req, res) => {
   const urlPath = req.url.split('?')[0];
 
@@ -375,6 +443,13 @@ const server = http.createServer((req, res) => {
       sendJson(res, 429, { error: 'Too many requests' });
       return;
     }
+  }
+
+  if (req.method === 'GET' && urlPath === '/api/code/languages') {
+    return handleCodeLanguages(req, res).catch(() => sendJson(res, 500, { error: 'Không dò được ngôn ngữ.' }));
+  }
+  if (req.method === 'POST' && urlPath === '/api/code/run') {
+    return handleCodeRun(req, res).catch(() => sendJson(res, 500, { error: 'Bộ chấm lỗi.' }));
   }
 
   if (req.method === 'POST' && urlPath === API_PATHS.AI_FEEDBACK) return handleAiFeedback(req, res);

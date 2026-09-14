@@ -1,7 +1,7 @@
 <template>
   <div class="code-editor">
     <div class="editor-bar">
-      <span class="editor-lang">JavaScript</span>
+      <span class="editor-lang">{{ languageLabel }}</span>
       <span class="editor-tips">Tab = thụt lề · Ctrl + Enter = chạy thử · Ctrl + Shift + Enter = nộp bài</span>
     </div>
 
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { highlightJs } from '../logic/code-lab-logic.js';
+import { highlightCode, findCodeLanguage } from '../logic/code-lab-logic.js';
 
 const INDENT = '  ';
 
@@ -43,18 +43,22 @@ export default {
   name: 'CCodeEditor',
   props: {
     modelValue: { type: String, default: '' },
-    ariaLabel: { type: String, default: 'Ô soạn code JavaScript' },
+    ariaLabel: { type: String, default: 'Ô soạn code' },
+    language: { type: String, default: 'javascript' },
   },
   emits: ['update:modelValue', 'run', 'submit', 'change'],
   data() {
     return { scrollTop: 0, scrollLeft: 0 };
   },
   computed: {
+    languageLabel() {
+      return findCodeLanguage(this.language).label;
+    },
     lineCount() {
       return Math.max(1, this.modelValue.split('\n').length);
     },
     highlighted() {
-      return highlightJs(this.modelValue);
+      return highlightCode(this.modelValue, this.language);
     },
   },
   methods: {
