@@ -11,6 +11,8 @@ const PROGRESS_KEY_LABELS = {
   sf_forge_stats: 'Thống kê XP và streak',
   sf_forge_daily: 'Nhịp học theo ngày',
   sf_ui_interview_seen: 'Câu hỏi phỏng vấn đã xem',
+  sf_code_lab_solutions: 'Bài giải Phòng luyện code và điểm số',
+  sf_code_lab_drafts: 'Code đang viết dở ở Phòng luyện code',
   sk_forge_notes: 'Ghi chú cá nhân',
   skillforge_motivation_state: 'Động lực học',
   skillforge_skills: 'Danh sách kỹ năng',

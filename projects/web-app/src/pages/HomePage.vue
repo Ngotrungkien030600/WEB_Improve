@@ -70,6 +70,7 @@ const groups = [
     title: 'Lập trình',
     items: [
       { icon: '☕', title: 'Java', description: 'Java core, Spring Boot, thực chiến, phỏng vấn backend.', path: '/java/hub' },
+      { icon: '🧪', title: 'Phòng luyện code', description: 'Viết code, chạy thật, chấm điểm bằng test ẩn — như LeetCode.', path: '/code-lab' },
       { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, framework, responsive.', path: '/frontend/hub' },
       { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, S3, RDS, DevOps.', path: '/cloud' },
       { icon: '🐳', title: 'DevOps', description: 'Docker, Kubernetes, CI/CD, Terraform, Monitoring.', path: '/devops' },

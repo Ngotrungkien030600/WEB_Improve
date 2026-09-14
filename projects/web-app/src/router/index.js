@@ -184,6 +184,11 @@ const routes = [
     component: () => import('../pages/CodeLearnPage.vue'),
   },
   {
+    path: '/code-lab',
+    name: 'code-lab',
+    component: () => import('../pages/CodeLabPage.vue'),
+  },
+  {
     path: '/interview-english',
     name: 'interview-english',
     component: () => import('../pages/InterviewEnglishPage.vue'),
