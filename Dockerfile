@@ -5,7 +5,7 @@ COPY projects/web-en ./projects/web-en
 COPY projects/web-app/package*.json ./projects/web-app/
 WORKDIR /app/projects/web-app
 RUN npm ci
-COPY projects/web-app ./projects/web-app
+COPY projects/web-app /app/projects/web-app
 RUN npm run build
 
 FROM node:26-bookworm-slim
