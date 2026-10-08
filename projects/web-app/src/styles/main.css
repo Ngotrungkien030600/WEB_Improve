@@ -24,6 +24,9 @@ body {
   min-height: 100vh;
   line-height: 1.6;
   color-scheme: dark;
+  /* Nền tối nên phải đặt màu chữ mặc định: không có dòng này thì mọi chữ không được
+     style riêng sẽ là đen trên nền đen (từng xảy ra ở Phòng luyện code). */
+  color: var(--forge-text, #f8fafc);
 }
 
 /* Custom scrollbar */

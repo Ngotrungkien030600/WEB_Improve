@@ -169,7 +169,7 @@ export default {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 13.5px;
   line-height: 21px;
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .editor-area {
@@ -223,7 +223,7 @@ export default {
   box-shadow: inset 0 0 0 2px rgba(139, 92, 246, 0.45);
 }
 
-:deep(.tk-com) { color: #6b7280; font-style: italic; }
+:deep(.tk-com) { color: #94a3b8; font-style: italic; }
 :deep(.tk-str) { color: #86efac; }
 :deep(.tk-kw) { color: #c084fc; font-weight: 600; }
 :deep(.tk-num) { color: #fdba74; }

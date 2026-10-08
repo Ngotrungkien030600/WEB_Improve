@@ -822,7 +822,7 @@ onUnmounted(() => {
 
 .counter {
   font-size: 0.8rem;
-  color: #64748b;
+  color: #94a3b8;
   text-align: center;
   margin-bottom: 1rem;
 }
@@ -886,7 +886,7 @@ onUnmounted(() => {
 }
 
 .drop-hint {
-  color: #64748b;
+  color: #94a3b8;
   font-style: italic;
   font-size: 0.85rem;
 }
@@ -992,7 +992,7 @@ onUnmounted(() => {
 
 .nav-counter {
   font-size: 0.85rem;
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .story-content {
@@ -1034,7 +1034,7 @@ onUnmounted(() => {
 
 .story-tip {
   font-size: 0.75rem;
-  color: #64748b;
+  color: #94a3b8;
   font-style: italic;
   text-align: center;
 }
@@ -1057,7 +1057,7 @@ onUnmounted(() => {
 
 .qa-subtitle {
   font-size: 0.85rem;
-  color: #64748b;
+  color: #94a3b8;
   margin: 0 0 1.5rem;
 }
 
@@ -1093,7 +1093,7 @@ onUnmounted(() => {
 }
 
 .qa-counter {
-  color: #64748b;
+  color: #94a3b8;
   font-size: 0.8rem;
   margin-bottom: 1rem;
 }
@@ -1127,7 +1127,7 @@ onUnmounted(() => {
 
 .idiom-header p {
   font-size: 0.85rem;
-  color: #64748b;
+  color: #94a3b8;
   margin: 0;
 }
 
@@ -1197,7 +1197,7 @@ onUnmounted(() => {
 
 .idiom-vi {
   font-size: 0.75rem;
-  color: #64748b;
+  color: #94a3b8;
   margin: 0;
 }
 

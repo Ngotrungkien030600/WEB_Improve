@@ -744,6 +744,154 @@ export default {
   padding: 1.5rem 0 3rem;
 }
 
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.page-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.1rem;
+}
+
+.topbar-left {
+  min-width: 0;
+}
+
+.topbar-left h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--forge-text, #f8fafc);
+}
+
+.topbar-left p {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--forge-text2, #cbd5e1);
+}
+
+.topbar-right {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid var(--forge-glass-border, rgba(139, 92, 246, 0.2));
+  background: var(--forge-glass, rgba(139, 92, 246, 0.1));
+  color: var(--forge-text, #f8fafc);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--transition-base, 0.25s ease), border-color var(--transition-base, 0.25s ease), transform var(--transition-base, 0.25s ease);
+}
+
+.home-btn:hover {
+  background: var(--forge-glass-hover, rgba(139, 92, 246, 0.2));
+  border-color: var(--forge-fire, #8b5cf6);
+  transform: translateY(-1px);
+}
+
+.score-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 1.25rem;
+}
+
+.score-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: 64px;
+  padding: 0.7rem 0.85rem;
+  border-radius: 14px;
+  border: 1px solid var(--forge-glass-border, rgba(139, 92, 246, 0.2));
+  background: var(--forge-glass, rgba(139, 92, 246, 0.1));
+}
+
+.rank-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.24), rgba(6, 182, 212, 0.14));
+  border-color: rgba(139, 92, 246, 0.42);
+}
+
+.score-emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.score-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.score-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--forge-text, #f8fafc);
+  font-variant-numeric: tabular-nums;
+}
+
+.score-value small {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--forge-text3, #94a3b8);
+}
+
+.score-key {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--forge-text3, #94a3b8);
+}
+
+.progress-card {
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.progress-card .score-key {
+  color: var(--forge-text2, #cbd5e1);
+}
+
+.progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+  transition: width 0.3s ease;
+}
+
 .lab-layout {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
@@ -809,8 +957,8 @@ export default {
 }
 
 .filter-chip.active {
-  background: var(--chip, #8b5cf6);
-  border-color: var(--chip, #8b5cf6);
+  background: var(--chip, #7c3aed);
+  border-color: var(--chip, #7c3aed);
   color: #10101c;
 }
 

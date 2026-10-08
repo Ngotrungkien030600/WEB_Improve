@@ -223,7 +223,7 @@ const getCategoryLabel = (tag) => {
 .vocab-counter {
   text-align: center;
   font-size: 0.8rem;
-  color: #64748b;
+  color: #94a3b8;
   margin: 0;
 }
 
