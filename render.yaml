@@ -4,11 +4,10 @@
 services:
   - type: web
     name: skillforge
-    runtime: node
+    runtime: docker
     plan: free
-    rootDir: projects/web-en
-    buildCommand: npm install
-    startCommand: node server/index.js
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /
     envVars:
       - key: HOST

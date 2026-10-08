@@ -470,7 +470,7 @@ export function previewValue(value) {
 export const CODE_LANGUAGES = [
   { id: 'javascript', label: 'JavaScript', runtime: 'browser', hint: 'Chạy ngay trong trình duyệt' },
   { id: 'nodejs', label: 'Node.js', runtime: 'server', hint: 'Chạy trên máy chủ bằng Node' },
-  { id: 'java', label: 'Java 17', runtime: 'server', hint: 'Biên dịch bằng javac rồi chạy' },
+  { id: 'java', label: 'Java', runtime: 'server', hint: 'Dùng JDK có sẵn trên máy chủ' },
   { id: 'python', label: 'Python 3', runtime: 'server', hint: 'Chạy bằng trình thông dịch Python' },
 ];
 
