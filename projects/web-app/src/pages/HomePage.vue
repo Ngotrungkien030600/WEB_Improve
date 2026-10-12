@@ -61,7 +61,7 @@ const groups = [
     title: 'Trí tuệ nhân tạo',
     items: [
       { icon: '🤖', title: 'Học AI', description: 'AI/ML — kiến thức, quiz, phỏng vấn, dự án thực hành.', path: '/ai' },
-      { icon: '⚡', title: 'AI Agent', description: 'Agent, Tools, Function Calling, Token & Cost.', path: '/ai/agent' },
+      { icon: '⚡', title: 'AI Agent', description: 'Coding agents, CodeGraph, MCP, Skills, Jira/Wiki & token.', path: '/ai/agent' },
       { icon: '🗣️', title: 'BMAD Agents', description: '7 trợ lý AI chuyên gia — Party Mode.', path: '/bmad-agents' },
     ],
   },

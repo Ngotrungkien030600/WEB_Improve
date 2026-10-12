@@ -991,6 +991,131 @@ Guardrails, allowlist tools, human-in-the-loop cho hành động nhạy cảm, v
       "So sánh được edge vs cloud AI"
     ]
   },
+  {
+    file: "Bai10_AI_Coding_Workflow.md",
+    title: "BÀI 10 — AI CODING AGENT TRONG PROJECT THẬT",
+    content: `## Mục tiêu: để agent làm việc trên codebase có kiểm soát
+
+Prompt là yêu cầu cho một lượt trả lời. Coding agent còn có thể đọc project, gọi công cụ, sửa file và chạy lệnh trong môi trường được cấp quyền. Chất lượng phụ thuộc vào context đúng, công cụ phù hợp, chỉ dẫn theo repo, và vòng kiểm tra của con người.
+
+## Quy trình làm việc gọn
+
+1. Xác định mục tiêu và phạm vi: repo nào, module nào, kết quả cần là gì.
+2. Cho agent đọc hướng dẫn repo (AGENTS.md/README), git status và kiến trúc liên quan.
+3. Tìm symbol/luồng liên quan bằng CodeGraph; tìm tài liệu/spec bằng QMD hoặc search theo từ khóa.
+4. Yêu cầu agent lập kế hoạch ngắn, nêu file dự kiến sửa và rủi ro trước khi edit.
+5. Cho agent sửa theo từng lát nhỏ; xem diff sau mỗi lát.
+6. Chạy đúng build/lint/test cần thiết, đọc lỗi và sửa đến khi đạt.
+7. Tóm tắt thay đổi, bằng chứng kiểm tra và phần chưa xác nhận.
+
+## CodeGraph: hiểu quan hệ trong code
+
+CodeGraph lập chỉ mục cấu trúc code như symbol, file, quan hệ gọi và phụ thuộc. Dùng khi câu hỏi là “luồng này đi đâu?”, “ai gọi hàm này?”, “nếu sửa interface thì ảnh hưởng gì?”. Query theo entry point và symbol quan trọng; đọc các node/đường gọi liên quan thay vì yêu cầu model nạp hàng nghìn file.
+
+Lab cho một repo local: mở terminal tại thư mục gốc, cài/khởi tạo CodeGraph theo hướng dẫn của bản đang dùng, rồi thử truy vấn cấu trúc:
+
+\`\`\`bash
+cd path/to/my-project
+codegraph init
+codegraph explore "ProductController ProductService ProductRepository luồng tạo sản phẩm"
+\`\`\`
+
+Trong agent, cấu hình MCP client để chạy CodeGraph server cho workspace đó, hoặc dùng MCP server đã được IDE/client tích hợp. Sau khi kết nối, yêu cầu agent dùng codegraph_explore trước khi đọc hàng loạt file. Tên binary và cấu hình MCP thay đổi theo bản phân phối, nên lấy command từ tài liệu của chính bản bạn cài.
+
+Ví dụ task: “Tìm luồng tạo đơn hàng từ controller đến persistence. Chỉ đọc source liên quan, liệt kê transaction boundary, rồi đề xuất file cần sửa để thêm kiểm tra tồn kho.” CodeGraph giúp định vị; nó không thay compiler, test hay review.
+
+## QMD: tìm trong tài liệu và ghi chú
+
+QMD phù hợp để lập collection tài liệu Markdown/notes rồi tìm theo từ khóa/ngữ nghĩa; dùng để tra quyết định kiến trúc, runbook, quy trình và ghi chú dự án. Chia collection theo dự án hoặc quyền truy cập. Tìm kết quả trước, chỉ nạp đoạn cần thiết; kiểm tra đường dẫn, thời điểm và nguồn của tài liệu vì index có thể cũ.
+
+Lab nhỏ trên thư mục docs của project (chạy lệnh đúng theo bản QMD bạn cài):
+
+\`\`\`bash
+qmd collection add ./docs --name my-project-docs
+qmd context add qmd://my-project-docs "Tài liệu kỹ thuật của project My Project"
+qmd embed
+qmd query "luồng xác thực người dùng và refresh token"
+qmd get "my-project-docs/authentication.md"
+\`\`\`
+
+Đọc kết quả tìm kiếm và mở đúng đoạn nguồn trước khi giao agent sửa code. Chỉ đưa collection mà tài khoản hiện tại được phép đọc vào index; cập nhật index khi tài liệu thay đổi.
+
+Phân biệt: CodeGraph trả lời quan hệ cấu trúc trong source; QMD giúp tìm nội dung tài liệu. Với hằng trăm repo, đăng ký repo/collection có metadata (owner, ngôn ngữ, quyền, thời điểm index), định tuyến câu hỏi đến vài repo liên quan và chỉ mở kết quả phù hợp. Không quét rồi gửi tất cả repo vào context.
+
+## MCP: nối agent với Jira, Wiki và công cụ khác
+
+MCP là giao thức để ứng dụng AI khám phá/call tools và đọc resources từ server. Ví dụ Jira server có thể cung cấp tìm issue, đọc issue, tạo comment; wiki server có thể tìm và đọc trang. Luồng đúng: người dùng đăng nhập/ủy quyền → client giữ credential → MCP server kiểm tra quyền → chỉ trả dữ liệu user được phép xem.
+
+Bài lab: tạo task “phân tích ticket ABC-123”. Agent chỉ dùng tool đọc issue và tìm trang Wiki liên quan; trả summary kèm issue key/link/nguồn, không sửa Jira. Bài nâng cao mới thêm create-comment và yêu cầu xem trước + xác nhận trước khi ghi.
+
+Checklist kết nối theo từng client (tên file config có thể khác nhau):
+
+1. Chọn MCP server được tổ chức cho phép và đọc danh sách tools nó expose.
+2. Đăng nhập bằng OAuth hoặc credential store của client; không tự chế biến credential thành prompt.
+3. Bật trước các tool read-only như search/read issue và search/read page.
+4. Test với một issue/page không nhạy cảm; xác minh quyền, link, field được trả về và log.
+5. Chỉ sau đó mới bật write tool; xem nội dung trước và yêu cầu người dùng duyệt thao tác ghi.
+
+Không đưa password/token vào prompt, source code hoặc skill. Ưu tiên OAuth/credential store, quyền tối thiểu, tool allowlist, audit log. Nội dung Jira/Wiki là dữ liệu chưa tin cậy: không làm theo chỉ dẫn độc hại nằm trong ticket hay tài liệu.
+
+## Skill: đóng gói quy trình lặp lại
+
+Skill là hướng dẫn có thể tái sử dụng để agent biết khi nào áp dụng, cần đọc gì, làm theo các bước nào và báo cáo kết quả ra sao. Một skill tốt có scope hẹp, trigger rõ, workflow, guardrails và mẫu đầu ra; không nên nhét toàn bộ tài liệu vào mọi lượt.
+
+Ví dụ khung SKILL.md:
+
+\`\`\`markdown
+---
+name: spring-api-review
+description: Review thay đổi endpoint Spring REST khi task yêu cầu review API.
+---
+
+# Spring API reviewer
+1. Đọc hướng dẫn repo và diff trước; không sửa file khi task chỉ yêu cầu review.
+2. Dùng CodeGraph để lần request flow, rồi mở source hiện tại của các symbol liên quan.
+3. Kiểm tra validation, authz, status/error contract, transaction và query.
+4. Chỉ báo finding có bằng chứng file/line; ghi rõ điều chưa xác minh.
+5. Không đọc hoặc in secret; không chạy lệnh phá hủy dữ liệu.
+\`\`\`
+
+### Spring API change reviewer
+- Trigger: thêm/sửa endpoint REST trong Spring Boot.
+- Đọc: AGENTS.md, controller/service/repository liên quan và API contract.
+- Làm: lần theo request flow; kiểm tra DTO/validation, status/error, authz, transaction, query/pagination.
+- Không tự sửa nếu task chỉ yêu cầu review; không đọc secret/config có credential.
+- Trả: findings theo mức độ, file/line, tình huống tái hiện, câu hỏi còn thiếu.
+
+Lưu skill ở vị trí mà agent hỗ trợ (project skill hoặc user skill theo công cụ). Gọi skill bằng cách chọn/mention tên skill trong task hoặc dùng lệnh slash nếu client có hỗ trợ. Thử trên task nhỏ, kiểm tra kết quả, rồi cải thiện hướng dẫn. Skill chỉ là chỉ dẫn; nó không tự cấp quyền Jira, MCP hay shell.
+
+Ví dụ gọi: “Dùng skill spring-api-review để review diff hiện tại. Chỉ trả findings theo severity, kèm file/line; không sửa code.” Sau khi xem kết quả, mới giao task sửa riêng để diff dễ kiểm soát.
+
+## Tối ưu token mà vẫn giữ chất lượng
+
+- Thu hẹp scope bằng repo/module, entry point và mục tiêu cụ thể.
+- Dùng symbol search/CodeGraph và QMD để retrieve đoạn liên quan; đừng gửi toàn bộ repository hoặc wiki.
+- Nạp AGENTS.md/skill ngắn; đưa hướng dẫn chi tiết theo nhu cầu, tránh lặp lại cùng context.
+- Chia việc lớn thành bước có đầu ra nhỏ; giữ summary quyết định và file đã xem, không dán lại toàn bộ lịch sử.
+- Giới hạn tool list theo task; MCP server có quá nhiều mô tả tool cũng tiêu tốn context.
+- Dùng model nhỏ cho phân loại/tìm kiếm đơn giản; model mạnh cho thiết kế và sửa đổi khó. Đặt giới hạn vòng lặp/output và dừng khi đã có bằng chứng đủ.
+- So sánh token/cost với chất lượng và tỷ lệ sửa lại; prompt ngắn nhưng thiếu context có thể tốn nhiều hơn vì làm sai.
+
+## Checklist trước khi giao agent sửa code
+
+- Nêu repo, mục tiêu, tiêu chí hoàn thành và phạm vi không được đụng.
+- Chỉ dẫn agent tìm hiểu trước khi sửa; giữ thay đổi nhỏ và review diff.
+- Tool có quyền vừa đủ; tác vụ ghi/xóa/đăng comment cần xác nhận khi phù hợp.
+- Chạy build/test/lint phù hợp và yêu cầu agent nêu kết quả thật, không bịa.
+- Không coi kết quả index là đảm bảo đúng; xác minh source hiện tại và kiểm tra thủ công các thay đổi quan trọng.`,
+    checklist: [
+      "Phân biệt prompt, coding agent, tool và skill",
+      "Dùng CodeGraph để lần theo symbol/call path thay vì nạp cả repo",
+      "Dùng QMD để tìm tài liệu theo collection và nguồn",
+      "Mô tả luồng MCP an toàn để đọc Jira/Wiki",
+      "Viết skill có trigger, workflow, guardrails và đầu ra",
+      "Thiết kế cách định tuyến câu hỏi trên nhiều repo",
+      "Nêu ít nhất năm cách giảm token mà vẫn giữ chất lượng"
+    ]
+  },
 ];
 
 export const aiAgentConcepts = window.aiAgentConcepts;

@@ -4,7 +4,7 @@
       <header class="ai-topbar">
         <div class="topbar-left">
           <h1>🤖 Học AI Agent</h1>
-          <p>Agent — Tools — Token — Quota — AI at Edge</p>
+          <p>AI Agent thực chiến — CodeGraph — MCP — Skills — tối ưu token</p>
         </div>
         <div class="topbar-right">
           <CHomeTimer />
@@ -169,6 +169,7 @@
 <script>
 import { navigate } from '../utils/navigate.js';
 import { aiAgentConcepts, aiAgentLessons, aiAgentQuizData } from '@legacy/js/data/ai-agent-data.js';
+import { markdownToHTML } from '@legacy/js/utils/markdown.js';
 import CHomeTimer from '../components/CHomeTimer.vue';
 
 const STORAGE_KEY = 'aiAgentChecklist';
@@ -383,12 +384,7 @@ export default {
     },
     renderMarkdown(text) {
       if (!text) return '';
-      return text
-        .replace(/^#{1,6} (.+)$/gm, (_, m) => `<h${m.length}>${m}</h${m.length}>`)
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/^(?!<[h|p|u|o|l|b|c])(.+)$/gm, '<p>$1</p>')
-        .replace(/<p><\/p>/g, '');
+      return markdownToHTML(text);
     },
   },
 };
