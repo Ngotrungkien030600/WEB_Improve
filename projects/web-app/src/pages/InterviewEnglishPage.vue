@@ -1,161 +1,65 @@
 <template>
-  <div class="subpage">
-    <div class="subpage-container">
-      <header class="subpage-topbar">
-        <div class="subpage-topbar-left">
-          <span class="icon">🇬🇧</span>
-          <div>
-            <h1>English Interview Preparation</h1>
-            <div class="subtitle">30-day lộ trình luyện tiếng Anh phỏng vấn Java Backend</div>
-          </div>
-        </div>
-        <div class="subpage-topbar-right">
-          <a class="subpage-back" href="#" @click.prevent="goHome">← Trang chủ</a>
-          <a class="subpage-back" href="/interview" @click.prevent="goToJavaInterview">☕ Java Interview</a>
-        </div>
+  <div class="interview-coach">
+    <div class="coach-shell">
+      <header class="topbar">
+        <button class="back" type="button" @click="goHome">← Trang chủ</button>
+        <div class="brand"><span>🎙️</span><div><h1>Luyện phỏng vấn bằng tiếng Anh</h1><p>Học từng câu ngắn, hiểu nghĩa rồi luyện nói theo JD của bạn.</p></div></div>
+        <span class="jd-badge">IT-532 · Java + Angular</span>
       </header>
 
-      <p class="page-desc">30-day lộ trình luyện tiếng Anh phỏng vấn Java Backend — mỗi ngày 30-45 phút. Kết hợp kỹ thuật + English.</p>
+      <section class="hero panel">
+        <div><div class="eyebrow">BỘ LUYỆN THEO JD</div><h2>Full Stack Java &amp; Angular Developer</h2><p>Java · Spring Boot · Angular · TypeScript · RxJS · SQL · AWS · CI/CD · Docker · testing · teamwork</p></div>
+        <div class="progress-box"><strong>{{ completedCount }}/{{ questions.length }}</strong><span>câu đã đánh dấu luyện xong</span><div class="progress-track"><i :style="{ width: `${completedCount / questions.length * 100}%` }"></i></div></div>
+      </section>
 
-      <!-- Week 1 -->
-      <div class="week-card">
-        <h2>📅 Week 1: Java Core & OOP</h2>
-        <div class="day-list">
-          <div class="day-item"><strong>Day 1</strong>Introduce Yourself + OOP concepts</div>
-          <div class="day-item"><strong>Day 2</strong>Encapsulation, Inheritance, Polymorphism</div>
-          <div class="day-item"><strong>Day 3</strong>Abstract Class vs Interface</div>
-          <div class="day-item"><strong>Day 4</strong>Collection Framework vocabulary</div>
-          <div class="day-item"><strong>Day 5</strong>HashMap & equals/hashCode</div>
-          <div class="day-item"><strong>Day 6</strong>Exception Handling in English</div>
-          <div class="day-item"><strong>Day 7</strong>Review + Mock interview (Java Core)</div>
-        </div>
+      <nav class="tabs" aria-label="Nội dung luyện tập">
+        <button v-for="tab in tabs" :key="tab.id" type="button" :class="{ active: activeTab === tab.id }" @click="activeTab = tab.id">{{ tab.label }}</button>
+      </nav>
 
-        <h3>🎯 Key Vocabulary</h3>
-        <div class="qa-block">
-          <div class="q">Q: Can you explain OOP principles?</div>
-          <div class="a">"Object-Oriented Programming has four main principles. First, Encapsulation means hiding internal data and only exposing public methods. Second, Inheritance allows a class to reuse fields and methods from a parent class. Third, Polymorphism enables a single method to behave differently based on the object. Fourth, Abstraction hides implementation details and shows only essential features."</div>
-        </div>
-        <div class="qa-block">
-          <div class="q">Q: What is the difference between an Interface and an Abstract Class?</div>
-          <div class="a">"An interface defines a contract — it only declares methods (and default methods since Java 8). A class can implement multiple interfaces. An abstract class can have both abstract and concrete methods, can hold state with fields, and a class can only extend one abstract class. Use interfaces for defining behavior, abstract classes for sharing common code."</div>
-        </div>
-      </div>
+      <main>
+        <section v-if="activeTab === 'start'" class="content-grid">
+          <article class="panel welcome-card"><div class="eyebrow">BẮT ĐẦU NHẸ NHÀNG</div><h2>Không cần nói tiếng Anh hoàn hảo.</h2><p>Hãy nói đúng ý bằng câu đơn giản. Mỗi câu hỏi có bản dịch, câu trả lời mẫu và nút nghe phát âm. Bạn có thể sửa câu mẫu để khớp với trải nghiệm thật của mình.</p><button class="primary" type="button" @click="activeTab = 'profile'">✍️ Điền hồ sơ của tôi</button></article>
+          <article class="panel today-card"><h3>📍 Lộ trình cho JD này</h3><div class="roadmap"><div><b>01</b><span><strong>Giới thiệu bản thân</strong><small>Vai trò, số năm kinh nghiệm, điểm mạnh</small></span></div><div><b>02</b><span><strong>Java &amp; Spring Boot</strong><small>API, dependency injection, JPA, testing</small></span></div><div><b>03</b><span><strong>Angular &amp; RxJS</strong><small>Component, service, Observable</small></span></div><div><b>04</b><span><strong>Dự án &amp; teamwork</strong><small>Khó khăn, giải pháp, kết quả, giao tiếp</small></span></div></div><button class="secondary" type="button" @click="activeTab = 'practice'">Bắt đầu luyện câu hỏi →</button></article>
+          <article class="panel summary-card"><h3>🧩 JD đang luyện</h3><div class="tag-list"><span v-for="skill in skills" :key="skill">{{ skill }}</span></div><p>JD yêu cầu 3+ năm kinh nghiệm full-cycle với Java và Angular, chú trọng code review, kiểm thử và giao tiếp tiếng Anh.</p></article>
+          <article class="panel summary-card"><h3>💡 Mẹo hôm nay</h3><p>Trả lời theo 3 ý: <b>What</b> (việc gì), <b>How</b> (bạn làm thế nào), <b>Result</b> (kết quả). Nếu bí từ, dùng câu ngắn và nói chậm.</p><button class="text-btn" type="button" @click="activeTab = 'vocabulary'">Học từ vựng trước →</button></article>
+        </section>
 
-      <!-- Week 2 -->
-      <div class="week-card">
-        <h2>📅 Week 2: Spring Boot & Database</h2>
-        <div class="day-list">
-          <div class="day-item"><strong>Day 8</strong>Spring Boot, IoC, DI explained</div>
-          <div class="day-item"><strong>Day 9</strong>REST API design in English</div>
-          <div class="day-item"><strong>Day 10</strong>JPA & Hibernate relationships</div>
-          <div class="day-item"><strong>Day 11</strong>SQL, JOIN, Index in English</div>
-          <div class="day-item"><strong>Day 12</strong>Transaction & ACID properties</div>
-          <div class="day-item"><strong>Day 13</strong>Security, JWT, Authentication</div>
-          <div class="day-item"><strong>Day 14</strong>Review + Mock interview (Spring)</div>
-        </div>
-
-        <h3>🎯 Key Vocabulary</h3>
-        <div class="qa-block">
-          <div class="q">Q: What is Dependency Injection?</div>
-          <div class="a">"Dependency Injection is a design pattern where dependencies are provided to an object rather than the object creating them itself. The Spring IoC container manages this. Constructor injection is the recommended approach because it makes dependencies explicit, enables immutability, and simplifies testing. Instead of using 'new' keyword, we let the framework inject the required beans."</div>
-        </div>
-        <div class="qa-block">
-          <div class="q">Q: Can you explain the difference between PUT and PATCH?</div>
-          <div class="a">"PUT is used to update an entire resource — you send the full object. PATCH is for partial updates — you only send the fields you want to change. PUT is idempotent, meaning calling it multiple times produces the same result. PATCH is generally not idempotent. For example, if a user has 10 fields, PUT requires all 10, but PATCH only needs the fields that changed."</div>
-        </div>
-      </div>
-
-      <!-- Week 3 -->
-      <div class="week-card">
-        <h2>📅 Week 3: Advanced Topics</h2>
-        <div class="day-list">
-          <div class="day-item"><strong>Day 15</strong>Microservices & Kafka explained</div>
-          <div class="day-item"><strong>Day 16</strong>Docker & CI/CD vocabulary</div>
-          <div class="day-item"><strong>Day 17</strong>Cloud (AWS) basics in English</div>
-          <div class="day-item"><strong>Day 18</strong>System Design: URL Shortener</div>
-          <div class="day-item"><strong>Day 19</strong>N+1 problem & optimization</div>
-          <div class="day-item"><strong>Day 20</strong>Design Patterns (Singleton, Strategy)</div>
-          <div class="day-item"><strong>Day 21</strong>Review + Mock interview (System Design)</div>
-        </div>
-
-        <h3>🎯 Key Vocabulary</h3>
-        <div class="qa-block">
-          <div class="q">Q: What is the N+1 problem in Hibernate?</div>
-          <div class="a">"The N+1 problem occurs when you fetch a list of N parent entities and each one triggers an additional query for its associated children. So you end up with 1 query for the parents plus N queries for the children. We can solve it using JOIN FETCH in JPQL, which loads everything in a single query. Another approach is enabling batch fetching or using DTO projections."</div>
-        </div>
-        <div class="qa-block">
-          <div class="q">Q: How do microservices communicate?</div>
-          <div class="a">"There are two main patterns: synchronous and asynchronous. For synchronous communication, services use REST or gRPC. For asynchronous, they use message brokers like Kafka or RabbitMQ. I prefer async communication for decoupling — for example, when an order is created, the order service emits an event to Kafka, and other services consume it independently."</div>
-        </div>
-      </div>
-
-      <!-- Week 4 -->
-      <div class="week-card">
-        <h2>📅 Week 4: Mock Interview & Polish</h2>
-        <div class="day-list">
-          <div class="day-item"><strong>Day 22</strong>Behavioral questions (STAR method)</div>
-          <div class="day-item"><strong>Day 23</strong>Project presentation in English</div>
-          <div class="day-item"><strong>Day 24</strong>Common coding questions (English)</div>
-          <div class="day-item"><strong>Day 25</strong>Full mock interview Round 1</div>
-          <div class="day-item"><strong>Day 26</strong>Weak areas review</div>
-          <div class="day-item"><strong>Day 27</strong>Full mock interview Round 2</div>
-          <div class="day-item"><strong>Day 28-30</strong>Final review + Confidence building</div>
-        </div>
-
-        <h3>🎯 Key Vocabulary</h3>
-        <div class="qa-block">
-          <div class="q">Q: Tell me about a challenging project you worked on.</div>
-          <div class="a">"In my recent project, I built an order management system using Spring Boot and microservices. The biggest challenge was handling the N+1 query problem and ensuring data consistency across services. I solved the N+1 problem by using JOIN FETCH and batch fetching. For consistency, I implemented the Saga pattern with Kafka for event-driven communication. The result was a scalable system that handles thousands of orders per day."</div>
-        </div>
-        <div class="qa-block">
-          <div class="q">Q: What are your strengths and weaknesses?</div>
-          <div class="a">"My main strength is my strong foundation in Java and Spring Boot. I write clean, testable code with proper exception handling and validation. I'm also good at debugging — I can analyze logs, use profilers, and optimize performance. My weakness is that I sometimes spend too much time on code perfection. I'm learning to balance quality with delivery speed by focusing on critical paths first."</div>
-        </div>
-      </div>
-
-      <!-- English Skills -->
-      <div class="week-card">
-        <h2>📊 English Skills Assessment</h2>
-        <div class="skill-grid">
-          <div class="skill-card">
-            <h5>🗣️ Speaking</h5>
-            <p>Luyện nói technical terms, describe architecture, answer behavioral questions. Ghi âm và nghe lại.</p>
+        <section v-else-if="activeTab === 'profile'" class="panel profile-panel">
+          <div class="section-heading"><div><div class="eyebrow">HỒ SƠ CỦA BẠN</div><h2>Điền thông tin thật để cá nhân hóa câu trả lời</h2><p>Các câu mẫu sẽ dùng thông tin bạn cung cấp. Có thể để trống phần chưa biết.</p></div><span class="saved" v-if="profileSaved">✓ Đã lưu trên thiết bị</span></div>
+          <div class="form-grid">
+            <label>Tên muốn dùng khi phỏng vấn<input v-model="profile.name" placeholder="Ví dụ: Minh" /></label>
+            <label>Số năm kinh nghiệm<input v-model="profile.years" placeholder="Ví dụ: 3 năm" /></label>
+            <label>Vai trò hiện tại / mong muốn<input v-model="profile.role" placeholder="Ví dụ: Full Stack Developer" /></label>
+            <label>Công ty / lĩnh vực (nếu muốn)<input v-model="profile.domain" placeholder="Ví dụ: fintech, thương mại điện tử" /></label>
+            <label class="full">Dự án bạn tự hào nhất<textarea v-model="profile.project" rows="3" placeholder="Dự án làm gì? Bạn phụ trách phần nào? Dùng công nghệ gì?" /></label>
+            <label class="full">Một vấn đề bạn đã giải quyết<textarea v-model="profile.challenge" rows="3" placeholder="Vấn đề → cách bạn xử lý → kết quả" /></label>
+            <label class="full">Kỹ năng đã thực sự sử dụng<input v-model="profile.knownSkills" placeholder="Ví dụ: Java, Spring Boot, Angular, MySQL (chỉ ghi kỹ năng thật)" /></label>
+            <label class="full">Kinh nghiệm thực tế với AWS / CI/CD<textarea v-model="profile.awsExperience" rows="2" placeholder="Ví dụ: mới tự học; đã tạo GitHub Actions chạy test; từng dùng AWS S3 ở dự án… ghi đúng mức của bạn" /></label>
           </div>
-          <div class="skill-card">
-            <h5>👂 Listening</h5>
-            <p>Xem tech talks (Spring Tips, Java Brains), podcast (Java Pub House). Note key terms.</p>
-          </div>
-          <div class="skill-card">
-            <h5>📖 Reading</h5>
-            <p>Đọc technical documentation (Spring docs, Baeldung), blog posts. Focus on sentence structure.</p>
-          </div>
-          <div class="skill-card">
-            <h5>✍️ Writing</h5>
-            <p>Viết technical answers, code comments, commit messages bằng tiếng Anh. Review grammar.</p>
-          </div>
-        </div>
+          <div class="profile-actions"><button class="primary" type="button" @click="saveProfile">Lưu hồ sơ</button><button class="text-btn" type="button" @click="resetProfile">Xóa thông tin đã lưu</button></div>
+          <div class="notice">🔒 Hồ sơ chỉ được lưu trong trình duyệt trên thiết bị này.</div>
+        </section>
 
-        <h3>📝 Common Interview Questions — English Version</h3>
-        <div class="qa-block">
-          <div class="q">Q: Why did you choose Java?</div>
-          <div class="a">"I chose Java because of its strong ecosystem, platform independence through the JVM, and excellent tooling. Java has a vast community, reliable frameworks like Spring Boot, and is widely used in enterprise environments. The combination of performance, scalability, and backward compatibility makes it a solid choice for building production-grade applications."</div>
-        </div>
-        <div class="qa-block">
-          <div class="q">Q: Where do you see yourself in 5 years?</div>
-          <div class="a">"In 5 years, I see myself as a senior backend engineer with deep expertise in distributed systems and cloud architecture. I want to mentor junior developers, contribute to system design decisions, and lead technical projects. I'm also interested in learning more about event-driven architecture and Kubernetes."</div>
-        </div>
-      </div>
+        <section v-else-if="activeTab === 'speaking'" class="speaking-layout">
+          <aside class="panel speech-menu"><div class="eyebrow">BÀI NÓI MẪU</div><button v-for="(model, index) in speechModels" :key="model.id" type="button" :class="{ active: activeSpeech === index }" @click="activeSpeech = index"><span>{{ String(index + 1).padStart(2, '0') }}</span><b>{{ model.title }}<small>{{ model.duration }} · {{ model.level }}</small></b></button></aside>
+          <article class="panel speech-card"><div class="eyebrow">{{ currentSpeech.category }}</div><h2>{{ currentSpeech.title }}</h2><p class="speech-intro">{{ currentSpeech.goal }}</p><div class="speech-controls"><button class="secondary" type="button" @click="speak(currentSpeech.sentences.map((part) => personalizeSpeech(part.en)).join(' '))">🔊 Nghe cả bài</button><button class="secondary" type="button" @click="speak(personalizeSpeech(currentSpeech.sentences[speechSentence].en))">🔊 Nghe câu {{ speechSentence + 1 }}</button><button class="text-btn" type="button" @click="showTranslation = !showTranslation">{{ showTranslation ? 'Ẩn bản dịch' : 'Hiện bản dịch' }}</button></div><div class="speech-lines"><div v-for="(part, index) in currentSpeech.sentences" :key="index" :class="{ current: speechSentence === index }"><button class="line-play" type="button" :aria-label="`Nghe câu ${index + 1}`" @click="speechSentence = index; speak(personalizeSpeech(part.en))">{{ speechSentence === index ? '▶' : index + 1 }}</button><div><p>{{ personalizeSpeech(part.en) }}</p><small v-if="showTranslation">{{ personalizeSpeech(part.vi) }}</small></div></div></div><div class="rehearsal-tip"><b>🎯 Cách luyện thuộc:</b> nghe một câu, đọc nhại 3 lần, che câu tiếng Anh rồi tự nói lại. Sau đó thay phần trong ngoặc bằng chuyện thật của bạn.</div><label class="your-answer">Ghi âm chuyển thành chữ để tự kiểm tra<textarea v-model="speechAnswers[currentSpeech.id]" rows="4" placeholder="Bấm micro rồi đọc cả bài theo trí nhớ…" /></label><div class="practice-actions"><button class="secondary" type="button" @click="toggleSpeechRecording">{{ recording ? '⏹ Dừng ghi âm' : '🎙️ Luyện nói bằng micro' }}</button><button class="primary" type="button" @click="markSpeechComplete">{{ speechDone[currentSpeech.id] ? '✓ Đã luyện xong' : 'Đánh dấu đã thuộc' }}</button></div><p v-if="speechMessage" class="speech-message">{{ speechMessage }}</p><div class="question-nav"><button class="text-btn" type="button" :disabled="activeSpeech === 0" @click="activeSpeech--; speechSentence = 0">← Bài trước</button><span>{{ activeSpeech + 1 }} / {{ speechModels.length }}</span><button class="text-btn" type="button" :disabled="activeSpeech === speechModels.length - 1" @click="activeSpeech++; speechSentence = 0">Bài tiếp →</button></div></article>
+        </section>
 
-      <!-- Resources -->
-      <div class="week-card">
-        <h2>📚 Resources</h2>
-        <p><strong>Books:</strong> "Effective Java" (Joshua Bloch), "Spring in Action"</p>
-        <p><strong>Websites:</strong> Baeldung, Medium, LeetCode (solving + explaining in English)</p>
-        <p><strong>YouTube:</strong> Java Brains, Spring Tips, Amigoscode</p>
-        <p><strong>Practice:</strong> Record yourself answering, join English tech communities, find a speaking partner</p>
-        <hr>
-        <p class="resources-note">📌 Tài liệu tham khảo từ: <code>30_day_english_plan_java_interview.pdf</code> và <code>English_Skill.docx</code></p>
-      </div>
+        <section v-else-if="activeTab === 'vocabulary'" class="vocab-layout">
+          <aside class="panel vocab-menu"><div class="eyebrow">TỪ VỰNG THEO NHÓM</div><button v-for="group in vocabGroups" :key="group.id" type="button" :class="{ active: vocabGroup === group.id }" @click="vocabGroup = group.id">{{ group.label }} <span>{{ group.words.length }}</span></button></aside>
+          <div class="vocab-list"><article v-for="(word, index) in currentWords" :key="word.term" class="panel vocab-card"><div class="word-heading"><div><span class="word-count">{{ String(index + 1).padStart(2, '0') }}</span><h3>{{ word.term }}</h3><small>{{ word.pronunciation }}</small></div><button class="icon-btn" type="button" :aria-label="`Nghe ${word.term}`" @click="speak(word.term)">🔊</button></div><p class="meaning">{{ word.meaning }}</p><div class="example"><span>Câu ví dụ</span><p>{{ word.example }}</p><small>{{ word.translation }}</small></div></article></div>
+        </section>
+
+        <section v-else class="practice-layout">
+          <aside class="panel question-list"><div class="eyebrow">CÂU HỎI PHỎNG VẤN</div><button v-for="(item, index) in questions" :key="item.id" type="button" :class="{ active: activeQuestion === index }" @click="activeQuestion = index"><span class="question-number">{{ String(index + 1).padStart(2, '0') }}</span><span>{{ item.short }}<small>{{ item.category }}</small></span><b v-if="completed[item.id]">✓</b></button></aside>
+          <article class="panel practice-card"><div class="practice-top"><span class="eyebrow">{{ currentQuestion.category }}</span><button class="icon-btn" type="button" @click="speak(currentQuestion.prompt)">🔊 Nghe câu hỏi</button></div><h2>{{ currentQuestion.prompt }}</h2><p class="translation">{{ currentQuestion.translation }}</p><div class="tip"><b>Gợi ý trả lời</b><span>{{ currentQuestion.tip }}</span></div>
+            <div class="answer-block"><div class="answer-heading"><b>Câu trả lời mẫu</b><button class="text-btn" type="button" @click="showTranslation = !showTranslation">{{ showTranslation ? 'Ẩn bản dịch' : 'Hiện bản dịch' }}</button></div><p>{{ personalizedAnswer(currentQuestion) }}</p><p v-if="showTranslation" class="answer-translation">{{ currentQuestion.answerVi }}</p><button class="listen-btn" type="button" @click="speak(personalizedAnswer(currentQuestion))">🔊 Nghe câu trả lời mẫu</button></div>
+            <label class="your-answer">Thử tự trả lời bằng tiếng Anh<textarea v-model="answers[currentQuestion.id]" rows="4" placeholder="Bạn có thể viết trước rồi đọc thành tiếng. Không cần dùng câu phức tạp." /></label>
+            <div class="practice-actions"><button class="secondary" type="button" @click="toggleRecording">{{ recording ? '⏹ Dừng ghi âm' : '🎙️ Luyện nói bằng micro' }}</button><button class="primary" type="button" @click="markComplete">{{ completed[currentQuestion.id] ? '✓ Đã luyện xong' : 'Đánh dấu đã luyện' }}</button></div><p v-if="speechMessage" class="speech-message">{{ speechMessage }}</p>
+            <div class="question-nav"><button class="text-btn" type="button" :disabled="activeQuestion === 0" @click="activeQuestion--">← Câu trước</button><span>{{ activeQuestion + 1 }} / {{ questions.length }}</span><button class="text-btn" type="button" :disabled="activeQuestion === questions.length - 1" @click="activeQuestion++">Câu tiếp →</button></div>
+          </article>
+        </section>
+      </main>
     </div>
   </div>
 </template>
@@ -163,227 +67,445 @@
 <script>
 import { navigate } from '../utils/navigate.js';
 
+const PROFILE_KEY = 'sf_interview_english_profile_v1';
+const ANSWERS_KEY = 'sf_interview_english_answers_v1';
+const DONE_KEY = 'sf_interview_english_done_v1';
+
+const defaultProfile = () => ({ name: '', years: '', role: '', domain: '', project: '', challenge: '', knownSkills: '', awsExperience: '' });
+const questions = [
+  { id: 'intro', short: 'Giới thiệu bản thân', category: 'Giới thiệu', prompt: 'Could you tell me about yourself?', translation: 'Bạn có thể giới thiệu đôi chút về bản thân không?', tip: 'Tên / vai trò → kinh nghiệm → kỹ năng hoặc mục tiêu phù hợp vị trí.', answer: 'My name is {{name}}. I am a {{role}} with {{years}} of experience. I have worked with {{skills}}. I am interested in this role because I want to build reliable full stack applications and continue growing as an engineer.', answerVi: 'Tôi tên là {{name}}. Tôi là {{role}} với {{years}} kinh nghiệm. Tôi đã làm việc với {{skills}}. Tôi quan tâm đến vị trí này vì muốn xây dựng các ứng dụng full stack ổn định và tiếp tục phát triển nghề nghiệp kỹ sư.' },
+  { id: 'project', short: 'Kể về dự án', category: 'Kinh nghiệm dự án', prompt: 'Can you describe a project you are proud of?', translation: 'Bạn có thể kể về một dự án mà bạn tự hào không?', tip: 'Dự án làm gì → phần bạn phụ trách → công nghệ → kết quả.', answer: 'One project I am proud of is {{project}}. My main responsibility was {{role}}. I used {{skills}} to build and maintain the application. This project helped me improve my problem-solving and teamwork skills.', answerVi: 'Một dự án tôi tự hào là {{project}}. Trách nhiệm chính của tôi là {{role}}. Tôi dùng {{skills}} để xây dựng và duy trì ứng dụng. Dự án giúp tôi cải thiện kỹ năng giải quyết vấn đề và làm việc nhóm.' },
+  { id: 'java', short: 'Java & Spring Boot', category: 'Backend · Java', prompt: 'How have you used Java and Spring Boot in your work?', translation: 'Bạn đã sử dụng Java và Spring Boot như thế nào trong công việc?', tip: 'Nói về API, business logic, database, security hoặc testing mà bạn thật sự từng làm.', answer: 'I have used Java and Spring Boot to develop backend services and REST APIs. I organize the code into clear layers, validate incoming requests, and handle errors consistently. I also write tests to make the service easier to maintain.', answerVi: 'Tôi đã dùng Java và Spring Boot để phát triển dịch vụ backend và REST API. Tôi tổ chức code thành các tầng rõ ràng, kiểm tra dữ liệu đầu vào và xử lý lỗi nhất quán. Tôi cũng viết kiểm thử để dịch vụ dễ bảo trì hơn.' },
+  { id: 'angular', short: 'Angular & RxJS', category: 'Frontend · Angular', prompt: 'How do you build features with Angular and RxJS?', translation: 'Bạn xây dựng tính năng bằng Angular và RxJS như thế nào?', tip: 'Component → service → gọi API → xử lý trạng thái bất đồng bộ.', answer: 'I build reusable Angular components and keep API communication in services. I use TypeScript to make data structures clearer and RxJS Observables to handle asynchronous data. I try to keep components focused and easy to test.', answerVi: 'Tôi xây dựng các Angular component có thể tái sử dụng và đặt phần giao tiếp API trong service. Tôi dùng TypeScript để cấu trúc dữ liệu rõ ràng hơn và RxJS Observable để xử lý dữ liệu bất đồng bộ. Tôi cố gắng giữ component tập trung vào một nhiệm vụ và dễ kiểm thử.' },
+  { id: 'api', short: 'Thiết kế REST API', category: 'Backend · API', prompt: 'What do you consider when designing a REST API?', translation: 'Bạn cân nhắc điều gì khi thiết kế REST API?', tip: 'Resource, HTTP method/status, validation, lỗi, bảo mật và tài liệu API.', answer: 'I start by identifying the resources and choosing clear endpoint names. I use HTTP methods and status codes consistently, validate input, and return predictable error responses. I document the API with OpenAPI so other developers can use it easily.', answerVi: 'Tôi bắt đầu bằng cách xác định resource và chọn tên endpoint rõ ràng. Tôi sử dụng HTTP method và status code nhất quán, kiểm tra dữ liệu đầu vào và trả về lỗi theo cấu trúc dễ dự đoán. Tôi tài liệu hóa API bằng OpenAPI để các lập trình viên khác dễ sử dụng.' },
+  { id: 'challenge', short: 'Khó khăn & cách xử lý', category: 'Hành vi · Giải quyết vấn đề', prompt: 'Tell me about a challenging problem you solved.', translation: 'Hãy kể về một vấn đề khó mà bạn đã giải quyết.', tip: 'Dùng STAR: Situation (bối cảnh), Task (nhiệm vụ), Action (hành động), Result (kết quả).', answer: 'In one project, {{challenge}}. I investigated the root cause, discussed options with my team, and implemented a fix. As a result, we improved the reliability of the feature and reduced similar issues.', answerVi: 'Trong một dự án, {{challenge}}. Tôi tìm nguyên nhân gốc, thảo luận các phương án với nhóm và triển khai cách sửa. Kết quả là chúng tôi cải thiện độ ổn định của tính năng và giảm các vấn đề tương tự.' },
+  { id: 'quality', short: 'Đảm bảo chất lượng code', category: 'Chất lượng · Testing', prompt: 'How do you make sure your code is reliable?', translation: 'Bạn làm thế nào để đảm bảo code đáng tin cậy?', tip: 'Unit test, review, kiểm tra trường hợp biên, log/debug và CI.', answer: 'I keep functions focused, add unit tests for important behavior, and review edge cases. I also take part in code reviews and use CI checks to catch problems early. When an issue occurs, I investigate the root cause instead of only fixing the symptom.', answerVi: 'Tôi giữ các hàm tập trung vào một nhiệm vụ, thêm unit test cho hành vi quan trọng và xem xét các trường hợp biên. Tôi cũng tham gia code review và dùng CI để phát hiện vấn đề sớm. Khi có lỗi, tôi tìm nguyên nhân gốc thay vì chỉ sửa biểu hiện.' },
+  { id: 'teamwork', short: 'Làm việc nhóm & Agile', category: 'Giao tiếp · Teamwork', prompt: 'How do you collaborate with a cross-functional team?', translation: 'Bạn phối hợp với nhóm đa chức năng như thế nào?', tip: 'Làm rõ yêu cầu, cập nhật tiến độ, hỏi khi chưa rõ, nhận và phản hồi review.', answer: 'I clarify requirements with the product and QA teams before implementation. I share progress and raise risks early. During code reviews, I explain my decisions clearly and consider feedback from other team members.', answerVi: 'Tôi làm rõ yêu cầu với nhóm sản phẩm và QA trước khi triển khai. Tôi cập nhật tiến độ và báo sớm các rủi ro. Trong code review, tôi giải thích quyết định của mình rõ ràng và cân nhắc góp ý từ các thành viên khác.' },
+  { id: 'aws', short: 'AWS cơ bản', category: 'Cloud · AWS', prompt: 'Which AWS services have you worked with, or how would you use AWS for a web application?', translation: 'Bạn đã làm việc với dịch vụ AWS nào, hoặc bạn sẽ dùng AWS thế nào cho ứng dụng web?', tip: 'Chỉ nêu dịch vụ đã dùng thật; nếu chưa làm dự án thật, hãy trả lời theo kiến thức và nói rõ đó là kiến thức học được.', answer: 'I am familiar with AWS services such as EC2 for compute, S3 for object storage, and RDS for managed relational databases. For a web application, I would first understand the traffic, security, availability, and cost requirements. I would use IAM roles and least-privilege permissions, keep secrets out of source code, and monitor the service after deployment. My hands-on experience is strongest with {{skills}}, and I am continuing to build practical AWS experience.', answerVi: 'Tôi biết các dịch vụ AWS như EC2 cho năng lực tính toán, S3 cho lưu trữ object và RDS cho cơ sở dữ liệu quan hệ được quản lý. Với ứng dụng web, trước tiên tôi sẽ tìm hiểu lưu lượng, bảo mật, tính sẵn sàng và chi phí. Tôi sẽ dùng IAM role và quyền tối thiểu, không để secret trong mã nguồn, đồng thời giám sát dịch vụ sau triển khai. Kinh nghiệm thực tế mạnh nhất của tôi là {{skills}}, và tôi đang tiếp tục tích lũy kinh nghiệm AWS.' },
+  { id: 'cicd', short: 'CI/CD pipeline', category: 'DevOps · CI/CD', prompt: 'Can you walk me through a CI/CD pipeline for a Java and Angular application?', translation: 'Bạn có thể giải thích quy trình CI/CD cho ứng dụng Java và Angular không?', tip: 'Nêu các bước build → test → đóng gói → deploy staging → kiểm tra → production, nhưng phân biệt rõ kiến thức và kinh nghiệm thực tế.', answer: 'A typical pipeline starts when code is pushed or a pull request is opened. It installs dependencies, runs static checks, and builds the Angular frontend and Java backend. Then it runs unit and integration tests. If the checks pass, the pipeline packages the application, for example as a Docker image, and publishes an artifact. The team deploys it to staging, verifies health checks and key user flows, and then promotes the same artifact to production with monitoring and a rollback plan. Tools can include GitHub Actions, GitLab CI, or Jenkins.', answerVi: 'Pipeline thông thường bắt đầu khi code được push hoặc pull request được tạo. Pipeline cài dependency, chạy kiểm tra tĩnh, build frontend Angular và backend Java, rồi chạy unit test và integration test. Nếu đạt, pipeline đóng gói ứng dụng, chẳng hạn thành Docker image, và lưu artifact. Nhóm triển khai lên staging, xác minh health check cùng luồng người dùng chính, rồi đưa chính artifact đó lên production kèm giám sát và kế hoạch rollback. Công cụ có thể gồm GitHub Actions, GitLab CI hoặc Jenkins.' },
+  { id: 'cloud-experience', short: 'Kinh nghiệm cloud thật', category: 'Kinh nghiệm · Trung thực', prompt: 'How much hands-on experience do you have with AWS and CI/CD?', translation: 'Bạn có bao nhiêu kinh nghiệm thực tế với AWS và CI/CD?', tip: 'Nếu chưa làm thật, nói thẳng mức kinh nghiệm, mô tả kiến thức đã học và cách bạn đang thực hành.', answer: 'My hands-on experience with AWS and CI/CD is {{awsExperience}}. I understand the basic purpose of services such as EC2, S3, and RDS. I have studied CI/CD concepts including build, automated testing, artifact creation, and deployment to staging. I do not want to overstate my production experience, but I am comfortable learning the team workflow and practicing with a small project.', answerVi: 'Kinh nghiệm thực tế của tôi với AWS và CI/CD là {{awsExperience}}. Tôi hiểu mục đích cơ bản của các dịch vụ như EC2, S3 và RDS. Tôi đã học các khái niệm CI/CD gồm build, kiểm thử tự động, tạo artifact và triển khai staging. Tôi không muốn nói quá kinh nghiệm production của mình, nhưng tôi sẵn sàng học quy trình của nhóm và thực hành bằng dự án nhỏ.' },
+  { id: 'deployment-failure', short: 'Deploy lỗi & rollback', category: 'DevOps · Incident response', prompt: 'What would you do if a production deployment caused errors?', translation: 'Bạn sẽ làm gì nếu lần triển khai production gây ra lỗi?', tip: 'Ưu tiên ảnh hưởng người dùng, phối hợp nhóm, rollback an toàn, điều tra nguyên nhân và ngăn tái diễn.', answer: 'First, I would confirm the impact and follow the incident process. I would check monitoring, logs, and the deployment timeline to understand what changed. If users are affected and a safe rollback is available, I would coordinate with the team to restore the previous stable version. After service recovery, I would investigate the root cause, add or improve tests, and document follow-up actions. I would keep stakeholders updated with clear and factual information.', answerVi: 'Trước tiên, tôi xác nhận mức ảnh hưởng và làm theo quy trình xử lý sự cố. Tôi kiểm tra monitoring, log và thời điểm triển khai để hiểu thay đổi nào vừa xảy ra. Nếu người dùng bị ảnh hưởng và có thể rollback an toàn, tôi phối hợp với nhóm để khôi phục phiên bản ổn định trước đó. Sau khi dịch vụ hoạt động lại, tôi điều tra nguyên nhân gốc, bổ sung hoặc cải thiện kiểm thử và ghi lại việc cần làm tiếp. Tôi cập nhật cho các bên liên quan bằng thông tin rõ ràng, đúng sự thật.' },
+];
+
+const vocabGroups = [
+  { id: 'java', label: 'Java & Spring', words: [
+    { term: 'backend service', pronunciation: '/ˈbæk.end ˈsɜː.vɪs/', meaning: 'dịch vụ phía máy chủ', example: 'I built a backend service with Spring Boot.', translation: 'Tôi xây dựng một dịch vụ backend bằng Spring Boot.' },
+    { term: 'dependency injection', pronunciation: '/dɪˈpen.dən.si ɪnˈdʒek.ʃən/', meaning: 'tiêm phụ thuộc; cách cung cấp dependency từ bên ngoài', example: 'Spring uses dependency injection to manage application components.', translation: 'Spring dùng dependency injection để quản lý các thành phần ứng dụng.' },
+    { term: 'business logic', pronunciation: '/ˈbɪz.nəs ˈlɒdʒ.ɪk/', meaning: 'logic nghiệp vụ', example: 'I keep business logic separate from the controller.', translation: 'Tôi tách logic nghiệp vụ khỏi controller.' },
+    { term: 'unit test', pronunciation: '/ˈjuː.nɪt test/', meaning: 'kiểm thử đơn vị', example: 'I use JUnit to write unit tests for the service layer.', translation: 'Tôi dùng JUnit để viết unit test cho tầng service.' },
+    { term: 'object-oriented programming (OOP)', pronunciation: '/ˈɒb.dʒɪkt ˈɔː.ri.en.tɪd ˈprəʊ.ɡræm.ɪŋ/', meaning: 'lập trình hướng đối tượng', example: 'Java is an object-oriented programming language.', translation: 'Java là ngôn ngữ lập trình hướng đối tượng.' },
+    { term: 'class and object', pronunciation: '/klɑːs ænd ˈɒb.dʒɪkt/', meaning: 'lớp và đối tượng', example: 'A class defines the structure, and an object is an instance of that class.', translation: 'Lớp định nghĩa cấu trúc, còn đối tượng là một thể hiện của lớp đó.' },
+    { term: 'inheritance', pronunciation: '/ɪnˈher.ɪ.təns/', meaning: 'tính kế thừa', example: 'Inheritance lets a class reuse behavior from a parent class.', translation: 'Tính kế thừa cho phép một lớp dùng lại hành vi từ lớp cha.' },
+    { term: 'polymorphism', pronunciation: '/ˌpɒl.iˈmɔː.fɪ.zəm/', meaning: 'tính đa hình', example: 'Polymorphism allows different classes to provide different implementations.', translation: 'Tính đa hình cho phép các lớp khác nhau cung cấp cách triển khai khác nhau.' },
+    { term: 'exception handling', pronunciation: '/ɪkˈsep.ʃən ˈhæn.dəl.ɪŋ/', meaning: 'xử lý ngoại lệ', example: 'Good exception handling makes failures easier to understand.', translation: 'Xử lý ngoại lệ tốt giúp hiểu lỗi dễ dàng hơn.' },
+    { term: 'Spring container', pronunciation: '/sprɪŋ kənˈteɪ.nər/', meaning: 'bộ chứa quản lý các bean trong Spring', example: 'The Spring container creates and manages application beans.', translation: 'Spring container tạo và quản lý các bean của ứng dụng.' },
+    { term: 'bean', pronunciation: '/biːn/', meaning: 'đối tượng do Spring quản lý', example: 'I register the service as a Spring bean.', translation: 'Tôi đăng ký service thành một Spring bean.' },
+    { term: 'Spring Data JPA', pronunciation: '/sprɪŋ ˈdeɪ.tə ˌdʒeɪ.piːˈeɪ/', meaning: 'thư viện Spring hỗ trợ truy cập dữ liệu qua JPA', example: 'Spring Data JPA reduces boilerplate code for data access.', translation: 'Spring Data JPA giảm code lặp khi truy cập dữ liệu.' },
+    { term: 'entity', pronunciation: '/ˈen.tɪ.ti/', meaning: 'thực thể ánh xạ với dữ liệu trong cơ sở dữ liệu', example: 'The User entity maps to the users table.', translation: 'Entity User ánh xạ với bảng users.' },
+    { term: 'transaction', pronunciation: '/trænˈzæk.ʃən/', meaning: 'giao dịch cơ sở dữ liệu', example: 'A transaction keeps related database changes consistent.', translation: 'Transaction giữ các thay đổi liên quan trong cơ sở dữ liệu nhất quán.' },
+    { term: 'authentication and authorization', pronunciation: '/ɔːˌθen.tɪˈkeɪ.ʃən ænd ˌɔː.θər.aɪˈzeɪ.ʃən/', meaning: 'xác thực danh tính và phân quyền', example: 'Authentication verifies the user, while authorization checks permissions.', translation: 'Authentication xác minh người dùng, còn authorization kiểm tra quyền.' },
+    { term: 'Spring MVC', pronunciation: '/sprɪŋ ˌem.viːˈsiː/', meaning: 'mô hình web MVC trong hệ sinh thái Spring', example: 'Spring MVC maps HTTP requests to controller methods.', translation: 'Spring MVC ánh xạ yêu cầu HTTP tới các phương thức controller.' },
+    { term: 'controller layer', pronunciation: '/kənˈtrəʊ.lər ˈleɪ.ər/', meaning: 'tầng tiếp nhận và điều phối yêu cầu', example: 'The controller layer handles the HTTP request and response.', translation: 'Tầng controller xử lý yêu cầu và phản hồi HTTP.' },
+    { term: 'service layer', pronunciation: '/ˈsɜː.vɪs ˈleɪ.ər/', meaning: 'tầng chứa logic nghiệp vụ', example: 'The service layer coordinates business operations.', translation: 'Tầng service điều phối các thao tác nghiệp vụ.' },
+    { term: 'repository layer', pronunciation: '/rɪˈpɒz.ɪ.tər.i ˈleɪ.ər/', meaning: 'tầng truy cập và lưu trữ dữ liệu', example: 'The repository layer isolates database access.', translation: 'Tầng repository tách biệt việc truy cập cơ sở dữ liệu.' },
+    { term: 'DTO (data transfer object)', pronunciation: '/ˌdiː.tiːˈəʊ/', meaning: 'đối tượng truyền dữ liệu giữa các tầng hoặc qua API', example: 'I use DTOs to control which fields are exposed by the API.', translation: 'Tôi dùng DTO để kiểm soát trường nào được API cung cấp.' },
+    { term: 'dependency inversion', pronunciation: '/dɪˈpen.dən.si ɪnˈvɜː.ʃən/', meaning: 'nguyên tắc đảo ngược phụ thuộc', example: 'Dependency inversion helps keep high-level logic independent of implementation details.', translation: 'Đảo ngược phụ thuộc giúp logic cấp cao không phụ thuộc chi tiết triển khai.' },
+    { term: 'SOLID principles', pronunciation: '/ˈsɒl.ɪd ˈprɪn.sə.pəlz/', meaning: 'năm nguyên tắc thiết kế hướng đối tượng', example: 'I apply SOLID principles when they make the code easier to change.', translation: 'Tôi áp dụng SOLID khi chúng giúp code dễ thay đổi hơn.' },
+    { term: 'interface segregation', pronunciation: '/ˈɪn.tə.feɪs ˌseɡ.rɪˈɡeɪ.ʃən/', meaning: 'nguyên tắc tách interface nhỏ theo nhu cầu sử dụng', example: 'Interface segregation avoids forcing classes to implement unused methods.', translation: 'Nguyên tắc này tránh buộc lớp triển khai các phương thức không dùng.' },
+    { term: 'mock object', pronunciation: '/mɒk ˈɒb.dʒɪkt/', meaning: 'đối tượng giả lập trong kiểm thử', example: 'I use Mockito to create mock objects for external dependencies.', translation: 'Tôi dùng Mockito tạo đối tượng giả lập cho dependency bên ngoài.' },
+    { term: 'integration test', pronunciation: '/ˌɪn.tɪˈɡreɪ.ʃən test/', meaning: 'kiểm thử tích hợp giữa nhiều thành phần', example: 'Integration tests verify that the API works with the database.', translation: 'Integration test xác nhận API hoạt động với cơ sở dữ liệu.' },
+    { term: 'logging', pronunciation: '/ˈlɒɡ.ɪŋ/', meaning: 'ghi nhật ký hoạt động của ứng dụng', example: 'Useful logging helps us diagnose errors in production.', translation: 'Log hữu ích giúp chẩn đoán lỗi trên production.' },
+  ]},
+  { id: 'angular', label: 'Angular & RxJS', words: [
+    { term: 'reusable component', pronunciation: '/ˌriːˈjuː.zə.bəl kəmˈpəʊ.nənt/', meaning: 'thành phần có thể tái sử dụng', example: 'I created reusable components for common form fields.', translation: 'Tôi tạo các component có thể tái sử dụng cho những trường biểu mẫu phổ biến.' },
+    { term: 'Observable', pronunciation: '/əbˈzɜː.və.bəl/', meaning: 'luồng dữ liệu bất đồng bộ trong RxJS', example: 'The service returns an Observable from the API request.', translation: 'Service trả về một Observable từ yêu cầu API.' },
+    { term: 'state management', pronunciation: '/steɪt ˈmæn.ɪdʒ.mənt/', meaning: 'quản lý trạng thái ứng dụng', example: 'RxJS helps us manage asynchronous state in the application.', translation: 'RxJS giúp quản lý trạng thái bất đồng bộ trong ứng dụng.' },
+    { term: 'responsive interface', pronunciation: '/rɪˈspɒn.sɪv ˈɪn.tə.feɪs/', meaning: 'giao diện thích ứng theo kích thước màn hình', example: 'We tested the responsive interface on mobile and desktop.', translation: 'Chúng tôi kiểm tra giao diện thích ứng trên điện thoại và máy tính.' },
+    { term: 'directive', pronunciation: '/dəˈrek.tɪv/', meaning: 'chỉ thị bổ sung hành vi cho phần tử giao diện', example: 'I use a directive to apply consistent behavior to form fields.', translation: 'Tôi dùng directive để áp dụng hành vi nhất quán cho các trường biểu mẫu.' },
+    { term: 'dependency', pronunciation: '/dɪˈpen.dən.si/', meaning: 'phụ thuộc; thư viện hoặc dịch vụ mà một thành phần cần dùng', example: 'The component gets its data through an injected service dependency.', translation: 'Component nhận dữ liệu thông qua service dependency được inject.' },
+    { term: 'Angular service', pronunciation: '/ˈæŋ.ɡjə.lər ˈsɜː.vɪs/', meaning: 'dịch vụ Angular chứa logic dùng chung hoặc gọi API', example: 'I put reusable API logic in an Angular service.', translation: 'Tôi đặt logic API dùng chung trong Angular service.' },
+    { term: 'subscription', pronunciation: '/səbˈskrɪp.ʃən/', meaning: 'đăng ký nhận dữ liệu từ Observable', example: 'I clean up subscriptions to avoid memory leaks.', translation: 'Tôi dọn subscription để tránh rò rỉ bộ nhớ.' },
+    { term: 'memory leak', pronunciation: '/ˈmem.ər.i liːk/', meaning: 'rò rỉ bộ nhớ', example: 'An unclosed subscription can cause a memory leak.', translation: 'Subscription không được đóng có thể gây rò rỉ bộ nhớ.' },
+    { term: 'operator', pronunciation: '/ˈɒp.ər.eɪ.tər/', meaning: 'toán tử xử lý dữ liệu trong RxJS', example: 'I use RxJS operators to transform and combine data streams.', translation: 'Tôi dùng RxJS operator để biến đổi và kết hợp luồng dữ liệu.' },
+    { term: 'reactive form', pronunciation: '/riˈæk.tɪv fɔːm/', meaning: 'biểu mẫu reactive trong Angular', example: 'Reactive forms make complex validation easier to manage.', translation: 'Reactive form giúp quản lý xác thực phức tạp dễ hơn.' },
+    { term: 'form validation', pronunciation: '/fɔːm ˌvæl.ɪˈdeɪ.ʃən/', meaning: 'xác thực dữ liệu biểu mẫu', example: 'We show clear validation messages next to each field.', translation: 'Chúng tôi hiện thông báo xác thực rõ ràng bên cạnh từng trường.' },
+    { term: 'lazy loading', pronunciation: '/ˈleɪ.zi ˈləʊ.dɪŋ/', meaning: 'tải nội dung khi cần', example: 'Lazy loading can reduce the initial bundle size.', translation: 'Lazy loading có thể giảm kích thước bundle ban đầu.' },
+    { term: 'change detection', pronunciation: '/tʃeɪndʒ dɪˈtek.ʃən/', meaning: 'cơ chế phát hiện thay đổi của Angular', example: 'Change detection updates the view when application data changes.', translation: 'Change detection cập nhật giao diện khi dữ liệu ứng dụng thay đổi.' },
+    { term: 'type safety', pronunciation: '/taɪp ˈseɪf.ti/', meaning: 'an toàn kiểu dữ liệu', example: 'Type safety helps catch certain errors during development.', translation: 'An toàn kiểu dữ liệu giúp phát hiện một số lỗi trong lúc phát triển.' },
+    { term: 'interface (TypeScript)', pronunciation: '/ˈɪn.tə.feɪs/', meaning: 'khai báo hình dạng dữ liệu trong TypeScript', example: 'I define an interface for the API response.', translation: 'Tôi khai báo interface cho dữ liệu trả về từ API.' },
+    { term: 'Angular module', pronunciation: '/ˈæŋ.ɡjə.lər ˈmɒdʒ.uːl/', meaning: 'đơn vị tổ chức khai báo trong Angular', example: 'The module groups related components and services.', translation: 'Module nhóm các component và service có liên quan.' },
+    { term: 'standalone component', pronunciation: '/ˈstænd.ə.ləʊn kəmˈpəʊ.nənt/', meaning: 'component Angular độc lập, không cần khai báo trong NgModule', example: 'A standalone component can import its own dependencies.', translation: 'Standalone component có thể tự import các dependency.' },
+    { term: 'template binding', pronunciation: '/ˈtem.pleɪt ˈbaɪn.dɪŋ/', meaning: 'liên kết dữ liệu giữa template và component', example: 'Template binding keeps the view in sync with component data.', translation: 'Template binding giữ giao diện đồng bộ với dữ liệu component.' },
+    { term: 'event handling', pronunciation: '/ɪˈvent ˈhæn.dəl.ɪŋ/', meaning: 'xử lý sự kiện giao diện', example: 'Event handling lets the component respond to user actions.', translation: 'Xử lý sự kiện giúp component phản hồi thao tác người dùng.' },
+    { term: 'route guard', pronunciation: '/ruːt ɡɑːd/', meaning: 'bộ bảo vệ điều hướng trang', example: 'A route guard can prevent unauthorized access to a page.', translation: 'Route guard có thể ngăn truy cập trái phép vào trang.' },
+    { term: 'lazy-loaded route', pronunciation: '/ˈleɪ.zi ləʊ.dɪd ruːt/', meaning: 'tuyến trang chỉ được tải khi cần', example: 'We lazy-load less frequently used sections of the application.', translation: 'Chúng tôi lazy-load các phần ít được dùng của ứng dụng.' },
+    { term: 'pipe', pronunciation: '/paɪp/', meaning: 'công cụ biến đổi dữ liệu hiển thị trong template Angular', example: 'The date pipe formats a timestamp for display.', translation: 'Date pipe định dạng dấu thời gian để hiển thị.' },
+    { term: 'async pipe', pronunciation: '/ˈeɪ.sɪŋk paɪp/', meaning: 'pipe tự đăng ký và hủy đăng ký Observable trong template', example: 'The async pipe subscribes to the Observable and updates the view.', translation: 'Async pipe đăng ký Observable và cập nhật giao diện.' },
+    { term: 'Subject', pronunciation: '/ˈsʌb.dʒɪkt/', meaning: 'đối tượng RxJS vừa phát vừa nhận giá trị', example: 'A Subject can multicast values to multiple subscribers.', translation: 'Subject có thể phát cùng giá trị tới nhiều subscriber.' },
+    { term: 'BehaviorSubject', pronunciation: '/bɪˈheɪv.jər ˌsʌb.dʒɪkt/', meaning: 'Subject giữ giá trị mới nhất và phát ngay cho subscriber mới', example: 'A BehaviorSubject is useful for sharing the latest state.', translation: 'BehaviorSubject hữu ích để chia sẻ trạng thái mới nhất.' },
+    { term: 'debouncing', pronunciation: '/diːˈbaʊn.sɪŋ/', meaning: 'trì hoãn xử lý đến khi người dùng ngừng thao tác một khoảng thời gian', example: 'Debouncing search input prevents unnecessary API calls.', translation: 'Debounce ô tìm kiếm giúp tránh gọi API không cần thiết.' },
+  ]},
+  { id: 'api', label: 'API & Database', words: [
+    { term: 'endpoint', pronunciation: '/ˈend.pɔɪnt/', meaning: 'điểm cuối API; địa chỉ để truy cập một chức năng', example: 'This endpoint returns a list of active users.', translation: 'Endpoint này trả về danh sách người dùng đang hoạt động.' },
+    { term: 'relational database', pronunciation: '/rɪˈleɪ.ʃən.əl ˈdeɪ.tə.beɪs/', meaning: 'cơ sở dữ liệu quan hệ', example: 'We store transactional data in a relational database.', translation: 'Chúng tôi lưu dữ liệu giao dịch trong cơ sở dữ liệu quan hệ.' },
+    { term: 'query optimization', pronunciation: '/ˈkwɪə.ri ˌɒp.tɪ.maɪˈzeɪ.ʃən/', meaning: 'tối ưu hóa truy vấn', example: 'I used an index to improve query performance.', translation: 'Tôi dùng index để cải thiện hiệu năng truy vấn.' },
+    { term: 'third-party integration', pronunciation: '/ˌθɜːd ˈpɑː.ti ˌɪn.tɪˈɡreɪ.ʃən/', meaning: 'tích hợp dịch vụ bên thứ ba', example: 'The application supports a third-party payment integration.', translation: 'Ứng dụng hỗ trợ tích hợp thanh toán bên thứ ba.' },
+    { term: 'request and response', pronunciation: '/rɪˈkwest ænd rɪˈspɒns/', meaning: 'yêu cầu và phản hồi', example: 'The client sends a request, and the server returns a response.', translation: 'Client gửi yêu cầu và server trả về phản hồi.' },
+    { term: 'HTTP status code', pronunciation: '/ˌeɪtʃ.tiː.tiː.piː ˈsteɪ.təs kəʊd/', meaning: 'mã trạng thái HTTP', example: 'We return the appropriate HTTP status code for each outcome.', translation: 'Chúng tôi trả mã trạng thái HTTP phù hợp cho từng kết quả.' },
+    { term: 'input validation', pronunciation: '/ˈɪn.pʊt ˌvæl.ɪˈdeɪ.ʃən/', meaning: 'kiểm tra dữ liệu đầu vào', example: 'Input validation prevents invalid data from reaching the service.', translation: 'Kiểm tra đầu vào ngăn dữ liệu không hợp lệ đi vào service.' },
+    { term: 'schema', pronunciation: '/ˈskiː.mə/', meaning: 'lược đồ cấu trúc cơ sở dữ liệu', example: 'We updated the schema to support the new business requirement.', translation: 'Chúng tôi cập nhật schema để hỗ trợ yêu cầu nghiệp vụ mới.' },
+    { term: 'primary key', pronunciation: '/ˈpraɪ.mər.i kiː/', meaning: 'khóa chính', example: 'Each record has a unique primary key.', translation: 'Mỗi bản ghi có một khóa chính duy nhất.' },
+    { term: 'foreign key', pronunciation: '/ˈfɒr.ən kiː/', meaning: 'khóa ngoại', example: 'A foreign key represents a relationship between two tables.', translation: 'Khóa ngoại thể hiện mối quan hệ giữa hai bảng.' },
+    { term: 'database index', pronunciation: '/ˈdeɪ.tə.beɪs ˈɪn.deks/', meaning: 'chỉ mục cơ sở dữ liệu', example: 'An index can speed up reads, but it also adds storage and write overhead.', translation: 'Index có thể tăng tốc đọc nhưng cũng tốn bộ nhớ và làm tăng chi phí ghi.' },
+    { term: 'join', pronunciation: '/dʒɔɪn/', meaning: 'phép kết hợp dữ liệu từ nhiều bảng', example: 'I use a join to retrieve related records from two tables.', translation: 'Tôi dùng join để lấy các bản ghi liên quan từ hai bảng.' },
+    { term: 'pagination', pronunciation: '/ˌpædʒ.ɪˈneɪ.ʃən/', meaning: 'phân trang kết quả', example: 'Pagination helps the API return large result sets efficiently.', translation: 'Phân trang giúp API trả tập kết quả lớn hiệu quả hơn.' },
+    { term: 'database migration', pronunciation: '/ˈdeɪ.tə.beɪs maɪˈɡreɪ.ʃən/', meaning: 'thay đổi cấu trúc cơ sở dữ liệu có kiểm soát', example: 'We use database migrations to track schema changes.', translation: 'Chúng tôi dùng migration để theo dõi thay đổi schema.' },
+    { term: 'connection pool', pronunciation: '/kəˈnek.ʃən puːl/', meaning: 'tập kết nối cơ sở dữ liệu được tái sử dụng', example: 'A connection pool avoids opening a new database connection for every request.', translation: 'Connection pool tránh tạo kết nối mới cho mỗi yêu cầu.' },
+    { term: 'SQL query', pronunciation: '/ˌes.kjuːˈel ˈkwɪə.ri/', meaning: 'câu truy vấn SQL', example: 'I reviewed the SQL query plan to understand the slow operation.', translation: 'Tôi xem execution plan của truy vấn SQL để hiểu thao tác chậm.' },
+    { term: 'normalization', pronunciation: '/ˌnɔː.məl.aɪˈzeɪ.ʃən/', meaning: 'chuẩn hóa dữ liệu và cấu trúc bảng', example: 'Normalization reduces duplicated data across related tables.', translation: 'Chuẩn hóa giảm dữ liệu trùng lặp giữa các bảng liên quan.' },
+    { term: 'denormalization', pronunciation: '/diːˌnɔː.məl.aɪˈzeɪ.ʃən/', meaning: 'phi chuẩn hóa để tối ưu một số truy vấn đọc', example: 'We considered denormalization for a read-heavy report.', translation: 'Chúng tôi cân nhắc phi chuẩn hóa cho báo cáo có nhiều thao tác đọc.' },
+    { term: 'query execution plan', pronunciation: '/ˈkwɪə.ri ˌek.sɪˈkjuː.ʃən plæn/', meaning: 'kế hoạch thực thi truy vấn', example: 'The execution plan showed that the query was scanning the entire table.', translation: 'Execution plan cho thấy truy vấn đang quét toàn bộ bảng.' },
+    { term: 'full table scan', pronunciation: '/fʊl ˈteɪ.bəl skæn/', meaning: 'quét toàn bộ bảng dữ liệu', example: 'A full table scan can be expensive on a large table.', translation: 'Quét toàn bộ bảng có thể tốn kém với bảng lớn.' },
+    { term: 'composite index', pronunciation: '/ˈkɒm.pə.zɪt ˈɪn.deks/', meaning: 'chỉ mục ghép trên nhiều cột', example: 'A composite index can help queries that filter by both columns.', translation: 'Index ghép có thể giúp truy vấn lọc theo cả hai cột.' },
+    { term: 'ACID properties', pronunciation: '/ˈæs.ɪd ˈprɒp.ə.tiz/', meaning: 'tính nguyên tử, nhất quán, cô lập và bền vững của transaction', example: 'ACID properties help preserve database correctness.', translation: 'Các tính chất ACID giúp bảo đảm tính đúng đắn của cơ sở dữ liệu.' },
+    { term: 'isolation level', pronunciation: '/ˌaɪ.səlˈeɪ.ʃən ˈlev.əl/', meaning: 'mức cô lập giao dịch', example: 'The isolation level determines how concurrent transactions interact.', translation: 'Mức cô lập xác định cách các transaction đồng thời tương tác.' },
+    { term: 'deadlock', pronunciation: '/ˈded.lɒk/', meaning: 'tình trạng các transaction chờ khóa lẫn nhau', example: 'We reviewed transaction order to reduce the risk of deadlocks.', translation: 'Chúng tôi xem lại thứ tự transaction để giảm nguy cơ deadlock.' },
+    { term: 'optimistic locking', pronunciation: '/ˌɒp.tɪˈmɪs.tɪk ˈlɒk.ɪŋ/', meaning: 'khóa lạc quan; phát hiện xung đột khi cập nhật', example: 'Optimistic locking works well when write conflicts are uncommon.', translation: 'Khóa lạc quan phù hợp khi xung đột ghi không thường xuyên.' },
+    { term: 'stored procedure', pronunciation: '/stɔːd prəˈsiː.dʒər/', meaning: 'thủ tục lưu trữ trong cơ sở dữ liệu', example: 'The legacy system uses a stored procedure for monthly reports.', translation: 'Hệ thống cũ dùng stored procedure cho báo cáo hàng tháng.' },
+    { term: 'data integrity', pronunciation: '/ˈdeɪ.tə ɪnˈteɡ.rə.ti/', meaning: 'tính toàn vẹn dữ liệu', example: 'Foreign key constraints help maintain data integrity.', translation: 'Ràng buộc khóa ngoại giúp duy trì tính toàn vẹn dữ liệu.' },
+  ]},
+  { id: 'team', label: 'Công việc & teamwork', words: [
+    { term: 'code review', pronunciation: '/kəʊd rɪˈvjuː/', meaning: 'đánh giá mã nguồn', example: 'I address feedback from code reviews before merging.', translation: 'Tôi xử lý góp ý từ code review trước khi merge.' },
+    { term: 'root cause', pronunciation: '/ruːt kɔːz/', meaning: 'nguyên nhân gốc rễ', example: 'We investigated the root cause of the production issue.', translation: 'Chúng tôi điều tra nguyên nhân gốc của sự cố production.' },
+    { term: 'cross-functional team', pronunciation: '/ˌkrɒs ˈfʌŋk.ʃən.əl tiːm/', meaning: 'nhóm gồm nhiều vai trò chuyên môn khác nhau', example: 'I work with a cross-functional team of developers, QA, and product managers.', translation: 'Tôi làm việc với nhóm gồm lập trình viên, QA và quản lý sản phẩm.' },
+    { term: 'meet a deadline', pronunciation: '/miːt ə ˈded.laɪn/', meaning: 'hoàn thành đúng thời hạn', example: 'We broke the work into smaller tasks to meet the deadline.', translation: 'Chúng tôi chia công việc thành các nhiệm vụ nhỏ để hoàn thành đúng hạn.' },
+    { term: 'requirement', pronunciation: '/rɪˈkwaɪə.mənt/', meaning: 'yêu cầu nghiệp vụ hoặc yêu cầu hệ thống', example: 'I confirm the requirement with the product manager before coding.', translation: 'Tôi xác nhận yêu cầu với quản lý sản phẩm trước khi viết code.' },
+    { term: 'acceptance criteria', pronunciation: '/əkˈsep.təns kraɪˈtɪə.ri.ə/', meaning: 'tiêu chí chấp nhận tính năng', example: 'We use acceptance criteria to agree on what done means.', translation: 'Chúng tôi dùng tiêu chí chấp nhận để thống nhất thế nào là hoàn thành.' },
+    { term: 'pull request', pronunciation: '/pʊl rɪˈkwest/', meaning: 'yêu cầu đưa thay đổi code vào nhánh chung', example: 'I opened a pull request and asked a teammate to review it.', translation: 'Tôi tạo pull request và nhờ đồng đội review.' },
+    { term: 'merge conflict', pronunciation: '/mɜːdʒ ˈkɒn.flɪkt/', meaning: 'xung đột khi gộp thay đổi code', example: 'We resolved the merge conflict and ran the relevant checks again.', translation: 'Chúng tôi xử lý xung đột merge và chạy lại các bước kiểm tra liên quan.' },
+    { term: 'regression', pronunciation: '/rɪˈɡreʃ.ən/', meaning: 'lỗi phát sinh lại hoặc ảnh hưởng chức năng cũ', example: 'The regression test verifies that the old behavior still works.', translation: 'Kiểm thử regression xác nhận hành vi cũ vẫn hoạt động.' },
+    { term: 'deployment', pronunciation: '/dɪˈplɔɪ.mənt/', meaning: 'triển khai phần mềm lên môi trường chạy', example: 'We deploy the change after the pipeline passes.', translation: 'Chúng tôi triển khai thay đổi sau khi pipeline chạy đạt.' },
+    { term: 'continuous integration (CI)', pronunciation: '/kənˈtɪn.ju.əs ˌɪn.tɪˈɡreɪ.ʃən/', meaning: 'tích hợp liên tục', example: 'Continuous integration runs automated checks for every pull request.', translation: 'CI chạy kiểm tra tự động cho mỗi pull request.' },
+    { term: 'sprint', pronunciation: '/sprɪnt/', meaning: 'chu kỳ làm việc ngắn trong Scrum', example: 'We plan the sprint based on priority and team capacity.', translation: 'Chúng tôi lập kế hoạch sprint dựa trên ưu tiên và năng lực nhóm.' },
+    { term: 'blocker', pronunciation: '/ˈblɒk.ər/', meaning: 'trở ngại đang ngăn công việc tiến triển', example: 'I raise a blocker early so the team can help resolve it.', translation: 'Tôi báo sớm trở ngại để nhóm cùng giải quyết.' },
+    { term: 'trade-off', pronunciation: '/ˈtreɪd.ɒf/', meaning: 'sự đánh đổi giữa các lựa chọn', example: 'We discussed the trade-off between implementation speed and flexibility.', translation: 'Chúng tôi thảo luận sự đánh đổi giữa tốc độ triển khai và tính linh hoạt.' },
+    { term: 'production issue', pronunciation: '/prəˈdʌk.ʃən ˈɪʃ.uː/', meaning: 'sự cố trên môi trường production', example: 'I helped investigate a production issue and prepared a safe fix.', translation: 'Tôi hỗ trợ điều tra sự cố production và chuẩn bị cách sửa an toàn.' },
+    { term: 'technical debt', pronunciation: '/ˈtek.nɪ.kəl det/', meaning: 'nợ kỹ thuật; chi phí phát sinh từ giải pháp tạm hoặc thiết kế chưa tốt', example: 'We document technical debt and plan time to address high-risk areas.', translation: 'Chúng tôi ghi nhận nợ kỹ thuật và lên kế hoạch xử lý vùng có rủi ro cao.' },
+    { term: 'business stakeholder', pronunciation: '/ˈbɪz.nəs ˈsteɪkˌhəʊl.dər/', meaning: 'bên liên quan nghiệp vụ', example: 'I confirm the expected workflow with the business stakeholder.', translation: 'Tôi xác nhận quy trình mong muốn với bên liên quan nghiệp vụ.' },
+    { term: 'clarify expectations', pronunciation: '/ˈklær.ɪ.faɪ ˌek.spekˈteɪ.ʃənz/', meaning: 'làm rõ kỳ vọng', example: 'I clarify expectations before estimating the work.', translation: 'Tôi làm rõ kỳ vọng trước khi ước lượng công việc.' },
+    { term: 'estimate effort', pronunciation: '/ˈes.tɪ.meɪt ˈef.ət/', meaning: 'ước lượng công sức cần thiết', example: 'We estimate effort together and discuss unknowns.', translation: 'Chúng tôi cùng ước lượng công sức và thảo luận các điểm chưa rõ.' },
+    { term: 'status update', pronunciation: '/ˈsteɪ.təs ʌpˌdeɪt/', meaning: 'cập nhật tình trạng công việc', example: 'I give a concise status update during the daily stand-up.', translation: 'Tôi cập nhật ngắn gọn tình trạng công việc trong họp đứng hàng ngày.' },
+    { term: 'constructive feedback', pronunciation: '/kənˈstrʌk.tɪv ˈfiːd.bæk/', meaning: 'phản hồi mang tính xây dựng', example: 'I try to give specific and constructive feedback in code reviews.', translation: 'Tôi cố gắng góp ý cụ thể và mang tính xây dựng khi review code.' },
+    { term: 'knowledge sharing', pronunciation: '/ˈnɒl.ɪdʒ ˌʃeə.rɪŋ/', meaning: 'chia sẻ kiến thức', example: 'I document recurring issues to support knowledge sharing.', translation: 'Tôi ghi tài liệu các lỗi lặp lại để hỗ trợ chia sẻ kiến thức.' },
+    { term: 'root cause analysis', pronunciation: '/ruːt kɔːz əˈnæl.ə.sɪs/', meaning: 'phân tích nguyên nhân gốc', example: 'We performed root cause analysis after the service outage.', translation: 'Chúng tôi phân tích nguyên nhân gốc sau khi dịch vụ ngừng hoạt động.' },
+    { term: 'mitigate risk', pronunciation: '/ˈmɪt.ɪ.ɡeɪt rɪsk/', meaning: 'giảm thiểu rủi ro', example: 'We added a rollback plan to mitigate deployment risk.', translation: 'Chúng tôi thêm kế hoạch rollback để giảm rủi ro triển khai.' },
+    { term: 'workaround', pronunciation: '/ˈwɜːk.ə.raʊnd/', meaning: 'cách xử lý tạm thời', example: 'We provided a workaround while preparing a permanent fix.', translation: 'Chúng tôi đưa ra cách xử lý tạm thời trong khi chuẩn bị bản sửa lâu dài.' },
+    { term: 'permanent fix', pronunciation: '/ˈpɜː.mə.nənt fɪks/', meaning: 'cách sửa triệt để, lâu dài', example: 'The permanent fix addresses the underlying issue.', translation: 'Cách sửa lâu dài xử lý vấn đề nền tảng.' },
+    { term: 'handover', pronunciation: '/ˈhændˌəʊ.vər/', meaning: 'bàn giao công việc hoặc thông tin', example: 'I prepare a clear handover when another engineer takes over the task.', translation: 'Tôi chuẩn bị bàn giao rõ ràng khi kỹ sư khác tiếp nhận công việc.' },
+    { term: 'ownership', pronunciation: '/ˈəʊ.nə.ʃɪp/', meaning: 'tinh thần chịu trách nhiệm đến cùng', example: 'I take ownership of a task from clarification through release.', translation: 'Tôi chịu trách nhiệm một nhiệm vụ từ lúc làm rõ đến khi phát hành.' },
+  ]},
+  { id: 'cloud', label: 'AWS · CI/CD · DevOps', words: [
+    { term: 'cloud computing', pronunciation: '/klaʊd kəmˈpjuː.tɪŋ/', meaning: 'điện toán đám mây', example: 'Cloud computing provides infrastructure on demand.', translation: 'Điện toán đám mây cung cấp hạ tầng theo nhu cầu.' },
+    { term: 'AWS (Amazon Web Services)', pronunciation: '/ˌeɪ.dʌb.əl.juːˈes/', meaning: 'nền tảng dịch vụ đám mây của Amazon', example: 'The application can run on AWS cloud infrastructure.', translation: 'Ứng dụng có thể chạy trên hạ tầng đám mây AWS.' },
+    { term: 'Amazon EC2', pronunciation: '/ˈiː.siː.tuː/', meaning: 'dịch vụ máy chủ ảo trên AWS', example: 'An EC2 instance provides virtual compute capacity.', translation: 'EC2 cung cấp năng lực máy tính dưới dạng máy chủ ảo.' },
+    { term: 'Amazon S3', pronunciation: '/ˌes ˈθriː/', meaning: 'dịch vụ lưu trữ object trên AWS', example: 'We can store uploaded files in an S3 bucket.', translation: 'Ta có thể lưu file tải lên trong S3 bucket.' },
+    { term: 'Amazon RDS', pronunciation: '/ˌɑːr.diːˈes/', meaning: 'dịch vụ cơ sở dữ liệu quan hệ được quản lý của AWS', example: 'RDS manages common database operations such as backups.', translation: 'RDS quản lý các thao tác cơ sở dữ liệu phổ biến như sao lưu.' },
+    { term: 'AWS Lambda', pronunciation: '/ˈlæm.də/', meaning: 'dịch vụ chạy hàm theo sự kiện mà không quản lý máy chủ', example: 'Lambda runs code in response to an event.', translation: 'Lambda chạy code khi có sự kiện.' },
+    { term: 'Amazon VPC', pronunciation: '/ˌviː.piːˈsiː/', meaning: 'mạng ảo riêng trên AWS', example: 'A VPC lets us define an isolated network for cloud resources.', translation: 'VPC cho phép định nghĩa mạng tách biệt cho tài nguyên cloud.' },
+    { term: 'IAM role', pronunciation: '/ˌaɪ.eɪˈem rəʊl/', meaning: 'vai trò cấp quyền truy cập AWS cho người dùng hoặc dịch vụ', example: 'The application uses an IAM role instead of hard-coded credentials.', translation: 'Ứng dụng dùng IAM role thay cho thông tin xác thực ghi cứng.' },
+    { term: 'least privilege', pronunciation: '/liːst ˈprɪv.əl.ɪdʒ/', meaning: 'nguyên tắc cấp quyền tối thiểu cần thiết', example: 'We follow least privilege when granting access to AWS resources.', translation: 'Chúng tôi theo nguyên tắc quyền tối thiểu khi cấp quyền truy cập AWS.' },
+    { term: 'availability zone', pronunciation: '/əˌveɪ.ləˈbɪl.ə.ti zəʊn/', meaning: 'vùng trung tâm dữ liệu độc lập trong một AWS region', example: 'Deploying across availability zones can improve resilience.', translation: 'Triển khai qua nhiều availability zone có thể tăng khả năng chống chịu.' },
+    { term: 'load balancer', pronunciation: '/ləʊd ˈbæl.ən.sər/', meaning: 'bộ cân bằng tải giữa nhiều máy chủ', example: 'A load balancer distributes traffic across healthy instances.', translation: 'Load balancer phân phối lưu lượng qua các máy chủ khỏe mạnh.' },
+    { term: 'auto scaling', pronunciation: '/ˌɔː.təʊ ˈskeɪ.lɪŋ/', meaning: 'tự động tăng giảm số lượng tài nguyên theo tải', example: 'Auto scaling can add instances when traffic increases.', translation: 'Auto scaling có thể thêm máy chủ khi lưu lượng tăng.' },
+    { term: 'container image', pronunciation: '/kənˈteɪ.nər ˈɪm.ɪdʒ/', meaning: 'ảnh chứa ứng dụng và các phụ thuộc để chạy trong container', example: 'The pipeline builds a container image for each release.', translation: 'Pipeline tạo container image cho mỗi lần phát hành.' },
+    { term: 'Docker container', pronunciation: '/ˈdɒk.ər kənˈteɪ.nər/', meaning: 'môi trường đóng gói ứng dụng để chạy nhất quán', example: 'A Docker container packages the application with its runtime dependencies.', translation: 'Docker container đóng gói ứng dụng cùng các phụ thuộc runtime.' },
+    { term: 'container registry', pronunciation: '/kənˈteɪ.nər ˈredʒ.ɪ.stri/', meaning: 'kho lưu trữ container image', example: 'We push the image to a container registry before deployment.', translation: 'Chúng tôi đẩy image lên kho container trước khi triển khai.' },
+    { term: 'infrastructure as code (IaC)', pronunciation: '/ˈɪn.frə.strʌk.tʃər æz kəʊd/', meaning: 'quản lý hạ tầng bằng mã nguồn', example: 'Infrastructure as code makes environments repeatable.', translation: 'IaC giúp tạo các môi trường có thể lặp lại nhất quán.' },
+    { term: 'Terraform', pronunciation: '/ˈter.ə.fɔːrm/', meaning: 'công cụ khai báo và quản lý hạ tầng bằng code', example: 'Terraform can define cloud resources in version-controlled files.', translation: 'Terraform có thể khai báo tài nguyên cloud trong file được quản lý phiên bản.' },
+    { term: 'CI/CD pipeline', pronunciation: '/ˌsiː.aɪ ˌsiːˈdiː ˈpaɪp.laɪn/', meaning: 'quy trình tự động tích hợp, kiểm tra và chuyển giao phần mềm', example: 'The CI/CD pipeline runs tests before deploying a new version.', translation: 'Pipeline CI/CD chạy kiểm thử trước khi triển khai phiên bản mới.' },
+    { term: 'continuous integration (CI)', pronunciation: '/kənˈtɪn.ju.əs ˌɪn.tɪˈɡreɪ.ʃən/', meaning: 'tự động tích hợp và kiểm tra thay đổi code thường xuyên', example: 'CI runs the build and tests when a pull request is opened.', translation: 'CI chạy build và test khi pull request được tạo.' },
+    { term: 'continuous delivery (CD)', pronunciation: '/kənˈtɪn.ju.əs dɪˈlɪv.ər.i/', meaning: 'tự động chuẩn bị phần mềm để có thể phát hành', example: 'Continuous delivery keeps a verified build ready for release.', translation: 'Continuous delivery giữ bản build đã xác minh sẵn sàng phát hành.' },
+    { term: 'build stage', pronunciation: '/bɪld steɪdʒ/', meaning: 'bước biên dịch và đóng gói phần mềm', example: 'The build stage compiles the application and creates an artifact.', translation: 'Bước build biên dịch ứng dụng và tạo artifact.' },
+    { term: 'automated test stage', pronunciation: '/ˈɔː.tə.meɪ.tɪd test steɪdʒ/', meaning: 'bước pipeline tự động chạy kiểm thử', example: 'The automated test stage runs unit and integration tests.', translation: 'Bước test tự động chạy unit test và integration test.' },
+    { term: 'deployment stage', pronunciation: '/dɪˈplɔɪ.mənt steɪdʒ/', meaning: 'bước triển khai artifact lên môi trường', example: 'The deployment stage publishes the release to the staging environment.', translation: 'Bước deploy đưa bản phát hành lên môi trường staging.' },
+    { term: 'pipeline artifact', pronunciation: '/ˈpaɪp.laɪn ˈɑː.tɪ.fækt/', meaning: 'gói đầu ra được tạo ra trong pipeline', example: 'The same artifact is promoted from testing to production.', translation: 'Cùng một artifact được đưa lần lượt từ kiểm thử lên production.' },
+    { term: 'environment variable', pronunciation: '/ɪnˈvaɪ.rən.mənt ˈveə.ri.ə.bəl/', meaning: 'biến cấu hình theo môi trường chạy', example: 'We use environment variables for non-secret configuration.', translation: 'Chúng tôi dùng biến môi trường cho cấu hình không bí mật.' },
+    { term: 'secret management', pronunciation: '/ˈsiː.krət ˈmæn.ɪdʒ.mənt/', meaning: 'quản lý mật khẩu, token và khóa truy cập an toàn', example: 'Secret management prevents credentials from being committed to Git.', translation: 'Quản lý secret ngăn thông tin xác thực bị commit lên Git.' },
+    { term: 'deployment environment', pronunciation: '/dɪˈplɔɪ.mənt ɪnˈvaɪ.rən.mənt/', meaning: 'môi trường triển khai như development, staging hoặc production', example: 'We validate the release in a staging environment first.', translation: 'Chúng tôi xác minh bản phát hành ở staging trước.' },
+    { term: 'staging environment', pronunciation: '/ˈsteɪ.dʒɪŋ ɪnˈvaɪ.rən.mənt/', meaning: 'môi trường tiền production để kiểm tra trước khi phát hành', example: 'QA tested the release candidate in staging.', translation: 'QA kiểm tra bản dự kiến phát hành trên staging.' },
+    { term: 'production environment', pronunciation: '/prəˈdʌk.ʃən ɪnˈvaɪ.rən.mənt/', meaning: 'môi trường thật phục vụ người dùng', example: 'We monitor errors after deploying to production.', translation: 'Chúng tôi theo dõi lỗi sau khi triển khai lên production.' },
+    { term: 'rollback', pronunciation: '/ˈrəʊl.bæk/', meaning: 'quay về phiên bản trước khi bản mới gặp sự cố', example: 'We prepared a rollback plan in case the deployment failed.', translation: 'Chúng tôi chuẩn bị kế hoạch rollback phòng trường hợp deploy thất bại.' },
+    { term: 'blue-green deployment', pronunciation: '/ˌbluː ˈɡriːn dɪˈplɔɪ.mənt/', meaning: 'chiến lược deploy hai môi trường để chuyển traffic an toàn', example: 'Blue-green deployment can reduce downtime during a release.', translation: 'Blue-green deployment có thể giảm thời gian gián đoạn khi phát hành.' },
+    { term: 'canary release', pronunciation: '/kəˈneə.ri rɪˈliːs/', meaning: 'phát hành cho một phần nhỏ người dùng trước', example: 'A canary release exposes the change to a small percentage of traffic.', translation: 'Canary release đưa thay đổi tới một tỷ lệ nhỏ lưu lượng trước.' },
+    { term: 'health check', pronunciation: '/helθ tʃek/', meaning: 'kiểm tra tình trạng sẵn sàng của dịch vụ', example: 'The load balancer uses a health check to route traffic safely.', translation: 'Load balancer dùng health check để chuyển traffic an toàn.' },
+    { term: 'monitoring and alerting', pronunciation: '/ˈmɒn.ɪ.tər.ɪŋ ænd əˈlɜː.tɪŋ/', meaning: 'giám sát hệ thống và gửi cảnh báo khi có vấn đề', example: 'Monitoring and alerting help the team respond to incidents.', translation: 'Giám sát và cảnh báo giúp nhóm phản hồi sự cố.' },
+    { term: 'log aggregation', pronunciation: '/lɒɡ ˌæɡ.rɪˈɡeɪ.ʃən/', meaning: 'tập trung log từ nhiều dịch vụ về một nơi', example: 'Log aggregation makes it easier to investigate distributed failures.', translation: 'Tập trung log giúp điều tra lỗi phân tán dễ hơn.' },
+    { term: 'incident response', pronunciation: '/ˈɪn.sɪ.dənt rɪˈspɒns/', meaning: 'quy trình phản hồi và xử lý sự cố', example: 'A clear incident response process assigns owners and communicates impact.', translation: 'Quy trình ứng phó rõ ràng phân công người phụ trách và thông báo ảnh hưởng.' },
+    { term: 'Jenkins pipeline', pronunciation: '/ˈdʒeŋ.kɪnz ˈpaɪp.laɪn/', meaning: 'quy trình CI/CD được cấu hình bằng Jenkins', example: 'A Jenkins pipeline can automate build, test, and deployment stages.', translation: 'Jenkins pipeline có thể tự động hóa các bước build, test và deploy.' },
+    { term: 'GitHub Actions workflow', pronunciation: '/ˈɡɪt.hʌb ˈæk.ʃənz ˈwɜːk.fləʊ/', meaning: 'quy trình tự động hóa trong GitHub Actions', example: 'The workflow runs checks whenever code is pushed.', translation: 'Workflow chạy kiểm tra mỗi khi code được push.' },
+    { term: 'GitLab CI/CD', pronunciation: '/ˈɡɪt.læb ˌsiː.aɪ ˌsiːˈdiː/', meaning: 'công cụ pipeline tích hợp trong GitLab', example: 'GitLab CI/CD uses a configuration file to define pipeline jobs.', translation: 'GitLab CI/CD dùng file cấu hình để định nghĩa các job trong pipeline.' },
+  ]},
+];
+
+const speechModels = [
+  { id: 'self-intro', title: 'Giới thiệu bản thân 60 giây', category: 'Câu hỏi mở đầu', duration: '60 giây', level: 'Cơ bản', goal: 'Khung trả lời dài vừa đủ để tạo ấn tượng đầu tiên. Thay các phần trong ngoặc bằng thông tin thật.', sentences: [
+    { en: 'Hello, my name is {{name}}, and I am a {{role}}.', vi: 'Xin chào, tôi tên là {{name}} và tôi là {{role}}.' },
+    { en: 'I have {{years}} of experience working on software applications.', vi: 'Tôi có {{years}} kinh nghiệm làm việc với các ứng dụng phần mềm.' },
+    { en: 'My main technical skills include {{skills}}.', vi: 'Các kỹ năng chuyên môn chính của tôi gồm {{skills}}.' },
+    { en: 'In my recent work, I have contributed to both frontend features and backend services.', vi: 'Trong công việc gần đây, tôi tham gia cả tính năng frontend lẫn dịch vụ backend.' },
+    { en: 'I enjoy turning business requirements into clear, reliable software.', vi: 'Tôi thích chuyển yêu cầu nghiệp vụ thành phần mềm rõ ràng và đáng tin cậy.' },
+    { en: 'I am now looking for a full stack role where I can contribute to a product team and keep improving my engineering skills.', vi: 'Hiện tôi đang tìm một vị trí full stack để đóng góp cho nhóm sản phẩm và tiếp tục nâng cao kỹ năng kỹ sư.' },
+    { en: 'That is why I am excited to learn more about this opportunity.', vi: 'Đó là lý do tôi hào hứng muốn tìm hiểu thêm về cơ hội này.' },
+  ]},
+  { id: 'project-story', title: 'Kể chuyện về dự án', category: 'Kinh nghiệm dự án', duration: '90 giây', level: 'Cơ bản', goal: 'Kể một câu chuyện có đầu cuối; đừng chỉ đọc danh sách công nghệ.', sentences: [
+    { en: 'One project I would like to talk about is {{project}}.', vi: 'Một dự án tôi muốn chia sẻ là {{project}}.' },
+    { en: 'The goal of the project was to help users {{domain}}.', vi: 'Mục tiêu của dự án là giúp người dùng {{domain}}.' },
+    { en: 'I worked as a {{role}}, and my responsibilities included implementing features, fixing issues, and discussing requirements with the team.', vi: 'Tôi làm việc với vai trò {{role}}, phụ trách triển khai tính năng, sửa lỗi và trao đổi yêu cầu với nhóm.' },
+    { en: 'I used {{skills}} on this project.', vi: 'Tôi sử dụng {{skills}} trong dự án này.' },
+    { en: 'One important part of my work was making sure the frontend and backend handled data consistently.', vi: 'Một phần quan trọng trong công việc của tôi là đảm bảo frontend và backend xử lý dữ liệu nhất quán.' },
+    { en: 'When we faced a problem, I first reproduced it, checked the logs, and narrowed down the root cause.', vi: 'Khi gặp vấn đề, trước tiên tôi tái hiện lỗi, kiểm tra log và tìm nguyên nhân gốc.' },
+    { en: 'I then discussed the solution with my teammates and tested the change before release.', vi: 'Sau đó tôi trao đổi cách giải quyết với đồng đội và kiểm thử thay đổi trước khi phát hành.' },
+    { en: 'This experience taught me how important clear communication and careful testing are.', vi: 'Trải nghiệm này giúp tôi hiểu giao tiếp rõ ràng và kiểm thử cẩn thận quan trọng thế nào.' },
+  ]},
+  { id: 'technical-strength', title: 'Nói về điểm mạnh kỹ thuật', category: 'Kỹ năng chuyên môn', duration: '60 giây', level: 'Trung bình', goal: 'Thể hiện cách làm việc có trách nhiệm, không tuyên bố những kỹ năng bạn chưa dùng.', sentences: [
+    { en: 'My strongest area is {{skills}}.', vi: 'Thế mạnh lớn nhất của tôi là {{skills}}.' },
+    { en: 'When I build a feature, I try to understand the user need and the business rules first.', vi: 'Khi xây dựng tính năng, trước hết tôi cố hiểu nhu cầu người dùng và quy tắc nghiệp vụ.' },
+    { en: 'Then I break the work into smaller parts and keep the code easy to read and maintain.', vi: 'Sau đó tôi chia công việc thành phần nhỏ hơn, giữ code dễ đọc và bảo trì.' },
+    { en: 'On the backend, I pay attention to API validation, error handling, and data consistency.', vi: 'Ở backend, tôi chú ý đến kiểm tra API, xử lý lỗi và tính nhất quán dữ liệu.' },
+    { en: 'On the frontend, I focus on reusable components and clear loading and error states.', vi: 'Ở frontend, tôi tập trung vào component tái sử dụng và trạng thái tải, lỗi rõ ràng.' },
+    { en: 'I also value unit tests and code reviews because they help the team catch issues early.', vi: 'Tôi cũng coi trọng unit test và code review vì chúng giúp nhóm phát hiện vấn đề sớm.' },
+  ]},
+  { id: 'challenge-story', title: 'Kể về một lần gặp khó khăn', category: 'Câu hỏi hành vi · STAR', duration: '90 giây', level: 'Trung bình', goal: 'STAR = Situation, Task, Action, Result. Hãy thay nội dung trong ngoặc bằng một việc có thật.', sentences: [
+    { en: 'In one project, we had a challenge with {{challenge}}.', vi: 'Trong một dự án, chúng tôi gặp khó khăn với {{challenge}}.' },
+    { en: 'My responsibility was to investigate the issue and help deliver a reliable solution.', vi: 'Trách nhiệm của tôi là điều tra vấn đề và góp phần đưa ra giải pháp đáng tin cậy.' },
+    { en: 'I reproduced the problem and collected information from logs and test cases.', vi: 'Tôi tái hiện vấn đề và thu thập thông tin từ log và các trường hợp kiểm thử.' },
+    { en: 'After I identified the likely root cause, I compared a few solutions and discussed the trade-offs with my teammates.', vi: 'Sau khi xác định nguyên nhân có khả năng cao, tôi so sánh vài giải pháp và trao đổi ưu nhược điểm với đồng đội.' },
+    { en: 'We chose a fix that addressed the cause and added a test to prevent regression.', vi: 'Chúng tôi chọn cách sửa đúng nguyên nhân và thêm kiểm thử để tránh lỗi quay lại.' },
+    { en: 'As a result, the feature became more stable, and the team had a clearer way to diagnose similar problems.', vi: 'Kết quả là tính năng ổn định hơn và nhóm có cách rõ ràng hơn để chẩn đoán vấn đề tương tự.' },
+    { en: 'I learned to communicate risks early and verify the fix before calling the issue resolved.', vi: 'Tôi học được cách báo sớm rủi ro và xác minh cách sửa trước khi kết luận vấn đề đã được giải quyết.' },
+  ]},
+  { id: 'why-us', title: 'Vì sao bạn muốn vị trí này?', category: 'Động lực ứng tuyển', duration: '45 giây', level: 'Cơ bản', goal: 'Kết nối công nghệ, cách làm việc và điều bạn muốn học với yêu cầu của JD.', sentences: [
+    { en: 'I am interested in this position because it combines backend and frontend development.', vi: 'Tôi quan tâm vị trí này vì nó kết hợp phát triển backend và frontend.' },
+    { en: 'The Java and Spring Boot stack matches my interest in building reliable APIs and business services.', vi: 'Java và Spring Boot phù hợp với sự quan tâm của tôi đến việc xây dựng API và dịch vụ nghiệp vụ đáng tin cậy.' },
+    { en: 'I am also interested in Angular because it helps teams build structured and maintainable user interfaces.', vi: 'Tôi cũng quan tâm Angular vì framework này giúp nhóm xây dựng giao diện có cấu trúc và dễ bảo trì.' },
+    { en: 'I value teams that care about testing, code review, and learning from feedback.', vi: 'Tôi coi trọng những nhóm quan tâm đến kiểm thử, code review và học hỏi từ phản hồi.' },
+    { en: 'I believe my experience with {{skills}} can help me contribute, while this role would help me grow further as a full stack engineer.', vi: 'Tôi tin kinh nghiệm với {{skills}} giúp tôi đóng góp cho nhóm, đồng thời vị trí này giúp tôi phát triển hơn với vai trò kỹ sư full stack.' },
+  ]},
+  { id: 'java-backend-deep-dive', title: 'Giải thích kinh nghiệm Java backend', category: 'Kỹ thuật · Java & Spring Boot', duration: '2 phút', level: 'Trung bình', goal: 'Bài dài để luyện trình bày một luồng backend. Chỉ giữ các ý đã thật sự làm; có thể thay phần trong ngoặc.', sentences: [
+    { en: 'In my backend work, I focus on building APIs that are reliable, understandable, and easy to maintain.', vi: 'Trong công việc backend, tôi tập trung xây dựng API đáng tin cậy, dễ hiểu và dễ bảo trì.' },
+    { en: 'I usually start by clarifying the requirement and identifying the main resources and business rules.', vi: 'Tôi thường bắt đầu bằng việc làm rõ yêu cầu, xác định resource chính và quy tắc nghiệp vụ.' },
+    { en: 'Then I design the endpoint, request and response models, and validation rules.', vi: 'Sau đó tôi thiết kế endpoint, model yêu cầu và phản hồi, cùng các quy tắc xác thực.' },
+    { en: 'In a Spring Boot application, I keep the controller, service, and repository responsibilities separate.', vi: 'Trong ứng dụng Spring Boot, tôi tách riêng trách nhiệm của controller, service và repository.' },
+    { en: 'The controller handles the HTTP request, while the service contains the business logic.', vi: 'Controller xử lý yêu cầu HTTP, còn service chứa logic nghiệp vụ.' },
+    { en: 'The repository layer handles database access, often through Spring Data JPA.', vi: 'Tầng repository xử lý truy cập cơ sở dữ liệu, thường thông qua Spring Data JPA.' },
+    { en: 'I use DTOs when I need to control the data exposed by the API.', vi: 'Tôi dùng DTO khi cần kiểm soát dữ liệu được API cung cấp.' },
+    { en: 'I pay attention to input validation, error handling, and meaningful log messages.', vi: 'Tôi chú ý đến xác thực đầu vào, xử lý lỗi và thông báo log có ý nghĩa.' },
+    { en: 'For important behavior, I write unit tests with JUnit and use Mockito when a dependency needs to be isolated.', vi: 'Với hành vi quan trọng, tôi viết unit test bằng JUnit và dùng Mockito khi cần cô lập dependency.' },
+    { en: 'I also review database queries and indexes when an endpoint becomes slow.', vi: 'Tôi cũng xem lại truy vấn và index cơ sở dữ liệu khi endpoint chạy chậm.' },
+    { en: 'Before I consider the task complete, I run the relevant checks and ask for a code review.', vi: 'Trước khi xem công việc là hoàn tất, tôi chạy các bước kiểm tra liên quan và đề nghị code review.' },
+    { en: 'This approach helps me deliver changes that are easier for the team to understand and support.', vi: 'Cách làm này giúp tôi bàn giao thay đổi để nhóm dễ hiểu và hỗ trợ hơn.' },
+  ]},
+  { id: 'angular-deep-dive', title: 'Giải thích kinh nghiệm Angular', category: 'Kỹ thuật · Angular & RxJS', duration: '2 phút', level: 'Trung bình', goal: 'Luyện diễn đạt cách bạn biến yêu cầu giao diện thành tính năng có thể bảo trì.', sentences: [
+    { en: 'When I build a frontend feature, I first clarify the user flow and the expected states.', vi: 'Khi xây dựng tính năng frontend, trước tiên tôi làm rõ luồng người dùng và các trạng thái mong đợi.' },
+    { en: 'I break the screen into components based on clear responsibilities.', vi: 'Tôi chia màn hình thành các component theo trách nhiệm rõ ràng.' },
+    { en: 'I use TypeScript interfaces to describe the data that comes from the API.', vi: 'Tôi dùng TypeScript interface để mô tả dữ liệu nhận từ API.' },
+    { en: 'I keep reusable data access and shared logic in Angular services.', vi: 'Tôi đặt phần truy cập dữ liệu và logic dùng chung trong Angular service.' },
+    { en: 'For asynchronous data, I work with RxJS Observables and operators.', vi: 'Với dữ liệu bất đồng bộ, tôi làm việc với RxJS Observable và operator.' },
+    { en: 'For example, I may combine a search input with an API request and debounce the input to avoid unnecessary calls.', vi: 'Ví dụ, tôi có thể kết hợp ô tìm kiếm với yêu cầu API và debounce đầu vào để tránh gọi thừa.' },
+    { en: 'I make loading, empty, success, and error states clear to the user.', vi: 'Tôi thể hiện rõ trạng thái đang tải, rỗng, thành công và lỗi cho người dùng.' },
+    { en: 'I also consider form validation, accessibility, and responsive behavior.', vi: 'Tôi cũng cân nhắc xác thực biểu mẫu, khả năng tiếp cận và hiển thị thích ứng.' },
+    { en: 'I write unit tests for important component behavior and review edge cases.', vi: 'Tôi viết unit test cho hành vi quan trọng của component và kiểm tra trường hợp biên.' },
+    { en: 'If the page becomes slow, I measure the problem before choosing an optimization.', vi: 'Nếu trang chạy chậm, tôi đo đạc vấn đề trước khi chọn cách tối ưu.' },
+    { en: 'I prefer simple components with predictable data flow because they are easier to debug.', vi: 'Tôi ưu tiên component đơn giản với luồng dữ liệu dễ dự đoán vì chúng dễ debug hơn.' },
+    { en: 'That is how I try to make frontend work useful for both users and the development team.', vi: 'Đó là cách tôi cố gắng làm cho phần frontend hữu ích với cả người dùng và nhóm phát triển.' },
+  ]},
+  { id: 'database-performance', title: 'Nói về database và tối ưu hiệu năng', category: 'Kỹ thuật · SQL & Database', duration: '2 phút', level: 'Trung bình', goal: 'Dùng bài này để trả lời câu hỏi về SQL, dữ liệu chậm và cách bạn điều tra.', sentences: [
+    { en: 'I treat database performance as part of the overall application experience.', vi: 'Tôi xem hiệu năng cơ sở dữ liệu là một phần của trải nghiệm ứng dụng tổng thể.' },
+    { en: 'When a query is slow, I first try to reproduce the issue with realistic data.', vi: 'Khi truy vấn chậm, trước tiên tôi cố tái hiện vấn đề với dữ liệu thực tế.' },
+    { en: 'I inspect the query and its execution plan to understand how the database is retrieving the rows.', vi: 'Tôi kiểm tra truy vấn và execution plan để hiểu cơ sở dữ liệu lấy các dòng dữ liệu như thế nào.' },
+    { en: 'I check whether the query is filtering and joining on the right columns.', vi: 'Tôi kiểm tra truy vấn có lọc và join theo đúng cột không.' },
+    { en: 'I also check whether an index can help, while considering the extra cost for inserts and updates.', vi: 'Tôi cũng xem index có giúp không, đồng thời cân nhắc chi phí tăng thêm cho insert và update.' },
+    { en: 'For large result sets, pagination can reduce the amount of data returned in one request.', vi: 'Với tập kết quả lớn, phân trang có thể giảm lượng dữ liệu trả về trong một yêu cầu.' },
+    { en: 'I pay attention to database constraints because they help protect data integrity.', vi: 'Tôi chú ý đến constraint vì chúng giúp bảo vệ tính toàn vẹn dữ liệu.' },
+    { en: 'For changes that touch multiple records, I consider transaction boundaries and failure behavior.', vi: 'Với thay đổi ảnh hưởng nhiều bản ghi, tôi cân nhắc ranh giới transaction và cách xử lý khi thất bại.' },
+    { en: 'I avoid making performance changes based only on assumptions.', vi: 'Tôi tránh thay đổi hiệu năng chỉ dựa trên giả định.' },
+    { en: 'After the change, I compare the result and add a test or monitoring check when it is appropriate.', vi: 'Sau thay đổi, tôi so sánh kết quả và thêm kiểm thử hoặc bước giám sát khi phù hợp.' },
+    { en: 'This helps balance query speed, data correctness, and maintainability.', vi: 'Điều này giúp cân bằng tốc độ truy vấn, tính đúng đắn của dữ liệu và khả năng bảo trì.' },
+  ]},
+  { id: 'team-client-communication', title: 'Giao tiếp với team và khách hàng', category: 'Giao tiếp · Làm việc quốc tế', duration: '90 giây', level: 'Cơ bản', goal: 'Luyện những câu thực tế khi trao đổi yêu cầu, tiến độ và rủi ro bằng tiếng Anh.', sentences: [
+    { en: 'I believe clear communication is an important part of delivering software.', vi: 'Tôi tin giao tiếp rõ ràng là phần quan trọng trong việc bàn giao phần mềm.' },
+    { en: 'When a requirement is unclear, I ask focused questions before I start implementation.', vi: 'Khi yêu cầu chưa rõ, tôi đặt câu hỏi tập trung trước khi bắt đầu triển khai.' },
+    { en: 'I confirm my understanding by summarizing the expected behavior in simple words.', vi: 'Tôi xác nhận mình hiểu đúng bằng cách tóm tắt hành vi mong đợi bằng lời đơn giản.' },
+    { en: 'During the work, I share progress and mention blockers early.', vi: 'Trong lúc làm, tôi cập nhật tiến độ và báo sớm trở ngại.' },
+    { en: 'If I need more time, I explain what is blocking me and give a realistic estimate.', vi: 'Nếu cần thêm thời gian, tôi giải thích điều đang cản trở và đưa ước lượng thực tế.' },
+    { en: 'I try to keep my messages concise, polite, and specific.', vi: 'Tôi cố gắng viết thông điệp ngắn gọn, lịch sự và cụ thể.' },
+    { en: 'In a code review, I explain the reason for my approach and stay open to feedback.', vi: 'Trong code review, tôi giải thích lý do chọn cách làm và cởi mở đón nhận góp ý.' },
+    { en: 'If I disagree, I discuss the trade-offs and focus on the shared goal.', vi: 'Nếu không đồng ý, tôi thảo luận sự đánh đổi và tập trung vào mục tiêu chung.' },
+    { en: 'I document important decisions so that the whole team has the same context.', vi: 'Tôi ghi lại quyết định quan trọng để cả nhóm có cùng bối cảnh.' },
+    { en: 'If I do not understand a question in English, I ask the speaker to repeat or rephrase it.', vi: 'Nếu không hiểu câu hỏi tiếng Anh, tôi nhờ người nói lặp lại hoặc diễn đạt theo cách khác.' },
+    { en: 'I would rather clarify early than make an incorrect assumption.', vi: 'Tôi muốn làm rõ sớm hơn là đưa ra giả định sai.' },
+  ]},
+  { id: 'mistake-learning', title: 'Kể về lỗi sai và điều đã học', category: 'Câu hỏi hành vi · Học hỏi', duration: '90 giây', level: 'Trung bình', goal: 'Câu trả lời mẫu hướng tới tinh thần chịu trách nhiệm. Hãy kể tình huống có thật, không nhận công lao hoặc bịa kết quả.', sentences: [
+    { en: 'Earlier in my career, I made a mistake during a project involving {{challenge}}.', vi: 'Trước đây trong công việc, tôi từng mắc lỗi trong một dự án liên quan đến {{challenge}}.' },
+    { en: 'At first, I focused on completing the task quickly and did not check one important assumption.', vi: 'Ban đầu, tôi tập trung hoàn tất nhanh và chưa kiểm tra một giả định quan trọng.' },
+    { en: 'When I noticed the issue, I informed the team and helped assess its impact.', vi: 'Khi nhận ra vấn đề, tôi báo cho nhóm và hỗ trợ đánh giá ảnh hưởng.' },
+    { en: 'I worked with my teammates to prepare a safe correction and verify the behavior.', vi: 'Tôi cùng đồng đội chuẩn bị cách sửa an toàn và xác minh hành vi.' },
+    { en: 'After that, I reviewed why the original check was missed.', vi: 'Sau đó, tôi xem lại vì sao bước kiểm tra ban đầu bị bỏ sót.' },
+    { en: 'We improved the checklist and added a test for that scenario.', vi: 'Chúng tôi cải thiện danh sách kiểm tra và thêm test cho tình huống đó.' },
+    { en: 'I learned that raising a problem early is better than hiding uncertainty.', vi: 'Tôi học được rằng báo vấn đề sớm tốt hơn che giấu điều chưa chắc chắn.' },
+    { en: 'I also learned to ask for review when a change affects an unfamiliar area.', vi: 'Tôi cũng học cách đề nghị review khi thay đổi ảnh hưởng đến phần mình chưa quen.' },
+    { en: 'Since then, I have been more deliberate about validation and communication.', vi: 'Từ đó, tôi cẩn thận hơn với việc xác thực và giao tiếp.' },
+    { en: 'The experience helped me become more reliable as a teammate.', vi: 'Trải nghiệm đó giúp tôi trở thành đồng đội đáng tin cậy hơn.' },
+  ]},
+  { id: 'aws-architecture', title: 'Giải thích kiến trúc web trên AWS', category: 'Kịch bản luyện tập · AWS', duration: '2 phút', level: 'Trung bình', goal: 'Đây là kịch bản tham khảo, không phải khẳng định kinh nghiệm cá nhân. Học cách nối dịch vụ với yêu cầu.', sentences: [
+    { en: 'For a typical web application on AWS, I would begin by understanding the functional and non-functional requirements.', vi: 'Với một ứng dụng web thông thường trên AWS, tôi bắt đầu bằng cách tìm hiểu yêu cầu chức năng và phi chức năng.' },
+    { en: 'I would clarify expected traffic, availability targets, security constraints, and the budget.', vi: 'Tôi sẽ làm rõ lưu lượng dự kiến, mục tiêu sẵn sàng, ràng buộc bảo mật và ngân sách.' },
+    { en: 'The frontend could be hosted as static assets, while the backend could run on a managed compute service or containers.', vi: 'Frontend có thể được lưu trữ dưới dạng tài nguyên tĩnh, còn backend có thể chạy trên dịch vụ tính toán được quản lý hoặc container.' },
+    { en: 'A relational database such as Amazon RDS could store transactional data.', vi: 'Cơ sở dữ liệu quan hệ như Amazon RDS có thể lưu dữ liệu giao dịch.' },
+    { en: 'Amazon S3 could store user uploads and other object data.', vi: 'Amazon S3 có thể lưu file người dùng tải lên và dữ liệu dạng object khác.' },
+    { en: 'I would place resources in a VPC and separate public and private network areas where appropriate.', vi: 'Tôi sẽ đặt tài nguyên trong VPC và tách vùng mạng công khai, riêng tư khi phù hợp.' },
+    { en: 'Access should follow the least-privilege principle, preferably using IAM roles instead of long-lived credentials.', vi: 'Quyền truy cập nên theo nguyên tắc tối thiểu, ưu tiên IAM role thay cho thông tin xác thực dài hạn.' },
+    { en: 'A load balancer and multiple availability zones can improve availability, depending on the application needs.', vi: 'Load balancer và nhiều availability zone có thể tăng tính sẵn sàng tùy theo nhu cầu ứng dụng.' },
+    { en: 'I would configure logs, metrics, health checks, and alerts so the team can detect issues quickly.', vi: 'Tôi sẽ cấu hình log, metric, health check và cảnh báo để nhóm phát hiện vấn đề nhanh.' },
+    { en: 'I would also estimate costs and avoid adding services that the product does not need.', vi: 'Tôi cũng ước tính chi phí và tránh thêm dịch vụ mà sản phẩm không cần.' },
+    { en: 'The final design should be reviewed against security, reliability, performance, and operational requirements.', vi: 'Thiết kế cuối cùng cần được xem xét theo yêu cầu bảo mật, độ tin cậy, hiệu năng và vận hành.' },
+    { en: 'If I have not implemented a service myself, I would explain it as design knowledge rather than hands-on experience.', vi: 'Nếu chưa tự triển khai dịch vụ nào, tôi sẽ trình bày đó là kiến thức thiết kế thay vì kinh nghiệm thực tế.' },
+  ]},
+  { id: 'cicd-pipeline', title: 'Trình bày pipeline CI/CD từ đầu đến cuối', category: 'Kịch bản luyện tập · CI/CD', duration: '2 phút', level: 'Trung bình', goal: 'Bài mẫu mô tả pipeline phổ biến; hãy đổi tên công cụ theo thứ bạn từng dùng hoặc nói đây là thiết kế đề xuất.', sentences: [
+    { en: 'A CI/CD pipeline automates repeatable steps from a code change to a deployable release.', vi: 'Pipeline CI/CD tự động hóa các bước lặp lại từ thay đổi code đến bản phát hành có thể triển khai.' },
+    { en: 'It usually starts when a developer pushes a branch or opens a pull request.', vi: 'Thông thường pipeline bắt đầu khi lập trình viên push branch hoặc tạo pull request.' },
+    { en: 'The first stage checks out the code and installs the required dependencies.', vi: 'Bước đầu lấy code và cài các dependency cần thiết.' },
+    { en: 'Next, the pipeline runs formatting, linting, static analysis, and security checks if they are configured.', vi: 'Tiếp theo, pipeline chạy format, lint, phân tích tĩnh và kiểm tra bảo mật nếu được cấu hình.' },
+    { en: 'It builds the Java backend and the Angular frontend.', vi: 'Pipeline build backend Java và frontend Angular.' },
+    { en: 'Then it runs unit tests and, where available, integration and end-to-end tests.', vi: 'Sau đó pipeline chạy unit test và nếu có thì cả integration test lẫn end-to-end test.' },
+    { en: 'When the checks pass, it packages the application as a versioned artifact or a container image.', vi: 'Khi các bước kiểm tra đạt, pipeline đóng gói ứng dụng thành artifact có version hoặc container image.' },
+    { en: 'The artifact is published to a registry so the deployment stage can retrieve the exact same build.', vi: 'Artifact được đưa lên registry để bước deploy lấy đúng bản build đó.' },
+    { en: 'The team deploys to a staging environment and verifies health checks and important user journeys.', vi: 'Nhóm triển khai lên staging rồi xác minh health check và các luồng người dùng quan trọng.' },
+    { en: 'Production deployment may require approval, depending on the release policy.', vi: 'Deploy production có thể cần phê duyệt tùy theo chính sách phát hành.' },
+    { en: 'After deployment, monitoring helps detect errors, and a rollback plan helps restore service if needed.', vi: 'Sau deploy, monitoring giúp phát hiện lỗi và kế hoạch rollback giúp khôi phục dịch vụ khi cần.' },
+    { en: 'Tools such as GitHub Actions, GitLab CI, and Jenkins can implement this workflow.', vi: 'Các công cụ như GitHub Actions, GitLab CI và Jenkins có thể triển khai quy trình này.' },
+    { en: 'The most important goal is a repeatable, traceable, and safe release process.', vi: 'Mục tiêu quan trọng nhất là quy trình phát hành lặp lại được, có thể truy vết và an toàn.' },
+  ]},
+  { id: 'release-strategy', title: 'Kể về một lần phát hành phần mềm', category: 'Kịch bản luyện tập · Release', duration: '2 phút', level: 'Trung bình', goal: 'Dùng làm khung kể một release thật. Nếu chưa từng phụ trách deploy, đổi “I deployed” thành “I learned about / I would”.', sentences: [
+    { en: 'For a release, I first make sure the scope and acceptance criteria are clear.', vi: 'Với một lần phát hành, trước tiên tôi đảm bảo phạm vi và tiêu chí chấp nhận rõ ràng.' },
+    { en: 'I check that the required code review and automated tests have completed successfully.', vi: 'Tôi kiểm tra code review và các bài test tự động cần thiết đã hoàn tất thành công.' },
+    { en: 'We prepare a versioned build so we know exactly what is being deployed.', vi: 'Chúng tôi chuẩn bị bản build có version để biết chính xác phiên bản nào được triển khai.' },
+    { en: 'Before release, I review configuration changes and confirm that secrets are stored securely.', vi: 'Trước khi phát hành, tôi xem thay đổi cấu hình và xác nhận secret được lưu an toàn.' },
+    { en: 'The release is first deployed to a test or staging environment.', vi: 'Bản phát hành được triển khai trước lên môi trường test hoặc staging.' },
+    { en: 'We verify the health checks and test the main user flows.', vi: 'Chúng tôi xác minh health check và kiểm thử các luồng người dùng chính.' },
+    { en: 'If everything looks correct, the team proceeds according to the production release plan.', vi: 'Nếu mọi thứ ổn, nhóm tiếp tục theo kế hoạch phát hành production.' },
+    { en: 'We monitor logs, error rates, and important service metrics after deployment.', vi: 'Sau triển khai, chúng tôi theo dõi log, tỷ lệ lỗi và metric quan trọng của dịch vụ.' },
+    { en: 'If we detect a serious regression, we communicate the impact and follow the rollback procedure.', vi: 'Nếu phát hiện regression nghiêm trọng, chúng tôi thông báo ảnh hưởng và làm theo quy trình rollback.' },
+    { en: 'After the release, I document any follow-up work and lessons learned.', vi: 'Sau phát hành, tôi ghi lại việc cần làm tiếp và bài học rút ra.' },
+    { en: 'This process helps the team release changes in a controlled and transparent way.', vi: 'Quy trình này giúp nhóm phát hành thay đổi có kiểm soát và minh bạch.' },
+  ]},
+  { id: 'production-incident', title: 'Diễn tập sự cố production', category: 'Kịch bản luyện tập · Incident response', duration: '2 phút', level: 'Trung bình', goal: 'Đây là bài diễn tập tình huống giả định. Luyện nói rõ thứ tự ưu tiên và giao tiếp khi áp lực cao.', sentences: [
+    { en: 'Imagine that users report errors shortly after a new release.', vi: 'Hãy tưởng tượng người dùng báo lỗi ngay sau một bản phát hành mới.' },
+    { en: 'My first priority would be to understand the scope and user impact.', vi: 'Ưu tiên đầu tiên của tôi là hiểu phạm vi và ảnh hưởng đến người dùng.' },
+    { en: 'I would notify the incident owner and follow the team process instead of making an uncoordinated change.', vi: 'Tôi sẽ báo người phụ trách sự cố và làm theo quy trình nhóm thay vì tự ý thay đổi.' },
+    { en: 'I would check dashboards, logs, health checks, and recent deployment details.', vi: 'Tôi sẽ kiểm tra dashboard, log, health check và thông tin deploy gần nhất.' },
+    { en: 'I would compare the current behavior with the previous stable version.', vi: 'Tôi sẽ so sánh hành vi hiện tại với phiên bản ổn định trước đó.' },
+    { en: 'If the latest release is the likely cause, I would discuss a rollback with the team.', vi: 'Nếu bản phát hành gần nhất có thể là nguyên nhân, tôi sẽ trao đổi với nhóm về rollback.' },
+    { en: 'During the incident, I would share concise updates and avoid guessing about the cause.', vi: 'Trong sự cố, tôi sẽ cập nhật ngắn gọn và tránh đoán nguyên nhân.' },
+    { en: 'After recovery, we would investigate the root cause and identify why existing checks did not catch it.', vi: 'Sau khôi phục, chúng tôi điều tra nguyên nhân gốc và tìm hiểu vì sao kiểm tra hiện tại không phát hiện lỗi.' },
+    { en: 'We could add a regression test, improve monitoring, or update the deployment checklist.', vi: 'Chúng tôi có thể thêm regression test, cải thiện monitoring hoặc cập nhật checklist deploy.' },
+    { en: 'I would document the timeline, decisions, and follow-up actions.', vi: 'Tôi sẽ ghi lại dòng thời gian, quyết định và các hành động tiếp theo.' },
+    { en: 'The goal is to restore service safely and learn from the incident without blaming individuals.', vi: 'Mục tiêu là khôi phục dịch vụ an toàn và học từ sự cố mà không đổ lỗi cá nhân.' },
+  ]},
+  { id: 'microservices-cloud', title: 'Nói về microservices và cloud', category: 'Kịch bản luyện tập · Architecture', duration: '2 phút', level: 'Khá', goal: 'Bài nói tham khảo về trade-off kiến trúc; không khẳng định bạn đã xây microservices nếu chưa có kinh nghiệm.', sentences: [
+    { en: 'Microservices organize a system as smaller services around business capabilities.', vi: 'Microservices tổ chức hệ thống thành các dịch vụ nhỏ hơn xoay quanh năng lực nghiệp vụ.' },
+    { en: 'Each service can own a specific responsibility and expose an API or publish events.', vi: 'Mỗi service có thể sở hữu một trách nhiệm cụ thể và cung cấp API hoặc phát sự kiện.' },
+    { en: 'This can allow teams to deploy services independently, but it also introduces operational complexity.', vi: 'Điều này có thể giúp nhóm triển khai service độc lập, nhưng cũng làm tăng độ phức tạp vận hành.' },
+    { en: 'Services need clear contracts, observability, and secure communication.', vi: 'Các service cần contract rõ ràng, khả năng quan sát và giao tiếp an toàn.' },
+    { en: 'A cloud platform can provide managed networking, storage, compute, and monitoring services.', vi: 'Nền tảng cloud có thể cung cấp dịch vụ mạng, lưu trữ, tính toán và monitoring được quản lý.' },
+    { en: 'The system should handle timeouts, retries, and partial failures carefully.', vi: 'Hệ thống cần xử lý timeout, retry và lỗi một phần cẩn thận.' },
+    { en: 'For asynchronous workflows, a message broker can reduce direct coupling between services.', vi: 'Với quy trình bất đồng bộ, message broker có thể giảm sự phụ thuộc trực tiếp giữa các service.' },
+    { en: 'However, eventual consistency and duplicate message handling must be considered.', vi: 'Tuy nhiên, cần cân nhắc tính nhất quán cuối cùng và việc xử lý message trùng lặp.' },
+    { en: 'I would not choose microservices just because they are popular.', vi: 'Tôi sẽ không chọn microservices chỉ vì chúng phổ biến.' },
+    { en: 'I would compare the team size, domain boundaries, scaling needs, and operational cost first.', vi: 'Trước tiên tôi sẽ so sánh quy mô nhóm, ranh giới nghiệp vụ, nhu cầu mở rộng và chi phí vận hành.' },
+    { en: 'For a smaller product, a well-structured modular application may be simpler to operate.', vi: 'Với sản phẩm nhỏ hơn, ứng dụng module hóa tốt có thể đơn giản hơn khi vận hành.' },
+    { en: 'The architecture should solve the actual product problem and remain understandable to the team.', vi: 'Kiến trúc nên giải quyết vấn đề thực tế của sản phẩm và vẫn dễ hiểu với nhóm.' },
+  ]},
+];
+
+function readStored(key, fallback) {
+  try { const value = localStorage.getItem(key); return value ? JSON.parse(value) : fallback; } catch { return fallback; }
+}
+
 export default {
   name: 'InterviewEnglishPage',
+  data() {
+    return {
+      tabs: [{ id: 'start', label: 'Tổng quan' }, { id: 'profile', label: 'Hồ sơ của tôi' }, { id: 'speaking', label: 'Bài nói mẫu (15)' }, { id: 'vocabulary', label: 'Từ vựng (151)' }, { id: 'practice', label: 'Luyện phỏng vấn (12)' }],
+      activeTab: 'start', profile: readStored(PROFILE_KEY, defaultProfile()), profileSaved: false,
+      answers: readStored(ANSWERS_KEY, {}), completed: readStored(DONE_KEY, {}), activeQuestion: 0,
+      speechModels, activeSpeech: 0, speechSentence: 0, speechAnswers: readStored('sf_interview_english_speech_answers_v1', {}), speechDone: readStored('sf_interview_english_speech_done_v1', {}),
+      questions, skills: ['Java 11/17+', 'Spring Boot', 'Angular 14+', 'TypeScript', 'RxJS', 'REST API', 'SQL', 'JUnit', 'AWS', 'CI/CD', 'Docker', 'Agile / Scrum'],
+      vocabGroups, vocabGroup: 'java', showTranslation: false, recording: false, speechMessage: '', recognition: null,
+    };
+  },
+  computed: {
+    completedCount() { return Object.values(this.completed).filter(Boolean).length; },
+    currentQuestion() { return this.questions[this.activeQuestion]; },
+    currentSpeech() { return this.speechModels[this.activeSpeech]; },
+    currentWords() { return this.vocabGroups.find((group) => group.id === this.vocabGroup)?.words || []; },
+  },
+  watch: {
+    profile: { deep: true, handler() { this.profileSaved = false; } },
+    answers: { deep: true, handler(value) { this.store(ANSWERS_KEY, value); } },
+    speechAnswers: { deep: true, handler(value) { this.store('sf_interview_english_speech_answers_v1', value); } },
+  },
+  beforeUnmount() { this.stopRecognition(); },
   methods: {
     goHome() { navigate('/'); },
-    goToJavaInterview() { navigate('/interview'); },
+    store(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* local storage can be unavailable */ } },
+    saveProfile() { this.store(PROFILE_KEY, this.profile); this.profileSaved = true; },
+    resetProfile() { this.profile = defaultProfile(); this.store(PROFILE_KEY, this.profile); this.profileSaved = true; },
+    markComplete() { this.completed = { ...this.completed, [this.currentQuestion.id]: true }; this.store(DONE_KEY, this.completed); },
+    markSpeechComplete() { this.speechDone = { ...this.speechDone, [this.currentSpeech.id]: true }; this.store('sf_interview_english_speech_done_v1', this.speechDone); },
+    personalizeSpeech(text) {
+      const p = this.profile;
+      return text.replaceAll('{{name}}', p.name || '[your name]').replaceAll('{{years}}', p.years || '[your years of experience]').replaceAll('{{role}}', p.role || '[your role]').replaceAll('{{skills}}', p.knownSkills || '[your real skills]').replaceAll('{{project}}', p.project || '[your real project]').replaceAll('{{challenge}}', p.challenge || '[a real challenge you faced]').replaceAll('{{domain}}', p.domain || '[the users or business domain]').replaceAll('{{awsExperience}}', p.awsExperience || '[your actual AWS and CI/CD experience]');
+    },
+    personalizedAnswer(question) {
+      const p = this.profile;
+      const replace = (text) => text.replaceAll('{{name}}', p.name || '[your name]').replaceAll('{{years}}', p.years || '[your years of experience]').replaceAll('{{role}}', p.role || '[your role]').replaceAll('{{skills}}', p.knownSkills || '[your relevant skills]').replaceAll('{{project}}', p.project || '[your project and its purpose]').replaceAll('{{challenge}}', p.challenge || '[the challenge you faced]').replaceAll('{{domain}}', p.domain || '[your industry]').replaceAll('{{awsExperience}}', p.awsExperience || '[your actual AWS and CI/CD experience]');
+      return replace(question.answer);
+    },
+    speak(text) {
+      if (!('speechSynthesis' in window)) { this.speechMessage = 'Trình duyệt này chưa hỗ trợ phát âm tự động.'; return; }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US'; utterance.rate = 0.86;
+      window.speechSynthesis.speak(utterance); this.speechMessage = '';
+    },
+    toggleRecording() {
+      if (this.recording) { this.stopRecognition(); return; }
+      const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Recognition) { this.speechMessage = 'Trình duyệt chưa hỗ trợ nhận diện giọng nói. Bạn vẫn có thể đọc câu mẫu thành tiếng.'; return; }
+      this.recognition = new Recognition(); this.recognition.lang = 'en-US'; this.recognition.interimResults = true; this.recognition.continuous = true;
+      this.recognition.onresult = (event) => { let transcript = ''; for (let i = event.resultIndex; i < event.results.length; i += 1) transcript += event.results[i][0].transcript; this.answers[this.currentQuestion.id] = transcript.trim(); };
+      this.recognition.onerror = () => { this.speechMessage = 'Không truy cập được micro. Hãy kiểm tra quyền micro của trình duyệt.'; this.recording = false; };
+      this.recognition.onend = () => { this.recording = false; };
+      try { this.recognition.start(); this.recording = true; this.speechMessage = 'Đang nghe. Hãy nói tiếng Anh, nội dung nhận diện sẽ hiện ở ô trả lời.'; } catch { this.speechMessage = 'Không thể bắt đầu micro. Hãy thử tải lại trang hoặc nhập câu trả lời.'; }
+    },
+    toggleSpeechRecording() {
+      if (this.recording) { this.stopRecognition(); return; }
+      const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Recognition) { this.speechMessage = 'Trình duyệt chưa hỗ trợ nhận diện giọng nói. Hãy nghe và đọc nhại từng câu.'; return; }
+      this.recognition = new Recognition(); this.recognition.lang = 'en-US'; this.recognition.interimResults = true; this.recognition.continuous = true;
+      this.recognition.onresult = (event) => { let transcript = ''; for (let i = event.resultIndex; i < event.results.length; i += 1) transcript += event.results[i][0].transcript; this.speechAnswers[this.currentSpeech.id] = transcript.trim(); };
+      this.recognition.onerror = () => { this.speechMessage = 'Không truy cập được micro. Hãy kiểm tra quyền micro của trình duyệt.'; this.recording = false; };
+      this.recognition.onend = () => { this.recording = false; };
+      try { this.recognition.start(); this.recording = true; this.speechMessage = 'Đang nghe bài nói của bạn. Phần nhận diện sẽ lưu vào ô bên dưới.'; } catch { this.speechMessage = 'Không thể bắt đầu micro. Hãy thử nhập hoặc đọc câu trả lời.'; }
+    },
+    stopRecognition() { if (this.recognition) { try { this.recognition.stop(); } catch { /* already stopped */ } this.recognition = null; } this.recording = false; },
   },
 };
 </script>
 
 <style scoped>
-.subpage {
-  background: var(--forge-bg);
-  min-height: 100vh;
-  padding: 2.5rem 1.5rem;
-}
-
-.subpage-container {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.subpage-topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.subpage-topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.subpage-topbar-left .icon {
-  font-size: 2rem;
-}
-
-.subpage-topbar-left h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--forge-text);
-  margin: 0;
-}
-
-.subtitle {
-  font-size: 0.85rem;
-  color: var(--forge-text2);
-}
-
-.subpage-topbar-right {
-  display: flex;
-  gap: 1rem;
-}
-
-.subpage-back {
-  background: var(--forge-glass);
-  border: 1px solid var(--forge-glass-border);
-  color: var(--forge-text);
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--forge-card-radius);
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: all var(--forge-transition-base, 0.2s);
-}
-
-.subpage-back:hover {
-  background: var(--forge-glass-hover);
-  border-color: var(--forge-accent);
-  text-decoration: none;
-}
-
-.page-desc {
-  color: var(--forge-text2);
-  margin-bottom: 2rem;
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-.week-card {
-  background: var(--forge-glass);
-  border: 1px solid var(--forge-glass-border);
-  border-radius: var(--forge-card-radius);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  transition: all var(--forge-transition-spring, 0.2s);
-}
-
-.week-card:hover {
-  border-color: var(--forge-glass-hover-border);
-}
-
-.week-card h2 {
-  color: var(--forge-ember, #fbbf24);
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--forge-glass-border);
-}
-
-.week-card h3 {
-  color: var(--forge-text);
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 1.25rem 0 0.75rem;
-}
-
-.week-card p,
-.week-card li {
-  color: var(--forge-text2);
-  line-height: 1.7;
-  font-size: 1rem;
-  margin-bottom: 0.75rem;
-}
-
-.week-card ul {
-  padding-left: 1.25rem;
-  margin-bottom: 1rem;
-}
-
-.week-card code {
-  font-family: 'JetBrains Mono', 'Consolas', monospace;
-  background: rgba(249, 115, 22, 0.1);
-  color: var(--forge-accent);
-  padding: 0.1rem 0.35rem;
-  border-radius: 4px;
-  font-size: 0.9em;
-}
-
-.day-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.day-item {
-  background: var(--forge-glass);
-  border: 1px solid var(--forge-glass-border);
-  border-radius: var(--forge-radius-sm, 8px);
-  padding: 0.6rem 0.8rem;
-  font-size: 0.875rem;
-  color: var(--forge-text2);
-  transition: all var(--forge-transition-base, 0.15s);
-}
-
-.day-item:hover {
-  background: var(--forge-glass-hover);
-  border-color: var(--forge-accent);
-}
-
-.day-item strong {
-  color: var(--forge-text);
-  display: block;
-  margin-bottom: 0.2rem;
-  font-size: 1rem;
-}
-
-.qa-block {
-  background: var(--forge-glass);
-  border-left: 3px solid var(--forge-accent);
-  border-radius: 0 var(--forge-radius-sm, 8px) var(--forge-radius-sm, 8px) 0;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
-.qa-block .q {
-  font-weight: 700;
-  color: var(--forge-text);
-  margin-bottom: 0.3rem;
-}
-
-.qa-block .a {
-  color: var(--forge-text2);
-  line-height: 1.6;
-}
-
-.skill-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-
-.skill-card {
-  background: var(--forge-glass);
-  border: 1px solid var(--forge-glass-border);
-  border-radius: var(--forge-radius-sm, 8px);
-  padding: 1rem;
-  transition: all var(--forge-transition-base, 0.15s);
-}
-
-.skill-card:hover {
-  background: var(--forge-glass-hover);
-  border-color: var(--forge-accent);
-}
-
-.skill-card h5 {
-  color: var(--forge-text);
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.3rem;
-}
-
-.skill-card p {
-  font-size: 0.875rem;
-  color: var(--forge-text3);
-  margin: 0;
-}
-
-.resources-note {
-  color: var(--forge-text3);
-  font-size: 0.875rem;
-}
-
-@media (max-width: 600px) {
-  .day-list { grid-template-columns: 1fr; }
-  .skill-grid { grid-template-columns: 1fr; }
-}
+.interview-coach{min-height:100vh;background:#0c0a1d;color:#f5f3ff;padding:28px 20px 60px;font-family:inherit}.coach-shell{max-width:1120px;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:26px}.brand{display:flex;align-items:center;gap:12px;flex:1}.brand>span{font-size:30px}.brand h1{font-size:20px;margin:0 0 4px}.brand p,.hero p,.section-heading p{color:#a9a5bb;margin:0;font-size:14px}.back,.secondary,.primary,.text-btn,.icon-btn,.listen-btn{font:inherit;cursor:pointer}.back{border:1px solid #302c42;background:#171527;color:#d9d5e8;border-radius:12px;padding:10px 14px}.jd-badge{background:#241c3d;color:#c4a8ff;padding:9px 12px;border-radius:999px;font-size:12px;white-space:nowrap}.panel{background:#151326;border:1px solid #2a273b;border-radius:18px}.hero{padding:24px 28px;display:flex;justify-content:space-between;align-items:center;gap:24px;background:linear-gradient(120deg,#1c1733,#151326 70%);margin-bottom:18px}.eyebrow{font-size:11px;letter-spacing:.12em;color:#a884ff;font-weight:800}.hero h2{font-size:24px;margin:8px 0}.hero p{line-height:1.6}.progress-box{min-width:210px;padding:14px 16px;border:1px solid #38334b;border-radius:14px;background:#19172a}.progress-box strong{font-size:23px;display:block}.progress-box span{font-size:12px;color:#aaa6bd}.progress-track{height:5px;background:#302b42;border-radius:8px;margin-top:12px;overflow:hidden}.progress-track i{display:block;height:100%;background:#8c4dff;border-radius:8px;transition:width .2s}.tabs{display:flex;gap:8px;margin:18px 0;overflow:auto}.tabs button{white-space:nowrap;background:transparent;border:1px solid #302c42;color:#c7c3d5;border-radius:12px;padding:10px 15px;font:inherit;cursor:pointer}.tabs button.active{background:#7138e8;color:white;border-color:#8c4dff}.content-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}.welcome-card,.today-card,.summary-card{padding:23px}.welcome-card h2{font-size:24px;margin:10px 0}.welcome-card p,.summary-card p{color:#aaa6bd;line-height:1.75;font-size:14px}.today-card h3,.summary-card h3{margin:0 0 16px;font-size:16px}.roadmap{display:grid;gap:13px;margin-bottom:20px}.roadmap>div{display:flex;align-items:flex-start;gap:12px}.roadmap b{color:#a884ff;background:#27203c;border-radius:9px;padding:6px 8px;font-size:12px}.roadmap strong,.roadmap small{display:block}.roadmap strong{font-size:13px}.roadmap small{color:#9691a8;margin-top:3px;font-size:12px}.primary,.secondary{border:0;border-radius:11px;padding:11px 16px;font-weight:700}.primary{background:#783df0;color:white}.primary:hover{background:#8d56fb}.secondary{background:#262239;color:#e6e1f5;border:1px solid #3b3651}.tag-list{display:flex;flex-wrap:wrap;gap:7px}.tag-list span{font-size:12px;background:#211d33;border:1px solid #363047;color:#c9b9ff;border-radius:999px;padding:6px 9px}.text-btn{background:none;border:0;color:#b79aff;padding:4px 0}.profile-panel{padding:25px}.section-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:22px}.section-heading h2{font-size:21px;margin:8px 0}.section-heading p{line-height:1.6}.saved{color:#69dab0;font-size:12px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.form-grid label,.your-answer{display:grid;gap:8px;color:#d7d3e4;font-size:13px;font-weight:650}.form-grid .full{grid-column:1/-1}.form-grid input,.form-grid textarea,.your-answer textarea{box-sizing:border-box;width:100%;border:1px solid #39354d;background:#0f0d1c;color:#f5f3ff;border-radius:10px;padding:11px 12px;font:inherit;font-size:13px;resize:vertical}.form-grid input::placeholder,.form-grid textarea::placeholder,.your-answer textarea::placeholder{color:#716c82}.profile-actions{display:flex;align-items:center;gap:18px;margin-top:20px}.notice{color:#858096;font-size:12px;margin-top:20px}.vocab-layout,.practice-layout{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:start}.vocab-menu,.question-list{padding:16px;position:sticky;top:16px}.vocab-menu>.eyebrow,.question-list>.eyebrow{display:block;margin:3px 3px 14px}.vocab-menu button,.question-list button{width:100%;display:flex;align-items:center;gap:10px;background:transparent;border:0;color:#c6c2d4;text-align:left;padding:11px 10px;border-radius:10px;cursor:pointer;font:inherit;font-size:13px}.vocab-menu button.active,.question-list button.active{background:#28213e;color:#eee8ff}.vocab-menu button span{margin-left:auto;color:#928da4;font-size:11px}.vocab-list{display:grid;grid-template-columns:1fr 1fr;gap:12px}.vocab-card{padding:17px}.word-heading{display:flex;justify-content:space-between;align-items:flex-start}.word-heading>div{display:grid;grid-template-columns:28px auto;align-items:center;column-gap:8px}.word-count{grid-row:span 2;color:#9b76f6;font-size:11px}.word-heading h3{margin:0;font-size:17px}.word-heading small{grid-column:2;color:#89849b;font-size:11px;margin-top:3px}.icon-btn{background:#272239;border:1px solid #3a354e;color:#e2dafa;border-radius:10px;padding:8px 10px}.meaning{color:#d0c0ff;margin:16px 0;font-size:14px}.example{border-top:1px solid #302c41;padding-top:12px}.example>span{font-size:10px;color:#908ba2;text-transform:uppercase;letter-spacing:.08em}.example p{font-size:13px;line-height:1.6;margin:8px 0;color:#f0edf8}.example small{font-size:12px;color:#9994ab;line-height:1.5}.question-list button{align-items:flex-start}.question-number{color:#a987ff;font-size:11px;padding-top:2px}.question-list button>span:nth-child(2){flex:1}.question-list button small{display:block;color:#928da4;font-size:10px;margin-top:4px}.question-list button>b{color:#5ad5a0}.practice-card{padding:24px}.practice-top{display:flex;justify-content:space-between;align-items:center}.practice-top .icon-btn{font-size:12px}.practice-card h2{font-size:23px;line-height:1.4;margin:18px 0 8px}.translation{color:#aaa6bd;margin:0 0 18px}.tip{display:flex;gap:10px;background:#211d32;border:1px solid #373149;border-radius:11px;padding:12px;color:#aaa6bd;font-size:13px;line-height:1.5}.tip b{white-space:nowrap;color:#c9b3ff}.answer-block{margin-top:19px;background:#100e1e;border:1px solid #302b42;border-radius:13px;padding:17px}.answer-heading{display:flex;justify-content:space-between;align-items:center;font-size:13px}.answer-block>p{color:#e3deef;line-height:1.8;font-size:14px;margin:14px 0}.answer-block>p.answer-translation{border-top:1px solid #302b42;padding-top:13px;color:#aaa6bd}.listen-btn{background:none;border:0;color:#b99dff;padding:0;font-size:12px}.your-answer{margin-top:18px}.your-answer textarea{margin-top:1px;line-height:1.6}.practice-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.speech-message{font-size:12px;color:#bfa9ff}.question-nav{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #302c41;margin-top:22px;padding-top:16px;color:#8e899f;font-size:12px}.text-btn:disabled{opacity:.35;cursor:default}
+.speaking-layout{display:grid;grid-template-columns:250px 1fr;gap:16px;align-items:start}.speech-menu{padding:16px;position:sticky;top:16px}.speech-menu>.eyebrow{display:block;margin:3px 3px 14px}.speech-menu button{width:100%;display:flex;align-items:flex-start;gap:11px;background:transparent;border:0;color:#c6c2d4;text-align:left;padding:12px 10px;border-radius:10px;cursor:pointer;font:inherit}.speech-menu button.active{background:#28213e;color:#f0eaff}.speech-menu button>span{font-size:11px;color:#a987ff;padding-top:2px}.speech-menu button b{font-size:13px}.speech-menu button small{display:block;color:#928da4;font-size:11px;font-weight:400;margin-top:5px}.speech-card{padding:24px}.speech-card h2{font-size:23px;margin:8px 0}.speech-intro{color:#aaa6bd;line-height:1.65;font-size:14px}.speech-controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:17px 0}.speech-controls .secondary{font-size:12px;padding:9px 12px}.speech-lines{display:grid;gap:8px}.speech-lines>div{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:11px;border:1px solid transparent;border-radius:11px;background:#100e1e}.speech-lines>div.current{border-color:#7148c9;background:#1a1630}.line-play{width:27px;height:27px;border-radius:50%;border:1px solid #51406e;background:#28213e;color:#c7adff;font-size:11px;cursor:pointer}.speech-lines p{margin:1px 0;color:#e6e2ef;font-size:14px;line-height:1.6}.speech-lines small{display:block;color:#9994ab;font-size:12px;line-height:1.6;margin-top:5px}.rehearsal-tip{margin:15px 0;background:#211d32;border:1px solid #373149;border-radius:11px;padding:12px 14px;color:#aaa6bd;font-size:12px;line-height:1.65}.rehearsal-tip b{color:#c9b3ff}.speech-card .your-answer textarea{margin-top:1px;line-height:1.6}
+@media(max-width:760px){.interview-coach{padding:18px 12px 40px}.topbar{flex-wrap:wrap}.brand{order:-1;flex-basis:100%}.back{order:0}.jd-badge{margin-left:auto}.hero{align-items:flex-start;flex-direction:column;padding:20px}.progress-box{box-sizing:border-box;width:100%}.content-grid{grid-template-columns:1fr}.vocab-layout,.practice-layout,.speaking-layout{grid-template-columns:1fr}.vocab-menu,.question-list,.speech-menu{position:static}.vocab-menu,.speech-menu{display:flex;gap:5px;overflow:auto;align-items:center}.vocab-menu>.eyebrow,.speech-menu>.eyebrow{display:none}.vocab-menu button,.speech-menu button{width:auto;white-space:nowrap}.question-list{display:grid;grid-template-columns:1fr 1fr;gap:3px}.question-list>.eyebrow{grid-column:1/-1}.vocab-list{grid-template-columns:1fr}.practice-card,.speech-card{padding:17px}.practice-card h2,.speech-card h2{font-size:20px}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.section-heading{flex-direction:column}}
 </style>
