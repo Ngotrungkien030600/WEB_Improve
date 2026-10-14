@@ -40,7 +40,7 @@ const cards = [
   {
     icon: '📝',
     title: 'Từ vựng & Idioms',
-    description: '86 từ 14 chủ đề, 48 idioms & phrasal verbs, flashcard lật',
+    description: 'Từ vựng IT & phỏng vấn có 3 câu dịch nghĩa cho mỗi cụm; thêm idioms và chủ đề cơ bản',
     path: '/english#vocab',
   },
   {

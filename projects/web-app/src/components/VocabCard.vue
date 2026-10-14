@@ -15,15 +15,27 @@
           <button class="speak-btn" @click.stop="$emit('speak', vocab?.en)" title="Nghe phát âm">
             🔊
           </button>
-          <p class="vocab-phonetic">{{ vocab?.phonetic }}</p>
+          <p v-if="vocab?.phonetic" class="vocab-phonetic">{{ vocab?.phonetic }}</p>
           <span class="vocab-tag">{{ vocab?.tag }}</span>
         </div>
 
         <!-- Back -->
         <div class="vocab-face vocab-back">
           <h3 class="vocab-vi">{{ vocab?.vi }}</h3>
-          <p class="vocab-example-en">{{ vocab?.exampleEn }}</p>
-          <p class="vocab-example-vi">{{ vocab?.exampleVi }}</p>
+          <div v-if="vocab?.examples?.length" class="vocab-examples">
+            <article v-for="(example, exampleIndex) in vocab.examples" :key="exampleIndex" class="vocab-example">
+              <div class="vocab-example-heading">
+                <span>Ví dụ {{ exampleIndex + 1 }}</span>
+                <button class="example-speak-btn" type="button" @click.stop="$emit('speak', example.en)" :aria-label="`Nghe câu ví dụ ${exampleIndex + 1}`">🔊</button>
+              </div>
+              <p class="vocab-example-en">{{ example.en }}</p>
+              <p class="vocab-example-vi">{{ example.vi }}</p>
+            </article>
+          </div>
+          <template v-else>
+            <p class="vocab-example-en">{{ vocab?.exampleEn }}</p>
+            <p class="vocab-example-vi">{{ vocab?.exampleVi }}</p>
+          </template>
         </div>
       </div>
     </div>
@@ -100,7 +112,7 @@ const getCategoryLabel = (tag) => {
 .vocab-card-inner {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 390px;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
 }
@@ -130,6 +142,9 @@ const getCategoryLabel = (tag) => {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   transform: rotateY(180deg);
   color: white;
+  justify-content: flex-start;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .vocab-en {
@@ -194,6 +209,40 @@ const getCategoryLabel = (tag) => {
   margin: 0;
 }
 
+.vocab-examples {
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.vocab-example {
+  padding: 0.7rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: left;
+}
+
+.vocab-example-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.example-speak-btn {
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  padding: 0.25rem;
+  cursor: pointer;
+}
+
+.vocab-example .vocab-example-en { margin: 0.3rem 0; }
+.vocab-example .vocab-example-vi { margin: 0; }
+
 /* Controls */
 .vocab-controls {
   display: flex;
@@ -239,7 +288,7 @@ const getCategoryLabel = (tag) => {
 /* Responsive */
 @media (max-width: 600px) {
   .vocab-card-inner {
-    height: 200px;
+    height: 390px;
   }
   
   .vocab-en {

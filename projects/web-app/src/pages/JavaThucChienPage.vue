@@ -113,32 +113,38 @@
     <!-- Modal -->
     <div class="modal-overlay" :class="{ open: showModal }" @click.self="closeModal">
       <div class="modal">
-        <button class="close-btn" @click="closeModal" aria-label="Đóng">✕</button>
         <template v-if="selectedTask">
-          <h2>{{ selectedTask.title }}</h2>
-          <div class="meta">
-            <span class="badge" :class="'badge-lv' + selectedTask.level">{{ levelLabel(selectedTask.level) }}</span>
-            <span class="badge badge-cat">{{ categoryLabel(selectedTask.category) }}</span>
+          <div class="modal-header">
+            <div>
+              <h2>{{ selectedTask.title }}</h2>
+              <div class="meta">
+                <span class="badge" :class="'badge-lv' + selectedTask.level">{{ levelLabel(selectedTask.level) }}</span>
+                <span class="badge badge-cat">{{ categoryLabel(selectedTask.category) }}</span>
+              </div>
+            </div>
+            <button class="close-btn" @click="closeModal" aria-label="Đóng">✕</button>
           </div>
-          <p class="summary">{{ selectedTask.summary }}</p>
-          <h4>🛠️ Tech Stack</h4>
-          <div class="stack">
-            <span v-for="s in selectedTask.stack" :key="s">{{ s }}</span>
+          <div class="modal-content">
+            <p class="summary">{{ selectedTask.summary }}</p>
+            <h4>🛠️ Tech Stack</h4>
+            <div class="stack">
+              <span v-for="s in selectedTask.stack" :key="s">{{ s }}</span>
+            </div>
+            <h4>📋 Deliverables — việc cần hoàn thành</h4>
+            <ul>
+              <li v-for="(d, i) in selectedTask.deliverables" :key="i">{{ d }}</li>
+            </ul>
+            <div class="keywords">
+              <span v-for="k in selectedTask.keywords" :key="k">#{{ k }}</span>
+            </div>
+            <button
+              type="button"
+              class="done-btn modal-done"
+              :class="{ active: isDone(selectedTask.id) }"
+              :aria-pressed="isDone(selectedTask.id) ? 'true' : 'false'"
+              @click="toggleDone(selectedTask)"
+            >{{ isDone(selectedTask.id) ? '✅ Đã làm xong task này' : '⬜ Đánh dấu đã làm xong' }}</button>
           </div>
-          <h4>📋 Deliverables — việc cần hoàn thành</h4>
-          <ul>
-            <li v-for="(d, i) in selectedTask.deliverables" :key="i">{{ d }}</li>
-          </ul>
-          <div class="keywords">
-            <span v-for="k in selectedTask.keywords" :key="k">#{{ k }}</span>
-          </div>
-          <button
-            type="button"
-            class="done-btn modal-done"
-            :class="{ active: isDone(selectedTask.id) }"
-            :aria-pressed="isDone(selectedTask.id) ? 'true' : 'false'"
-            @click="toggleDone(selectedTask)"
-          >{{ isDone(selectedTask.id) ? '✅ Đã làm xong task này' : '⬜ Đánh dấu đã làm xong' }}</button>
         </template>
       </div>
     </div>
@@ -647,13 +653,13 @@ export default {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(5, 4, 14, 0.88);
+  backdrop-filter: blur(5px);
   display: none;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   z-index: 100;
-  padding: 2rem 1rem;
-  overflow-y: auto;
+  padding: 1.5rem 1rem;
 }
 
 .modal-overlay.open {
@@ -661,15 +667,35 @@ export default {
 }
 
 .modal {
-  background: var(--color-surface);
+  /* --color-surface is intentionally translucent for cards; dialogs need an opaque surface. */
+  background: #100d22;
   border: 1px solid var(--color-border);
   border-radius: 16px;
-  max-width: 720px;
+  max-width: 900px;
   width: 100%;
-  padding: 1.75rem;
   position: relative;
-  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  max-height: min(86vh, 900px);
+  overflow: hidden;
   animation: modalIn 0.2s ease;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+}
+
+.modal-header {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 1.5rem 4.25rem 1rem 1.5rem;
+  background: #100d22;
+  border-bottom: 1px solid var(--color-border);
+  z-index: 1;
+}
+
+.modal-content {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem 1.5rem;
+  overscroll-behavior: contain;
 }
 
 @keyframes modalIn {
@@ -685,8 +711,8 @@ export default {
 
 .modal .close-btn {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 1.25rem;
+  right: 1.25rem;
   background: var(--color-surface2);
   border: 1px solid var(--color-border);
   color: var(--color-text2);
@@ -708,7 +734,7 @@ export default {
   font-weight: 800;
   color: #fbbf24;
   margin-bottom: 0.75rem;
-  padding-right: 2.5rem;
+  padding-right: 0;
   line-height: 1.4;
 }
 
@@ -841,6 +867,23 @@ export default {
   }
   .filters input[type="text"] {
     width: 100%;
+  }
+  .modal-overlay {
+    padding: 0.75rem;
+  }
+  .modal {
+    max-height: 92dvh;
+    border-radius: 12px;
+  }
+  .modal-header {
+    padding: 1rem 3.75rem 0.75rem 1rem;
+  }
+  .modal-content {
+    padding: 1rem;
+  }
+  .modal .close-btn {
+    top: 0.8rem;
+    right: 0.8rem;
   }
 }
 </style>

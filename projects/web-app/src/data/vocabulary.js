@@ -1,5 +1,6 @@
 // Vocabulary data organized by category
 export const vocabCategories = {
+  itInterview: { label: 'IT & Phỏng vấn', icon: '💻' },
   greetings: { label: 'Chào hỏi & Giới thiệu', icon: '👋' },
   daily: { label: 'Sinh hoạt hàng ngày', icon: '🏠' },
   food: { label: 'Ăn uống', icon: '🍽️' },
@@ -17,6 +18,112 @@ export const vocabCategories = {
 };
 
 export const vocabulary = [
+  // IT workplace & interview vocabulary: learn each phrase through varied complete sentences.
+  { en: 'take ownership', phonetic: '', vi: 'chủ động chịu trách nhiệm đến cùng', tag: 'itInterview', examples: [
+    { en: 'I took ownership of the payment API from design to production.', vi: 'Tôi chịu trách nhiệm với API thanh toán từ khâu thiết kế đến khi đưa lên production.' },
+    { en: 'When an issue affects the team, I take ownership instead of waiting for someone else.', vi: 'Khi một vấn đề ảnh hưởng đến nhóm, tôi chủ động nhận trách nhiệm thay vì chờ người khác.' },
+    { en: 'I can take ownership of the migration and keep stakeholders updated.', vi: 'Tôi có thể phụ trách việc migration và thường xuyên cập nhật cho các bên liên quan.' },
+  ] },
+  { en: 'troubleshoot', phonetic: '', vi: 'điều tra và xử lý sự cố', tag: 'itInterview', examples: [
+    { en: 'I troubleshoot production issues by checking logs, metrics, and recent deployments.', vi: 'Tôi điều tra sự cố production bằng cách kiểm tra log, metrics và các lần deploy gần đây.' },
+    { en: 'We used a thread dump to troubleshoot the high CPU usage.', vi: 'Chúng tôi dùng thread dump để tìm nguyên nhân CPU sử dụng cao.' },
+    { en: 'I enjoy troubleshooting problems that cross service boundaries.', vi: 'Tôi thích điều tra những vấn đề liên quan đến nhiều service.' },
+  ] },
+  { en: 'root cause', phonetic: '', vi: 'nguyên nhân gốc rễ', tag: 'itInterview', examples: [
+    { en: 'We found the root cause in a missing database index.', vi: 'Chúng tôi tìm thấy nguyên nhân gốc rễ là thiếu index trong database.' },
+    { en: 'Before applying a fix, I try to understand the root cause.', vi: 'Trước khi sửa, tôi cố gắng hiểu nguyên nhân gốc rễ.' },
+    { en: 'The incident review helped us identify the root cause and prevent it from happening again.', vi: 'Buổi đánh giá sự cố giúp chúng tôi xác định nguyên nhân gốc rễ và ngăn vấn đề tái diễn.' },
+  ] },
+  { en: 'clarify requirements', phonetic: '', vi: 'làm rõ yêu cầu', tag: 'itInterview', examples: [
+    { en: 'I clarify requirements with the client before estimating the work.', vi: 'Tôi làm rõ yêu cầu với khách hàng trước khi ước lượng công việc.' },
+    { en: 'Could you clarify what should happen when the payment times out?', vi: 'Bạn có thể làm rõ điều gì cần xảy ra khi thanh toán hết thời gian chờ không?' },
+    { en: 'We clarified the acceptance criteria during sprint planning.', vi: 'Chúng tôi đã làm rõ tiêu chí nghiệm thu trong buổi lập kế hoạch sprint.' },
+  ] },
+  { en: 'trade-off', phonetic: '', vi: 'sự đánh đổi giữa các lựa chọn', tag: 'itInterview', examples: [
+    { en: 'There is a trade-off between faster delivery and broader test coverage.', vi: 'Có sự đánh đổi giữa việc giao hàng nhanh hơn và độ bao phủ kiểm thử rộng hơn.' },
+    { en: 'We chose a simpler design after discussing the performance trade-offs.', vi: 'Sau khi thảo luận các đánh đổi về hiệu năng, chúng tôi chọn thiết kế đơn giản hơn.' },
+    { en: 'In the interview, I explained the trade-offs behind that architecture decision.', vi: 'Trong buổi phỏng vấn, tôi giải thích những đánh đổi đằng sau quyết định kiến trúc đó.' },
+  ] },
+  { en: 'maintainable', phonetic: '', vi: 'dễ bảo trì', tag: 'itInterview', examples: [
+    { en: 'I try to keep the code maintainable by separating business logic from controllers.', vi: 'Tôi cố gắng giữ code dễ bảo trì bằng cách tách nghiệp vụ khỏi controller.' },
+    { en: 'Clear naming makes the codebase more maintainable for the whole team.', vi: 'Đặt tên rõ ràng giúp cả nhóm dễ bảo trì codebase hơn.' },
+    { en: 'We refactored the module to make future changes safer and more maintainable.', vi: 'Chúng tôi refactor module để các thay đổi sau này an toàn và dễ bảo trì hơn.' },
+  ] },
+  { en: 'scalable', phonetic: '', vi: 'có khả năng mở rộng khi tải tăng', tag: 'itInterview', examples: [
+    { en: 'We designed the service to be scalable as the number of users grows.', vi: 'Chúng tôi thiết kế service có thể mở rộng khi số người dùng tăng.' },
+    { en: 'The current solution works well, but it may not be scalable for millions of records.', vi: 'Giải pháp hiện tại hoạt động tốt nhưng có thể không mở rộng được với hàng triệu bản ghi.' },
+    { en: 'I consider scalability, reliability, and cost when choosing an architecture.', vi: 'Tôi cân nhắc khả năng mở rộng, độ tin cậy và chi phí khi chọn kiến trúc.' },
+  ] },
+  { en: 'optimize', phonetic: '', vi: 'tối ưu hóa', tag: 'itInterview', examples: [
+    { en: 'I optimized the SQL query and reduced the response time from two seconds to 300 milliseconds.', vi: 'Tôi tối ưu truy vấn SQL và giảm thời gian phản hồi từ hai giây xuống 300 mili giây.' },
+    { en: 'We should measure performance before we optimize the code.', vi: 'Chúng ta nên đo hiệu năng trước khi tối ưu code.' },
+    { en: 'I optimized the CI pipeline by caching dependencies.', vi: 'Tôi tối ưu pipeline CI bằng cách cache các dependency.' },
+  ] },
+  { en: 'deploy', phonetic: '', vi: 'triển khai phiên bản lên môi trường', tag: 'itInterview', examples: [
+    { en: 'We deploy to staging first and run smoke tests before production.', vi: 'Chúng tôi triển khai lên staging trước và chạy smoke test trước khi lên production.' },
+    { en: 'The team deploys small changes several times a week.', vi: 'Nhóm triển khai các thay đổi nhỏ vài lần mỗi tuần.' },
+    { en: 'I monitored the service after the deployment to make sure everything was stable.', vi: 'Tôi theo dõi service sau khi triển khai để đảm bảo mọi thứ ổn định.' },
+  ] },
+  { en: 'code review', phonetic: '', vi: 'đánh giá mã nguồn', tag: 'itInterview', examples: [
+    { en: 'I use code reviews to share context and catch issues early.', vi: 'Tôi dùng việc review code để chia sẻ ngữ cảnh và phát hiện vấn đề sớm.' },
+    { en: 'I try to make my pull requests small and easy to review.', vi: 'Tôi cố gắng giữ pull request nhỏ và dễ review.' },
+    { en: 'During code review, I focus on correctness, readability, and edge cases.', vi: 'Khi review code, tôi tập trung vào tính đúng đắn, khả năng đọc hiểu và các trường hợp biên.' },
+  ] },
+  { en: 'collaborate', phonetic: '', vi: 'phối hợp làm việc', tag: 'itInterview', examples: [
+    { en: 'I collaborate with product managers to break down business requirements.', vi: 'Tôi phối hợp với product manager để chia nhỏ yêu cầu nghiệp vụ.' },
+    { en: 'I collaborated with the QA team to reproduce and resolve the issue.', vi: 'Tôi đã phối hợp với nhóm QA để tái hiện và xử lý vấn đề.' },
+    { en: 'In my current role, I collaborate with developers across different time zones.', vi: 'Trong vai trò hiện tại, tôi phối hợp với các lập trình viên ở nhiều múi giờ khác nhau.' },
+  ] },
+  { en: 'resolve', phonetic: '', vi: 'giải quyết, xử lý dứt điểm', tag: 'itInterview', examples: [
+    { en: 'I resolved a data consistency issue by adding a transaction boundary.', vi: 'Tôi xử lý vấn đề nhất quán dữ liệu bằng cách thêm ranh giới transaction.' },
+    { en: 'We resolved the customer’s concern before the release.', vi: 'Chúng tôi đã giải quyết lo ngại của khách hàng trước khi phát hành.' },
+    { en: 'I prioritize issues based on user impact and urgency.', vi: 'Tôi ưu tiên vấn đề dựa trên ảnh hưởng đến người dùng và mức độ khẩn cấp.' },
+  ] },
+  { en: 'impact', phonetic: '', vi: 'ảnh hưởng, tác động', tag: 'itInterview', examples: [
+    { en: 'The change has a positive impact on API response time.', vi: 'Thay đổi này tác động tích cực đến thời gian phản hồi API.' },
+    { en: 'I assess the impact on existing clients before changing the contract.', vi: 'Tôi đánh giá ảnh hưởng đến các client hiện tại trước khi thay đổi contract.' },
+    { en: 'This bug affects a small number of users, but the business impact is high.', vi: 'Lỗi này ảnh hưởng đến ít người dùng nhưng tác động đến hoạt động kinh doanh lại lớn.' },
+  ] },
+  { en: 'reliable', phonetic: '', vi: 'đáng tin cậy, hoạt động ổn định', tag: 'itInterview', examples: [
+    { en: 'We added retries and monitoring to make the integration more reliable.', vi: 'Chúng tôi thêm cơ chế thử lại và monitoring để tích hợp đáng tin cậy hơn.' },
+    { en: 'A reliable system should fail gracefully and provide useful logs.', vi: 'Một hệ thống đáng tin cậy nên xử lý lỗi có kiểm soát và cung cấp log hữu ích.' },
+    { en: 'I focus on building reliable services, not just adding new features.', vi: 'Tôi tập trung xây dựng service ổn định, không chỉ thêm tính năng mới.' },
+  ] },
+  { en: 'meet a deadline', phonetic: '', vi: 'hoàn thành đúng thời hạn', tag: 'itInterview', examples: [
+    { en: 'We met the deadline by reducing the scope of the first release.', vi: 'Chúng tôi kịp thời hạn bằng cách giảm phạm vi của đợt phát hành đầu.' },
+    { en: 'I raise risks early if I think we may not meet a deadline.', vi: 'Tôi báo rủi ro sớm nếu nghĩ rằng nhóm có thể không kịp thời hạn.' },
+    { en: 'The team delivered on time without skipping critical tests.', vi: 'Nhóm bàn giao đúng hạn mà không bỏ qua các kiểm thử quan trọng.' },
+  ] },
+  { en: 'be responsible for', phonetic: '', vi: 'chịu trách nhiệm về', tag: 'itInterview', examples: [
+    { en: 'I was responsible for building REST APIs for the customer portal.', vi: 'Tôi chịu trách nhiệm xây dựng REST API cho cổng thông tin khách hàng.' },
+    { en: 'I am responsible for maintaining several backend services.', vi: 'Tôi chịu trách nhiệm bảo trì một số backend service.' },
+    { en: 'I was responsible for the implementation, while another engineer handled the infrastructure.', vi: 'Tôi phụ trách phần triển khai tính năng, còn một kỹ sư khác phụ trách hạ tầng.' },
+  ] },
+  { en: 'contribute to', phonetic: '', vi: 'đóng góp vào', tag: 'itInterview', examples: [
+    { en: 'I contributed to the migration from a monolith to smaller services.', vi: 'Tôi đã đóng góp vào quá trình chuyển từ monolith sang các service nhỏ hơn.' },
+    { en: 'My main contribution was improving the reliability of the payment flow.', vi: 'Đóng góp chính của tôi là cải thiện độ ổn định của luồng thanh toán.' },
+    { en: 'I would like to contribute to a product used by customers across different markets.', vi: 'Tôi muốn đóng góp vào một sản phẩm được khách hàng ở nhiều thị trường sử dụng.' },
+  ] },
+  { en: 'workaround', phonetic: '', vi: 'cách xử lý tạm thời', tag: 'itInterview', examples: [
+    { en: 'We applied a workaround to restore the service while preparing a permanent fix.', vi: 'Chúng tôi áp dụng cách xử lý tạm thời để khôi phục service trong khi chuẩn bị bản sửa triệt để.' },
+    { en: 'The workaround reduced the impact, but it did not fix the root cause.', vi: 'Cách xử lý tạm thời giảm ảnh hưởng nhưng không giải quyết nguyên nhân gốc rễ.' },
+    { en: 'I documented the workaround so the support team could help customers.', vi: 'Tôi ghi lại cách xử lý tạm thời để nhóm hỗ trợ có thể giúp khách hàng.' },
+  ] },
+  { en: 'break down a task', phonetic: '', vi: 'chia nhỏ một đầu việc', tag: 'itInterview', examples: [
+    { en: 'I break down large tasks into smaller steps that can be reviewed independently.', vi: 'Tôi chia đầu việc lớn thành các bước nhỏ có thể review độc lập.' },
+    { en: 'Breaking down the migration helped us identify dependencies early.', vi: 'Việc chia nhỏ migration giúp chúng tôi nhận ra các phụ thuộc từ sớm.' },
+    { en: 'Could we break this task down and deliver the highest-priority part first?', vi: 'Chúng ta có thể chia nhỏ việc này và bàn giao phần ưu tiên cao nhất trước không?' },
+  ] },
+  { en: 'keep stakeholders informed', phonetic: '', vi: 'cập nhật thông tin cho các bên liên quan', tag: 'itInterview', examples: [
+    { en: 'I keep stakeholders informed when a delivery date or scope changes.', vi: 'Tôi cập nhật cho các bên liên quan khi ngày bàn giao hoặc phạm vi thay đổi.' },
+    { en: 'During the incident, we kept stakeholders informed with short, regular updates.', vi: 'Trong sự cố, chúng tôi cập nhật ngắn gọn và đều đặn cho các bên liên quan.' },
+    { en: 'I share risks early so stakeholders have time to make a decision.', vi: 'Tôi chia sẻ rủi ro sớm để các bên liên quan có thời gian đưa ra quyết định.' },
+  ] },
+  { en: 'one of my key contributions', phonetic: '', vi: 'một trong những đóng góp nổi bật của tôi', tag: 'itInterview', examples: [
+    { en: 'One of my key contributions was reducing the API’s average response time.', vi: 'Một trong những đóng góp nổi bật của tôi là giảm thời gian phản hồi trung bình của API.' },
+    { en: 'One of my key contributions was introducing automated checks to the deployment pipeline.', vi: 'Một đóng góp nổi bật của tôi là đưa các bước kiểm tra tự động vào pipeline triển khai.' },
+    { en: 'One of my key contributions was helping the team deliver the migration safely.', vi: 'Một đóng góp nổi bật của tôi là giúp nhóm thực hiện migration an toàn.' },
+  ] },
   // Greetings
   { en: 'Hello', phonetic: '/həˈloʊ/', vi: 'Xin chào', tag: 'greetings', exampleEn: '"Hello, nice to meet you!"', exampleVi: '"Xin chào, rất vui được gặp bạn!"' },
   { en: 'Goodbye', phonetic: '/ɡʊdˈbaɪ/', vi: 'Tạm biệt', tag: 'greetings', exampleEn: '"Goodbye, see you tomorrow!"', exampleVi: '"Tạm biệt, hẹn gặp lại ngày mai!"' },

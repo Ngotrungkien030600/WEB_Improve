@@ -61,6 +61,7 @@
       <main class="content-area">
         <!-- Vocabulary Section -->
         <section v-show="currentTab === 'vocab'" class="content-section">
+          <p class="vocab-learning-tip">Học theo cụm từ dùng trong công việc IT và phỏng vấn. Mỗi cụm có 3 câu hoàn chỉnh kèm nghĩa tiếng Việt — lật thẻ để học, bấm 🔊 để nghe câu.</p>
           <VocabCard
             v-if="currentVocab"
             :vocab="currentVocab"
@@ -341,7 +342,7 @@ const toggleTimer = () => {
 // Tabs & Navigation
 const currentTab = ref('vocab');
 const searchQuery = ref('');
-const activeCategory = ref('all');
+const activeCategory = ref('itInterview');
 
 const tabs = [
   { id: 'vocab', icon: '📝', label: 'Từ vựng' },
@@ -743,6 +744,17 @@ onUnmounted(() => {
 /* Content */
 .content-section {
   animation: fadeIn 0.3s ease;
+}
+
+.vocab-learning-tip {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(129, 140, 248, 0.28);
+  border-radius: 12px;
+  background: rgba(99, 102, 241, 0.1);
+  color: #c7d2fe;
+  font-size: 0.88rem;
+  line-height: 1.6;
 }
 
 .empty-state {

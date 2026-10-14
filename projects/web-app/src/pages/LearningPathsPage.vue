@@ -13,6 +13,23 @@
         bạn đã làm ở Phòng luyện code, quiz Java, Thực chiến và Pomodoro — không phải tự khai.
       </p>
 
+      <section class="study-loop" aria-label="Cách học mỗi buổi">
+        <div class="study-loop-heading">
+          <span class="study-loop-icon">⏱️</span>
+          <div>
+            <h2>Một buổi học hiệu quả · 45–60 phút</h2>
+            <p>Học ít nội dung, tự làm lại và giải thích được — rồi mới chuyển sang phần tiếp theo.</p>
+          </div>
+        </div>
+        <ol class="study-loop-steps">
+          <li><strong>5 phút · Gợi nhớ</strong><span>Đóng tài liệu, tự nhắc lại bài cũ.</span></li>
+          <li><strong>15 phút · Học một ý</strong><span>Đọc ví dụ và lần theo luồng dữ liệu.</span></li>
+          <li><strong>25 phút · Tự làm</strong><span>Gõ lại từ đầu, chạy thử và sửa lỗi.</span></li>
+          <li><strong>5 phút · Nói lại</strong><span>Giải thích vì sao code chạy; thử nói bằng tiếng Anh với chủ đề IT.</span></li>
+          <li><strong>5 phút · Ghi lỗi</strong><span>Ghi điều chưa hiểu để ôn sau 1–3–7 ngày.</span></li>
+        </ol>
+      </section>
+
       <div class="track-tabs" role="tablist" aria-label="Chọn lộ trình">
         <button
           v-for="track in tracks"
@@ -104,7 +121,13 @@
           <h4>📚 Bài học</h4>
           <ul class="item-list">
             <li v-for="item in itemsOf(stage, 'lesson')" :key="item.key" class="item" :class="{ done: item.done }">
-              <span class="item-state">{{ item.done ? '✅' : '⬜' }}</span>
+              <button
+                type="button"
+                class="item-check"
+                :aria-pressed="item.done ? 'true' : 'false'"
+                :aria-label="`${item.done ? 'Bỏ đánh dấu' : 'Đánh dấu đã học'}: ${item.label}`"
+                @click="toggleItem(item.key, !item.done)"
+              >{{ item.done ? '✅' : '⬜' }}</button>
               <a v-if="item.path" class="item-link" @click="handleNavigate(item.path)">{{ item.label }}</a>
               <span v-else class="item-label">{{ item.label }}</span>
             </li>
@@ -288,6 +311,61 @@ export default {
   margin-bottom: 1.25rem;
   font-size: var(--font-sm);
   line-height: 1.7;
+}
+
+.study-loop {
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(6, 182, 212, 0.06));
+}
+
+.study-loop-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.study-loop-icon {
+  font-size: 1.25rem;
+}
+
+.study-loop-heading h2 {
+  font-size: var(--font-base);
+  font-weight: 800;
+}
+
+.study-loop-heading p {
+  margin-top: 0.2rem;
+  color: var(--color-text2);
+  font-size: var(--font-xs);
+  line-height: 1.5;
+}
+
+.study-loop-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+}
+
+.study-loop-steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: rgba(12, 10, 29, 0.35);
+  font-size: var(--font-xs);
+}
+
+.study-loop-steps li span {
+  color: var(--color-text2);
+  line-height: 1.45;
 }
 
 .track-tabs {
