@@ -74,22 +74,10 @@ const cards = [
     path: '/skill-tracker',
   },
   {
-    icon: '🃏',
-    title: 'Memory Game',
-    description: 'Ghép từ vựng với nghĩa',
-    path: '/game-memory',
-  },
-  {
-    icon: '🔀',
-    title: 'Xếp chữ',
-    description: 'Sắp xếp từ thành câu',
-    path: '/game-scramble',
-  },
-  {
-    icon: '⚡',
-    title: 'Speed Quiz',
-    description: 'Trắc nghiệm nhanh có thời gian',
-    path: '/game-speedquiz',
+    icon: '🎯',
+    title: 'Luyện giao tiếp IT',
+    description: '5 bài luyện phỏng vấn, stand-up, làm rõ yêu cầu và xử lý sự cố bằng tiếng Anh',
+    path: '/it-english-practice/interview',
   },
 ];
 

@@ -39,7 +39,15 @@
             <div v-if="back.examples && back.examples.length" class="detail-section">
               <span class="detail-label">📝 Ví dụ</span>
               <div class="examples">
-                <p v-for="(ex, i) in back.examples" :key="i" class="example">{{ ex }}</p>
+                <div v-for="(ex, i) in back.examples" :key="i" class="example">
+                  <template v-if="typeof ex === 'string'">{{ ex }}</template>
+                  <template v-else>
+                    <p class="question-line"><strong>❓ Hỏi:</strong> {{ ex.q }}</p>
+                    <p class="question-translation">{{ ex.qVi }}</p>
+                    <p class="answer-line"><strong>💬 Đáp:</strong> {{ ex.a }}</p>
+                    <p class="question-translation">{{ ex.aVi }}</p>
+                  </template>
+                </div>
               </div>
             </div>
           </template>
@@ -245,6 +253,25 @@ defineEmits(['flip']);
   font-size: 0.8rem;
   font-style: italic;
   margin: 0;
+}
+
+.example .question-line,
+.example .answer-line {
+  margin: 0;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.example .question-translation {
+  margin: 0.1rem 0 0.45rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.76rem;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.example .answer-line {
+  margin-top: 0.4rem;
 }
 
 /* EN-VI example pairs */

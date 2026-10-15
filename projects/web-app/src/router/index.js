@@ -139,6 +139,11 @@ const routes = [
     component: () => import('../pages/GameSpeedQuizPage.vue'),
   },
   {
+    path: '/it-english-practice/:gameId',
+    name: 'it-english-practice',
+    component: () => import('../pages/ItEnglishGamePage.vue'),
+  },
+  {
     path: '/exam',
     name: 'exam',
     component: () => import('../pages/ExamPage.vue'),

@@ -177,8 +177,25 @@
         <!-- Q&A Section -->
         <section v-show="currentTab === 'qa'" class="content-section">
           <div class="qa-container">
-            <h2 class="qa-title">❓ Học từ vựng hỏi</h2>
-            <p class="qa-subtitle">Bấm vào từ để xem: nghĩa, cách dùng, và ví dụ</p>
+            <h2 class="qa-title">❓ Từ để hỏi và cách hỏi–đáp</h2>
+            <p class="qa-subtitle">Học công thức do/does/did và am/is/are, sau đó lật thẻ để xem câu hỏi, câu trả lời mẫu và nghĩa tiếng Việt.</p>
+
+            <section class="question-patterns" aria-labelledby="question-patterns-title">
+              <h3 id="question-patterns-title">Hỏi thế nào với do, does, did và are?</h3>
+              <p class="question-patterns-intro">Đừng chỉ học nghĩa của What/Where/Why. Hãy chọn đúng trợ động từ, rồi nghe câu trả lời mẫu.</p>
+              <article v-for="rule in questionPatternGuide" :key="rule.id" class="question-pattern-card">
+                <h4>{{ rule.title }}</h4>
+                <code>{{ rule.pattern }}</code>
+                <p class="question-pattern-explanation">{{ rule.explanation }}</p>
+                <div class="question-pattern-example">
+                  <p><strong>❓ Hỏi:</strong> {{ rule.question }}</p>
+                  <p class="example-translation">{{ rule.questionVi }}</p>
+                  <p><strong>💬 Đáp:</strong> {{ rule.answer }}</p>
+                  <p class="example-translation">{{ rule.answerVi }}</p>
+                </div>
+              </article>
+              <p class="short-answer-tip"><strong>Câu hỏi Yes/No:</strong> “Do you use Spring Data?” → “Yes, I do.” · “Does it return a DTO?” → “No, it doesn’t.” · “Are you working on the API?” → “Yes, I am.”</p>
+            </section>
 
             <div class="qa-filter">
               <button
@@ -199,7 +216,7 @@
                 meaning: qaCurrentWord?.meaning,
                 usage: qaCurrentWord?.usage,
                 formula: qaCurrentWord?.formula,
-                examples: qaCurrentWord?.examples
+                examples: qaCurrentWord?.dialogues || qaCurrentWord?.examples
               }"
               :flipped="qaWordRevealed"
               @flip="qaWordReveal"
@@ -295,6 +312,7 @@ import { vocabulary, vocabCategories } from '../data/vocabulary.js';
 import { tenses, practiceSentences } from '../data/tenses.js';
 import { stories } from '../data/stories.js';
 import { idioms, phrasalVerbs, idiomCategories } from '../data/idioms.js';
+import { questionPatternGuide, whQuestionDialogues } from '../data/question-patterns.js';
 import { getHistory } from '../logic/forge-timer-logic.js';
 
 // Timer
@@ -537,7 +555,11 @@ watch(qaFilterCat, () => {
   qaWordRevealed.value = false;
 });
 
-const qaCurrentWord = computed(() => filteredQaWords.value[qaWordIndex.value]);
+const qaCurrentWord = computed(() => {
+  const word = filteredQaWords.value[qaWordIndex.value];
+  if (!word) return null;
+  return { ...word, dialogues: whQuestionDialogues[word.word] || [] };
+});
 
 const qaWordNext = () => {
   if (qaWordIndex.value < filteredQaWords.value.length - 1) {
@@ -593,9 +615,11 @@ const filteredPhrasals = computed(() => {
 
 // Games
 const gameCards = [
-  { icon: '🃏', title: 'Memory Game', description: 'Ghép từ vựng với nghĩa', path: '/game-memory' },
-  { icon: '🔀', title: 'Xếp chữ', description: 'Sắp xếp từ thành câu', path: '/game-scramble' },
-  { icon: '⚡', title: 'Speed Quiz', description: 'Trắc nghiệm nhanh có thời gian', path: '/game-speedquiz' },
+  { icon: '🎙️', title: 'Phỏng vấn thử', description: 'Tập trả lời câu hỏi kỹ thuật, xem cách triển khai và bài mẫu 60–90 giây', path: '/it-english-practice/interview' },
+  { icon: '🗓️', title: 'Daily Stand-up', description: 'Nói rõ việc hôm qua, hôm nay và điều đang bị vướng', path: '/it-english-practice/standup' },
+  { icon: '🧭', title: 'Làm rõ yêu cầu', description: 'Đặt câu hỏi đúng trước khi bắt đầu code theo yêu cầu khách hàng', path: '/it-english-practice/clarify' },
+  { icon: '🕵️', title: 'Thám tử xử lý sự cố', description: 'Đọc ticket và log, chọn bước kiểm tra rồi giải thích suy luận', path: '/it-english-practice/incident' },
+  { icon: '🧱', title: 'Dựng câu trả lời', description: 'Sắp xếp ý thành câu chuyện phỏng vấn mạch lạc, có kết quả rõ ràng', path: '/it-english-practice/answer-builder' },
 ];
 
 const handleNavigate = (path) => navigate(path);
@@ -1071,6 +1095,89 @@ onUnmounted(() => {
   font-size: 0.85rem;
   color: #94a3b8;
   margin: 0 0 1.5rem;
+}
+
+.question-patterns {
+  margin: 0 auto 1.5rem;
+  max-width: 960px;
+  padding: 1rem;
+  border: 1px solid rgba(129, 140, 248, 0.28);
+  border-radius: 16px;
+  background: rgba(99, 102, 241, 0.08);
+  text-align: left;
+}
+
+.question-patterns > h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  color: #e0e7ff;
+}
+
+.question-patterns-intro,
+.question-pattern-explanation,
+.example-translation {
+  color: #aeb8ce;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.question-patterns-intro {
+  margin: 0 0 0.85rem;
+}
+
+.question-pattern-card {
+  padding: 0.85rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.question-pattern-card h4 {
+  margin: 0 0 0.4rem;
+  font-size: 0.88rem;
+  color: #c4b5fd;
+}
+
+.question-pattern-card code {
+  display: inline-block;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(9, 8, 25, 0.55);
+  color: #f8fafc;
+  font-size: 0.8rem;
+  white-space: normal;
+}
+
+.question-pattern-explanation {
+  margin: 0.45rem 0;
+}
+
+.question-pattern-example {
+  padding: 0.65rem 0.75rem;
+  border-left: 3px solid #8b5cf6;
+  border-radius: 0 8px 8px 0;
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.question-pattern-example p {
+  margin: 0.15rem 0;
+}
+
+.question-pattern-example .example-translation {
+  margin: 0 0 0.35rem;
+  font-style: italic;
+}
+
+.short-answer-tip {
+  margin: 0.65rem 0 0;
+  padding: 0.7rem;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.08);
+  color: #a7f3d0;
+  font-size: 0.8rem;
+  line-height: 1.6;
 }
 
 .qa-filter {
