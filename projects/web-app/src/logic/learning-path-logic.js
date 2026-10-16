@@ -29,6 +29,7 @@ export function readTicks() {
   return {
     items: stored.items && typeof stored.items === 'object' ? stored.items : {},
     stages: stored.stages && typeof stored.stages === 'object' ? stored.stages : {},
+    reviews: stored.reviews && typeof stored.reviews === 'object' ? stored.reviews : {},
   };
 }
 
@@ -52,6 +53,13 @@ export function markStage(stageId, done) {
   const ticks = readTicks();
   if (done) ticks.stages[stageId] = new Date().toISOString();
   else delete ticks.stages[stageId];
+  saveTicks(ticks);
+  return ticks;
+}
+
+export function markStageReviewed(stageId) {
+  const ticks = readTicks();
+  ticks.reviews[stageId] = new Date().toISOString();
   saveTicks(ticks);
   return ticks;
 }
@@ -238,7 +246,9 @@ export function reviewReminders(track, ticks, now = Date.now()) {
   const stages = track.stages || [];
   return stages
     .map((stage) => {
-      const at = ticks.stages[stage.id];
+      const completedAt = ticks.stages[stage.id];
+      const reviewedAt = ticks.reviews?.[stage.id];
+      const at = reviewedAt && reviewedAt > completedAt ? reviewedAt : completedAt;
       if (!at) return null;
       const days = Math.floor((now - new Date(at).getTime()) / 86400000);
       if (!Number.isFinite(days) || days < REVIEW_GAP_DAYS) return null;

@@ -13,6 +13,16 @@
         bạn đã làm ở Phòng luyện code, quiz Java, Thực chiến và Pomodoro — không phải tự khai.
       </p>
 
+      <section class="how-to-card" aria-label="Cách sử dụng lộ trình">
+        <strong>Bắt đầu như thế nào?</strong>
+        <ol>
+          <li>Chọn lộ trình phù hợp, rồi làm đúng việc được gợi ý trong mục “Hôm nay học gì”.</li>
+          <li>Mở bài học, thực hành ở trang được liên kết; quay lại đây và đánh dấu từng mục sau khi tự làm được.</li>
+          <li>Khi mọi mục trong chặng đã hoàn thành, xác nhận “Đạt chuẩn”. Sau 7 ngày, chặng sẽ hiện “Cần ôn lại”.</li>
+        </ol>
+        <div class="status-legend"><span>○ Chưa học</span><span>◐ Đang học</span><span>✓ Đã học</span><span>↻ Cần ôn lại</span><span>★ Đạt chuẩn</span></div>
+      </section>
+
       <section class="study-loop" aria-label="Cách học mỗi buổi">
         <div class="study-loop-heading">
           <span class="study-loop-icon">⏱️</span>
@@ -70,9 +80,13 @@
 
         <div class="today-foot">
           <span>⏱ Tổng thời gian học: <strong>{{ hoursLabel(signals.totalMinutes) }}</strong> ({{ signals.streak }} ngày liên tiếp)</span>
-          <span v-if="reminders.length" class="review-nudge">
-            🔁 Nên ôn lại: {{ reminders.map((item) => `${item.title} (${item.days} ngày trước)`).join(' · ') }}
-          </span>
+          <div v-if="reminders.length" class="review-nudge">
+            <strong>🔁 Cần ôn lại</strong>
+            <span v-for="item in reminders" :key="item.stageId" class="review-reminder">
+              {{ item.title }} · {{ item.days }} ngày chưa ôn
+              <button type="button" @click="markReviewed(item.stageId)">Đã ôn hôm nay</button>
+            </span>
+          </div>
         </div>
       </section>
 
@@ -104,6 +118,7 @@
           <div class="stage-state">
             <span class="stage-percent">{{ stage.progress.percent }}%</span>
             <span class="stage-count">{{ stage.progress.done }}/{{ stage.progress.total }} việc</span>
+            <span class="stage-status" :class="stageStatusClass(stage)">{{ stageStatus(stage) }}</span>
           </div>
         </header>
 
@@ -130,6 +145,7 @@
               >{{ item.done ? '✅' : '⬜' }}</button>
               <a v-if="item.path" class="item-link" @click="handleNavigate(item.path)">{{ item.label }}</a>
               <span v-else class="item-label">{{ item.label }}</span>
+              <span class="item-status">{{ item.done ? 'Đã học' : 'Chưa học' }}</span>
             </li>
           </ul>
         </div>
@@ -150,6 +166,7 @@
               <a v-if="item.path" class="item-link" @click="handleNavigate(item.path)">{{ item.label }}</a>
               <span v-else class="item-label">{{ item.label }}</span>
               <span v-if="item.detail" class="item-detail">{{ item.detail }}</span>
+              <span class="item-status">{{ item.done ? 'Đã luyện' : 'Cần luyện' }}</span>
             </li>
           </ul>
         </div>
@@ -166,6 +183,7 @@
                 @click="toggleItem(item.key, !item.done)"
               >{{ item.done ? '✅' : '⬜' }}</button>
               <span class="item-label">{{ item.label }}</span>
+              <span class="item-status">{{ item.done ? 'Đạt' : 'Chưa đạt' }}</span>
             </li>
           </ul>
         </div>
@@ -177,9 +195,11 @@
             <button
               type="button"
               class="btn-mark"
-              :class="{ active: stage.progress.completed }"
+              :class="{ active: stage.progress.completed, disabled: !stage.progress.completed && stage.progress.percent < 100 }"
+              :disabled="!stage.progress.completed && stage.progress.percent < 100"
+              :title="stage.progress.percent < 100 ? 'Hoàn thành các mục học và luyện tập trước' : ''"
               @click="toggleStage(stage)"
-            >{{ stage.progress.completed ? '✅ Đã đạt chuẩn chặng' : '🏁 Đạt chuẩn chặng này' }}</button>
+            >{{ stage.progress.completed ? '✅ Đã đạt chuẩn · Bỏ xác nhận' : '🏁 Xác nhận đạt chuẩn' }}</button>
             <span v-if="stage.progress.completedAt" class="stage-date">xong {{ formatDate(stage.progress.completedAt) }}</span>
           </div>
         </div>
@@ -210,6 +230,7 @@ import {
   countQuizResult,
   hoursLabel,
   markStageComplete,
+  markStageReviewed,
   nextStep,
   prerequisiteWarnings,
   readQuizState,
@@ -243,7 +264,7 @@ export default {
       return nextStep(this.track, this.signals, this.ticks);
     },
     reminders() {
-      return reviewReminders(this.track, this.ticks).slice(0, 2);
+      return reviewReminders(this.track, this.ticks);
     },
   },
 
@@ -284,6 +305,21 @@ export default {
     toggleStage(stage) {
       this.ticks = markStageComplete(stage, this.signals, !stage.progress.completed);
     },
+    markReviewed(stageId) {
+      this.ticks = markStageReviewed(stageId);
+    },
+    stageStatus(stage) {
+      if (this.reminders.some((item) => item.stageId === stage.id)) return 'Cần ôn lại';
+      if (stage.progress.completed) return 'Đạt chuẩn';
+      if (stage.progress.done > 0) return 'Đang học';
+      return 'Chưa bắt đầu';
+    },
+    stageStatusClass(stage) {
+      if (this.reminders.some((item) => item.stageId === stage.id)) return 'needs-review';
+      if (stage.progress.completed) return 'mastered';
+      if (stage.progress.done > 0) return 'in-progress';
+      return 'not-started';
+    },
     formatDate(value) {
       const date = new Date(value);
       if (Number.isNaN(date.getTime())) return '';
@@ -311,6 +347,36 @@ export default {
   margin-bottom: 1.25rem;
   font-size: var(--font-sm);
   line-height: 1.7;
+}
+
+.how-to-card {
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(6, 182, 212, 0.28);
+  border-radius: var(--radius-lg);
+  background: rgba(6, 182, 212, 0.06);
+  color: var(--color-text2);
+  font-size: var(--font-xs);
+  line-height: 1.6;
+}
+
+.how-to-card > strong {
+  color: var(--color-text);
+  font-size: var(--font-sm);
+}
+
+.how-to-card ol {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.status-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.85rem;
+  color: var(--color-text);
 }
 
 .study-loop {
@@ -468,7 +534,31 @@ export default {
 }
 
 .review-nudge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
   color: #fcd34d;
+}
+
+.review-reminder {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid rgba(252, 211, 77, 0.25);
+  border-radius: var(--radius-sm);
+  background: rgba(252, 211, 77, 0.06);
+}
+
+.review-reminder button {
+  border: 0;
+  background: transparent;
+  color: #fde68a;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .track-head {
@@ -586,6 +676,21 @@ export default {
   color: var(--color-text2);
 }
 
+.stage-status {
+  display: inline-block;
+  margin-top: 0.2rem;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.stage-status.not-started { color: var(--color-text2); background: var(--color-surface2); }
+.stage-status.in-progress { color: #93c5fd; background: rgba(59, 130, 246, 0.12); }
+.stage-status.mastered { color: #6ee7b7; background: rgba(16, 185, 129, 0.12); }
+.stage-status.needs-review { color: #fde68a; background: rgba(245, 158, 11, 0.14); }
+
 .stage-progress-track {
   height: 5px;
   margin: 0.6rem 0 0.75rem;
@@ -688,6 +793,13 @@ export default {
   color: var(--color-text2);
 }
 
+.item-status {
+  flex: 0 0 auto;
+  color: var(--color-text2);
+  font-size: 0.66rem;
+  white-space: nowrap;
+}
+
 .item.checkpoint .item-label {
   color: var(--color-text);
   font-weight: 600;
@@ -752,6 +864,12 @@ export default {
   border-color: rgba(52, 211, 153, 0.6);
   color: #34d399;
   background: rgba(52, 211, 153, 0.1);
+}
+
+.btn-mark:disabled,
+.btn-mark.disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
 }
 
 .stage-date {

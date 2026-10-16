@@ -61,6 +61,7 @@ const groups = [
     title: 'Bắt đầu & lộ trình học',
     items: [
       { icon: '🗺️', title: 'Lộ trình học', description: 'Chọn mục tiêu đi làm, theo dõi các chặng và điều kiện hoàn thành.', path: '/learning-paths' },
+      { icon: '🧠', title: 'Tư duy kỹ sư qua bài toán thật', description: 'Học thuật toán, backend, database, vận hành và tiếng Anh trong cùng tình huống thực tế.', path: '/engineering-thinking' },
       { icon: '🚀', title: 'Accelerator 30-Day', description: 'Kế hoạch luyện tập cấp tốc 1 giờ mỗi ngày trong 30 ngày.', path: '/accelerator' },
     ],
   },

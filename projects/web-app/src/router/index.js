@@ -14,6 +14,11 @@ const routes = [
     component: () => import('../pages/BusinessDomainsPage.vue'),
   },
   {
+    path: '/engineering-thinking',
+    name: 'engineering-thinking',
+    component: () => import('../pages/EngineeringThinkingPage.vue'),
+  },
+  {
     path: '/ai',
     name: 'ai',
     component: () => import('../pages/AiHubPage.vue'),
