@@ -282,6 +282,10 @@ const router = createRouter({
   routes,
 });
 
+router.onError((error, to) => {
+  console.error(`[SkillForge] Router failed to load ${to.fullPath}:`, error);
+});
+
 // Chặn toàn bộ nội dung khi chưa đăng nhập: trang đăng nhập là trang đầu tiên của web.
 const PUBLIC_PATHS = ['/login', '/register'];
 

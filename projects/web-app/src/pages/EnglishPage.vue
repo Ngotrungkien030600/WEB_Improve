@@ -55,6 +55,10 @@
           <span class="tab-icon">📝</span>
           <span class="tab-label">Thi</span>
         </a>
+        <a class="tab-item tab-link interview-tab-link" href="/it-english-practice/interview" @click.prevent="handleNavigate('/it-english-practice/interview')">
+          <span class="tab-icon">🎙️</span>
+          <span class="tab-label">Phỏng vấn thử</span>
+        </a>
       </div>
 
       <!-- Content Sections -->

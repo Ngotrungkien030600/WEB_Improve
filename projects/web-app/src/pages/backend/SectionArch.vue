@@ -8,6 +8,25 @@
       <div class="info-card"><h4>Event-Driven</h4><p>Service giao tiếp qua events (Kafka). Saga pattern. Tách rời, chịu lỗi tốt nhưng khó debug hơn.</p></div>
     </div>
 
+    <h3>Thiết kế một hệ thống enterprise bằng Spring Boot</h3>
+    <p class="section-text">Bài toán xuyên suốt: khách hàng doanh nghiệp cần tạo đơn hàng, thanh toán và theo dõi trạng thái. Bắt đầu bằng một modular monolith Spring Boot với các module <code>order</code>, <code>payment</code>, <code>inventory</code>; chỉ tách service khi có nhu cầu deploy, scale hoặc sở hữu dữ liệu độc lập. Mỗi service sở hữu database của mình, giao tiếp qua API có version hoặc event; tránh để service này đọc trực tiếp database của service khác.</p>
+    <div class="cards-grid cols-4">
+      <div class="info-card"><h4>REST</h4><p>Dùng cho command và resource có contract ổn định: <code>POST /orders</code>, <code>GET /orders/{id}</code>. Dễ cache, quan sát và tích hợp với đối tác.</p></div>
+      <div class="info-card"><h4>GraphQL</h4><p>Hợp khi nhiều client cần chọn các trường hoặc quan hệ khác nhau. Đặt giới hạn độ sâu/chi phí query, kiểm soát N+1 và quyền ở từng field.</p></div>
+      <div class="info-card"><h4>Async events</h4><p>Dùng event như <code>OrderCreated</code> khi consumer không cần phản hồi tức thời. Thiết kế idempotency, retry có giới hạn, dead-letter và eventual consistency.</p></div>
+      <div class="info-card"><h4>Spring Boot production</h4><p>Giữ service stateless; cấu hình connection pool, timeout, health/readiness, metrics và structured logs. Scale theo số liệu thực tế, không chỉ tăng replica.</p></div>
+    </div>
+
+    <h3>Luồng thực tế và các điểm phải quyết định</h3>
+    <ol class="steps-list">
+      <li><strong>POST /orders:</strong> Spring controller kiểm tra DTO, service xác thực quyền và quy tắc tồn kho, ghi order cùng outbox trong transaction.</li>
+      <li><strong>Thanh toán:</strong> worker phát event; payment service gọi nhà cung cấp với timeout và idempotency key. Không giữ transaction database mở trong lúc gọi mạng.</li>
+      <li><strong>Nhất quán phân tán:</strong> nếu thanh toán thất bại, Saga điều phối trạng thái hoặc hành động bù; API trả trạng thái có thể theo dõi thay vì giả vờ mọi bước hoàn tất đồng bộ.</li>
+      <li><strong>Vận hành:</strong> CI/CD chạy test và scan, tạo image bất biến, triển khai staging trước production trên Kubernetes/AWS; Terraform quản lý hạ tầng và rollback dùng image/version trước.</li>
+      <li><strong>Quyết định tách service:</strong> đo bottleneck, tần suất release và ranh giới sở hữu dữ liệu trước. Microservices tăng độ phức tạp về network, tracing, bảo mật và xử lý lỗi.</li>
+    </ol>
+    <p class="section-text"><strong>Cách phối hợp với khách hàng quốc tế:</strong> xác nhận acceptance criteria và API contract bằng văn bản; làm rõ múi giờ, deadline, dữ liệu nhạy cảm và hành vi lỗi; thống nhất với frontend, QA, product và DevOps trước khi chia task. Khi có trade-off, trình bày lựa chọn, rủi ro và đề xuất bằng ngôn ngữ dễ hiểu.</p>
+
     <h3>Outbox Pattern — đảm bảo "ghi DB + gửi event" cùng xảy ra</h3>
     <p class="section-text">Vấn đề: ghi Order vào DB xong gửi event lên Kafka — nếu gửi event fail, dữ liệu ghi rồi nhưng hệ thống khác không biết (mất event). <strong>Outbox Pattern:</strong> ghi event vào bảng <code>outbox</code> <strong>trong cùng transaction</strong> với Order. Sau đó CDC Worker (Debezium) đọc bảng outbox và publish lên Kafka — đảm bảo không mất event, không trùng.</p>
     <CodeBlock :code="outboxCode" language="java" />
@@ -59,6 +78,17 @@ export default {
   border-radius: 4px;
   font-family: var(--font-mono);
   font-size: 0.85em;
+}
+
+.steps-list {
+  margin: 1rem 0;
+  padding-left: 1.4rem;
+  color: var(--forge-text2);
+}
+
+.steps-list li {
+  padding: 0.45rem 0;
+  line-height: 1.65;
 }
 
 .cards-grid {

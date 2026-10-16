@@ -15,7 +15,7 @@
         </button>
       </nav>
 
-      <section class="practice-card">
+      <section v-if="round" class="practice-card">
         <div class="practice-heading">
           <div>
             <p class="eyebrow">{{ activeGame.icon }} BÀI LUYỆN GIAO TIẾP IT</p>
@@ -95,6 +95,11 @@
           <div v-if="showSample" class="learning-panel"><h3>Bài mẫu hoàn chỉnh</h3><blockquote>{{ round.model }}</blockquote><p class="translation">{{ round.modelVi }}</p><h3>Khung kể chuyện</h3><ol><li v-for="note in round.notes" :key="note">{{ note }}</li></ol><WordList :words="round.words" /></div>
         </template>
       </section>
+      <section v-else class="practice-card empty-round" role="status">
+        <h1>Chưa tải được bài luyện</h1>
+        <p>Không tìm thấy tình huống cho mục này. Quay lại Tiếng Anh rồi mở lại Phỏng vấn thử nhé.</p>
+        <button class="primary" @click="goBack">Quay lại Tiếng Anh</button>
+      </section>
       <p class="practice-tip">Mẹo luyện: tự nói thành tiếng trước khi mở bài mẫu. Mục tiêu là diễn đạt được ý của mình, không cần học thuộc nguyên văn.</p>
     </main>
   </div>
@@ -112,7 +117,7 @@ const validIds = itEnglishGames.map(game => game.id);
 const gameId = ref(validIds.includes(route.params.gameId) ? route.params.gameId : validIds[0]);
 const activeGame = computed(() => itEnglishGames.find(game => game.id === gameId.value) || itEnglishGames[0]);
 const roundIndex = ref(0);
-const round = computed(() => activeGame.value.rounds[roundIndex.value]);
+const round = computed(() => activeGame.value?.rounds?.[roundIndex.value] ?? activeGame.value?.rounds?.[0] ?? null);
 const draft = ref('');
 const showSample = ref(false);
 const selectedChoices = ref([]);
@@ -169,7 +174,7 @@ function resetRound() {
   draft.value = ''; showSample.value = false; checked.value = false; selectedChoices.value = [];
   standup.yesterday = ''; standup.today = ''; standup.blocker = '';
   arrangedBlocks.value = [];
-  blockPool.value = round.value.blocks?.map((text, original) => ({ text, original })).sort(() => Math.random() - 0.5) || [];
+  blockPool.value = round.value?.blocks?.map((text, original) => ({ text, original })).sort(() => Math.random() - 0.5) || [];
 }
 resetRound();
 function selectGame(id) { router.push(`/it-english-practice/${id}`); }
