@@ -21,6 +21,27 @@
       <div class="info-card"><h4>CORS đúng cách</h4><p>Chỉ allow đúng origin thật (không dùng <code>*</code> khi có credentials), giới hạn method + header cần thiết.</p></div>
     </div>
     <CodeBlock :code="corsCode" language="java" />
+
+    <h3>OAuth 2.0, OpenID Connect và JWT: mỗi thứ giải quyết việc gì?</h3>
+    <div class="cards-grid cols-2">
+      <div class="info-card"><h4>OAuth 2.0</h4><p>Framework ủy quyền: client xin quyền truy cập API thay mặt người dùng. Nó định nghĩa flow/token, không phải định dạng token.</p></div>
+      <div class="info-card"><h4>OpenID Connect (OIDC)</h4><p>Lớp xác thực danh tính đặt trên OAuth 2.0. ID token nói client biết user là ai; access token dùng gọi API.</p></div>
+      <div class="info-card"><h4>JWT</h4><p>Định dạng token có header, claims và chữ ký. JWT thường chỉ được ký, không được mã hóa; đừng đặt password/secret trong payload.</p></div>
+      <div class="info-card"><h4>Authorization Code + PKCE</h4><p>Flow thường dùng cho web/mobile user login. PKCE ràng buộc code với client để giảm nguy cơ authorization code bị đánh cắp.</p></div>
+    </div>
+    <div class="diagram">User → Client → Identity Provider (login + MFA)<br>Client nhận authorization code → đổi code + PKCE verifier lấy token<br>Client gửi access token → Resource Server kiểm chữ ký, issuer, audience, expiry và scope</div>
+    <p class="section-text">Trong production, thường dùng Identity Provider (Cognito, Keycloak, Entra ID hoặc dịch vụ tương đương) để quản lý login/MFA/token lifecycle. API dùng Spring OAuth2 Resource Server để xác thực access token. Tự viết JWT filter giúp hiểu pipeline, nhưng không tự cung cấp OAuth/OIDC, refresh rotation hay key management.</p>
+    <CodeBlock :code="resourceServerCode" language="java" />
+
+    <h3>Token lifecycle: hết hạn, refresh, logout và thu hồi</h3>
+    <ol class="security-list">
+      <li>Access token sống ngắn; API luôn kiểm tra chữ ký, <code>iss</code>, <code>aud</code>, <code>exp</code>, <code>nbf</code> và scope/authority.</li>
+      <li>Refresh token chỉ gửi tới authorization server. Dùng rotation: mỗi lần refresh phát token mới và vô hiệu token cũ; phát hiện reuse thì thu hồi cả token family.</li>
+      <li>Logout cần revoke refresh token/session. JWT access token đã phát thường còn hiệu lực tới khi hết hạn, trừ khi thêm denylist/introspection; cần cân bằng giữa khả năng thu hồi và tính stateless.</li>
+      <li>Không tin role hoặc user ID do client gửi. Quyền phải được xác nhận từ token đã verify hoặc dữ liệu server.</li>
+    </ol>
+    <div class="callout"><strong>Browser security:</strong> nếu lưu refresh token trong cookie thì đặt <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code> phù hợp và có CSRF strategy. Nếu dùng BFF, browser giữ session cookie còn access/refresh token ở server. Không chọn nơi lưu token theo thói quen; xác định threat model trước.</div>
+    <CodeBlock :code="tokenClaimsCode" language="json" />
   </div>
 </template>
 
@@ -95,11 +116,56 @@ public CorsConfigurationSource corsConfigurationSource() {
     return src;
 }`;
 
+const resourceServerCode = `// Resource Server: verify issuer and signing keys from IdP metadata/JWKS
+@Bean
+SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
+    return http
+        .csrf(csrf -> csrf.disable()) // chỉ phù hợp API stateless dùng bearer header
+        .sessionManagement(sm -> sm.sessionCreationPolicy(STATELESS))
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/actuator/health").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/admin/**")
+                .hasAuthority("SCOPE_admin:read")
+            .anyRequest().authenticated())
+        .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
+        .build();
+}
+
+// application.yml
+spring.security.oauth2.resourceserver.jwt.issuer-uri: https://login.example.com/realms/app
+
+// Add audience validation; issuer validation alone is not enough.
+@Bean
+JwtDecoder jwtDecoder() {
+    String issuer = "https://login.example.com/realms/app";
+    NimbusJwtDecoder decoder = NimbusJwtDecoder.withIssuerLocation(issuer).build();
+    OAuth2TokenValidator<Jwt> issuerValidator = JwtValidators.createDefaultWithIssuer(issuer);
+    OAuth2TokenValidator<Jwt> audienceValidator = jwt ->
+        jwt.getAudience().contains("orders-api")
+            ? OAuth2TokenValidatorResult.success()
+            : OAuth2TokenValidatorResult.failure(
+                new OAuth2Error("invalid_token", "Wrong audience", null));
+    decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(issuerValidator, audienceValidator));
+    return decoder;
+}`;
+
+const tokenClaimsCode = `{
+  "iss": "https://login.example.com/realms/app",
+  "sub": "user-123",
+  "aud": ["orders-api"],
+  "exp": 1980000000,
+  "scope": "orders:read orders:write",
+  "roles": ["CUSTOMER"]
+}
+
+// API must reject wrong issuer/audience, expired token and invalid signature.
+// Never accept the payload before signature verification.`;
+
 export default {
   name: 'SpringSectionSecurity',
   components: { CodeBlock },
   data() {
-    return { securityConfigCode, jwtFilterCode, corsCode };
+    return { securityConfigCode, jwtFilterCode, corsCode, resourceServerCode, tokenClaimsCode };
   },
 };
 </script>
@@ -168,6 +234,12 @@ export default {
   margin: 0;
   line-height: 1.5;
 }
+
+.diagram, .callout { margin: 1rem 0; padding: 1rem; border: 1px solid var(--forge-glass-border); border-radius: var(--radius-md); background: var(--forge-surface); color: var(--forge-text2); font-size: .82rem; line-height: 1.8; }
+.security-list { display: grid; gap: .55rem; padding-left: 1.25rem; color: var(--forge-text2); font-size: .84rem; line-height: 1.65; }
+.security-list li::marker { color: var(--forge-fire); font-weight: 800; }
+.callout { border-left: 3px solid var(--forge-fire); background: rgba(245,158,11,.07); }
+.callout strong { color: var(--forge-text); }
 
 @media (max-width: 700px) {
   .cards-grid,

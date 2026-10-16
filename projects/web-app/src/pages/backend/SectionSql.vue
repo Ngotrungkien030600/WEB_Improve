@@ -37,6 +37,21 @@
       <li><strong>Pagination:</strong> keyset pagination thay vì OFFSET (OFFSET chậm khi page lớn)</li>
       <li><strong>Connection pool:</strong> HikariCP size ~ 2*CPU + 1</li>
     </ul>
+
+    <h3>Đọc query plan: index có được dùng thật không?</h3>
+    <p class="section-text">Đừng thêm index chỉ vì một query trông có vẻ chậm. Với PostgreSQL, <code>EXPLAIN (ANALYZE, BUFFERS)</code> chạy query thật và cho biết actual time, số rows, loops, buffers cùng cách planner truy cập. So estimated rows với actual rows; lệch lớn có thể làm planner chọn plan kém.</p>
+    <CodeBlock :code="explainCode" language="sql" />
+    <div class="info-card"><h4>Cách đọc nhanh</h4><p><strong>Seq Scan</strong> chưa chắc sai nếu bảng nhỏ hoặc trả về nhiều dòng. <strong>Index Scan</strong> cũng chưa chắc nhanh nếu phải fetch quá nhiều row. Tối ưu theo query thực tế, độ chọn lọc, thứ tự cột và write cost; kiểm tra lại bằng plan sau khi sửa.</p></div>
+
+    <h3>Schema migration, backup và phục hồi</h3>
+    <p class="section-text">Schema production cần thay đổi có version và review cùng code. Flyway chạy migration theo thứ tự; migration đã áp dụng nên được xem là immutable. Với thay đổi lớn, dùng cách expand → deploy code tương thích cũ/mới → backfill → switch → contract để tránh downtime.</p>
+    <CodeBlock :code="migrationCode" language="sql / yaml" />
+    <ul class="tips-list">
+      <li><strong>Backward compatible:</strong> thêm cột nullable/default trước; deploy ứng dụng đọc/ghi tương thích rồi mới xóa field cũ ở release sau.</li>
+      <li><strong>Backup:</strong> xác định RPO/RTO, retention, mã hóa và quyền truy cập; snapshot/backup cần được restore thử định kỳ.</li>
+      <li><strong>Khôi phục:</strong> tài liệu hóa ai quyết định, restore vào đâu, kiểm tra consistency thế nào và chuyển traffic ra sao.</li>
+      <li><strong>Data migration lớn:</strong> chạy batch có checkpoint, giới hạn tải DB, đo tiến độ và có cách dừng/tiếp tục.</li>
+    </ul>
   </div>
 </template>
 
@@ -74,11 +89,39 @@ public class Product {
 
 -- Deadlock fix: luôn lock theo cùng thứ tự (id 1 → 2)`;
 
+const explainCode = `-- Tìm đơn mới nhất của một user
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT id, status, created_at
+FROM orders
+WHERE customer_id = 42
+  AND status = 'PAID'
+ORDER BY created_at DESC
+LIMIT 20;
+
+-- Index theo equality filters trước, rồi cột sort/range
+CREATE INDEX idx_orders_customer_status_created
+  ON orders(customer_id, status, created_at DESC);
+
+-- Kiểm tra lại plan và write overhead sau khi tạo index.`;
+
+const migrationCode = `-- src/main/resources/db/migration/V014__index_orders_for_history.sql
+CREATE INDEX idx_orders_customer_status_created
+    ON orders(customer_id, status, created_at DESC);
+
+-- application.yml
+spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+-- Migration áp dụng rồi không sửa lại; tạo V015 cho thay đổi tiếp theo.
+-- Production: chạy migration có kiểm soát, theo dõi lock/time và có rollback plan.`;
+
 export default {
   name: 'BackendSectionSql',
   components: { CodeBlock },
   data() {
-    return { indexCode, transactionCode };
+    return { indexCode, transactionCode, explainCode, migrationCode };
   },
 };
 </script>

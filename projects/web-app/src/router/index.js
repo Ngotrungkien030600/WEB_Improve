@@ -9,6 +9,11 @@ const routes = [
     component: () => import('../pages/HomePage.vue'),
   },
   {
+    path: '/business-domains',
+    name: 'business-domains',
+    component: () => import('../pages/BusinessDomainsPage.vue'),
+  },
+  {
     path: '/ai',
     name: 'ai',
     component: () => import('../pages/AiHubPage.vue'),
@@ -32,6 +37,11 @@ const routes = [
     path: '/frontend/hub',
     name: 'frontend-hub',
     component: () => import('../pages/FrontendHubPage.vue'),
+  },
+  {
+    path: '/frontend/design-system',
+    name: 'frontend-design-system',
+    component: () => import('../pages/FrontendDesignSystemPage.vue'),
   },
   {
     path: '/frontend/ui-interview',
@@ -67,6 +77,11 @@ const routes = [
     path: '/cloud/hub',
     name: 'cloud-hub-sub',
     component: () => import('../pages/CloudHubSubPage.vue'),
+  },
+  {
+    path: '/cloud/backend-deploy',
+    name: 'cloud-backend-deploy',
+    component: () => import('../pages/CloudBackendDeployPage.vue'),
   },
   {
     path: '/cloud/:sectionId',
@@ -226,6 +241,11 @@ const routes = [
     path: '/java/tu-zero',
     name: 'java-tu-zero',
     component: () => import('../pages/JavaTuZeroPage.vue'),
+  },
+  {
+    path: '/java/advanced-core',
+    name: 'java-advanced-core',
+    component: () => import('../pages/JavaAdvancedCorePage.vue'),
   },
   {
     path: '/java/spring-boot',

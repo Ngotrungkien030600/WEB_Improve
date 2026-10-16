@@ -133,6 +133,12 @@ const hubCards = [
     description: 'SSH Tunnel, SSM Session Manager',
     path: '/cloud/bastion',
   },
+  {
+    icon: '🚀',
+    title: 'Deploy Spring Boot lên ECS',
+    description: 'Docker, ECR, Fargate, RDS và pipeline dev → stg → prod',
+    path: '/cloud/backend-deploy',
+  },
 ];
 
 export default {

@@ -62,7 +62,7 @@
   <div class="topbar">
     <div>
       <h1>🔄 CI/CD</h1>
-      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">Jenkins vs GitHub Actions, pipeline stages, GitOps, quality gates, blue-green &amp; canary deploy — song ngữ EN-VI</p>
+      <p class="desc" style="margin-top:0.3rem;margin-bottom:0;">Pipeline từ pull request đến dev, staging, production — GitHub Actions, AWS Lambda, ECS, deployment templates, quality gates — song ngữ EN-VI</p>
     </div>
     <div class="links">
       <a href="hub.html">← DevOps</a>
@@ -74,11 +74,12 @@
     <a href="#concept">1. CI/CD là gì?</a>
     <a href="#pipeline">2. Pipeline &amp; Stages</a>
     <a href="#github-actions">3. GitHub Actions</a>
-    <a href="#jenkins">4. Jenkins</a>
-    <a href="#deploy">5. Deploy Strategies</a>
-    <a href="#gitops">6. GitOps &amp; ArgoCD</a>
-    <a href="#quality">7. Quality Gates</a>
-    <a href="#interview">8. Câu hỏi phỏng vấn</a>
+    <a href="#aws-env-deploy">4. Deploy AWS qua dev/stg/prod</a>
+    <a href="#jenkins">5. Jenkins</a>
+    <a href="#deploy">6. Deploy Strategies</a>
+    <a href="#gitops">7. GitOps &amp; ArgoCD</a>
+    <a href="#quality">8. Quality Gates</a>
+    <a href="#interview">9. Câu hỏi phỏng vấn</a>
   </div>
 
   <!-- ===== 1. Concept ===== -->
@@ -163,6 +164,7 @@ jobs:
           path: target/*.jar</code></pre>
 
       <h3>CI/CD hoàn chỉnh với Docker</h3>
+      <p><strong>Phạm vi ví dụ:</strong> đoạn dưới đây minh họa deploy container lên một máy chủ Linux qua SSH + Docker Compose. Nó phù hợp với VM/server tự quản lý; không phải template deploy cho Lambda hoặc ECS. Với Lambda/ECS cần đóng gói và cập nhật tài nguyên theo dịch vụ tương ứng — xem phần tiếp theo.</p>
       <pre><code>  deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -190,9 +192,180 @@ jobs:
     </div>
   </div>
 
-  <!-- ===== 4. Jenkins ===== -->
+  <!-- ===== 4. AWS environments ===== -->
+  <div class="section" id="aws-env-deploy">
+    <div class="section-title">4. Deploy một repo lên AWS: dev → staging → production</div>
+    <div class="section-body">
+      <h3>Hai loại template cần phân biệt</h3>
+      <div class="grid-2">
+        <div class="card"><h4>Pipeline template</h4><p>Workflow như <code>.github/workflows/deploy.yml</code> mô tả trigger, build, test, approval và cách gọi lệnh deploy. Có thể tách phần dùng chung thành reusable workflow.</p></div>
+        <div class="card"><h4>Infrastructure template (IaC)</h4><p><code>template.yaml</code> của AWS SAM/CloudFormation, CDK hoặc Terraform mô tả Lambda, ECS, IAM, API, network và alarm. Template khai báo hạ tầng mong muốn; pipeline triển khai template đó vào từng environment.</p></div>
+      </div>
+      <p><strong>Không phải một template duy nhất cho tất cả.</strong> Pipeline template quyết định thứ tự công việc; IaC template định nghĩa tài nguyên cloud. Ứng dụng Lambda thường dùng SAM/CloudFormation; ECS có thể dùng CloudFormation/CDK/Terraform cùng task definition và service.</p>
+
+      <h3>Luồng điển hình của một repository</h3>
+      <div class="diagram">Pull request → lint + unit/integration test + security scan<br/>Merge main → build một lần → lưu artifact có version → deploy dev → smoke test → promote đúng artifact lên staging → approval → promote đúng artifact lên production → monitor / rollback</div>
+      <ol>
+        <li><strong>Pull request:</strong> chạy kiểm tra, không cấp quyền deploy production cho mã chưa được merge.</li>
+        <li><strong>Build một lần:</strong> tạo ZIP/JAR cho Lambda hoặc Docker image cho ECS; gắn commit SHA và lưu ở S3/ECR. Ghi lại image digest hoặc artifact version.</li>
+        <li><strong>Deploy dev:</strong> dùng cùng artifact với cấu hình dev, chạy smoke/integration test trên môi trường thật.</li>
+        <li><strong>Promote staging rồi production:</strong> đổi cấu hình/stack/account đích, không build lại source thành artifact khác. Staging kiểm tra gần giống production; production có approval, health alarm và rollback.</li>
+      </ol>
+      <p><strong>Environment</strong> không nhất thiết là một nhánh Git. Thường là target riêng với account hoặc role, stack/service/function, cấu hình và secret riêng. Nên cô lập production bằng AWS account riêng nếu tổ chức cho phép; quyền pipeline chỉ vừa đủ deploy vào target được giao.</p>
+
+      <h3>Repository layout mẫu</h3>
+      <pre><code>orders-service/
+├── src/                         # application code
+├── tests/
+├── template.yaml                # SAM / CloudFormation infrastructure
+├── samconfig.toml                # per-environment stack parameters
+└── .github/workflows/
+    ├── ci.yml                    # PR: verify only
+    └── deploy.yml                # build once, deploy/promote</code></pre>
+
+      <h3>Ví dụ A — AWS Lambda bằng SAM template</h3>
+      <p><code>template.yaml</code> vừa mô tả Lambda vừa mô tả cách phát hành an toàn. <code>Stage</code> là cấu hình không bí mật; credential/secret lấy từ IAM, Secrets Manager hoặc Parameter Store theo quyền của function.</p>
+      <pre><code>Transform: AWS::Serverless-2016-10-31
+Parameters:
+  Stage:
+    Type: String
+    AllowedValues: [dev, staging, prod]
+
+Resources:
+  OrdersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.handler
+      Runtime: nodejs22.x
+      Timeout: 15
+      MemorySize: 512
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: Canary10Percent5Minutes
+        Alarms:
+          - !Ref FunctionErrorAlarm
+      Environment:
+        Variables:
+          APP_STAGE: !Ref Stage
+      Policies:
+        - AWSLambdaBasicExecutionRole
+
+  FunctionErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref OrdersFunction
+        - Name: Resource
+          Value: !Sub '${OrdersFunction}:live'
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching</code></pre>
+      <p><strong>Deploy lần đầu:</strong> SAM gradual rollout cần version Lambda cũ để so traffic. Ở stack mới, trước tiên deploy function với <code>AutoPublishAlias</code> nhưng chưa thêm <code>DeploymentPreference</code>; sau khi alias/version đã tồn tại, thêm canary preference và deploy lại. Các lần cập nhật tiếp theo mới shift traffic từ version cũ sang mới.</p>
+      <p><code>AutoPublishAlias</code> tạo version/alias để chuyển traffic; <code>DeploymentPreference</code> yêu cầu SAM cấu hình gradual deployment qua CodeDeploy. Alarm lỗi có thể kích hoạt rollback. Chỉ thêm IAM policy đúng tài nguyên function cần truy cập, không cấp quyền rộng chỉ để pipeline chạy được.</p>
+
+      <h3>Cấu hình target bằng <code>samconfig.toml</code></h3>
+      <pre><code>[dev.deploy.parameters]
+stack_name = "orders-dev"
+region = "ap-southeast-1"
+capabilities = "CAPABILITY_IAM"
+resolve_s3 = true
+parameter_overrides = "Stage=dev"
+
+[staging.deploy.parameters]
+stack_name = "orders-staging"
+region = "ap-southeast-1"
+capabilities = "CAPABILITY_IAM"
+resolve_s3 = true
+parameter_overrides = "Stage=staging"
+
+[prod.deploy.parameters]
+stack_name = "orders-prod"
+region = "ap-southeast-1"
+capabilities = "CAPABILITY_IAM"
+resolve_s3 = true
+parameter_overrides = "Stage=prod"</code></pre>
+      <pre><code># Local/manual flow: build once, then select the target config
+sam build
+sam deploy --config-env dev
+sam deploy --config-env staging
+sam deploy --config-env prod</code></pre>
+      <p>Trong CI, các lệnh promote phải nhận đúng build artifact đã tạo trước đó; không chạy lại build riêng ở staging/prod. Tài khoản AWS đích được quyết định bởi role/credentials mà job assume, còn <code>--config-env</code> chọn stack và parameter tương ứng.</p>
+
+      <h3>GitHub Actions vào AWS: dùng OIDC thay access key dài hạn</h3>
+      <p>Thiết lập GitHub OIDC provider và IAM role trust đúng repository/environment. Job chỉ xin token tạm thời; scope IAM role giới hạn theo account và tài nguyên cần deploy. Không lưu AWS access key dài hạn trong GitHub Secrets.</p>
+      <pre><code>permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ap-southeast-1
+      - run: sam deploy --config-env dev --no-confirm-changeset</code></pre>
+      <p>Workflow hoàn chỉnh cần thêm job CI/build, lưu và tải lại artifact, smoke test, dependency <code>needs</code>, cùng GitHub Environment protection cho staging/production. Environment có thể yêu cầu reviewer duyệt trước khi job production được cấp quyền chạy.</p>
+
+      <h3>Ví dụ B — ECS: image → task definition → service</h3>
+      <ol>
+        <li>CI build container một lần, push lên ECR với tag commit SHA; lấy image digest bất biến để biết chính xác revision nào đang promote.</li>
+        <li>Task definition template trỏ tới image URI/digest, task role, execution role, port, resource limits và secret reference. Các giá trị theo environment như cluster, service, desired count và secret ARN được truyền lúc deploy.</li>
+        <li>Đăng ký task definition revision mới, cập nhật ECS service ở dev và đợi service ổn định; chạy smoke test. Sau đó dùng cùng image digest để cập nhật staging và production.</li>
+        <li>Rolling deployment phù hợp cách triển khai đơn giản. Khi cần blue/green hoặc traffic shift, cấu hình deployment controller/CodeDeploy, load balancer và health alarm; với CodeDeploy ECS thường cần hai target groups để giữ task set cũ và task set mới trong lúc chuyển traffic.</li>
+      </ol>
+      <pre><code># Conceptual ECS release steps (the image is built once in CI)
+docker build -t "$ECR_URI:$GIT_SHA" .
+docker push "$ECR_URI:$GIT_SHA"
+# Resolve and record the pushed image digest; render task definition with that digest.
+aws ecs register-task-definition --cli-input-json file://rendered-task-definition.json
+aws ecs update-service --cluster "$ECS_CLUSTER" --service "$ECS_SERVICE" --task-definition "$TASK_DEFINITION_ARN"
+aws ecs wait services-stable --cluster "$ECS_CLUSTER" --services "$ECS_SERVICE"</code></pre>
+      <p>Đoạn lệnh trên là khung luồng, cần điền registry, cluster, service, IAM role và file task definition của dự án. Nếu dùng ECS CodeDeploy blue/green, pipeline cần tạo deployment revision/AppSpec và cấu hình hai target groups, listener, alarm và rollback; không chỉ gọi <code>update-service</code>.</p>
+
+      <h3>Checklist trước production</h3>
+      <ul>
+        <li>PR đã qua test, lint, scan dependency/image và review của người.</li>
+        <li>Artifact có commit SHA/version/digest; biết rõ artifact nào đang chạy ở dev, staging và production.</li>
+        <li>Mỗi environment dùng role, config, secrets, stack/service riêng; secret không nằm trong Git hay template plaintext.</li>
+        <li>Staging smoke test đạt; production có approval, health alarm, rollback plan và người theo dõi sau deploy.</li>
+        <li>Database migration tương thích ngược: ưu tiên expand → deploy code → migrate/backfill → contract sau; không phát hành code mới buộc mọi instance cũ dừng ngay lập tức.</li>
+      </ul>
+
+      <h3>Tự luyện theo repo mẫu</h3>
+      <ol>
+        <li>Tạo function Lambda và SAM template cho dev; deploy bằng <code>sam deploy --guided</code>, sau đó đưa lựa chọn ổn định vào <code>samconfig.toml</code>.</li>
+        <li>Tạo CI chạy test/build khi mở PR. Merge vào main chỉ tự deploy dev; staging chạy sau smoke test; production phải qua approval.</li>
+        <li>Đối chiếu commit SHA và artifact version ở cả ba môi trường; chứng minh staging/prod đang dùng đúng artifact đã test.</li>
+        <li>Thực hành cố ý làm health check fail ở dev/staging, đọc log, rollback và ghi lại cách xác nhận service đã ổn định.</li>
+      </ol>
+      <p><strong>Câu phỏng vấn:</strong> <em>“How do you promote a change from development to production?”</em></p>
+      <p><strong>Câu trả lời gợi ý:</strong> <em>“I run the checks on the pull request, build an immutable artifact once, and deploy it to development first. After smoke tests pass, I promote the same artifact to staging and then to production through an approval gate. Each environment uses separate configuration and a least-privilege AWS role. I monitor health alarms after deployment and roll back if the release is unhealthy.”</em></p>
+      <p><strong>Nghĩa:</strong> Tôi chạy kiểm tra trên pull request, build artifact bất biến một lần rồi deploy lên dev. Sau khi smoke test đạt, tôi promote chính artifact đó lên staging rồi production qua bước duyệt. Mỗi môi trường dùng cấu hình riêng và AWS role quyền tối thiểu. Sau deploy tôi theo dõi health alarm và rollback nếu bản phát hành không ổn định.</p>
+
+      <h3>Tài liệu chính thức để đọc tiếp</h3>
+      <ul>
+        <li><a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-authoring.html" target="_blank" rel="noopener noreferrer">AWS SAM: khai báo serverless resources</a> và <a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-config.html" target="_blank" rel="noopener noreferrer">cấu hình nhiều environment trong samconfig.toml</a>.</li>
+        <li><a href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/automating-updates-to-serverless-apps.html" target="_blank" rel="noopener noreferrer">AWS SAM: gradual Lambda deployments và rollback</a>.</li>
+        <li><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-type-ecs.html" target="_blank" rel="noopener noreferrer">ECS rolling deployments</a> và <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-type-bluegreen.html" target="_blank" rel="noopener noreferrer">ECS blue/green deployments</a>.</li>
+        <li><a href="https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws" target="_blank" rel="noopener noreferrer">GitHub Actions: kết nối AWS bằng OIDC</a>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 5. Jenkins ===== -->
   <div class="section" id="jenkins">
-    <div class="section-title">4. Jenkins</div>
+    <div class="section-title">5. Jenkins</div>
     <div class="section-body">
       <h3>Jenkins là gì?</h3>
       <p>Một CI/CD server tự-host truyền thống — cực kỳ linh hoạt nhờ hệ thống plugin khổng lồ. <em>(A traditional self-hosted CI/CD server — extremely flexible thanks to a huge plugin ecosystem.)</em></p>
@@ -231,9 +404,9 @@ jobs:
     </div>
   </div>
 
-  <!-- ===== 5. Deploy Strategies ===== -->
+  <!-- ===== 6. Deploy Strategies ===== -->
   <div class="section" id="deploy">
-    <div class="section-title">5. Deploy Strategies (Chiến lược triển khai)</div>
+    <div class="section-title">6. Deploy Strategies (Chiến lược triển khai)</div>
     <div class="section-body">
       <div class="grid-2">
         <div class="card"><h4>🔄 Rolling Deploy</h4><p>Thay từng instance cũ bằng mới dần dần — không downtime nhưng trong lúc đó có 2 version song song.</p></div>
@@ -252,9 +425,9 @@ jobs:
     </div>
   </div>
 
-  <!-- ===== 6. GitOps ===== -->
+  <!-- ===== 7. GitOps ===== -->
   <div class="section" id="gitops">
-    <div class="section-title">6. GitOps &amp; ArgoCD</div>
+    <div class="section-title">7. GitOps &amp; ArgoCD</div>
     <div class="section-body">
       <h3>GitOps là gì?</h3>
       <p>Git là <strong>single source of truth</strong> cho cả code lẫn cấu hình hạ tầng. Mọi thay đổi = pull request → merge → một operator tự động đồng bộ lên cluster. <em>(Git is the single source of truth for both code and infrastructure config. Every change is a PR; an operator auto-syncs it to the cluster.)</em></p>
@@ -278,9 +451,9 @@ jobs:
     </div>
   </div>
 
-  <!-- ===== 7. Quality Gates ===== -->
+  <!-- ===== 8. Quality Gates ===== -->
   <div class="section" id="quality">
-    <div class="section-title">7. Quality Gates</div>
+    <div class="section-title">8. Quality Gates</div>
     <div class="section-body">
       <h3>Quality Gate là gì?</h3>
       <p>Ngưỡng chất lượng bắt buộc — pipeline <strong>fail</strong> nếu không đạt, ngăn artifact xấu lên production. <em>(Mandatory quality thresholds — the pipeline fails if not met, blocking bad artifacts from reaching production.)</em></p>
@@ -299,9 +472,9 @@ mvn verify jacoco:check \
     </div>
   </div>
 
-  <!-- ===== 8. Interview ===== -->
+  <!-- ===== 9. Interview ===== -->
   <div class="section" id="interview">
-    <div class="section-title">8. Câu hỏi phỏng vấn (Interview Questions)</div>
+    <div class="section-title">9. Câu hỏi phỏng vấn (Interview Questions)</div>
     <div class="section-body">
       <div class="grid-2">
         <div class="card"><h4>❓ CI vs CD?</h4><p>CI: build + test tự động mỗi commit. CD: tự động đưa artifact đạt chuẩn lên môi trường (Delivery = chờ duyệt, Deployment = tự động).</p></div>

@@ -111,6 +111,15 @@ const allCards = [
     path: '/java/tu-zero',
   },
   {
+    icon: '🧠',
+    title: 'Java Core nâng cao',
+    description: 'equals/hashCode, collections, streams, concurrency, async và JVM qua tình huống backend',
+    badge: '8 chủ đề thực chiến',
+    tags: ['Java Core', 'Concurrency', 'JVM', 'Backend'],
+    category: 'learn',
+    path: '/java/advanced-core',
+  },
+  {
     icon: '💻',
     title: 'Học Code',
     description: '10 bài học từ biến, OOP, collection đến SQL, JDBC, Git',

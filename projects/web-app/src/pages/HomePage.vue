@@ -11,7 +11,7 @@
       <section class="hero-section">
         <h2 class="hero-title">Rèn kỹ năng,<br />tự tin chinh phục</h2>
         <p class="hero-subtitle">
-          Từ Java, AWS Cloud đến Frontend, AI — học có lộ trình, thực hành có bài bản, ôn luyện có hệ thống.
+          Ưu tiên tiếng Anh phỏng vấn, Full-stack/Backend, nghiệp vụ sản phẩm và triển khai thực tế — học theo lộ trình rõ ràng.
         </p>
       </section>
 
@@ -57,45 +57,59 @@ import { navigate } from '../utils/navigate.js';
 
 const groups = [
   {
-    icon: '🧠',
-    title: 'Trí tuệ nhân tạo',
+    icon: '🎯',
+    title: 'Bắt đầu & lộ trình học',
     items: [
-      { icon: '🤖', title: 'Học AI', description: 'AI/ML — kiến thức, quiz, phỏng vấn, dự án thực hành.', path: '/ai' },
-      { icon: '⚡', title: 'AI Agent', description: 'Coding agents, CodeGraph, MCP, Skills, Jira/Wiki & token.', path: '/ai/agent' },
-      { icon: '🗣️', title: 'BMAD Agents', description: '7 trợ lý AI chuyên gia — Party Mode.', path: '/bmad-agents' },
+      { icon: '🗺️', title: 'Lộ trình học', description: 'Chọn mục tiêu đi làm, theo dõi các chặng và điều kiện hoàn thành.', path: '/learning-paths' },
+      { icon: '🚀', title: 'Accelerator 30-Day', description: 'Kế hoạch luyện tập cấp tốc 1 giờ mỗi ngày trong 30 ngày.', path: '/accelerator' },
+    ],
+  },
+  {
+    icon: '🎤',
+    title: 'Phỏng vấn & tiếng Anh đi làm',
+    items: [
+      { icon: '🗣️', title: 'Phỏng vấn bằng tiếng Anh', description: 'Luyện giới thiệu bản thân, dự án và câu hỏi kỹ thuật bằng tiếng Anh.', path: '/interview-english' },
+      { icon: '🧑‍💼', title: 'Phỏng vấn kỹ thuật', description: 'Câu hỏi Java, Spring, database, kiến trúc và kinh nghiệm dự án.', path: '/interview' },
+      { icon: '💬', title: 'Luyện nói & Viết', description: 'Luyện tạo câu hoàn chỉnh và diễn đạt ý trong công việc.', path: '/sentence-practice' },
+      { icon: '📖', title: 'Tiếng Anh thực hành', description: 'Từ vựng, ngữ pháp và bài học theo chủ đề.', path: '/english' },
+      { icon: '🎓', title: 'Thi thử', description: 'Kiểm tra kiến thức và từ vựng theo chủ đề.', path: '/exam' },
+      { icon: '🎧', title: 'Podcast', description: 'Luyện nghe tiếng Anh khi cần bài học nhẹ hơn.', path: '/podcast' },
     ],
   },
   {
     icon: '💻',
-    title: 'Lập trình',
+    title: 'Full-stack, Backend & nghiệp vụ sản phẩm',
     items: [
-      { icon: '☕', title: 'Java', description: 'Java core, Spring Boot, thực chiến, phỏng vấn backend.', path: '/java/hub' },
-      { icon: '🧪', title: 'Phòng luyện code', description: 'Viết code, chạy thật, chấm điểm bằng test ẩn — như LeetCode.', path: '/code-lab' },
-      { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, framework, responsive.', path: '/frontend/hub' },
-      { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, S3, RDS, DevOps.', path: '/cloud' },
-      { icon: '🐳', title: 'DevOps', description: 'Docker, Kubernetes, CI/CD, Terraform, Monitoring.', path: '/devops' },
-      { icon: '⚙️', title: 'Backend Engineering', description: 'SQL, Kafka, Docker, K8s, CI/CD, System Design.', path: '/java/backend' },
+      { icon: '⚙️', title: 'Backend Engineering', description: 'REST API, SQL, Kafka, Docker, CI/CD và System Design.', path: '/java/backend' },
+      { icon: '☕', title: 'Java & Spring Boot', description: 'Java core, Spring Boot, thực chiến và phỏng vấn backend.', path: '/java/hub' },
+      { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, framework và responsive UI.', path: '/frontend/hub' },
+      { icon: '🧭', title: 'Business Domains', description: 'Học business object và quy trình IT trong banking, media, healthcare, e-commerce, energy, logistics.', path: '/business-domains' },
+      { icon: '🧪', title: 'Phòng luyện code', description: 'Viết code, chạy thật và luyện tư duy giải quyết bài toán.', path: '/code-lab' },
     ],
   },
   {
-    icon: '📖',
-    title: 'Tiếng Anh',
+    icon: '☁️',
+    title: 'Cloud, DevOps & triển khai',
     items: [
-      { icon: '🗣️', title: 'Tiếng Anh', description: 'Từ vựng, ngữ pháp, truyện, luyện thi.', path: '/english' },
-      { icon: '🎧', title: 'Podcast', description: 'Nghe podcast tiếng Anh.', path: '/podcast' },
-      { icon: '🎓', title: 'Thi thử', description: 'Exam — kiểm tra trình độ theo chủ đề.', path: '/exam' },
-      { icon: '💬', title: 'Luyện nói & Viết', description: 'Sentence Practice — luyện câu mỗi ngày.', path: '/sentence-practice' },
-      { icon: '🎮', title: 'Game tiếng Anh', description: 'Ghép cặp, xếp chữ, trắc nghiệm nhanh.', path: '/game-memory' },
+      { icon: '☁️', title: 'AWS Cloud', description: 'IAM, VPC, EC2, Lambda, S3, RDS và kiến trúc cloud.', path: '/cloud' },
+      { icon: '🐳', title: 'DevOps & CI/CD', description: 'Docker, Kubernetes, pipeline, Terraform và monitoring.', path: '/devops' },
     ],
   },
   {
-    icon: '🚀',
-    title: 'Lộ trình & Công cụ',
+    icon: '🧠',
+    title: 'AI & công cụ phát triển',
     items: [
-      { icon: '🚀', title: 'Accelerator 30-Day', description: 'Lộ trình cấp tốc — 1h/ngày — 30 ngày.', path: '/accelerator' },
-      { icon: '🗺️', title: 'Lộ trình học', description: '5 trục theo mục tiêu đi làm, có điều kiện đạt chuẩn và tiến độ thật.', path: '/learning-paths' },
-      { icon: '📊', title: 'Skill Tracker', description: 'Theo dõi kỹ năng, XP, streak.', path: '/skill-tracker' },
-      { icon: '📈', title: 'Dashboard', description: 'Thống kê học tập, tổng quan tiến độ.', path: '/dashboard' },
+      { icon: '🤖', title: 'Học AI', description: 'AI/ML, kiến thức nền, quiz và dự án thực hành.', path: '/ai' },
+      { icon: '⚡', title: 'AI Agent', description: 'CodeGraph, MCP, Skills, Jira/Wiki và cách dùng token hiệu quả.', path: '/ai/agent' },
+      { icon: '🗣️', title: 'BMAD Agents', description: 'Khám phá quy trình làm việc với nhóm trợ lý AI chuyên biệt.', path: '/bmad-agents' },
+    ],
+  },
+  {
+    icon: '📊',
+    title: 'Theo dõi tiến độ',
+    items: [
+      { icon: '📊', title: 'Skill Tracker', description: 'Theo dõi kỹ năng, XP và streak học tập.', path: '/skill-tracker' },
+      { icon: '📈', title: 'Dashboard', description: 'Xem thống kê và tổng quan tiến độ học.', path: '/dashboard' },
     ],
   },
 ];

@@ -10,6 +10,17 @@
     <p class="section-text"><strong>@Async</strong> đẩy việc chậm ra nền, <strong>@Cacheable</strong> cache kết quả method, <strong>batch insert</strong> thay vì ghi từng dòng, <strong>pagination</strong> thay vì load toàn bộ. Bốn kỹ thuật này giải quyết đa số bài toán hiệu năng app Java.</p>
     <CodeBlock :code="perfCode" language="java" />
 
+    <h3>Redis cache-aside trong Spring Boot</h3>
+    <p class="section-text">Cache-aside: service thử đọc cache; miss thì đọc DB rồi lưu kết quả với TTL. Khi cập nhật dữ liệu, invalidate key liên quan sau khi DB transaction commit. Cache là bản sao có thể xây lại, không phải nơi duy nhất lưu dữ liệu quan trọng.</p>
+    <CodeBlock :code="redisConfigCode" language="java / yaml" />
+    <CodeBlock :code="cacheAsideCode" language="java" />
+    <div class="cards-grid cols-2">
+      <div class="info-card"><h4>Chọn TTL và key</h4><p>TTL theo mức chấp nhận stale data; thêm jitter để tránh nhiều key hết hạn cùng lúc. Key phải gồm tenant/user nếu dữ liệu cá nhân hóa, ví dụ <code>product:tenant-7:42</code>.</p></div>
+      <div class="info-card"><h4>Chống stampede</h4><p>Khi key nóng hết hạn, nhiều request có thể cùng query DB. Dùng TTL jitter, single-flight/lock có giới hạn hoặc refresh nền; luôn đặt timeout và fallback hợp lý.</p></div>
+      <div class="info-card"><h4>Invalidate đúng lúc</h4><p>Evict sau commit để tránh request khác đọc lại giá trị cũ trong khi transaction chưa lưu. Khi có nhiều app instance, invalidation phải tới cùng cache dùng chung.</p></div>
+      <div class="info-card"><h4>Đo hiệu quả</h4><p>Theo dõi hit/miss ratio, Redis latency, evictions, memory, DB QPS và stale-data incidents. Nếu hit thấp hoặc dữ liệu đổi liên tục thì cache có thể làm hệ thống phức tạp hơn.</p></div>
+    </div>
+
     <h3>JVM Tuning — ép container dùng đúng RAM</h3>
     <p class="section-text">Khi chạy JVM trong container, JVM mặc định nhìn RAM của host — có thể dùng quá limit container và bị kill. <code>MaxRAMPercentage</code> giới hạn JVM dùng 75% RAM container. <code>G1GC</code> cho latency thấp, <code>HeapDumpOnOutOfMemoryError</code> để capture heap khi crash.</p>
     <CodeBlock :code="jvmCode" language="bash" />
@@ -42,11 +53,60 @@ const jvmCode = `# Docker memory limits
 -XX:+UseG1GC
 -XX:+HeapDumpOnOutOfMemoryError`;
 
+const redisConfigCode = `// Dependency: spring-boot-starter-data-redis
+@Configuration
+@EnableCaching
+class CacheConfig {
+    @Bean
+    RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+        RedisCacheConfiguration defaults = RedisCacheConfiguration
+            .defaultCacheConfig()
+            .entryTtl(Duration.ofMinutes(5))
+            .disableCachingNullValues();
+        return RedisCacheManager.builder(connectionFactory)
+            .cacheDefaults(defaults)
+            .withCacheConfiguration("products", defaults.entryTtl(Duration.ofMinutes(10)))
+            .build();
+    }
+}
+
+// spring.data.redis.host/password should come from environment/secret manager,
+// never commit credentials in application.yml.`;
+
+const cacheAsideCode = `@Service
+@RequiredArgsConstructor
+class ProductQueryService {
+    private final ProductRepository repository;
+
+    @Cacheable(cacheNames = "products", key = "#tenantId + ':' + #productId")
+    public ProductResponse get(String tenantId, long productId) {
+        return repository.findByTenantIdAndId(tenantId, productId)
+            .map(ProductResponse::from)
+            .orElseThrow(() -> new ProductNotFoundException(productId));
+    }
+}
+
+record ProductChanged(String tenantId, long productId) {}
+
+@Component
+@RequiredArgsConstructor
+class ProductCacheInvalidator {
+    private final CacheManager cacheManager;
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void afterProductCommit(ProductChanged event) {
+        Cache cache = cacheManager.getCache("products");
+        if (cache != null) cache.evict(event.tenantId() + ':' + event.productId());
+    }
+}
+
+// Chỉ publish ProductChanged trong transaction sau khi update thành công.`;
+
 export default {
   name: 'BackendSectionPerf',
   components: { CodeBlock },
   data() {
-    return { perfCode, jvmCode };
+    return { perfCode, jvmCode, redisConfigCode, cacheAsideCode };
   },
 };
 </script>
@@ -91,6 +151,11 @@ export default {
   line-height: 2;
   font-family: var(--font-mono);
 }
+
+.cards-grid.cols-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; }
+.info-card { padding: 1rem; border: 1px solid var(--forge-glass-border); border-radius: var(--radius-md); background: var(--forge-surface); }
+.info-card h4 { margin: 0 0 .5rem; color: var(--forge-text); font-size: .9rem; }
+.info-card p { margin: 0; color: var(--forge-text2); font-size: .8rem; line-height: 1.55; }
 
 @media (max-width: 700px) {
   .cards-grid,

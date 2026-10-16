@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f8fc" />
+  <meta name="description" content="Khám phá và so sánh các business domain trong ngành CNTT: banking, healthcare, media, energy, e-commerce, logistics." />
+  <title>Domain Atlas — Học nghiệp vụ IT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { ink: '#172033', muted: '#68738a', line: '#e7eaf1', canvas: '#f7f8fc', brand: '#5b5ce2' },
+          boxShadow: { soft: '0 12px 40px rgba(26, 38, 70, .07)', lift: '0 20px 50px rgba(35, 45, 90, .13)' }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root { color-scheme: light; scroll-behavior: smooth; }
+    body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    ::selection { background: #dcdcff; color: #26205f; }
+    .domain-card { animation: rise .48s both; transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease; }
+    .domain-card:hover { transform: translateY(-5px); }
+    .live-item { animation: fade-in .35s ease both; }
+    .chip { transition: all .18s ease; }
+    .compare-scroll::-webkit-scrollbar { height: 8px; }
+    .compare-scroll::-webkit-scrollbar-thumb { background: #cdd2e2; border-radius: 20px; }
+    .progress-bar { animation: progress 5.8s linear infinite; transform-origin: left; }
+    @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fade-in { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body class="bg-canvas text-ink antialiased">
+  <header class="sticky top-0 z-40 border-b border-line/80 bg-white/90 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+      <a href="#top" class="flex items-center gap-3" aria-label="Domain Atlas trang chủ">
+        <span class="grid h-10 w-10 place-items-center rounded-2xl bg-indigo-600 text-xl text-white shadow-lg shadow-indigo-200">⌘</span>
+        <span><span class="block text-sm font-extrabold tracking-tight sm:text-base">Domain <span class="text-indigo-600">Atlas</span></span><span class="hidden text-[11px] text-muted sm:block">HỌC NGHIỆP VỤ IT THEO NGÀNH</span></span>
+      </a>
+      <nav class="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
+        <a class="hover:text-indigo-600" href="#domains">Khám phá</a>
+        <a class="hover:text-indigo-600" href="#live">Cập nhật</a>
+        <a class="hover:text-indigo-600" href="#compare">So sánh</a>
+      </nav>
+      <a href="#domains" class="rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-indigo-700 sm:text-sm">Bắt đầu học <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="top" class="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+    <section class="relative overflow-hidden pb-10 pt-12 sm:pb-14 sm:pt-16 lg:pt-20">
+      <div class="pointer-events-none absolute -right-24 -top-16 h-80 w-80 rounded-full bg-violet-200/50 blur-3xl"></div>
+      <div class="pointer-events-none absolute right-1/3 top-20 h-48 w-48 rounded-full bg-sky-100 blur-3xl"></div>
+      <div class="relative grid items-end gap-10 lg:grid-cols-[1.15fr_.85fr]">
+        <div>
+          <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-white px-3 py-1.5 text-xs font-bold text-indigo-700 shadow-sm"><span class="h-2 w-2 rounded-full bg-emerald-500"></span> BẢN ĐỒ NGHIỆP VỤ CÔNG NGHỆ</div>
+          <h1 class="max-w-3xl text-4xl font-black leading-[1.08] tracking-[-.045em] sm:text-5xl lg:text-6xl">Hiểu ngành đứng sau <span class="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-500 bg-clip-text text-transparent">những dòng code.</span></h1>
+          <p class="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">Khám phá cách các ngành vận hành, hệ thống IT giải quyết bài toán gì và kỹ năng nào giúp bạn bước vào domain tiếp theo.</p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href="#domains" class="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-200 transition hover:-translate-y-0.5 hover:bg-indigo-700">Khám phá 6 domain <span aria-hidden="true">↓</span></a>
+            <a href="#compare" class="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-700 transition hover:border-indigo-200 hover:text-indigo-700">Xem bảng so sánh</a>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3 lg:pb-1">
+          <div class="rounded-2xl border border-white bg-white/80 p-4 shadow-soft sm:p-5"><div class="text-2xl font-black tracking-tight">06</div><div class="mt-1 text-xs font-medium text-muted sm:text-sm">lĩnh vực tiêu biểu</div></div>
+          <div class="rounded-2xl border border-white bg-white/80 p-4 shadow-soft sm:p-5"><div class="text-2xl font-black tracking-tight">30+</div><div class="mt-1 text-xs font-medium text-muted sm:text-sm">khái niệm nghiệp vụ</div></div>
+          <div class="rounded-2xl border border-white bg-white/80 p-4 shadow-soft sm:p-5"><div class="text-2xl font-black tracking-tight">01</div><div class="mt-1 text-xs font-medium text-muted sm:text-sm">bản đồ để bắt đầu</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="live" class="mb-12 scroll-mt-24">
+      <div class="overflow-hidden rounded-[1.75rem] bg-slate-950 text-white shadow-soft">
+        <div class="grid lg:grid-cols-[.7fr_1.3fr]">
+          <div class="relative overflow-hidden p-6 sm:p-8">
+            <div class="absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-indigo-600/30 blur-3xl"></div>
+            <div class="relative flex items-start justify-between gap-4">
+              <div><div class="flex items-center gap-2 text-xs font-bold uppercase tracking-[.18em] text-indigo-300"><span class="relative flex h-2.5 w-2.5"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60"></span><span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400"></span></span> Live update stream</div><h2 class="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl">Tín hiệu từ các domain</h2><p class="mt-2 max-w-sm text-sm leading-6 text-slate-400">Luồng minh họa tự xoay vòng. Thay feed mẫu bằng API tin tức hoặc nguồn nội bộ khi sẵn sàng.</p></div>
+              <div class="hidden h-14 w-14 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/5 text-2xl sm:grid">◉</div>
+            </div>
+            <div class="mt-6 flex items-center gap-2 text-[11px] font-semibold text-slate-500"><span id="stream-count">01</span><span> / 06 tín hiệu mẫu</span><span class="ml-auto">TỰ ĐỘNG LÀM MỚI</span></div>
+            <div class="mt-2 h-1 overflow-hidden rounded-full bg-white/10"><div class="progress-bar h-full w-full rounded-full bg-gradient-to-r from-cyan-400 to-indigo-400"></div></div>
+          </div>
+          <div class="border-t border-white/10 p-5 sm:p-7 lg:border-l lg:border-t-0">
+            <div class="mb-4 flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-slate-400">Bản tin mẫu · cập nhật luân phiên</span><button id="pause-stream" class="rounded-lg border border-white/10 px-3 py-1.5 text-xs font-semibold text-slate-300 transition hover:bg-white/10" type="button">Tạm dừng</button></div>
+            <div id="live-card" aria-live="polite" class="live-item min-h-[126px]"></div>
+            <div id="live-dots" class="mt-4 flex gap-1.5" aria-label="Chọn bản tin"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="domains" class="scroll-mt-24">
+      <div class="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+        <div><p class="text-xs font-extrabold uppercase tracking-[.18em] text-indigo-600">Chọn hướng khám phá</p><h2 class="mt-2 text-3xl font-black tracking-tight sm:text-4xl">Business domains</h2><p class="mt-2 max-w-xl text-sm leading-6 text-muted sm:text-base">Tìm theo ngành, công nghệ hoặc bài toán. Mở thẻ để xem kiến thức nghiệp vụ và góc nhìn nghề nghiệp.</p></div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button data-view="simple" class="view-btn rounded-xl border border-indigo-600 bg-indigo-600 px-3.5 py-2.5 text-xs font-bold text-white" type="button" aria-pressed="true">◫ Tóm tắt</button>
+          <button data-view="detail" class="view-btn rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-bold text-slate-600 transition hover:border-indigo-200" type="button" aria-pressed="false">▤ Chi tiết</button>
+        </div>
+      </div>
+
+      <div class="mt-6 grid gap-3 lg:grid-cols-[1fr_auto]">
+        <label class="relative block"><span class="sr-only">Tìm theo domain hoặc công nghệ</span><span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400">⌕</span><input id="search" type="search" placeholder="Tìm domain, công nghệ, nghiệp vụ…" class="w-full rounded-2xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100" /></label>
+        <div id="filters" class="flex gap-2 overflow-x-auto pb-1 lg:justify-end" aria-label="Lọc lĩnh vực"></div>
+      </div>
+      <div id="result-meta" class="mt-4 text-xs font-semibold text-slate-500" aria-live="polite"></div>
+      <div id="domain-grid" class="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
+      <div id="empty-state" class="mt-4 hidden rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center"><div class="text-3xl">⌕</div><p class="mt-3 font-bold">Chưa tìm thấy domain phù hợp</p><p class="mt-1 text-sm text-muted">Thử từ khóa khác, ví dụ “API”, “data” hoặc “payment”.</p></div>
+    </section>
+
+    <section id="compare" class="mt-16 scroll-mt-24">
+      <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p class="text-xs font-extrabold uppercase tracking-[.18em] text-indigo-600">Nhìn nhanh toàn cảnh</p><h2 class="mt-2 text-3xl font-black tracking-tight">So sánh các lĩnh vực</h2></div><p class="max-w-md text-sm leading-6 text-muted">Độ khó và cơ hội là đánh giá định hướng để bạn bắt đầu tìm hiểu, không phải xếp hạng tuyệt đối.</p></div>
+      <div class="compare-scroll mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-soft"><table class="w-full min-w-[850px] border-collapse text-left text-sm"><thead class="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500"><tr><th class="px-5 py-4">Domain</th><th class="px-5 py-4">Bài toán trọng tâm</th><th class="px-5 py-4">Độ khó</th><th class="px-5 py-4">Cơ hội IT</th><th class="px-5 py-4">Công nghệ thường gặp</th></tr></thead><tbody id="compare-body" class="divide-y divide-slate-100"></tbody></table></div>
+      <p class="mt-3 text-xs leading-5 text-slate-500">* Lương phụ thuộc vai trò, seniority, địa điểm, ngoại ngữ và loại hình công ty; các thẻ dùng mức tham khảo chung cho nghề IT tại Việt Nam, không khẳng định domain nào trả cao hơn.</p>
+    </section>
+
+    <section class="mt-14 rounded-[1.75rem] border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-6 sm:p-9">
+      <div class="grid gap-7 md:grid-cols-[1fr_auto] md:items-center"><div><p class="text-xs font-extrabold uppercase tracking-[.18em] text-indigo-600">Học theo vấn đề thực tế</p><h2 class="mt-2 text-2xl font-black tracking-tight sm:text-3xl">Đừng chỉ học tên công nghệ.</h2><p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600">Bắt đầu từ người dùng, quy trình và rủi ro của ngành. Sau đó nối chúng với API, dữ liệu, bảo mật, kiến trúc và cách kiểm thử.</p></div><a href="#domains" class="inline-flex w-fit items-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white transition hover:bg-indigo-700">Chọn một domain <span aria-hidden="true">↗</span></a></div>
+    </section>
+
+    <footer class="mt-12 border-t border-slate-200 pt-6 text-xs leading-6 text-slate-500">
+      <div class="flex flex-col justify-between gap-4 sm:flex-row"><p>Domain Atlas · Nội dung tổng quan phục vụ học tập. Mô tả công nghệ và cơ hội việc làm có thể thay đổi theo thị trường.</p><p class="flex flex-wrap gap-x-4 gap-y-1"><a class="font-semibold text-indigo-600 hover:underline" href="https://itviec.com/report/vietnam-it-salary-and-recruitment-market" target="_blank" rel="noopener noreferrer">ITviec Salary & Recruitment Report 2025–2026 ↗</a><a class="font-semibold text-indigo-600 hover:underline" href="https://www.michaelpage.com.vn/salary-benchmark-tool" target="_blank" rel="noopener noreferrer">Michael Page Salary Benchmark ↗</a></p></div>
+    </footer>
+  </main>
+
+  <dialog id="domain-dialog" class="w-[min(760px,calc(100%-2rem))] max-h-[88vh] overflow-y-auto rounded-[1.75rem] border border-white bg-white p-0 text-ink shadow-2xl backdrop:bg-slate-950/55 backdrop:backdrop-blur-sm">
+    <div id="dialog-content"></div>
+  </dialog>
+
+  <script>
+    const salaryNote = 'Tham khảo IT Việt Nam: khoảng 12–55+ triệu VND/tháng cho kỹ sư backend từ entry đến senior; không phải dải riêng của domain.';
+    const domains = [
+      { id:'banking', name:'Banking & Finance', vi:'Tài chính – Ngân hàng', icon:'🏦', accent:'#2563eb', tint:'#eff6ff', category:'Tài chính', difficulty:'Cao', opportunity:'Rất cao', salary:salaryNote, focus:'Dòng tiền, tài khoản, thanh toán và quản trị rủi ro trong môi trường yêu cầu độ chính xác, kiểm soát và khả năng kiểm toán cao.', scope:['Core banking: khách hàng, tài khoản, tiền gửi, khoản vay','Payment rails: chuyển khoản, thẻ, QR, đối soát','Fraud/risk: phát hiện giao dịch bất thường, AML/KYC','Digital banking: mobile app, internet banking, Open API'], special:'Một giao dịch không chỉ là “trừ tiền”. Hệ thống phải đảm bảo ghi nhận nhất quán, chống xử lý trùng, có audit trail và đối soát với hệ thống liên quan.', tech:['Java / .NET','Kafka','Oracle / PostgreSQL','ISO 8583 / Open Banking','Kubernetes','IAM / HSM'], pros:['Nghiệp vụ sâu, kiến thức có giá trị lâu dài','Hệ thống lớn, tiêu chuẩn và quy trình chặt chẽ','Nhiều hướng đi: backend, data, security, BA'], challenges:['Legacy và tích hợp nhiều hệ thống','Bảo mật, tuân thủ, audit khắt khe','Sai lệch số dư/giao dịch ảnh hưởng trực tiếp khách hàng'], jobs:['Backend Engineer','Payment Engineer','Business Analyst','Fraud / Data Engineer'], difficultyScore:5, oppScore:5, challenge:'Tính toàn vẹn giao dịch', problem:'Xử lý giao dịch thanh toán an toàn, không ghi nợ hai lần khi mạng chập chờn.', learning:'Bắt đầu với vòng đời một giao dịch: authorize → post → settle → reconcile.' },
+      { id:'healthcare', name:'Healthcare', vi:'Y tế – Chăm sóc sức khỏe', icon:'🏥', accent:'#0f9f86', tint:'#ecfdf5', category:'Chăm sóc', difficulty:'Cao', opportunity:'Cao', salary:salaryNote, focus:'Số hóa quy trình khám chữa bệnh, hồ sơ sức khỏe, chẩn đoán, thanh toán bảo hiểm và vận hành bệnh viện/phòng khám.', scope:['EHR/EMR: hồ sơ sức khỏe điện tử','Lịch hẹn, tiếp nhận, chỉ định và kết quả xét nghiệm','Quản lý thuốc, kho, giường bệnh, billing','Kết nối thiết bị và trao đổi dữ liệu y tế'], special:'Dữ liệu phải đúng người, đúng thời điểm và có thể truy vết. Chuẩn như HL7 FHIR giúp các hệ thống y tế trao đổi dữ liệu có cấu trúc.', tech:['HL7 FHIR','DICOM','Java / .NET','PostgreSQL','Event-driven APIs','Encryption / IAM'], pros:['Tác động thực tế tới chất lượng chăm sóc','Bài toán liên ngành giữa phần mềm và y tế','Nhu cầu số hóa từ bệnh viện tới telehealth'], challenges:['Dữ liệu nhạy cảm, yêu cầu riêng tư cao','Chuẩn dữ liệu và quy trình khác nhau giữa cơ sở','Downtime có thể ảnh hưởng vận hành lâm sàng'], jobs:['Healthcare Software Engineer','Interoperability Engineer','Health Data Analyst','Clinical Systems BA'], difficultyScore:4, oppScore:4, challenge:'Riêng tư & liên thông dữ liệu', problem:'Giúp bác sĩ xem thông tin liên quan nhanh mà chỉ người có quyền mới được truy cập.', learning:'Tìm hiểu một luồng khám: đăng ký → encounter → order → result → discharge.' },
+      { id:'media', name:'Media & Entertainment', vi:'Truyền thông & Giải trí', icon:'🎬', accent:'#9333ea', tint:'#faf5ff', category:'Nội dung số', difficulty:'Trung bình', opportunity:'Cao', salary:salaryNote, focus:'Sản xuất, quản lý, phân phối và kiếm tiền từ nội dung số: video, âm thanh, tin tức, quảng cáo, livestream và nội dung tương tác.', scope:['CMS và workflow biên tập','Media processing: encode, transcode, thumbnail','CDN và phân phối nội dung toàn cầu','Subscription, quảng cáo, recommendation'], special:'Một video upload có thể tạo ra nhiều bản mã hóa theo bitrate/độ phân giải; CDN đưa nội dung tới gần người xem để phát mượt hơn.', tech:['AWS Media Services','S3 / object storage','CDN','Kafka / queues','Recommendation / ML','React / Node.js'], pros:['Sản phẩm hướng người dùng, phản hồi nhanh','Kết hợp dữ liệu, trải nghiệm và sáng tạo','Bài toán quy mô lớn ở giờ cao điểm'], challenges:['Traffic tăng đột biến theo sự kiện','Chi phí lưu trữ/băng thông cao','Bản quyền, moderation và an toàn nội dung'], jobs:['Media Platform Engineer','Streaming Engineer','Data / Recommendation Engineer','AdTech Engineer'], difficultyScore:3, oppScore:4, challenge:'Phân phối nội dung quy mô lớn', problem:'Phát video ổn định trên nhiều thiết bị và mạng khác nhau.', learning:'Theo một asset: ingest → transcode → package → CDN → playback analytics.' },
+      { id:'energy', name:'Oil, Gas & Energy', vi:'Dầu khí & Năng lượng', icon:'🛢️', accent:'#d97706', tint:'#fffbeb', category:'Công nghiệp', difficulty:'Rất cao', opportunity:'Khá cao', salary:salaryNote, focus:'Vận hành và tối ưu thăm dò, khai thác, nhà máy, lưới điện và năng lượng tái tạo bằng phần mềm công nghiệp và dữ liệu cảm biến.', scope:['SCADA/DCS: giám sát, điều khiển thiết bị','Asset maintenance và quản lý vòng đời tài sản','Dữ liệu thời gian thực từ sensor/IoT','Mô hình dự báo sản lượng, lỗi, tiêu thụ năng lượng'], special:'IT thường phải phối hợp với OT. Hệ thống điều khiển công nghiệp ưu tiên an toàn và tính sẵn sàng; cập nhật không thể tùy tiện như web app thông thường.', tech:['SCADA / OPC UA','IoT / MQTT','Time-series databases','Python / analytics','GIS / digital twin','OT security'], pros:['Bài toán chuyên sâu, ít người có trải nghiệm','Kết hợp software, data và hệ thống vật lý','Nhu cầu tối ưu hiệu suất và chuyển dịch năng lượng'], challenges:['Chu kỳ dự án dài, môi trường triển khai đặc thù','Tích hợp hệ thống cũ và thiết bị đa hãng','An toàn vận hành và an ninh OT'], jobs:['Industrial IoT Engineer','OT/IT Integration Engineer','Energy Data Engineer','Asset Management BA'], difficultyScore:5, oppScore:3, challenge:'Tính sẵn sàng & an toàn OT', problem:'Phát hiện dấu hiệu thiết bị sắp hỏng mà không làm gián đoạn vận hành.', learning:'Học khác biệt giữa IT và OT, telemetry, alerting và quy trình bảo trì.' },
+      { id:'ecommerce', name:'E-commerce', vi:'Thương mại điện tử', icon:'🛒', accent:'#e11d48', tint:'#fff1f2', category:'Bán lẻ số', difficulty:'Trung bình', opportunity:'Rất cao', salary:salaryNote, focus:'Kết nối người mua, người bán và đối tác fulfillment trong toàn bộ hành trình tìm kiếm, đặt hàng, thanh toán, giao hàng và hậu mãi.', scope:['Catalog, search, pricing, promotion','Cart, checkout, order management','Payment, refund, fraud prevention','Inventory, fulfillment, returns, loyalty'], special:'Giá và tồn kho có thể thay đổi trong lúc khách checkout. Cần xử lý cạnh tranh đồng thời, giữ hàng hợp lý và đảm bảo đơn hàng có trạng thái rõ ràng.', tech:['Java / Node.js','Redis / Elasticsearch','Kafka','PostgreSQL','Payment APIs','Cloud / Kubernetes'], pros:['Nhu cầu tuyển đa dạng và sản phẩm phát triển nhanh','Dễ hiểu bài toán, có chỉ số kinh doanh rõ','Cơ hội ở product, platform, data, growth'], challenges:['Flash sale và tải đột biến','Tích hợp thanh toán, vận chuyển, kho','Cân bằng conversion, fraud và trải nghiệm'], jobs:['Commerce Backend Engineer','Search Engineer','Payment / Order Engineer','Product Analyst'], difficultyScore:3, oppScore:5, challenge:'Tải đột biến & nhất quán đơn hàng', problem:'Không bán vượt tồn kho khi nhiều khách cùng đặt sản phẩm cuối.', learning:'Vẽ order state machine từ cart → payment → fulfillment → return.' },
+      { id:'logistics', name:'Transportation & Supply Chain', vi:'Vận tải & Chuỗi cung ứng', icon:'🚚', accent:'#0891b2', tint:'#ecfeff', category:'Vận hành', difficulty:'Cao', opportunity:'Cao', salary:salaryNote, focus:'Lập kế hoạch và theo dõi luồng hàng hóa từ nhà cung cấp tới kho, phương tiện, điểm giao và khách hàng cuối.', scope:['WMS/TMS: quản lý kho và vận tải','Route planning, dispatch, tracking','Procurement, demand planning, replenishment','Proof of delivery, reverse logistics'], special:'Trạng thái đơn phụ thuộc cả sự kiện số lẫn hoạt động ngoài đời. Dữ liệu GPS, scan kho và giao nhận có thể đến trễ, thiếu hoặc sai thứ tự.', tech:['Geospatial / Maps APIs','Kafka / event streaming','Optimization algorithms','IoT / GPS','WMS / TMS / ERP','Cloud data platform'], pros:['Domain phổ biến ở bán lẻ, sản xuất và giao nhận','Bài toán tối ưu có kết quả vận hành đo được','Kết hợp real-time, data, mobile và APIs'], challenges:['Nhiều bên tham gia, dữ liệu phân tán','Ngoại lệ vận hành và điều kiện thực địa','Tối ưu tuyến phải cân bằng chi phí và SLA'], jobs:['Logistics Platform Engineer','Supply Chain Analyst','TMS/WMS Consultant','Routing / Optimization Engineer'], difficultyScore:4, oppScore:4, challenge:'Ngoại lệ ngoài đời & dữ liệu phân tán', problem:'Cập nhật ETA đáng tin cậy khi tuyến đường, thời tiết hoặc năng lực giao hàng thay đổi.', learning:'Theo dõi một shipment: tạo lệnh → phân tuyến → pickup → hub → delivery → proof.' }
+    ];
+
+    const businessGlossaries = {
+      banking: {
+        relation: 'Customer/Party → Account → Payment Instruction → Payment Transaction → Ledger Entries → Settlement → Reconciliation',
+        featured: ['Payment Instruction', 'Payment / Transfer', 'Ledger Entry'],
+        terms: [
+          ['Customer / Party', 'Cá nhân hoặc tổ chức có quan hệ với ngân hàng; Party có thể là người, doanh nghiệp hoặc bên thụ hưởng.'],
+          ['Account', 'Tài khoản ghi nhận quyền sở hữu tiền hoặc hạn mức; có currency, owner, trạng thái và số dư khả dụng.'],
+          ['Beneficiary', 'Người/tổ chức nhận tiền trong lệnh chuyển; không nhất thiết là chủ tài khoản nguồn.'],
+          ['Payment Instruction', 'Chỉ thị yêu cầu thanh toán: ai trả, ai nhận, bao nhiêu, tiền tệ nào, thời điểm nào.'],
+          ['Payment / Transfer', 'Giao dịch thực thi chỉ thị; có trạng thái như initiated, pending, posted, settled, failed hoặc reversed.'],
+          ['Ledger Entry', 'Bút toán ghi nợ/ghi có bất biến; một giao dịch thường tạo các dòng cân bằng trong sổ cái.'],
+          ['Settlement', 'Quá trình quyết toán nghĩa vụ tiền giữa các ngân hàng/đối tác thanh toán.'],
+          ['Reconciliation', 'Đối chiếu giao dịch nội bộ với sao kê/kết quả từ đối tác, tìm khoản thiếu, trùng hoặc lệch.'],
+          ['Mandate / Standing Order', 'Ủy quyền hoặc lệnh định kỳ cho phép hệ thống thu/trả tiền theo điều kiện đã đồng ý.'],
+          ['Reversal / Refund', 'Reversal đảo bút toán nghiệp vụ; refund là hoàn tiền theo quy trình thanh toán. Không xóa lịch sử cũ.']
+        ]
+      },
+      healthcare: {
+        relation: 'Patient → Appointment → Encounter → ServiceRequest/Order → Observation/DiagnosticReport → Claim',
+        featured: ['Patient', 'Encounter', 'ServiceRequest / Order'],
+        references: [['HL7 FHIR · ServiceRequest', 'https://hl7.org/fhir/R4/servicerequest.html']],
+        terms: [
+          ['Patient', 'Người nhận dịch vụ y tế; định danh cần phân biệt với hồ sơ trùng, người thân và mã bệnh viện.'],
+          ['Practitioner / Provider', 'Bác sĩ, điều dưỡng hoặc tổ chức/cơ sở cung cấp dịch vụ; Provider có thể chỉ cá nhân hoặc đơn vị tùy hệ thống.'],
+          ['Appointment', 'Lịch hẹn dự kiến; chưa khẳng định bệnh nhân đã đến hay dịch vụ đã diễn ra.'],
+          ['Encounter', 'Một lần tương tác/chăm sóc thực tế: khám ngoại trú, nhập viện, cấp cứu hoặc tư vấn.'],
+          ['Condition / Diagnosis', 'Vấn đề sức khỏe hoặc chẩn đoán gắn với patient và có thể gắn với encounter cụ thể.'],
+          ['ServiceRequest / Order', 'Yêu cầu thực hiện dịch vụ như xét nghiệm, chẩn đoán hình ảnh hoặc thủ thuật.'],
+          ['Observation', 'Một kết quả đo/quan sát như huyết áp, nhiệt độ hoặc chỉ số xét nghiệm; thường có value, unit, time, status.'],
+          ['DiagnosticReport', 'Báo cáo tổng hợp kết quả chẩn đoán, có thể tham chiếu nhiều Observation hoặc hình ảnh.'],
+          ['MedicationRequest / Prescription', 'Yêu cầu kê thuốc: thuốc, liều, đường dùng, lịch dùng và người kê; khác với MedicationDispense là thuốc đã cấp.'],
+          ['Payer / Coverage / Claim', 'Bên chi trả, quyền lợi bảo hiểm và hồ sơ yêu cầu thanh toán cho dịch vụ đã cung cấp.'],
+          ['Consent / AuditEvent', 'Consent ghi phạm vi đồng ý sử dụng dữ liệu; AuditEvent ghi ai đã xem/thay đổi dữ liệu và khi nào.']
+        ]
+      },
+      media: {
+        relation: 'Series/Show → Episode/Asset → Program → Schedule → Channel → Playback; Rights và Ad Break áp dụng theo nội dung/khung phát',
+        featured: ['Program', 'Schedule', 'Channel'],
+        references: [
+          ['AWS MediaTailor · Channel assembly concepts', 'https://docs.aws.amazon.com/mediatailor/latest/ug/what-is-terms.html'],
+          ['AWS MediaTailor · Add a program to a channel schedule', 'https://docs.aws.amazon.com/mediatailor/latest/ug/channel-assembly-programs.html']
+        ],
+        terms: [
+          ['Series / Show', 'Tác phẩm/chương trình ở cấp bộ sưu tập, ví dụ một series có nhiều mùa và tập. Không đồng nghĩa với một lần phát cụ thể.'],
+          ['Episode', 'Một tập nội dung thuộc series/season; có metadata, thời lượng, rating và asset tương ứng.'],
+          ['Asset / Source', 'File video/audio gốc hoặc nguồn live đầu vào; sau ingest có thể tạo nhiều rendition, subtitle và manifest.'],
+          ['Program', 'Đơn vị được xếp vào lịch phát của channel. Tùy nền tảng, program tham chiếu VOD source, episode, movie hoặc live source.'],
+          ['Schedule', 'Lịch có thứ tự và thời điểm bắt đầu/kết thúc của các program; điều khiển nội dung nào phát trên channel lúc nào.'],
+          ['Channel', 'Một feed/luồng phát tuyến tính có output/playback URL và schedule riêng; không phải cùng khái niệm với series/show.'],
+          ['Playout / Playback', 'Playout là phát theo lịch phía kênh; playback là phiên xem của người dùng qua player/app.'],
+          ['Rights / License Window', 'Quyền khai thác nội dung theo lãnh thổ, thời hạn, nền tảng, ngôn ngữ hoặc loại thuê bao.'],
+          ['Ad Break / Ad Avail', 'Vị trí hoặc khoảng có thể chèn quảng cáo trong nội dung; ad decision system chọn quảng cáo theo luật/campaign.'],
+          ['EPG (Electronic Program Guide)', 'Hướng dẫn chương trình điện tử hiển thị channel, program và giờ phát cho người xem.'],
+          ['Rendition / Manifest', 'Rendition là bản encode ở codec/độ phân giải/bitrate cụ thể; manifest liệt kê cách player tải các segment.']
+        ]
+      },
+      energy: {
+        relation: 'Site/Facility → Asset → Tag/Sensor → Meter Reading/Telemetry → Alarm → Work Order → Maintenance History',
+        featured: ['Asset / Equipment', 'Tag / Point', 'Work Order'],
+        terms: [
+          ['Site / Facility', 'Địa điểm vận hành như nhà máy, trạm biến áp, giàn khai thác hoặc trang trại điện gió.'],
+          ['Asset / Equipment', 'Thiết bị cần theo dõi/bảo trì: turbine, pump, transformer, compressor; thường có tag và criticality.'],
+          ['Tag / Point', 'Tên điểm dữ liệu trong SCADA/DCS, ví dụ nhiệt độ ổ trục hoặc áp suất đầu vào; cần biết unit, range và quality.'],
+          ['Meter Reading / Telemetry', 'Giá trị đo theo thời gian từ công tơ hoặc sensor; có timestamp, đơn vị, nguồn và chất lượng đo.'],
+          ['Alarm', 'Cảnh báo sinh khi giá trị/quy tắc vượt điều kiện; alarm cần severity, acknowledge, clear và lịch sử.'],
+          ['Work Order', 'Lệnh công việc bảo trì được giao cho đội/người thực hiện, có ưu tiên, vật tư, thời hạn và kết quả.'],
+          ['Maintenance Plan', 'Kế hoạch bảo dưỡng theo lịch, giờ chạy, số chu kỳ hoặc condition-based trigger.'],
+          ['Outage / Availability', 'Outage là thời gian thiết bị/nghĩa vụ ngừng hoạt động; availability đo khả năng sẵn sàng vận hành theo định nghĩa nghiệp vụ.'],
+          ['Tariff / Energy Contract', 'Biểu giá hoặc hợp đồng quy định đơn giá, khung giờ, sản lượng, điều khoản mua/bán năng lượng.'],
+          ['Generation / Dispatch', 'Generation là sản lượng phát; dispatch là quyết định huy động nguồn nào, bao nhiêu và khi nào.']
+        ]
+      },
+      ecommerce: {
+        relation: 'Seller → Product/SKU → Price & Inventory → Cart → Order → Payment → Fulfillment/Shipment → Return/Refund',
+        featured: ['Product', 'SKU / Variant', 'Order / Order Item'],
+        terms: [
+          ['Seller / Merchant', 'Bên bán hàng; marketplace có thể có nhiều seller cùng bán các sản phẩm khác nhau.'],
+          ['Product', 'Mô tả mặt hàng ở cấp nội dung/catalog: tên, thương hiệu, thuộc tính, hình ảnh và phân loại.'],
+          ['SKU / Variant', 'Mã đơn vị hàng hóa cụ thể có thể bán và quản lý tồn, ví dụ áo mẫu X màu đen size M.'],
+          ['Price / Promotion', 'Giá bán và luật giảm giá; cần xác định thời hạn, điều kiện áp dụng, ưu tiên và cách cộng dồn.'],
+          ['Inventory / Reservation', 'Inventory là số lượng theo SKU/location; reservation tạm giữ hàng cho checkout trước khi xác nhận đơn.'],
+          ['Cart', 'Danh sách lựa chọn chưa đặt; giá/tồn kho trong cart có thể cần kiểm tra lại lúc checkout.'],
+          ['Order / Order Item', 'Order là cam kết mua sau checkout; Order Item lưu SKU, số lượng, giá chốt, thuế/discount tại thời điểm mua.'],
+          ['Payment Attempt / Transaction', 'Attempt là một lần thử thanh toán; transaction là kết quả ghi nhận phía payment provider, có thể pending rồi mới final.'],
+          ['Fulfillment', 'Quy trình lấy hàng, đóng gói và bàn giao cho vận chuyển; có thể chia một order thành nhiều fulfillment.'],
+          ['Return / Refund', 'Return là yêu cầu/luồng trả hàng; refund là hoàn tiền. Trạng thái hàng trả và tiền hoàn không nhất thiết kết thúc cùng lúc.'],
+          ['GMV / Conversion', 'GMV đo tổng giá trị giao dịch theo định nghĩa sản phẩm; conversion đo tỷ lệ người dùng hoàn thành hành động mục tiêu.']
+        ]
+      },
+      logistics: {
+        relation: 'Shipper → Shipment → Stops/Route → Carrier & Vehicle → Tracking Events → Proof of Delivery / Exception',
+        featured: ['Shipment', 'Stop / Route', 'Tracking Event / Scan'],
+        terms: [
+          ['Shipper / Consignor', 'Bên gửi hàng hoặc tạo yêu cầu vận chuyển; khác với Carrier là đơn vị chuyên chở.'],
+          ['Consignee', 'Bên nhận hàng tại điểm đến; có thể khác người đặt dịch vụ vận chuyển.'],
+          ['Shipment', 'Đơn vị nghiệp vụ theo dõi một lô gửi từ nơi lấy tới nơi giao; có thể chứa nhiều package.'],
+          ['Package / Handling Unit', 'Kiện/đơn vị vật lý được gắn nhãn, cân đo, quét và chuyển qua hub.'],
+          ['Consignment / Load', 'Lô hàng gom hoặc chuyến tải; thường nhóm nhiều shipment/package để vận chuyển cùng chặng.'],
+          ['Stop / Route', 'Stop là điểm pickup, hub hoặc delivery; Route là thứ tự các stop và chặng phương tiện cần đi.'],
+          ['Carrier / Service Level', 'Carrier là hãng vận chuyển; service level quy định loại dịch vụ/SLA như same-day, express hoặc standard.'],
+          ['Tracking Event / Scan', 'Sự kiện ghi nhận hàng đã được tạo, lấy, đến hub, rời hub, giao thất bại hoặc giao thành công.'],
+          ['ETA / ETD', 'ETA là giờ dự kiến đến; ETD là giờ dự kiến khởi hành. Đây là dự báo có thể thay đổi, không phải cam kết mặc định.'],
+          ['POD (Proof of Delivery)', 'Bằng chứng giao hàng như chữ ký, ảnh, mã OTP, thời gian và vị trí giao.'],
+          ['Exception / RTO', 'Exception là tình huống cần xử lý như sai địa chỉ/hư hỏng; RTO là Return to Origin khi hàng quay về nơi gửi.']
+        ]
+      }
+    };
+
+    const practicalCases = {
+      banking: {
+        scenario: 'Khách chuyển 2.000.000₫ từ A sang B. Request tới ngân hàng nhưng client timeout rồi gửi lại. Không được trừ tiền hai lần; giao dịch phải truy vết và đối soát được.',
+        flow: ['API xác thực user, quyền trên tài khoản và Idempotency-Key.', 'Transfer Service kiểm tra trạng thái tài khoản, hạn mức, số dư khả dụng.', 'Trong một DB transaction: tạo transfer PENDING, ghi hai ledger entry Nợ/Có cân bằng và ghi outbox event.', 'Worker phát TransferPosted lên Kafka; notification và fraud monitoring xử lý riêng.', 'Trả transferId; khi timeout client gọi GET trạng thái, không tạo lệnh chuyển mới.', 'Đối soát ledger với core banking/payment rail; lệch số liệu tạo case điều tra.'],
+        api: 'POST /api/v1/transfers {fromAccountId, toAccountId, amount, currency} + Idempotency-Key; GET /api/v1/transfers/{id}. Dùng lỗi nghiệp vụ ổn định như INSUFFICIENT_FUNDS thay vì trả lỗi DB.',
+        data: 'accounts; transfers(id, status, amount, idempotency_key); ledger_entries(account_id, debit, credit, transfer_id); outbox_events. Ledger bất biến; tổng debit và credit của giao dịch phải cân bằng.',
+        design: 'DB transaction bảo vệ sổ cái; unique constraint bảo vệ idempotency; version/lock ngăn hai lệnh tiêu cùng số dư. Transactional outbox giúp phát event sau commit. Không giả định DB và Kafka commit cùng lúc.',
+        tests: ['Retry cùng key chỉ tạo một transfer.', 'Hai lệnh đồng thời không làm tài khoản âm.', 'Kafka/provider timeout không làm mất giao dịch đã commit; retry worker an toàn.', 'Đối soát tìm được lệch ledger và audit log ghi đủ actor, thời điểm, request ID.']
+      },
+      healthcare: {
+        scenario: 'Bác sĩ tạo chỉ định xét nghiệm cho một lần khám. LIS gửi kết quả trễ; kết quả phải gắn đúng bệnh nhân/encounter và chỉ người có quyền mới xem được.',
+        flow: ['Lễ tân tạo Appointment; lúc bệnh nhân đến, mở Encounter.', 'Bác sĩ tạo Order/ServiceRequest gửi sang LIS qua integration adapter.', 'LIS trả Observation qua webhook/message; adapter validate schema, mã xét nghiệm và correlation ID.', 'Deduplicate kết quả, ánh xạ vào đúng Encounter; trạng thái có thể preliminary rồi final.', 'Bác sĩ nhận thông báo và xác nhận đã xem.', 'Mọi lần đọc/sửa hồ sơ nhạy cảm tạo audit record gồm actor, patient, action, timestamp.'],
+        api: 'POST /api/encounters/{id}/orders; GET /api/patients/{id}/observations?category=laboratory. Trao đổi với đối tác bằng FHIR ServiceRequest, Observation, Patient theo profile đã thống nhất.',
+        data: 'Patient, Practitioner, Appointment, Encounter, ServiceRequest, Observation, AuditEvent. Lưu external_id và source_system để nối HIS/LIS; không dùng tên bệnh nhân làm khóa liên kết.',
+        design: 'Tách clinical workflow khỏi adapter đối tác. Quyền cần xét cả role lẫn quan hệ chăm sóc (RBAC/ABAC); mã hóa dữ liệu; chuẩn hóa timezone, đơn vị đo và code system. Dữ liệu đến chưa đủ ngữ cảnh phải chờ reconcile, không đoán bệnh nhân.',
+        tests: ['Nhân viên khoa khác không đọc được hồ sơ ngoài quyền.', 'Webhook lặp không tạo Observation trùng.', 'Result đến trước Encounter được đưa vào hàng chờ đối soát.', 'Kiểm tra audit, đơn vị đo và chuyển preliminary → final.']
+      },
+      media: {
+        scenario: 'Biên tập viên upload video 4K. Chỉ được phát sau kiểm duyệt và khi các bản rendition/manifest đã sẵn sàng. Worker retry không tạo nội dung xuất bản trùng.',
+        flow: ['Frontend xin upload session; backend cấp presigned URL tới object storage.', 'Upload hoàn tất tạo Asset UPLOADED và MediaUploaded event vào queue.', 'Worker tạo rendition 1080p/720p/480p, thumbnail và HLS/DASH manifest.', 'CMS kiểm duyệt metadata/bản quyền rồi chuyển asset READY → PUBLISHED.', 'Playback API kiểm subscription/entitlement và cấp signed manifest URL; CDN phục vụ segment.', 'Metrics ghi startup time, rebuffering, lỗi theo thiết bị/khu vực.'],
+        api: 'POST /api/assets/upload-sessions; POST /api/assets/{id}/complete; POST /api/content/{id}/publish; GET /api/playback/{contentId}/manifest. Không truyền file video lớn xuyên qua API server.',
+        data: 'assets(id, owner, source_key, status); transcode_jobs(asset_id, profile, attempt); renditions(codec, resolution, key); publications; playback_sessions. Lưu trạng thái từng rendition để retry đúng phần lỗi.',
+        design: 'Object storage giữ file; queue tách upload khỏi transcode; worker scale theo backlog. Dùng idempotent job, retry có giới hạn và dead-letter queue. CDN cache segment; entitlement được kiểm tra trước khi cấp URL.',
+        tests: ['Callback upload lặp không tạo hai pipeline.', 'Worker crash có thể chạy tiếp các rendition chưa xong.', 'Không publish nếu thiếu manifest hoặc chưa duyệt.', 'URL hết hạn và user không có subscription không phát được nội dung.']
+      },
+      energy: {
+        scenario: 'Sensor rung máy bơm vượt ngưỡng. Hệ thống cần báo kỹ sư và mở work order; gateway có thể mất mạng rồi gửi bù dữ liệu cũ.',
+        flow: ['PLC/SCADA đọc tag; edge gateway gắn asset ID, timestamp, đơn vị và quality flag.', 'Gateway gửi telemetry qua OPC UA/MQTT; buffer local khi offline.', 'Ingestion service validate schema rồi ghi time-series store.', 'Rule engine xét ngưỡng/thời lượng; tạo alert có dedup key để không spam mỗi sample.', 'CMMS nhận work order; kỹ sư xử lý, kết quả được nối về lịch sử thiết bị.'],
+        api: 'Telemetry đi qua MQTT topic/OPC UA subscription thay vì REST từng mẫu. REST dùng GET /api/assets/{id}/telemetry và POST /api/work-orders. Lệnh xuống thiết bị cần allowlist, authorization và audit riêng.',
+        data: 'assets(asset_id, site, criticality); telemetry(asset_id, tag, event_time, value, unit, quality); alerts(dedup_key, severity, state); work_orders(asset_id, alert_id, status). Giữ event_time và ingest_time để nhận biết dữ liệu trễ.',
+        design: 'Tách mạng OT/IT bằng zone/DMZ; ưu tiên telemetry read-only, edge buffer và store-and-forward. Có backpressure, đơn vị chuẩn và quality checks. Không để dashboard cloud điều khiển thiết bị ngoài quy trình an toàn.',
+        tests: ['Gateway offline rồi online không làm mất hoặc phát lại vô hạn sample.', 'Sample cũ không ghi đè giá trị mới.', 'Nhiều mẫu vượt ngưỡng tạo một alert/work order đang mở.', 'Broker lỗi phải hiện degraded state và giữ buffer.']
+      },
+      ecommerce: {
+        scenario: 'Hai khách checkout sản phẩm cuối cùng. Payment gateway gửi webhook thành công hai lần hoặc tới trễ; không được oversell hay xác nhận hai đơn.',
+        flow: ['Checkout xác minh giá/promotion và tạo inventory reservation có TTL.', 'Tạo Order PENDING_PAYMENT và PaymentAttempt với idempotency key.', 'Webhook xác thực chữ ký, deduplicate event ID, cập nhật payment status.', 'Khi payment thành công, xác nhận reservation, chuyển order CONFIRMED và phát event cho fulfillment.', 'Reservation hết hạn hoặc payment thất bại thì giải phóng hàng; refund có trạng thái riêng.'],
+        api: 'POST /api/checkouts; POST /api/payment-webhooks/{provider}; GET /api/orders/{id}. Browser không được tự báo payment thành công; backend chỉ tin callback đã xác thực hoặc kết quả provider.',
+        data: 'orders, order_items, inventory(sku, available, reserved, version), reservations(expires_at), payment_attempts(provider_ref, status), outbox_events. Order state machine chỉ cho phép transition hợp lệ.',
+        design: 'Inventory Service sở hữu giữ hàng với atomic update/conditional write. Checkout là saga vì DB và payment provider không chung transaction. Webhook verify signature, deduplicate, retry và xử lý event sai thứ tự.',
+        tests: ['Hai checkout tranh món cuối: chỉ một reservation thành công.', 'Webhook lặp hoặc đến trước response đồng bộ không duplicate order.', 'Payment thành công nhưng reservation hết hạn có recovery/refund rõ ràng.', 'Promotion hết hạn giữa cart và checkout được tính lại đúng.']
+      },
+      logistics: {
+        scenario: 'Shipment bị quét vào hub hai lần; scan rời hub đến trước scan nhận hàng vì thiết bị đồng bộ offline. Tracking không được lùi trạng thái hoặc báo giao thành công nhầm.',
+        flow: ['OMS tạo Shipment/Stops; TMS tính route theo năng lực xe, thời gian và SLA.', 'Driver app ghi scan có event ID, device time, GPS và sequence; lưu offline khi mất mạng.', 'Ingestion API xác thực driver/device, deduplicate event rồi đưa vào stream.', 'State processor kiểm tra transition; event sai thứ tự được giữ chờ hoặc đánh dấu cần reconcile.', 'ETA service tính lại theo vị trí; chỉ gửi thông báo khi ETA thay đổi đáng kể.', 'Proof of Delivery lưu ảnh/chữ ký, timestamp và người nhận; giao thất bại mở exception case.'],
+        api: 'POST /api/shipments; POST /api/shipments/{id}/events; GET /api/shipments/{id}/tracking; POST /api/routes/{id}/replan. Event có eventId, eventTime và source để xử lý retry/sync trễ.',
+        data: 'shipments, shipment_stops, route_plans, tracking_events(event_id, event_time, received_at, sequence, location), delivery_proofs, exception_cases. Giữ raw event để replay khi sửa state processor.',
+        design: 'Tách command tạo shipment khỏi event tracking. State machine bảo vệ transition; geospatial index hỗ trợ truy vấn vùng. Không dùng server received time làm thời điểm scan; đánh dấu stale GPS và event bất thường.',
+        tests: ['Scan trùng eventId chỉ được tính một lần.', 'Event đến trễ không đẩy DELIVERED về IN_TRANSIT.', 'Driver offline rồi đồng bộ vẫn giữ sequence và event time.', 'Thiếu Proof of Delivery hoặc GPS stale hiện exception để vận hành xử lý.']
+      }
+    };
+
+    const updates = [
+      { domain:'banking', icon:'🏦', label:'BANKING', time:'Tín hiệu học tập', title:'Idempotency là chìa khóa cho retry thanh toán', text:'Khi client retry vì timeout, payment API cần nhận diện cùng một yêu cầu để tránh tạo giao dịch lặp. Hãy tìm hiểu idempotency key và trạng thái giao dịch.', tag:'PAYMENT · API DESIGN' },
+      { domain:'healthcare', icon:'🏥', label:'HEALTHCARE', time:'Tín hiệu học tập', title:'FHIR giúp hệ thống y tế nói cùng một ngôn ngữ', text:'FHIR tổ chức dữ liệu thành resource có cấu trúc như Patient, Observation và Encounter, giúp trao đổi thông tin giữa các hệ thống dễ mở rộng hơn.', tag:'HL7 FHIR · INTEROPERABILITY' },
+      { domain:'media', icon:'🎬', label:'MEDIA', time:'Tín hiệu học tập', title:'Adaptive bitrate giúp video thích ứng với mạng', text:'Player có thể chuyển giữa các mức chất lượng dựa trên băng thông và buffer hiện tại. Nội dung được chia segment và phân phối qua CDN.', tag:'STREAMING · CDN' },
+      { domain:'energy', icon:'🛢️', label:'ENERGY', time:'Tín hiệu học tập', title:'OT security cần hiểu quy trình vận hành', text:'Phân vùng mạng, quản lý truy cập và giám sát thiết bị cần được thiết kế cùng đội vận hành để bảo vệ hệ thống mà không gây gián đoạn quy trình công nghiệp.', tag:'OT · SECURITY' },
+      { domain:'ecommerce', icon:'🛒', label:'E-COMMERCE', time:'Tín hiệu học tập', title:'Flash sale là bài toán về tải và nhất quán', text:'Cache, queue, giới hạn tồn kho và xử lý cạnh tranh giúp hệ thống chịu tải cao mà vẫn tránh xác nhận đơn vượt quá hàng có thể bán.', tag:'SCALABILITY · INVENTORY' },
+      { domain:'logistics', icon:'🚚', label:'LOGISTICS', time:'Tín hiệu học tập', title:'ETA tốt cần sự kiện cập nhật đáng tin cậy', text:'Kết hợp GPS, sự kiện tại hub và lịch sử thời gian xử lý giúp ước tính thời gian giao hàng tốt hơn, nhưng cần xử lý dữ liệu trễ và mất kết nối.', tag:'REAL-TIME · ROUTING' }
+    ];
+
+    let selectedFilter = 'Tất cả';
+    let viewMode = 'simple';
+    let activeUpdate = 0;
+    let streamPaused = false;
+    let streamTimer;
+    const grid = document.getElementById('domain-grid');
+    const searchInput = document.getElementById('search');
+    const filtersEl = document.getElementById('filters');
+    const compareBody = document.getElementById('compare-body');
+    const dialog = document.getElementById('domain-dialog');
+
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+    const techChips = (items, accent) => items.map(item => `<span class="rounded-lg border px-2.5 py-1 text-[11px] font-bold" style="color:${accent};border-color:${accent}22;background:${accent}0d">${escapeHtml(item)}</span>`).join('');
+    const levelDots = (score, accent) => `<span class="inline-flex gap-1" aria-label="Mức ${score} trên 5">${Array.from({length:5},(_,i)=>`<i class="h-1.5 w-4 rounded-full" style="background:${i<score?accent:'#e7eaf1'}"></i>`).join('')}</span>`;
+
+    function renderFilters() {
+      const categories = ['Tất cả', ...new Set(domains.map(domain => domain.category))];
+      filtersEl.innerHTML = categories.map(category => `<button type="button" data-filter="${escapeHtml(category)}" aria-pressed="${selectedFilter===category}" class="chip shrink-0 rounded-xl border px-3.5 py-2.5 text-xs font-bold ${selectedFilter===category?'border-indigo-600 bg-indigo-600 text-white shadow-sm':'border-slate-200 bg-white text-slate-600 hover:border-indigo-200 hover:text-indigo-700'}">${escapeHtml(category)}</button>`).join('');
+    }
+
+    function matches(domain) {
+      const query = searchInput.value.trim().toLocaleLowerCase('vi');
+      const glossary = businessGlossaries[domain.id];
+      const haystack = [domain.name,domain.vi,domain.category,domain.focus,domain.special,...domain.scope,...domain.tech,...domain.jobs,glossary.relation,...glossary.terms.flat()].join(' ').toLocaleLowerCase('vi');
+      return (selectedFilter==='Tất cả'||domain.category===selectedFilter) && (!query||haystack.includes(query));
+    }
+
+    function renderDomains() {
+      const items = domains.filter(matches);
+      document.getElementById('result-meta').textContent = `Đang hiển thị ${items.length} / ${domains.length} lĩnh vực`;
+      document.getElementById('empty-state').classList.toggle('hidden',items.length>0);
+      grid.innerHTML = items.map((domain,index) => `
+        <article class="domain-card group overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-soft" style="animation-delay:${index*45}ms;--accent:${domain.accent}">
+          <div class="h-1.5" style="background:linear-gradient(90deg,${domain.accent},${domain.accent}55)"></div>
+          <div class="p-5 sm:p-6">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3.5"><div class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-2xl" style="background:${domain.tint}">${domain.icon}</div><div><div class="text-[10px] font-extrabold uppercase tracking-[.15em]" style="color:${domain.accent}">${escapeHtml(domain.category)}</div><h3 class="mt-0.5 text-lg font-extrabold tracking-tight">${escapeHtml(domain.name)}</h3><p class="text-xs text-slate-500">${escapeHtml(domain.vi)}</p></div></div>
+              <button type="button" data-open="${domain.id}" class="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-slate-200 text-lg text-slate-500 transition hover:border-slate-300 hover:bg-slate-50" aria-label="Mở chi tiết ${escapeHtml(domain.vi)}">↗</button>
+            </div>
+            <p class="mt-4 text-sm leading-6 text-slate-600">${escapeHtml(domain.focus)}</p>
+            <div class="mt-4 rounded-xl border border-slate-100 bg-slate-50 p-3"><div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">IT case study</div><p class="mt-1 text-xs leading-5 text-slate-700">${escapeHtml(practicalCases[domain.id].scenario)}</p></div>
+            <div class="mt-3 flex flex-wrap gap-1.5">${businessGlossaries[domain.id].featured.map(term=>`<span class="rounded-full px-2.5 py-1 text-[10px] font-bold" style="background:${domain.tint};color:${domain.accent}">${escapeHtml(term)}</span>`).join('')}<span class="self-center text-[10px] font-semibold text-slate-400">Business terms</span></div>
+            <div class="mt-4 flex flex-wrap gap-1.5">${techChips(domain.tech.slice(0,4),domain.accent)}${domain.tech.length>4?`<span class="rounded-lg bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-500">+${domain.tech.length-4}</span>`:''}</div>
+            ${viewMode==='detail'?`<div class="mt-5 border-t border-slate-100 pt-4"><div class="rounded-xl p-3.5" style="background:${domain.tint}"><div class="text-[10px] font-extrabold uppercase tracking-wider" style="color:${domain.accent}">Đặc điểm nghiệp vụ</div><p class="mt-1.5 text-xs leading-5 text-slate-700">${escapeHtml(domain.special)}</p></div><div class="mt-4 grid grid-cols-2 gap-3"><div><div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Độ khó</div><div class="mt-1.5 flex items-center gap-2">${levelDots(domain.difficultyScore,domain.accent)}<span class="text-xs font-bold text-slate-700">${escapeHtml(domain.difficulty)}</span></div></div><div><div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Cơ hội</div><p class="mt-1.5 text-xs font-bold text-slate-700">${escapeHtml(domain.opportunity)}</p></div></div><div class="mt-3 rounded-xl border border-slate-100 p-3"><div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Lương IT tham khảo</div><p class="mt-1 text-xs leading-5 text-slate-600">${escapeHtml(domain.salary)}</p></div></div>`:''}
+            <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-4"><span class="text-xs font-semibold text-slate-500">Bài toán: <span class="font-bold text-slate-700">${escapeHtml(domain.challenge)}</span></span><button type="button" data-open="${domain.id}" class="text-xs font-extrabold transition group-hover:translate-x-0.5" style="color:${domain.accent}">Khám phá <span aria-hidden="true">→</span></button></div>
+          </div>
+        </article>`).join('');
+    }
+
+    function renderComparison() {
+      compareBody.innerHTML = domains.map(domain => `<tr class="transition hover:bg-slate-50"><td class="px-5 py-4"><div class="flex items-center gap-2.5"><span class="grid h-9 w-9 place-items-center rounded-xl text-lg" style="background:${domain.tint}">${domain.icon}</span><span><strong class="block text-sm">${escapeHtml(domain.vi)}</strong><span class="text-[11px] text-slate-500">${escapeHtml(domain.name)}</span></span></div></td><td class="max-w-xs px-5 py-4 text-xs leading-5 text-slate-600">${escapeHtml(domain.challenge)}</td><td class="px-5 py-4"><div class="flex items-center gap-2">${levelDots(domain.difficultyScore,domain.accent)}<span class="text-xs font-semibold">${escapeHtml(domain.difficulty)}</span></div></td><td class="px-5 py-4"><span class="rounded-full px-2.5 py-1 text-xs font-bold" style="background:${domain.tint};color:${domain.accent}">${escapeHtml(domain.opportunity)}</span></td><td class="px-5 py-4"><div class="flex max-w-xs flex-wrap gap-1.5">${techChips(domain.tech.slice(0,3),domain.accent)}</div></td></tr>`).join('');
+    }
+
+    function openDomain(id) {
+      const domain = domains.find(item=>item.id===id);
+      const practical = practicalCases[id];
+      const glossary = businessGlossaries[id];
+      if (!domain) return;
+      const list = (items) => items.map(item=>`<li class="flex gap-2 text-sm leading-6 text-slate-600"><span class="mt-0.5 font-black" style="color:${domain.accent}">•</span><span>${escapeHtml(item)}</span></li>`).join('');
+      const numberedList = (items) => items.map((item,index)=>`<li class="flex gap-3"><span class="grid h-6 w-6 shrink-0 place-items-center rounded-lg text-[10px] font-black" style="background:${domain.tint};color:${domain.accent}">${String(index+1).padStart(2,'0')}</span><span class="text-xs leading-5 text-slate-600">${escapeHtml(item)}</span></li>`).join('');
+      document.getElementById('dialog-content').innerHTML = `
+        <div class="h-2" style="background:${domain.accent}"></div><div class="p-6 sm:p-8">
+          <div class="flex items-start justify-between gap-4"><div class="flex items-center gap-4"><div class="grid h-14 w-14 place-items-center rounded-2xl text-3xl" style="background:${domain.tint}">${domain.icon}</div><div><div class="text-[10px] font-extrabold uppercase tracking-[.16em]" style="color:${domain.accent}">${escapeHtml(domain.category)}</div><h2 class="mt-1 text-2xl font-black tracking-tight">${escapeHtml(domain.vi)}</h2><p class="text-sm text-slate-500">${escapeHtml(domain.name)}</p></div></div><button id="close-dialog" type="button" class="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-slate-200 text-xl text-slate-500 hover:bg-slate-50" aria-label="Đóng">×</button></div>
+          <div class="mt-6 rounded-2xl p-4 sm:p-5" style="background:${domain.tint}"><div class="text-[10px] font-extrabold uppercase tracking-wider" style="color:${domain.accent}">Định nghĩa & phạm vi</div><p class="mt-2 text-sm leading-6 text-slate-700">${escapeHtml(domain.focus)}</p><div class="mt-4 grid gap-2 sm:grid-cols-2">${domain.scope.map((item,i)=>`<div class="flex gap-2 rounded-xl border border-white/80 bg-white/70 p-3 text-xs leading-5 text-slate-700"><span class="font-black" style="color:${domain.accent}">0${i+1}</span>${escapeHtml(item)}</div>`).join('')}</div></div>
+          <div class="mt-5 grid gap-5 sm:grid-cols-2"><section><h3 class="text-sm font-extrabold">Điểm thú vị</h3><p class="mt-2 text-sm leading-6 text-slate-600">${escapeHtml(domain.special)}</p></section><section><h3 class="text-sm font-extrabold">Công nghệ thường gặp</h3><div class="mt-2 flex flex-wrap gap-2">${techChips(domain.tech,domain.accent)}</div></section></div>
+          <section class="mt-7 rounded-2xl border border-slate-200 p-4 sm:p-5">
+            <div class="text-[10px] font-extrabold uppercase tracking-[.15em]" style="color:${domain.accent}">Domain language · Ngôn ngữ nghiệp vụ</div>
+            <h3 class="mt-1 text-lg font-black">Các business object cần hiểu</h3>
+            <p class="mt-2 text-xs leading-5 text-slate-500">Đây là từ vựng của người làm sản phẩm/nghiệp vụ trong ngành. Tên object có thể khác giữa công ty; cần thống nhất nghĩa trong từng dự án.</p>
+            <div class="mt-4 overflow-x-auto rounded-xl p-3" style="background:${domain.tint}"><div class="min-w-max font-mono text-[11px] font-bold leading-6" style="color:${domain.accent}">${escapeHtml(glossary.relation)}</div></div>
+            <div class="mt-4 grid gap-2 sm:grid-cols-2">${glossary.terms.map(([term,meaning])=>`<article class="rounded-xl border border-slate-100 bg-white p-3"><h4 class="text-xs font-extrabold" style="color:${domain.accent}">${escapeHtml(term)}</h4><p class="mt-1 text-xs leading-5 text-slate-600">${escapeHtml(meaning)}</p></article>`).join('')}</div>
+            ${glossary.references?`<div class="mt-4 flex flex-wrap gap-x-4 gap-y-2">${glossary.references.map(([label,url])=>`<a class="text-xs font-bold text-indigo-600 hover:underline" href="${url}" target="_blank" rel="noopener noreferrer">Đọc thêm: ${escapeHtml(label)} ↗</a>`).join('')}</div>`:''}
+          </section>
+          <div class="mt-6 grid gap-4 rounded-2xl border border-slate-200 p-4 sm:grid-cols-3"><div><div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Độ khó tham khảo</div><div class="mt-2 flex items-center gap-2">${levelDots(domain.difficultyScore,domain.accent)}<span class="text-xs font-bold">${escapeHtml(domain.difficulty)}</span></div></div><div><div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Cơ hội việc làm</div><p class="mt-2 text-sm font-extrabold">${escapeHtml(domain.opportunity)}</p><p class="text-xs text-slate-500">${domain.jobs.length} nhóm vai trò tiêu biểu</p></div><div><div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Lương IT tham khảo</div><p class="mt-2 text-xs leading-5 text-slate-600">${escapeHtml(domain.salary)}</p></div></div>
+          <div class="mt-6 grid gap-5 sm:grid-cols-2"><section><h3 class="text-sm font-extrabold text-emerald-700">Ưu điểm</h3><ul class="mt-2 space-y-1">${list(domain.pros)}</ul></section><section><h3 class="text-sm font-extrabold text-rose-700">Thách thức</h3><ul class="mt-2 space-y-1">${list(domain.challenges)}</ul></section></div>
+          <section class="mt-7 overflow-hidden rounded-2xl border border-slate-200">
+            <div class="border-b border-slate-200 bg-slate-50 p-4 sm:p-5"><div class="text-[10px] font-extrabold uppercase tracking-[.15em]" style="color:${domain.accent}">Case study · từ nghiệp vụ tới code</div><h3 class="mt-1 text-lg font-black">Một luồng IT thực tế</h3><p class="mt-2 text-sm leading-6 text-slate-600">${escapeHtml(practical.scenario)}</p></div>
+            <div class="grid gap-5 p-4 sm:p-5 lg:grid-cols-2">
+              <div><h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Luồng xử lý</h4><ol class="mt-3 space-y-3">${numberedList(practical.flow)}</ol></div>
+              <div class="space-y-4">
+                <div><h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">API / Integration</h4><p class="mt-2 rounded-xl bg-slate-950 p-3 font-mono text-[11px] leading-5 text-emerald-300">${escapeHtml(practical.api)}</p></div>
+                <div><h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Data model</h4><p class="mt-2 rounded-xl bg-slate-50 p-3 font-mono text-[11px] leading-5 text-slate-700">${escapeHtml(practical.data)}</p></div>
+                <div><h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Backend / system design</h4><p class="mt-2 text-xs leading-5 text-slate-600">${escapeHtml(practical.design)}</p></div>
+              </div>
+            </div>
+            <div class="border-t border-slate-200 bg-emerald-50/60 p-4 sm:p-5"><h4 class="text-xs font-extrabold uppercase tracking-wider text-emerald-800">Test case cần nghĩ tới</h4><ul class="mt-2 grid gap-x-6 gap-y-1 sm:grid-cols-2">${practical.tests.map(item=>`<li class="flex gap-2 text-xs leading-5 text-slate-700"><span class="font-black text-emerald-600">✓</span><span>${escapeHtml(item)}</span></li>`).join('')}</ul></div>
+          </section>
+          <div class="mt-6 rounded-2xl bg-slate-950 p-4 text-white"><div class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-300">Bài tập tư duy đầu tiên</div><p class="mt-2 text-sm leading-6 text-slate-200">${escapeHtml(domain.problem)}</p><p class="mt-3 border-t border-white/10 pt-3 text-xs leading-5 text-slate-400"><strong class="text-slate-200">Hướng học:</strong> ${escapeHtml(domain.learning)}</p></div>
+          <div class="mt-5"><div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vai trò có thể tìm hiểu</div><div class="mt-2 flex flex-wrap gap-2">${domain.jobs.map(job=>`<span class="rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600">${escapeHtml(job)}</span>`).join('')}</div></div>
+          <p class="mt-6 text-[11px] leading-5 text-slate-400">Lương và cơ hội thay đổi theo vai trò, kinh nghiệm, địa điểm và thị trường. Tham khảo báo cáo ITviec 2025–2026 ở cuối trang.</p>
+        </div>`;
+      dialog.showModal();
+      document.getElementById('close-dialog').addEventListener('click',()=>dialog.close());
+    }
+
+    function renderUpdate() {
+      const item = updates[activeUpdate];
+      const domain = domains.find(entry=>entry.id===item.domain);
+      document.getElementById('stream-count').textContent = String(activeUpdate+1).padStart(2,'0');
+      document.getElementById('live-card').innerHTML = `<div class="live-item flex items-start gap-4"><div class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-2xl" style="background:${domain.accent}25">${item.icon}</div><div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><span class="rounded-full px-2.5 py-1 text-[10px] font-extrabold tracking-wider" style="background:${domain.accent}2b;color:${domain.accent==='\u0023d97706'?'#fbbf24':domain.accent}">${item.label}</span><span class="text-[11px] text-slate-500">${item.time}</span></div><h3 class="mt-2 text-base font-extrabold leading-6 sm:text-lg">${item.title}</h3><p class="mt-1.5 max-w-3xl text-sm leading-6 text-slate-400">${item.text}</p><span class="mt-3 inline-flex rounded-md border border-white/10 px-2 py-1 text-[9px] font-bold tracking-wider text-slate-400">${item.tag}</span></div></div>`;
+      document.getElementById('live-dots').innerHTML = updates.map((_,i)=>`<button type="button" data-update="${i}" aria-label="Hiện tín hiệu ${i+1}" class="h-1.5 rounded-full transition-all ${i===activeUpdate?'w-7 bg-indigo-400':'w-1.5 bg-white/20 hover:bg-white/40'}"></button>`).join('');
+    }
+
+    function startStream() { clearInterval(streamTimer); if (!streamPaused) streamTimer=setInterval(()=>{activeUpdate=(activeUpdate+1)%updates.length;renderUpdate();},5800); }
+    renderFilters(); renderDomains(); renderComparison(); renderUpdate(); startStream();
+    searchInput.addEventListener('input',renderDomains);
+    filtersEl.addEventListener('click',event=>{const button=event.target.closest('[data-filter]');if(!button)return;selectedFilter=button.dataset.filter;renderFilters();renderDomains();});
+    document.querySelectorAll('.view-btn').forEach(button=>button.addEventListener('click',()=>{viewMode=button.dataset.view;document.querySelectorAll('.view-btn').forEach(item=>{const active=item===button;item.setAttribute('aria-pressed',String(active));item.className=`view-btn rounded-xl border px-3.5 py-2.5 text-xs font-bold transition ${active?'border-indigo-600 bg-indigo-600 text-white shadow-sm':'border-slate-200 bg-white text-slate-600 hover:border-indigo-200'}`;});renderDomains();}));
+    grid.addEventListener('click',event=>{const button=event.target.closest('[data-open]');if(button)openDomain(button.dataset.open);});
+    document.getElementById('live-dots').addEventListener('click',event=>{const button=event.target.closest('[data-update]');if(!button)return;activeUpdate=Number(button.dataset.update);renderUpdate();startStream();});
+    document.getElementById('pause-stream').addEventListener('click',event=>{streamPaused=!streamPaused;event.currentTarget.textContent=streamPaused?'Tiếp tục':'Tạm dừng';event.currentTarget.setAttribute('aria-pressed',String(streamPaused));startStream();});
+    dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&dialog.open)dialog.close();});
+  </script>
+</body>
+</html>

@@ -38,6 +38,12 @@ const cards = [
     path: '/frontend/html-css',
   },
   {
+    icon: '🧩',
+    title: 'Design System',
+    description: 'Thiết kế token, component API, accessibility, Storybook, visual testing và governance.',
+    path: '/frontend/design-system',
+  },
+  {
     icon: '⚡',
     title: 'JavaScript',
     description: 'ES6+, DOM, Async/Await, Closure, Promise, Event Loop, Web API, Module, TypeScript cơ bản',
