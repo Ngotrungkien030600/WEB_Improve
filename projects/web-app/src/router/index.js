@@ -39,6 +39,11 @@ const routes = [
     component: () => import('../pages/JavaHubPage.vue'),
   },
   {
+    path: '/go/interview',
+    name: 'go-interview',
+    component: () => import('../pages/GoInterviewPage.vue'),
+  },
+  {
     path: '/frontend/hub',
     name: 'frontend-hub',
     component: () => import('../pages/FrontendHubPage.vue'),

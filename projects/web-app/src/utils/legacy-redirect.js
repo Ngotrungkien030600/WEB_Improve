@@ -12,6 +12,7 @@ const LEGACY_TO_VUE = {
   'english/hub.html': '/english/hub',
   'backend.html': '/java/backend',
   'java/hub.html': '/java/hub',
+  'go/interview.html': '/go/interview',
   'java/backend.html': '/java/backend',
   'java/spring-boot.html': '/java/spring-boot',
   'java/thuc-chien.html': '/java/thuc-chien',
