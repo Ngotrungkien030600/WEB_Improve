@@ -84,6 +84,7 @@ const groups = [
       { icon: '⚙️', title: 'Backend Engineering', description: 'REST API, SQL, Kafka, Docker, CI/CD và System Design.', path: '/java/backend' },
       { icon: '☕', title: 'Java & Spring Boot', description: 'Java core, Spring Boot, thực chiến và phỏng vấn backend.', path: '/java/hub' },
       { icon: '🐹', title: 'Phỏng vấn Go', description: 'Ôn Go từ nền tảng đến concurrency, runtime và system design. Song ngữ Việt - Anh.', path: '/go/interview' },
+      { icon: '📚', title: 'The Way to Go', description: 'Đọc sách Go theo 21 chương với ghi chú Việt - Anh, ví dụ và tiến độ riêng.', path: '/books/the-way-to-go' },
       { icon: '🌐', title: 'Frontend', description: 'HTML/CSS, JavaScript, framework và responsive UI.', path: '/frontend/hub' },
       { icon: '🧭', title: 'Business Domains', description: 'Học business object và quy trình IT trong banking, media, healthcare, e-commerce, energy, logistics.', path: '/business-domains' },
       { icon: '🧪', title: 'Phòng luyện code', description: 'Viết code, chạy thật và luyện tư duy giải quyết bài toán.', path: '/code-lab' },

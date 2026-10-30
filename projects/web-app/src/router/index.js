@@ -44,6 +44,11 @@ const routes = [
     component: () => import('../pages/GoInterviewPage.vue'),
   },
   {
+    path: '/books/the-way-to-go',
+    name: 'the-way-to-go',
+    component: () => import('../pages/TheWayToGoPage.vue'),
+  },
+  {
     path: '/frontend/hub',
     name: 'frontend-hub',
     component: () => import('../pages/FrontendHubPage.vue'),
