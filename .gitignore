@@ -16,3 +16,6 @@ codegraph/
 .DS_Store
 Thumbs.db
 *.swp
+
+# Thu muc kiem tra tam thoi
+.tmp-check/
