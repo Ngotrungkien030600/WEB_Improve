@@ -1,0 +1,1 @@
+import{E as e,d as t,k as n,t as r}from"./_plugin-vue_export-helper-mTPtt9wH.js";var i={},a={class:`home-cards`};function o(r,i){return e(),t(`div`,a,[n(r.$slots,`default`,{},void 0,!0)])}var s=r(i,[[`render`,o],[`__scopeId`,`data-v-b10b980f`]]);export{s as t};

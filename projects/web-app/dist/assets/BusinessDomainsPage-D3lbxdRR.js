@@ -1,0 +1,1 @@
+import{E as e,c as t,d as n,t as r}from"./_plugin-vue_export-helper-mTPtt9wH.js";var i={},a={class:`business-domains-page`};function o(r,i){return e(),n(`main`,a,[...i[0]||=[t(`iframe`,{class:`business-domains-frame`,src:`/business-domains.html`,title:`Domain Atlas — học nghiệp vụ IT`},null,-1)]])}var s=r(i,[[`render`,o],[`__scopeId`,`data-v-d7cec297`]]);export{s as default};

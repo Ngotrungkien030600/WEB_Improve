@@ -1,0 +1,25 @@
+feat(lo-trinh): làm lại lộ trình học theo mục tiêu đi làm, tiến độ lấy từ dữ liệu thật
+
+Trang /learning-paths trước đây chỉ có 4 thẻ tĩnh, 12 dòng mốc chữ, 3 đích đến
+trong khi app có 46 route; bản port sang Vue còn bỏ hết objective/finalProject/
+prerequisites/lessons mà bản legacy đã có. Không có tick, không %, không điều kiện
+đạt chuẩn, không ôn tập, và tiến độ thì rơi vãi ở 6-7 khoá localStorage khác nhau.
+
+- 5 trục lộ trình: Java Backend (trục chính, 6 chặng, 12 tuần), English,
+  Frontend, DevOps & Cloud, AI
+- mỗi chặng bắt buộc đủ 6 phần: mục tiêu đo được, bài học (route thật),
+  luyện tập có chấm, điều kiện đạt chuẩn, sản phẩm, cách ôn lại
+- tiến độ đọc thật từ sf_code_lab_solutions, sf_java_tuzero_quiz,
+  thucChien_done, sf_ui_interview_seen, sf_timer_history + đánh dấu của
+  người học trong sf_learning_progress
+- thẻ "Hôm nay học gì" (việc tiếp theo + nút làm ngay), nhắc ôn chặng đã xong
+  từ 7 ngày, cảnh báo tiên quyết mềm (không khoá, không ẩn liên kết)
+- sửa quiz Java từ 0: câu trả lời lưu ngay vào sf_java_tuzero_quiz, tải lại
+  không mất; điểm quiz dùng được cho điều kiện đạt chuẩn (≥ 80% câu đúng)
+- trang Thực chiến: thêm thucChien_done + nút đánh dấu xong từng task + ô đếm
+- tài liệu: docs/lo-trinh-hoc.md (kèm nợ kỹ thuật), cập nhật docs/index.md,
+  README, mô tả thẻ ở trang chủ
+
+Kiểm chứng trên bản chạy thật 8080: logic lộ trình 226/226, verify trang 74/74;
+các bộ cũ vẫn xanh: code lab 112/112, timer 52/52, ui interview 38/38,
+entry 18/18, import 27/27, account menu 30/30, 0 lỗi JS.

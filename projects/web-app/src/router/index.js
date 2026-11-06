@@ -229,6 +229,11 @@ const routes = [
     component: () => import('../pages/InterviewEnglishPage.vue'),
   },
   {
+    path: '/cv-builder',
+    name: 'cv-builder',
+    component: () => import('../pages/CvBuilderPage.vue'),
+  },
+  {
     path: '/bmad-agents',
     name: 'bmad-agents',
     component: () => import('../pages/BmadAgentsPage.vue'),

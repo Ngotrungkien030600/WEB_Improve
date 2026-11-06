@@ -71,6 +71,7 @@ const groups = [
     items: [
       { icon: '🗣️', title: 'Phỏng vấn bằng tiếng Anh', description: 'Luyện giới thiệu bản thân, dự án và câu hỏi kỹ thuật bằng tiếng Anh.', path: '/interview-english' },
       { icon: '🧑‍💼', title: 'Phỏng vấn kỹ thuật', description: 'Câu hỏi Java, Spring, database, kiến trúc và kinh nghiệm dự án.', path: '/interview' },
+      { icon: '📄', title: 'CV theo JD', description: 'Lưu CV nền, đối chiếu yêu cầu công việc và tạo bản CV phù hợp để rà soát.', path: '/cv-builder' },
       { icon: '💬', title: 'Luyện nói & Viết', description: 'Luyện tạo câu hoàn chỉnh và diễn đạt ý trong công việc.', path: '/sentence-practice' },
       { icon: '📖', title: 'Tiếng Anh thực hành', description: 'Từ vựng, ngữ pháp và bài học theo chủ đề.', path: '/english' },
       { icon: '🎓', title: 'Thi thử', description: 'Kiểm tra kiến thức và từ vựng theo chủ đề.', path: '/exam' },

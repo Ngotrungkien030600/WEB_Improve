@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+private-user-data/*.json
 
 # Phụ thuộc & build
 node_modules/
