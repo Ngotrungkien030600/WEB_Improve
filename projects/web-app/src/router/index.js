@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import CNavRedirect from '../components/CNavRedirect.vue';
 import { isLoggedIn } from '../utils/auth-store.js';
+import { backendBasicsLessons } from '../data/backend-basics-lessons.js';
 
 const routes = [
   {
@@ -284,6 +285,18 @@ const routes = [
     path: '/java/backend-basics',
     name: 'java-backend-basics',
     component: () => import('../pages/BackendBasicsPage.vue'),
+  },
+  {
+    path: '/java/backend-basics/:lessonId',
+    name: 'java-backend-basics-lesson',
+    component: () => import('../pages/BackendBasicsLessonPage.vue'),
+    beforeEnter: (to) => {
+      if (backendBasicsLessons.some((lesson) => lesson.id === to.params.lessonId)) {
+        return true;
+      }
+
+      return { name: 'java-backend-basics', replace: true };
+    },
   },
   {
     path: '/java/backend/:sectionId',
