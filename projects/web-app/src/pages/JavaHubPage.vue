@@ -156,6 +156,15 @@ const allCards = [
     path: '/java/backend',
   },
   {
+    icon: '🌱',
+    title: '10 điều cơ bản Backend cần biết',
+    description: 'Lộ trình nhập môn từ HTTP, API, dữ liệu đến bảo mật, kiểm thử và triển khai',
+    badge: 'Nhập môn · 10 bài',
+    tags: ['Backend', 'Cơ bản', 'API', 'SQL'],
+    category: 'backend',
+    path: '/java/backend-basics',
+  },
+  {
     icon: '☕',
     title: 'Phỏng vấn Backend',
     description: '39 cheat sheet Java Core, Spring Boot, Microservices, System Design',

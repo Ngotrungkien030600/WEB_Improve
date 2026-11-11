@@ -281,6 +281,11 @@ const routes = [
     redirect: '/java/backend/sql',
   },
   {
+    path: '/java/backend-basics',
+    name: 'java-backend-basics',
+    component: () => import('../pages/BackendBasicsPage.vue'),
+  },
+  {
     path: '/java/backend/:sectionId',
     name: 'java-backend',
     component: () => import('../pages/BackendSectionPage.vue'),
