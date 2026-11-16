@@ -58,7 +58,7 @@ export const PORTED_PAGE_LABELS = {
   '/ai': 'Học AI',
   '/ai/hub': 'AI Hub',
   '/ai/agent': 'AI Agent',
-  '/ai/engineer': 'Lộ trình AI Engineer',
+  '/ai/engineer': 'Học AI · AI Engineer',
   '/java/hub': 'Java',
   '/frontend/hub': 'Frontend',
   '/frontend/frameworks': 'React / Vue / Angular',

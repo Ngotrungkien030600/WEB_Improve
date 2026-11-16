@@ -105,7 +105,6 @@ const groups = [
     items: [
       { icon: '🤖', title: 'Học AI', description: 'AI/ML, kiến thức nền, quiz và dự án thực hành.', path: '/ai' },
       { icon: '⚡', title: 'AI Agent', description: 'CodeGraph, MCP, Skills, Jira/Wiki và cách dùng token hiệu quả.', path: '/ai/agent' },
-      { icon: '🧭', title: 'Lộ trình AI Engineer', description: 'Từ nền tảng lập trình đến dự án portfolio và công việc AI thực tế.', path: '/ai/engineer' },
       { icon: '🗣️', title: 'BMAD Agents', description: 'Khám phá quy trình làm việc với nhóm trợ lý AI chuyên biệt.', path: '/bmad-agents' },
     ],
   },

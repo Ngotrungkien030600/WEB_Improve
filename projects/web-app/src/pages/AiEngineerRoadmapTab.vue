@@ -1,14 +1,7 @@
 <template>
-  <div class="ai-engineer-page" style="--forge-accent: var(--accent-ai)">
+  <div class="ai-engineer-roadmap-tab" style="--forge-accent: var(--accent-ai)">
     <header class="page-header">
       <div class="page-shell">
-        <CTopbar
-          title="Lộ trình AI Engineer"
-          back-label="AI Hub"
-          back-path="/ai"
-          @go-home="navigate"
-        />
-
         <p class="eyebrow">TỪ CHƯA BIẾT AI ĐẾN TỰ XÂY SẢN PHẨM</p>
         <h2 class="hero-title">Bạn không cần bắt đầu bằng việc tạo ra một mô hình AI.</h2>
         <p class="hero-copy">
@@ -238,20 +231,13 @@
 
       <footer class="page-footer">
         <p>Học nền tảng đủ để tự xây một thứ nhỏ, rồi dùng dự án để nhận ra mình cần học sâu phần nào tiếp theo.</p>
-        <a href="/ai" @click.prevent="navigate('/ai')">← Quay lại AI Hub</a>
       </footer>
     </main>
   </div>
 </template>
 
-<script setup>
-import CTopbar from '../components/CTopbar.vue';
-import { navigate } from '../utils/navigate.js';
-</script>
-
 <style scoped>
-.ai-engineer-page {
-  min-height: 100vh;
+.ai-engineer-roadmap-tab {
   color: var(--forge-text);
   background: var(--forge-bg);
 }
@@ -262,15 +248,11 @@ import { navigate } from '../utils/navigate.js';
 }
 
 .page-header {
-  padding: 2rem 0 3.5rem;
+  padding: 0 0 2rem;
   border-bottom: 1px solid var(--forge-glass-border);
   background:
     radial-gradient(ellipse at 85% 12%, var(--forge-glow), transparent 40%),
     var(--forge-bg2);
-}
-
-.page-header :deep(.hub-topbar) {
-  margin-bottom: 3rem;
 }
 
 .eyebrow,
@@ -664,14 +646,6 @@ import { navigate } from '../utils/navigate.js';
 }
 
 @media (max-width: 600px) {
-  .page-header {
-    padding-top: 1.25rem;
-  }
-
-  .page-header :deep(.hub-topbar) {
-    margin-bottom: 2rem;
-  }
-
   .section-nav {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

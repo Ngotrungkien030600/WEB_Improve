@@ -36,8 +36,8 @@ const routes = [
   },
   {
     path: '/ai/engineer',
-    name: 'ai-engineer-roadmap',
-    component: () => import('../pages/AiEngineerRoadmapPage.vue'),
+    name: 'ai-engineer-roadmap-redirect',
+    redirect: { path: '/ai', query: { tab: 'engineer' } },
   },
   {
     path: '/java/hub',
