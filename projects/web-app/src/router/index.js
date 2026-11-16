@@ -35,6 +35,11 @@ const routes = [
     component: () => import('../pages/AiAgentPage.vue'),
   },
   {
+    path: '/ai/engineer',
+    name: 'ai-engineer-roadmap',
+    component: () => import('../pages/AiEngineerRoadmapPage.vue'),
+  },
+  {
     path: '/java/hub',
     name: 'java-hub',
     component: () => import('../pages/JavaHubPage.vue'),

@@ -9,6 +9,15 @@
         <a class="back-btn" href="/" aria-label="Về trang chủ" title="Về trang chủ" @click.prevent="handleBack">🏠</a>
       </div>
 
+      <RouterLink class="roadmap-link" to="/ai/engineer">
+        <span class="roadmap-link-icon" aria-hidden="true">🧭</span>
+        <span class="roadmap-link-copy">
+          <strong>Muốn chuyển nghề thành AI Engineer?</strong>
+          <span>Xem lộ trình từ nền tảng lập trình đến dự án và công việc thực tế.</span>
+        </span>
+        <span class="roadmap-link-arrow" aria-hidden="true">→</span>
+      </RouterLink>
+
       <div class="tabs">
         <button
           v-for="tab in tabs"
@@ -503,6 +512,47 @@ export default {
 .page {
   max-width: 900px;
   margin: 0 auto;
+}
+
+.roadmap-link {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.15rem;
+  color: var(--forge-text);
+  text-decoration: none;
+  background: var(--forge-glass);
+  border: 1px solid var(--forge-glass-border);
+  border-radius: 16px;
+  transition: border-color var(--transition-base), transform var(--transition-base);
+}
+
+.roadmap-link:hover,
+.roadmap-link:focus-visible {
+  border-color: var(--accent-ai);
+  transform: translateY(-2px);
+}
+
+.roadmap-link-icon {
+  font-size: 1.5rem;
+}
+
+.roadmap-link-copy {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.roadmap-link-copy span {
+  color: var(--forge-text2);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.roadmap-link-arrow {
+  color: var(--accent-ai);
+  font-size: 1.3rem;
 }
 
 .topbar {
