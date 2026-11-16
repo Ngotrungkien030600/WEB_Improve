@@ -40,6 +40,8 @@
         </ol>
       </section>
 
+      <CRoadmapDiagram roadmap-id="overview" />
+
       <div class="track-tabs" role="tablist" aria-label="Chọn lộ trình">
         <button
           v-for="track in tracks"
@@ -223,6 +225,7 @@
 <script>
 import { navigate } from '../utils/navigate.js';
 import CTopbar from '../components/CTopbar.vue';
+import CRoadmapDiagram from '../components/CRoadmapDiagram.vue';
 import { JAVA_TU_ZERO } from '../utils/java-tu-zero-content.js';
 import { LEARNING_TRACKS, PRIMARY_TRACK_ID, findTrack } from '../data/learning-paths.js';
 import {
@@ -242,7 +245,7 @@ import {
 
 export default {
   name: 'LearningPathsPage',
-  components: { CTopbar },
+  components: { CTopbar, CRoadmapDiagram },
 
   data() {
     return {

@@ -97,6 +97,7 @@
           <h2>Đi theo năng lực đầu ra, không chạy theo danh sách tool</h2>
           <p>Mỗi chặng có một việc bạn phải tự làm được. Chuyển tiếp khi giải thích được cách làm và tự sửa được lỗi cơ bản.</p>
         </div>
+        <CRoadmapDiagram roadmap-id="ai-engineer" />
         <ol class="roadmap-list">
           <li class="roadmap-item">
             <span class="stage-number">1</span>
@@ -235,6 +236,10 @@
     </main>
   </div>
 </template>
+
+<script setup>
+import CRoadmapDiagram from '../components/CRoadmapDiagram.vue';
+</script>
 
 <style scoped>
 .ai-engineer-roadmap-tab {

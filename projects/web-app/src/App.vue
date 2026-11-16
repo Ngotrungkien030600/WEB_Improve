@@ -3,12 +3,23 @@
     <Transition name="page" mode="out-in" appear>
       <component :is="Component" :key="route.path" />
     </Transition>
+    <CRoadmapDiagram
+      v-if="roadmapIdForRoute(route)"
+      :roadmap-id="roadmapIdForRoute(route)"
+    />
   </RouterView>
 </template>
 
 <script>
+import CRoadmapDiagram from './components/CRoadmapDiagram.vue';
+import { getRoadmapIdForRoute } from './data/technology-roadmaps.js';
+
 export default {
   name: 'App',
+  components: { CRoadmapDiagram },
+  methods: {
+    roadmapIdForRoute: getRoadmapIdForRoute,
+  },
 };
 </script>
 
